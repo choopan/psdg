@@ -51,7 +51,6 @@ td.highlight {
                                         <td><?php echo $loop['dep_name']; ?></td>
 										<td><?php echo $loop['div_name']; ?></td>
 										<td>
-											<a href='<?php echo "div_view_info/".$loop['id']; ?>' class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
 											<a href='<?php echo "div_edit_info/".$loop['id']; ?>' class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
 											<a href='<?php echo "div_del_info/".$loop['id']; ?>' class="btnDelete btn btn-danger btn-xs" onClick='return confirm(" คุณต้องการลบหรือไม่ ")' title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></a>
 										</td>
