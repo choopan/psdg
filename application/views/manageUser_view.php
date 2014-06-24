@@ -90,16 +90,16 @@ td.highlight {
 							     <?php  } ?>
                                 </tbody>
 							</table>
-							หน้าที่  : <select id="page_select">
+							<select id="page_select" class="form-control" style="max-width:120px">
 							<?php 
 							  
 							  $loop = $numuser / $limit;
 							  for($i = 0; $i < $loop; $i++) {
 							  	$pagenum = $i + 1;
 								if($pagenum == $currentPage) { 
-							  		echo "<option value=\"$pagenum\" SELECTED>$pagenum</option> ";
+							  		echo "<option value=\"$pagenum\" SELECTED>หน้า $pagenum</option> ";
 								} else {
-									echo "<option value=\"$pagenum\">$pagenum</option> ";
+									echo "<option value=\"$pagenum\">หน้า $pagenum</option> ";
 								}
 							  }
 							?>

@@ -172,6 +172,9 @@ class Manageuser extends CI_Controller {
 	{
 		$data['data']=$this->user_manage->get_division_show();
 		$data['title'] = "MFA - Division Management";
+		/* echo "<pre>";
+		print_r($data);
+		echo "</pre>"; */
 		$this->load->view('manageDivision_view',$data);
 	}
 	

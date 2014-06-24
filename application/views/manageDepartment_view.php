@@ -38,7 +38,6 @@ td.highlight {
                             <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 <thead>
                                     <tr>
-                                        <th>id</th>
                                         <th>ชื่อ</th>
 										<th>เครื่องมือ</th>
                                     </tr>
@@ -48,7 +47,6 @@ td.highlight {
 									foreach($data as $loop){
 								?>
 									<tr>
-                                        <td><?php echo $loop['id']; ?></td>
                                         <td><?php echo $loop['name']; ?></td>
 										<td>
 											<a href='<?php echo "dep_view_info/".$loop['id']; ?>' class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>

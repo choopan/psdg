@@ -103,7 +103,9 @@ Class User_manage extends CI_Model
  
   function get_division_show()
  {
-	$query=$this->db->get('division')
+	$query=$this->db->query('select division.id AS id,department.name AS dep_name,division.name AS div_name 
+							 from department inner join division 
+							 on department.id = division.dep_id')
 					->result_array();
 	return $query;
  }
