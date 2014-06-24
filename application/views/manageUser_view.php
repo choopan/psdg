@@ -35,34 +35,21 @@ td.highlight {
 					</div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                        	<!--
-                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
-                                <thead>
-                                    <tr>
-                                        <th>id</th>
-                                        <th>ชื่อ</th>
-                                        <th>นามสกุล</th>
-										<th>เครื่องมือ</th>
-                                    </tr>
-                                </thead>
-								<tbody>
-								<?php if(is_array($data) && count($data) ) {
-									foreach($data as $loop){?>
-									<tr>
-                                        <td><?php echo $loop['USERID']; ?></td>
-                                        <td><?php echo $loop['PWFNAME']; ?></td>
-                                        <td><?php echo $loop['PWLNAME']; ?></td>
-										<td>
-											<a href='<?php echo "user_view_info/".$loop['USERID']; ?>' class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
-											<a href='<?php echo "user_edit_info/".$loop['USERID']; ?>' class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
-											<a href='<?php echo "user_del_info/".$loop['USERID']; ?>' class="btnDelete btn btn-danger btn-xs" onClick='return confirm(" คุณต้องการลบหรือไม่ ")' title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></a>
-										</td>
-                                    </tr>
-									<?php } } ?>
-                                </tbody>
-							</table>
-							-->
-							
+                        <select id="page_select" class="form-control" style="max-width:120px">
+							<?php 
+							  
+							  $loop = $numuser / $limit;
+							  for($i = 0; $i < $loop; $i++) {
+							  	$pagenum = $i + 1;
+								if($pagenum == $currentPage) { 
+							  		echo "<option value=\"$pagenum\" SELECTED>หน้า $pagenum</option> ";
+								} else {
+									echo "<option value=\"$pagenum\">หน้า $pagenum</option> ";
+								}
+							  }
+							?>
+
+							</select><br>							
 							
 						<table class="table table-striped table-bordered table-hover">
                                 <thead>
@@ -90,21 +77,6 @@ td.highlight {
 							     <?php  } ?>
                                 </tbody>
 							</table>
-							<select id="page_select" class="form-control" style="max-width:120px">
-							<?php 
-							  
-							  $loop = $numuser / $limit;
-							  for($i = 0; $i < $loop; $i++) {
-							  	$pagenum = $i + 1;
-								if($pagenum == $currentPage) { 
-							  		echo "<option value=\"$pagenum\" SELECTED>หน้า $pagenum</option> ";
-								} else {
-									echo "<option value=\"$pagenum\">หน้า $pagenum</option> ";
-								}
-							  }
-							?>
-
-							</select>
 						</div>
 					</div>
 				</div>

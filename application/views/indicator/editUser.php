@@ -28,42 +28,23 @@ td.highlight {
 			<div class="col-lg-11">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<strong>เพิ่มผู้ใช้</strong>
+						<strong>แก้ไขข้อมูลผู้ใช้</strong>
 					</div>
 					<div class="panel-body">
 							
-								<form action="<?php echo site_url("manageuser/addUser_save"); ?>" method="post" name="addUser">
-									<div class="row">
-										<div class="col-lg-4">
-										<div class="form-group">
-                                            <label>Username *</label>
-											<input type="text" name="username" class="form-control" required>
-										</div>
-										</div>
-										<div class="col-lg-4">
-										<div class="form-group">
-                                            <label>Password *</label>
-                                            <input type="password" name="password" class="form-control" required>
-										</div>
-										</div>
-										<div class="col-lg-4">
-										<div class="form-group">
-                                            <label>Confirm-password *</label>
-                                            <input type="password" name="retry_password" class="form-control" required>
-										</div>
-										</div>
-									</div>
+								<form action="<?php echo site_url("manageuser/editUser_save"); ?>" method="post" name="editUser">
+									<input type="hidden" name="id" value="<?php echo $data2[0]['USERID'];?>" class="form-control" required>
 									<div class="row">
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>ชื่อ(ภาษาไทย) *</label>
-											<input type="text" name="fname" class="form-control" required>
+											<input type="text" name="fname" value="<?php echo $data2[0]['PWFNAME'];?>" class="form-control" required>
 										</div>
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>นามสกุล(ภาษาไทย) *</label>
-                                            <input type="text" name="lname" class="form-control" required>
+                                            <input type="text" name="lname" value="<?php echo $data2[0]['PWLNAME'];?>" class="form-control" required>
 										</div>
 										</div>
 									</div>
@@ -71,22 +52,13 @@ td.highlight {
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>Name(ภาษาอังกฤษ) *</label>
-											<input type="text" name="efname" class="form-control" required>
+											<input type="text" name="efname" value="<?php echo $data2[0]['PWEFNAME'];?>" class="form-control" required>
 										</div>
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>Last name(ภาษาอังกฤษ)  *</label>
-                                            <input type="text" name="elname" class="form-control" required>
-										</div>
-										</div>
-										<div class="col-lg-4">
-										<div class="form-group">
-                                            <label>เพศ *</label>
-                                            <select name="gender" class="form-control" required>
-												<option value="1">ชาย</option>
-												<option value="2">หญิง</option>
-											</select>
+                                            <input type="text" name="elname" value="<?php echo $data2[0]['PWELNAME'];?>" class="form-control" required>
 										</div>
 										</div>
 									</div>
@@ -94,19 +66,19 @@ td.highlight {
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>E-mail *</label>
-											<input type="email" name="email" class="form-control" required>
+											<input type="email" name="email" value="<?php echo $data2[0]['PWEMAIL'];?>" class="form-control" required>
 										</div>
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>เบอร์ภายใน *</label>
-                                            <input type="text" name="tel" class="form-control" required>
+                                            <input type="text" name="tel" value="<?php echo $data2[0]['PWTELOFFICE'];?>" class="form-control" required>
 										</div>
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>เบอร์มือถือ *</label>
-                                            <input type="text" name="mobile" class="form-control" required>
+                                            <input type="text" name="mobile" value="<?php echo $data2[0]['mobile'];?>" class="form-control" >
 										</div>
 										</div>
 									</div>
@@ -137,7 +109,7 @@ td.highlight {
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>เลือกตำแหน่ง *</label>
-											<select name="position1" class="form-control" onChange="get_division(this.value)" required>
+											<select name="position1" class="form-control"  required>
 													<option value="0">กรุณาเลือกตำแหน่ง</option>
 												<?php foreach($position as $loop2){ ?>
 													<option value="<?php echo $loop2['PWPOSITION']; ?>"><?php echo $loop2['PWNAME']; ?></option>
@@ -149,6 +121,7 @@ td.highlight {
 										<div class="form-group">
                                             <label>เลือกระดับ *</label>
                                             <select name="level" class="form-control" id="division_db" required>
+												<option value="<?php echo $data2[0]['PWLEVEL'];?>"><?php echo "ค่าเดิม ".$data2[0]['PWLEVEL'];?></option>
 												<option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
 												<option>7</option><option>8</option><option>9</option><option>10</option><option>11</option>
 											</select>
@@ -157,8 +130,7 @@ td.highlight {
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>เลือกตำแหน่งที่ 2 *</label>
-											<select name="position2" class="form-control" onChange="get_division(this.value)">
-													<option value="-1">กรุณาเลือกตำแหน่งที่ 2</option>
+											<select name="position2" class="form-control" >
 													<option value="0">ไม่มี</option>
 												<?php foreach($position as $loop3){ ?>
 													<option value="<?php echo $loop3['PWPOSITION']; ?>"><?php echo $loop3['PWNAME']; ?></option>
@@ -172,27 +144,49 @@ td.highlight {
 											<div class="form-group">
 											<label>ผู้ดูแลระบบ * |</label>
 												<label class="checkbox-inline">
-													<input type="checkbox" name="admin_min">ระดับกระทรวง
+													<?php if($data2[0]['admin_min']==1): ?>
+													<input type="checkbox" name="admin_min" checked >ระดับกระทรวง
+													<?php else:?>
+													<input type="checkbox" name="admin_min" >ระดับกระทรวง
+													<?php endif?>
 												</label>
 												
 												<label class="checkbox-inline">
-													<input type="checkbox" name="admin_dep">ระดับกรม
+													<?php if($data2[0]['admin_dep']==1): ?>
+													<input type="checkbox" name="admin_dep" checked >ระดับกระกรม
+													<?php else:?>
+													<input type="checkbox" name="admin_dep" >ระดับกระกรม
+													<?php endif?>
 												</label>
 												
 												<label class="checkbox-inline">
-													<input type="checkbox" name="admin_div">ระดับกอง
+													<?php if($data2[0]['admin_div']==1): ?>
+													<input type="checkbox" name="admin_div" checked >ระดับกระกอง
+													<?php else:?>
+													<input type="checkbox" name="admin_div" >ระดับกระกอง
+													<?php endif?>
 												</label>
 											</div>
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-lg-2">
+										<div class="col-lg-3">
 										<div class="form-group">
 											<label>สิทธิบริหาร *</label>
-											<select name="execode" class="form-control" required>
-												<option value="0">ไม่มี</option>
-												<option value="1">ผู้อำนวยการกอง</option>
-												<option value="2">อธิบดีกรม</option>
+											<select name="execode" class="form-control" >
+												<?php if($data2[0]['execode']==0){?>
+													<option value="0" selected>ไม่มี</option>
+													<option value="1">ผู้อำนวยการกอง</option>
+													<option value="2">อธิบดีกรม</option>
+												<?php }else if($data2[0]['execode']==1){?>
+													<option value="0">ไม่มี</option>
+													<option value="1"selected>ผู้อำนวยการกอง</option>
+													<option value="2">อธิบดีกรม</option>
+												<?php }else if($data2[0]['execode']==2){?>
+													<option value="0">ไม่มี</option>
+													<option value="1">ผู้อำนวยการกอง</option>
+													<option value="2"selected>อธิบดีกรม</option>
+												<?php }?>
 											</select>
 										</div>
 										</div>
@@ -200,7 +194,7 @@ td.highlight {
 									<div class="row">
 										<div class="col-lg-1">
 										<div class="form-group">
-											<input id="addNew" type="submit" class="btn btn-success" value="เพิ่ม">	
+											<input id="addNew" type="submit" class="btn btn-success" value="แก้ไข">	
 										</div>
 										</div>
 									</div>

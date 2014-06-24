@@ -58,7 +58,11 @@ class Manageuser extends CI_Controller {
 	function adduser()
 	{
 		$data['data']=$this->user_manage->get_department();
+		$data['position']=$this->user_manage->get_position();
 		$data['title'] = "MFA - User Management";
+		/* echo "<pre>";
+		print_r($data);
+		echo "</pre>"; */
 		$this->load->view('indicator/addUser',$data);
 	}
 	
@@ -69,15 +73,21 @@ class Manageuser extends CI_Controller {
 		$retry_password=$this->input->post('retry_password');
 		$fname=$this->input->post('fname');
 		$lname=$this->input->post('lname');
+		$efname=$this->input->post('efname');
+		$elname=$this->input->post('elname');
+		$gender=$this->input->post('gender');
 		$email=$this->input->post('email');
 		$tel=$this->input->post('tel');
 		$mobile=$this->input->post('mobile');
 		$department=$this->input->post('department');
 		$division=$this->input->post('division');
+		$position1=$this->input->post('position1');
+		$level=$this->input->post('level');
+		$position2=$this->input->post('position2');
 		$admin_min_0=$this->input->post('admin_min');
 		$admin_dep_0=$this->input->post('admin_dep');
 		$admin_div_0=$this->input->post('admin_div');
-		$position2=$this->input->post('position2');
+		$execode=$this->input->post('execode');
 		
 		if($admin_min_0=="on"){
 			$admin_min=1;
@@ -99,7 +109,7 @@ class Manageuser extends CI_Controller {
 		
 		if($password==$retry_password)
 		{
-			$this->user_manage->addUser_save($username,md5($password),$fname,$lname,$email,$tel,$mobile,$department,$division,$admin_min,$admin_dep,$admin_div,$position2);
+			$this->user_manage->addUser_save($username,md5($password),$fname,$lname,$efname,$elname,$gender,$email,$tel,$mobile,$department,$division,$position1,$level,$position2,$admin_min,$admin_dep,$admin_div,$execode);
 			redirect('manageuser/user_view');
 		}else{
 			echo "Can't insert data";
@@ -114,6 +124,61 @@ class Manageuser extends CI_Controller {
 		print_r($data);
 		echo "</pre>"; */
 		$this->load->view('indicator/showUser',$data);
+	}
+	
+	function user_edit_info($id)
+	{
+		$data['data']=$this->user_manage->get_department();
+		$data['position']=$this->user_manage->get_position();
+		$data['title'] = "MFA - User Management";
+		$data['data2']=$this->user_manage->user_view_info($id);
+		/* echo "<pre>";
+		print_r($data);
+		echo "</pre>"; */
+		$this->load->view('indicator/editUser',$data);
+	}
+	
+	function editUser_save()
+	{
+		$id=$this->input->post('id');
+		$fname=$this->input->post('fname');
+		$lname=$this->input->post('lname');
+		$efname=$this->input->post('efname');
+		$elname=$this->input->post('elname');
+		$email=$this->input->post('email');
+		$tel=$this->input->post('tel');
+		$mobile=$this->input->post('mobile');
+		$department=$this->input->post('department');
+		$division=$this->input->post('division');
+		$position1=$this->input->post('position1');
+		$level=$this->input->post('level');
+		$position2=$this->input->post('position2');
+		$admin_min_0=$this->input->post('admin_min');
+		$admin_dep_0=$this->input->post('admin_dep');
+		$admin_div_0=$this->input->post('admin_div');
+		$execode=$this->input->post('execode');
+		
+		if($admin_min_0=="on"){
+			$admin_min=1;
+		}else{
+			$admin_min=0;
+		}
+		
+		if($admin_dep_0=="on"){
+			$admin_dep=1;
+		}else{
+			$admin_dep=0;
+		}
+		
+		if($admin_div_0=="on"){
+			$admin_div=1;
+		}else{
+			$admin_div=0;
+		}
+		
+		$this->user_manage->editUser_save($id,$fname,$lname,$efname,$elname,$email,$tel,$mobile,$department,$division,$position1,$level,$position2,$admin_min,$admin_dep,$admin_div,$execode);
+		redirect('manageuser/user_view');
+
 	}
 	
 	function user_del_info($user_id)

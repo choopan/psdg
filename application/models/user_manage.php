@@ -23,22 +23,50 @@ Class User_manage extends CI_Model
 	return $query;
  }
  
- function addUser_save($username,$password,$fname,$lname,$email,$tel,$mobile,$department,$division,$admin_min,$admin_dep,$admin_div,$position2)
+ function addUser_save($username,$password,$fname,$lname,$efname,$elname,$gender,$email,$tel,$mobile,$department,$division,$position1,$level,$position2,$admin_min,$admin_dep,$admin_div,$execode)
  {
 	$this->db->set('PWUSERNAME',$username)
 			 ->set('PWPASSWORD',$password)
 			 ->set('PWFNAME',$fname)
 			 ->set('PWLNAME',$lname)
+			 ->set('PWEFNAME',$efname)
+			 ->set('PWELNAME',$elname)
+			 ->set('PWSEX',$gender)
 			 ->set('PWEMAIL',$email)
 			 ->set('PWTELOFFICE',$tel)
 			 ->set('mobile',$mobile)
 			 ->set('department',$department)
 			 ->set('division',$division)
+			 ->set('PWPOSITION',$position1)
+			 ->set('PWLEVEL',$level)
+			 ->set('PWPOSITION2',$position2)
 			 ->set('admin_min',$admin_min)
 			 ->set('admin_dep',$admin_dep)
 			 ->set('admin_div',$admin_div)
-			 ->set('PWPOSITION2',$position2)
+			 ->set('execode',$execode)
 			 ->insert('pwemployee');
+ }
+ 
+ function editUser_save($id,$fname,$lname,$efname,$elname,$email,$tel,$mobile,$department,$division,$position1,$level,$position2,$admin_min,$admin_dep,$admin_div,$execode)
+ {
+	$this->db->where('USERID',$id)
+			 ->set('PWFNAME',$fname)
+			 ->set('PWLNAME',$lname)
+			 ->set('PWEFNAME',$efname)
+			 ->set('PWELNAME',$elname)
+			 ->set('PWEMAIL',$email)
+			 ->set('PWTELOFFICE',$tel)
+			 ->set('mobile',$mobile)
+			 ->set('department',$department)
+			 ->set('division',$division)
+			 ->set('PWPOSITION',$position1)
+			 ->set('PWLEVEL',$level)
+			 ->set('PWPOSITION2',$position2)
+			 ->set('admin_min',$admin_min)
+			 ->set('admin_dep',$admin_dep)
+			 ->set('admin_div',$admin_div)
+			 ->set('execode',$execode)
+			 ->update('pwemployee');
  }
  
  function user_view_info($id)
@@ -52,8 +80,17 @@ Class User_manage extends CI_Model
  function user_del_info($user_id)
  {
 	$this->db->where('USERID',$user_id)
-			 ->set('PWSTATUS','7')
+			 ->set('enabled','0')
 			 ->update('pwemployee');
+ }
+ 
+ function get_position()
+ {
+	$query=$this->db->distinct()
+					->select('PWPOSITION,PWNAME')
+					->get('pwposition')
+					->result_array();
+	return $query;
  }
  
  //============================================================= Department =====================================
@@ -66,7 +103,8 @@ Class User_manage extends CI_Model
  
  function get_department()
  {
-	$query=$this->db->get('department')
+	$query=$this->db->distinct()
+					->get('department')
 					->result_array();
 	return $query;
  }
@@ -95,7 +133,8 @@ Class User_manage extends CI_Model
  //============================================================= Division =======================================
  function get_division($dep_id)
  {
-	$query=$this->db->where('dep_id',$dep_id)
+	$query=$this->db->distinct()
+					->where('dep_id',$dep_id)
 					->get('division')
 					->result_array();
 	return $query;

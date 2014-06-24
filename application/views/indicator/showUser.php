@@ -44,14 +44,38 @@ td.highlight {
 									<div class="row">
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>ชื่อ *</label>
+                                            <label>ชื่อ(ภาษาไทย) *</label>
 											<input type="text" class="form-control" value="<?php echo $data[0]['PWFNAME']?>" readonly>
 										</div>
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>นามสกุล *</label>
+                                            <label>นามสกุล(ภาษาไทย)  *</label>
                                             <input type="text" class="form-control" value="<?php echo $data[0]['PWLNAME']?>" readonly>
+										</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-4">
+										<div class="form-group">
+                                            <label>Name(ภาษาอังกฤษ) *</label>
+											<input type="text" class="form-control" value="<?php echo $data[0]['PWEFNAME']?>" readonly>
+										</div>
+										</div>
+										<div class="col-lg-4">
+										<div class="form-group">
+                                            <label>Last name(ภาษาอังกฤษ)  *</label>
+                                            <input type="text" class="form-control" value="<?php echo $data[0]['PWELNAME']?>" readonly>
+										</div>
+										</div>
+										<div class="col-lg-4">
+										<div class="form-group">
+                                            <label>เพศ *</label>
+											<?php if($data[0]['PWSEX']==1){?>
+                                            <input type="text" class="form-control" value="ชาย" readonly>
+											<?php }else{?>
+											<input type="text" class="form-control" value="หญิง" readonly>
+											<?php }?>
 										</div>
 										</div>
 									</div>
@@ -90,6 +114,26 @@ td.highlight {
 										</div>
 									</div>
 									<div class="row">
+										<div class="col-lg-4">
+										<div class="form-group">
+                                            <label>ตำแหน่ง *</label>
+											<input type="text" class="form-control" value="<?php echo $data[0]['PWPOSITION']?>" readonly>
+										</div>
+										</div>
+										<div class="col-lg-4">
+										<div class="form-group">
+                                            <label>เลือกระดับ *</label>
+                                            <input type="text" class="form-control" value="<?php echo $data[0]['PWLEVEL']?>" readonly>
+										</div>
+										</div>
+										<div class="col-lg-4">
+										<div class="form-group">
+                                            <label>เลือกตำแหน่งที่ 2 *</label>
+											<input type="text" class="form-control" value="<?php echo $data[0]['PWPOSITION2']?>" readonly>
+										</div>
+										</div>
+									</div>
+									<div class="row">
 										<div class="col-lg-8">
 											<div class="form-group">
 											<label>ผู้ดูแลระบบ * |</label>
@@ -120,10 +164,16 @@ td.highlight {
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-lg-2">
+										<div class="col-lg-3">
 										<div class="form-group">
-											<label>ระดับตำแหน่ง *</label>
-											<input type="text" class="form-control" value="<?php echo $data[0]['PWPOSITION2']?>" readonly>
+											<label>สิทธิบริหาร *</label>
+											<?php if($data[0]['execode']==0){ ?>
+												<input type="text" class="form-control" value="ไม่มี" readonly>
+											<?php }else if($data[0]['execode']==1){?>
+												<input type="text" class="form-control" value="ผู้อำนวยการกอง" readonly>
+											<?php }else if($data[0]['execode']==2){ ?>
+												<input type="text" class="form-control" value="อธิบดีกรม" readonly>
+											<?php } ?>
 										</div>
 										</div>
 									</div>
