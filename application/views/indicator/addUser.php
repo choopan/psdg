@@ -222,6 +222,7 @@ td.highlight {
 
 <script type="text/javascript" charset="utf-8">
 function get_division(val){
+
 	$.ajax({
 					'url' : '<?php echo site_url('manageuser/get_division'); ?>/'+val,
 					'dataType': 'json',
@@ -231,7 +232,7 @@ function get_division(val){
 					'success' : function(data){
 						$("#division_db").empty();
 						var division_num=data.length;
-						var tr='<option>เลือก section</option>';
+						var tr='<option>เลือกกอง</option>';
 						for(i=0;i<division_num;i++)
 						{
 							tr+='<option value="'+data[i]['id']+'">'+data[i]['name']+'</option>';

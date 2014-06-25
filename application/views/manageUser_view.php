@@ -28,12 +28,109 @@ td.highlight {
         </div>
 		
 		<div class="row">
-            <div>
-                <div class="panel panel-default">
+            <div class="panel panel-default">
 					<div class="panel-heading">
 						<button type="button" class="btn btn-outline btn-success" onClick="window.location.href='<?php echo site_url("manageuser/adduser"); ?>'">เพิ่มผู้ใช้งาน</button>
+						
+						<button class="btn btn-outline btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">กดเพื่อค้นหา</button>
+							<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+							  <div class="modal-dialog modal-lg">
+								<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+									<h4 class="modal-title" id="myLargeModalLabel">ค้นหา</h4>
+								</div>
+								<div class="modal-body">
+
+										<div class="row">
+											<div class="col-lg-4">
+											<div class="form-group">
+												<label>Username *</label>
+												<input type="text" id="username" class="form-control">
+											</div>
+											</div>
+											<div class="col-lg-4">
+											<div class="form-group">
+												<label>ชื่อ *</label>
+												<input type="text" id="fname" class="form-control">
+											</div>
+											</div>
+											<div class="col-lg-4">
+											<div class="form-group">
+												<label>นามสกุล *</label>
+												<input type="text" id="lname" class="form-control">
+											</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-4">
+											<div class="form-group">
+												<label>กรม *</label>
+												<select id="department" class="form-control" onChange="get_division(this.value)">
+													<option value="0">เลือกกรม</option>
+													<?php foreach($department as $value0){?>
+													<option value="<?php echo $value0['id'];?>"><?php echo $value0['name'];?></option>
+													<?php } ?>
+												</select>
+											</div>
+											</div>
+											<div class="col-lg-4">
+											<div class="form-group">
+												<label>กอง *</label>
+												<select class="form-control" id="division_db">
+													<option value="0">---</option>
+												</select>
+											</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-4">
+											<div class="form-group">
+												<label>ตำแหน่ง *</label>
+												<select id="position" class="form-control" >
+													<option value="0">เลือกตำแหน่ง</option>
+													<?php foreach($position as $value1){?>
+													<option value="<?php echo $value1['PWPOSITION'];?>"><?php echo $value1['PWNAME'];?></option>
+													<?php } ?>
+												</select>
+											</div>
+											</div>
+											<div class="col-lg-4">
+											<div class="form-group">
+												<label>สิทธิผู้ดูแล *</label>
+												<select id="admin_mdd" class="form-control" >
+													<option value="admin_min">ระดับกระทรวง</option>
+													<option value="admin_dep">ระดับกรม</option>
+													<option value="admin_div">ระดับกอง</option>
+												</select>
+											</div>
+											</div>
+											<div class="col-lg-4">
+											<div class="form-group">
+												<label>สิทธิบริหาร *</label>
+												<select id="execode" class="form-control" >
+													<option value="0">ไม่มี</option>
+													<option value="1">ผู้อำนวยการกอง</option>
+													<option value="2">อธิบดีกรม</option>
+												</select>
+											</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-1">
+											<div class="form-group">	
+												<button type="button" onClick="get_search()" class="btn btn-warning" data-dismiss="modal" aria-hidden="true">ค้นหา</button>
+											</div>
+											</div>
+										</div>
+								  
+								</div>
+								</div>
+							  </div>
+							</div>
 					</div>
                     <div class="panel-body">
+					
                         <div class="table-responsive">
                         <select id="page_select" class="form-control" style="max-width:120px">
 							<?php 
@@ -54,20 +151,26 @@ td.highlight {
 						<table class="table table-striped table-bordered table-hover">
                                 <thead>
                                     <tr>
-                                        <th>id</th>
-                                        <th>ชื่อ</th>
-                                        <th>นามสกุล</th>
+                                        <th>ชื่อ-นามสกุล</th>
+                                        <th>กรม</th>
+										<th>กอง</th>
+										<th>ตำแหน่ง(ระดับ)</th>
+										<th>ต่ำแหน่งบริหาร</th>
+                                        <th>E-mail</th>
 										<th>เครื่องมือ</th>
                                     </tr>
                                 </thead>
-								<tbody>
+								<tbody id="user_db">
 								<?php 
 									foreach($data2 as $loop){
 								?>
 									<tr>
-                                        <td><?php echo $loop['USERID']; ?></td>
-                                        <td><?php echo $loop['PWFNAME']; ?></td>
-                                        <td><?php echo $loop['PWLNAME']; ?></td>
+                                        <td><?php echo $loop['PWFNAME']." ".$loop['PWLNAME']; ?></td>
+                                        <td><?php echo $loop['department']; ?></td>
+                                        <td><?php echo $loop['division']; ?></td>
+                                        <td><?php echo $loop['PWPOSITION']."(".$loop['PWLEVEL'].")"; ?></td>
+                                        <td><?php echo $loop['PWPOSITION2']; ?></td>
+                                        <td><?php echo $loop['PWEMAIL']; ?></td>
 										<td>
 											<a href='<?php echo "user_view_info/".$loop['USERID']; ?>' class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
 											<a href='<?php echo "user_edit_info/".$loop['USERID']; ?>' class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -80,7 +183,7 @@ td.highlight {
 						</div>
 					</div>
 				</div>
-			</div>	
+			
 		</div>
 	</div>
 
@@ -104,6 +207,66 @@ td.highlight {
 		});
 		
     });
+	
+	function get_division(val){
+
+	$.ajax({
+					'url' : '<?php echo site_url('manageuser/get_division'); ?>/'+val,
+					'dataType': 'json',
+					'error' : function(data){ 
+						alert('error');
+                    },
+					'success' : function(data){
+						$("#division_db").empty();
+						var division_num=data.length;
+						var tr='<option>เลือกกอง</option>';
+						for(i=0;i<division_num;i++)
+						{
+							tr+='<option value="'+data[i]['id']+'">'+data[i]['name']+'</option>';
+							
+						}
+						$(tr).appendTo('#division_db');
+                    }
+				});
+	}
+	
+	function get_search(){
+			var username = $('#username').val();
+			var fname = $('#fname').val();
+			var lname = $('#lname').val();
+			var department = $('#department').val();
+			var division = $('#division_db').val();
+			var position = $('#position').val();
+			var admin_mdd = $('#admin_mdd').val();
+			var execode = $('#execode').val();
+			
+			$.ajax({
+					'url' : '<?php echo site_url('manageuser/get_search'); ?>/',
+					'type':'get',
+					'data':{username:username,fname:fname,lname:lname,department:department,division:division,position:position,admin_mdd:admin_mdd,execode:execode},
+					'error' : function(data){ 
+						alert('error');
+                    },
+					'success' : function(data){
+						$("#user_db").empty();
+						var user_num=data.length;
+						for(i=0;i<user_num;i++)
+						{
+							var tr ='<tr>';
+								tr+='<td>'+data[i]['PWFNAME']+' '+data[i]['PWLNAME']+'</td>';
+								tr+='<td>'+data[i]['department']+'</td>';
+								tr+='<td>'+data[i]['division']+'</td>';
+								tr+='<td>'+data[i]['PWPOSITION']+'('+data[i]['PWLEVEL']+')</td>';
+								tr+='<td>'+data[i]['PWPOSITION2']+'</td>';
+								tr+='<td>'+data[i]['execode']+'</td>';
+								tr+='<td>เครื่องมือ</td>';
+								tr+='</tr>';
+							$(tr).appendTo('#user_db');
+						}
+                    }
+				});
+			
+	}
 </script>
 </body>
 </html>

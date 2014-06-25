@@ -39,6 +39,8 @@ class Manageuser extends CI_Controller {
 	{
 		$data['data']=$this->user_manage->get_user();
 		$data['title'] = "MFA - User Management";
+		$data['department']=$this->user_manage->get_department();
+		$data['position']=$this->user_manage->get_position();
 		$data['numuser'] = $this->user_manage->get_num_user();				
 		$limit = 15;
 		$data['limit'] = $limit;
@@ -51,6 +53,10 @@ class Manageuser extends CI_Controller {
 			$data['data2']=$this->user_manage->get_user_limit(($this->input->get('pagenum') - 1) * $limit, $limit);
 			$data['currentPage'] = $this->input->get('pagenum'); 			
 		}
+		
+		/* echo "<pre>";
+		print_r($data);
+		echo "</pre>"; */
 
 		$this->load->view('manageUser_view',$data);
 	}
@@ -186,6 +192,44 @@ class Manageuser extends CI_Controller {
 		echo $user_id;
 		$this->user_manage->user_del_info($user_id);
 		redirect('manageuser/user_view');
+	}
+	
+	function get_search()
+	{
+		$username = $this->input->get('username');
+		$fname = $this->input->get('fname');
+		$lname = $this->input->get('lname');
+		$department = $this->input->get('department');
+		$division = $this->input->get('division');
+		$position = $this->input->get('position');
+		$admin_mdd = $this->input->get('admin_mdd');
+		$execode = $this->input->get('execode');
+		
+		if(!empty($admin_mdd)){
+			if($admin_mdd=="admin_min"){
+				$admin_min = "1";
+				$admin_dep = null;
+				$admin_div = null;
+			}else if($admin_mdd=="admin_dep"){
+				$admin_min = null;
+				$admin_dep = "1";
+				$admin_div = null;
+			}else if($admin_mdd=="admin_div"){
+				$admin_min = null;
+				$admin_dep = null;
+				$admin_div = "1";
+			}
+		}else{
+			$admin_min = null;
+				$admin_dep = null;
+				$admin_div = null;
+		}
+		
+		$data=$this->user_manage->get_search($username,$fname,$lname,$department,$division,$position,$admin_min,$admin_dep,$admin_div,$execode);
+		echo "<pre>";
+		print_r($data);
+		echo "</pre>";
+		//echo json_encode($data);
 	}
 	
 	
