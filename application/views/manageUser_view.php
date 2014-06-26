@@ -132,21 +132,41 @@ td.highlight {
                     <div class="panel-body">
 					
                         <div class="table-responsive">
-                        <select id="page_select" class="form-control" style="max-width:120px">
-							<?php 
-							  
-							  $loop = $numuser / $limit;
-							  for($i = 0; $i < $loop; $i++) {
-							  	$pagenum = $i + 1;
-								if($pagenum == $currentPage) { 
-							  		echo "<option value=\"$pagenum\" SELECTED>หน้า $pagenum</option> ";
-								} else {
-									echo "<option value=\"$pagenum\">หน้า $pagenum</option> ";
-								}
-							  }
-							?>
+						<div class="row">
+							<div class="col-lg-2">
+							<div class="form-group">
+							<select id="page_select" class="form-control">
+								<?php 
+								  
+								  $loop = $numuser / $limit;
+								  for($i = 0; $i < $loop; $i++) {
+									$pagenum = $i + 1;
+									if($pagenum == $currentPage) { 
+										echo "<option value=\"$pagenum\" SELECTED>หน้า $pagenum</option> ";
+									} else {
+										echo "<option value=\"$pagenum\">หน้า $pagenum</option> ";
+									}
+								  }
+								?>
 
-							</select><br>							
+								</select>
+							</div>
+							</div>
+							<p>
+								<?php if($currentPage > 1){?>
+									<a href="user_view?pagenum=<?php echo $currentPage-1;?>" class="btn btn-warning btn-outline"> << </a> 
+								<?php }else{?>
+									<a  class="btn btn-danger"> << </a> 
+								<?php }?>
+									<input type="text" value=" หน้าที่ <?php echo $currentPage;?> ทั้งหมด <?php echo $i;?> หน้า " style="width:170px; height:35px; margin-left:auto; margin-right:auto; border-style: none;" readonly> 
+								<?php if($currentPage < $i){?>
+									<a href="user_view?pagenum=<?php echo $currentPage+1;?>" class="btn btn-warning btn-outline"> >> </a>
+								<?php }else{?>
+									<a  class="btn btn-danger"> >> </a> 
+								<?php }?>
+							</p>
+						
+						</div>
 							
 						<table class="table table-striped table-bordered table-hover">
                                 <thead>
