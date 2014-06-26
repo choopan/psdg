@@ -176,7 +176,7 @@
 								<div class="panel-body">
 									<div class="row">
 										<div class="table-responsive">
-											<table class="table table-hover" id="dataTables-example">
+											<table class="table table-hover" id="test1">
 												<thead>
 													<tr>
 														<th style="width: 200px">วันที่</th>
@@ -186,26 +186,26 @@
 													</tr>
 												</thead>
 												<tbody>
-													<tr>
+													<tr id="row1">
 														<td><input type="text" class="form-control" id="test" style="width: 200px"></td>
 														<td><textarea class="form-control" rows="1" cols="100"></textarea></td>
 														<td><textarea class="form-control" rows="1" cols="40"></textarea></td>
 														<td>
 															<div class="form-group"><input type="file" id="exampleInputFile"></div>
-															<button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>
-															<button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-chevron-down"></span> Add Down</button>
-															<button type="button" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus"></span> Delete</button>
+															<button type="button" class="btn btn-primary btn-xs" onclick="addUp('test1', 'row1');"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>
+															<button type="button" class="btn btn-info btn-xs" onclick="addDown('test1', 'row1');"><span class="glyphicon glyphicon-chevron-down"></span> Add Down</button>
+															<button type="button" class="btn btn-danger btn-xs" onclick="deleteRow('test1', 'row1');"><span class="glyphicon glyphicon-minus"></span> Delete</button>
 														</td>
 													</tr>
-													<tr>
+													<tr id="row2">
 														<td><input type="text" class="form-control" id="test" style="width: 200px"></td>
 														<td><textarea class="form-control" rows="1" cols="100"></textarea></td>
 														<td><textarea class="form-control" rows="1" cols="40"></textarea></td>
 														<td>
 															<div class="form-group"><input type="file" id="exampleInputFile"></div>
-															<button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>
-															<button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-chevron-down"></span> Add Down</button>
-															<button type="button" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus"></span> Delete</button>
+															<button type="button" class="btn btn-primary btn-xs" onclick="addUp('test1', 'row2');"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>
+															<button type="button" class="btn btn-info btn-xs" onclick="addDown('test1', 'row2');"><span class="glyphicon glyphicon-chevron-down"></span> Add Down</button>
+															<button type="button" class="btn btn-danger btn-xs" onclick="deleteRow('test1', 'row2');"><span class="glyphicon glyphicon-minus"></span> Delete</button>
 														</td>
 													</tr>
 												</tbody>
@@ -227,7 +227,7 @@
 								<div class="panel-body">
 									<div class="row">
 										<div class="table-responsive">
-											<table class="table table-hover" id="test1">
+											<table class="table table-hover" id="test2">
 												<thead>
 													<tr>
 														<th style="width: 200px">วันที่</th>
@@ -253,9 +253,9 @@
 														<td><textarea class="form-control" name="" id="" rows="1" cols="40"></textarea></td>
 														<td>
 															<div class="form-group"><input type="file" name="" id=""></div>
-															<button type="button" name="" id="" class="btn btn-primary btn-xs" onclick="addUp('test1', 'row1');"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>
-															<button type="button" name="" id="" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-chevron-down" onclick()></span> Add Down</button>
-															<button type="button" name="" id="" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus" onclick()></span> Delete</button>
+															<button type="button" name="" id="" class="btn btn-primary btn-xs" onclick="addUp('test2', 'row1');"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>
+															<button type="button" name="" id="" class="btn btn-info btn-xs" onclick="addDown('test2', 'row1');"><span class="glyphicon glyphicon-chevron-down" onclick()></span> Add Down</button>
+															<button type="button" name="" id="" class="btn btn-danger btn-xs" onclick="deleteRow('test2', 'row1');"><span class="glyphicon glyphicon-minus" onclick()></span> Delete</button>
 														</td>
 													</tr>
 													
@@ -266,9 +266,9 @@
 														<td><textarea class="form-control" rows="1" cols="40"></textarea></td>
 														<td>
 															<div class="form-group"><input type="file" id="exampleInputFile"></div>
-															<button type="button" class="btn btn-primary btn-xs" onclick="addUp('test1', 'row2');"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>
-															<button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-chevron-down"></span> Add Down</button>
-															<button type="button" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus"></span> Delete</button>
+															<button type="button" class="btn btn-primary btn-xs" onclick="addUp('test2', 'row2');"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>
+															<button type="button" class="btn btn-info btn-xs" onclick="addDown('test2', 'row2');"><span class="glyphicon glyphicon-chevron-down"></span> Add Down</button>
+															<button type="button" class="btn btn-danger btn-xs" onclick="deleteRow('test2', 'row2');"><span class="glyphicon glyphicon-minus"></span> Delete</button>
 														</td>
 													</tr>
 												</tbody>
@@ -320,14 +320,14 @@ var rowCount = 3;
 function addUp(tmpid, rows){
 	var table = document.getElementById(tmpid);
 	$("#"+tmpid).append('<tr id="row' + rowCount + '">'
-						+ '<td><input type="text" class="form-control" name="" id="" value="'+rowCount+'" style="width: 200px"></td>'
+						+ '<td><input type="text" class="form-control" name="" id="" value="' + rowCount + '" style="width: 200px"></td>'
 						+ '<td><textarea class="form-control" name="" id="" rows="1" cols="100"></textarea></td>'
 						+ '<td><textarea class="form-control" name="" id="" rows="1" cols="40"></textarea></td>'
 						+ '<td>'
 						+ '<div class="form-group"><input type="file" name="" id=""></div>'
-						+ '<button type="button" name="" id="" class="btn btn-primary btn-xs" onclick="addUp(\'test1\', \'row'+rowCount+'\');"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>'
-						+ '<button type="button" name="" id="" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-chevron-down" onclick()></span> Add Down</button>'
-						+ '<button type="button" name="" id="" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus" onclick()></span> Delete</button>'
+						+ '<button type="button" name="" id="" class="btn btn-primary btn-xs" onclick="addUp(\'' + tmpid + '\', \'row' + rowCount + '\');"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>'
+						+ ' <button type="button" name="" id="" class="btn btn-info btn-xs" onclick="addDown(\'' + tmpid + '\', \'row' + rowCount + '\');"><span class="glyphicon glyphicon-chevron-down" onclick()></span> Add Down</button>'
+						+ ' <button type="button" name="" id="" class="btn btn-danger btn-xs" onclick="deleteRow(\'' + tmpid + '\', \'row' + rowCount + '\');"><span class="glyphicon glyphicon-minus" onclick()></span> Delete</button>'
 						+ '</td>'
 						+ '</tr>'
 						);
@@ -342,6 +342,36 @@ function addUp(tmpid, rows){
 	rowCount += 1;
 }
 
+function addDown(tmpid, rows){
+	var table = document.getElementById(tmpid);
+	$("#"+tmpid).append('<tr id="row' + rowCount + '">'
+						+ '<td><input type="text" class="form-control" name="" id="" value="' + rowCount + '" style="width: 200px"></td>'
+						+ '<td><textarea class="form-control" name="" id="" rows="1" cols="100"></textarea></td>'
+						+ '<td><textarea class="form-control" name="" id="" rows="1" cols="40"></textarea></td>'
+						+ '<td>'
+						+ '<div class="form-group"><input type="file" name="" id=""></div>'
+						+ '<button type="button" name="" id="" class="btn btn-primary btn-xs" onclick="addUp(\'' + tmpid + '\', \'row' + rowCount + '\');"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>'
+						+ ' <button type="button" name="" id="" class="btn btn-info btn-xs" onclick="addDown(\'' + tmpid + '\', \'row' + rowCount + '\');"><span class="glyphicon glyphicon-chevron-down" onclick()></span> Add Down</button>'
+						+ ' <button type="button" name="" id="" class="btn btn-danger btn-xs" onclick="deleteRow(\'' + tmpid + '\', \'row' + rowCount + '\');"><span class="glyphicon glyphicon-minus" onclick()></span> Delete</button>'
+						+ '</td>'
+						+ '</tr>'
+						);
+						
+	var getStartRows = document.getElementById(rows);
+	var getStopRows = document.getElementById("row"+rowCount);
+
+	var firstRow = table.rows[getStartRows.rowIndex + 1];
+    var secondRow = table.rows[getStopRows.rowIndex];
+    firstRow.parentNode.insertBefore (secondRow, firstRow);
+	
+	rowCount += 1;
+}
+
+function deleteRow(tmpid, rows){
+	var table = document.getElementById(tmpid);				
+	var getRows = document.getElementById(rows);
+	table.deleteRow(getRows.rowIndex);
+}
 
 function getvalonchange(point, weight, totalpoint) {
 
