@@ -97,6 +97,38 @@
                                 </li>
                             </ul>
                         </li>
+
+                        <li>
+                            <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> ผลการปฏิบัติการตามตัวชี้วัด<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="<?php echo site_url("reportplan/minister"); ?>">ระดับกระทรวง</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo site_url("reportplan/department"); ?>">ระดับกรม</a>
+                                </li>
+								<li>
+                                    <a href="<?php echo site_url("reportplan/division"); ?>">ระดับกอง</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> ผลการปฏิบัติราชการระดับบุคคล<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="<?php echo site_url("reportperson/minister"); ?>">ระดับกระทรวง</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo site_url("reportperson/department"); ?>">ระดับกรม</a>
+                                </li>
+								<li>
+                                    <a href="<?php echo site_url("reportperson/division"); ?>">ระดับกอง (choopan)</a>
+                                </li>
+								<li>
+                                    <a href="<?php echo site_url("reportperson/person"); ?>">ระดับบุคคล (puwarun)</a>
+                                </li>
+                            </ul>
+                        </li>
                         
   
                     </ul>
