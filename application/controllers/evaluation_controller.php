@@ -13,8 +13,8 @@ class evaluation_controller extends CI_Controller {
 		//waiting data from models
 		//
 		//$this->load->view('indicator/evaluation',$data);
-		
-		$this->load->view('indicator/evaluation');
+		$data['title'] = "MFA - View Indicator ";
+		$this->load->view('indicator/evaluation',$data);
 	}
 }
 

@@ -125,7 +125,7 @@
                                     <a href="<?php echo site_url("reportperson/division"); ?>">ระดับกอง (choopan)</a>
                                 </li>
 								<li>
-                                    <a href="<?php echo site_url("reportperson/person"); ?>">ระดับบุคคล (puwarun)</a>
+                                    <a href="<?php echo site_url("evaluation_controller/evaluation"); ?>">ระดับบุคคล (puwarun)</a>
                                 </li>
                             </ul>
                         </li>

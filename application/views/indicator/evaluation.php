@@ -1,20 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title><?php echo $title ?></title>
-<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/bootstrap.min.css" >
-<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>font-awesome/css/font-awesome.css" >
-<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/sb-admin.css" >
-<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/plugins/dataTables/dataTables.bootstrap.css" >
+<?php $this->load->view('header_view'); ?>
 </head>
 <body>
 <div id="wrapper">
 <?php $this->load->view('menu'); ?>
-	<?php $url = site_url("manageindicator/delete");
-          $urleditnum = site_url("manageindicator/editNumber");
-    ?>
-	
+<?php echo site_url("reportperson/person"); ?>
 <div id="page-wrapper">
 	
 	<div class="row">
@@ -235,7 +227,7 @@
 								<div class="panel-body">
 									<div class="row">
 										<div class="table-responsive">
-											<table class="table table-hover" id="dataTables-example">
+											<table class="table table-hover" id="test1">
 												<thead>
 													<tr>
 														<th style="width: 200px">วันที่</th>
@@ -255,26 +247,26 @@
 													<?php } } ?>
 													-->
 												
-													<tr>
-														<td><input type="text" class="form-control" name="" id="" style="width: 200px"></td>
+													<tr id="row1">
+														<td><input type="text" class="form-control" name="" id="" value="1" style="width: 200px"></td>
 														<td><textarea class="form-control" name="" id="" rows="1" cols="100"></textarea></td>
 														<td><textarea class="form-control" name="" id="" rows="1" cols="40"></textarea></td>
 														<td>
 															<div class="form-group"><input type="file" name="" id=""></div>
-															<button type="button" name="" id="" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-chevron-up" onclick()></span> Add Up</button>
+															<button type="button" name="" id="" class="btn btn-primary btn-xs" onclick="addUp('test1', 'row1');"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>
 															<button type="button" name="" id="" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-chevron-down" onclick()></span> Add Down</button>
 															<button type="button" name="" id="" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus" onclick()></span> Delete</button>
 														</td>
 													</tr>
 													
 													
-													<tr>
-														<td><input type="text" class="form-control" id="test" style="width: 200px"></td>
+													<tr id="row2">
+														<td><input type="text" class="form-control" id="test" value="2" style="width: 200px"></td>
 														<td><textarea class="form-control" rows="1" cols="100"></textarea></td>
 														<td><textarea class="form-control" rows="1" cols="40"></textarea></td>
 														<td>
 															<div class="form-group"><input type="file" id="exampleInputFile"></div>
-															<button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>
+															<button type="button" class="btn btn-primary btn-xs" onclick="addUp('test1', 'row2');"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>
 															<button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-chevron-down"></span> Add Down</button>
 															<button type="button" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus"></span> Delete</button>
 														</td>
@@ -324,6 +316,33 @@
 <script src="<?php echo base_url(); ?>js/jquery-ui-1.10.4.min.js"></script>
 
 <script type="text/javascript">
+var rowCount = 3;
+function addUp(tmpid, rows){
+	var table = document.getElementById(tmpid);
+	$("#"+tmpid).append('<tr id="row' + rowCount + '">'
+						+ '<td><input type="text" class="form-control" name="" id="" value="'+rowCount+'" style="width: 200px"></td>'
+						+ '<td><textarea class="form-control" name="" id="" rows="1" cols="100"></textarea></td>'
+						+ '<td><textarea class="form-control" name="" id="" rows="1" cols="40"></textarea></td>'
+						+ '<td>'
+						+ '<div class="form-group"><input type="file" name="" id=""></div>'
+						+ '<button type="button" name="" id="" class="btn btn-primary btn-xs" onclick="addUp(\'test1\', \'row'+rowCount+'\');"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>'
+						+ '<button type="button" name="" id="" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-chevron-down" onclick()></span> Add Down</button>'
+						+ '<button type="button" name="" id="" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus" onclick()></span> Delete</button>'
+						+ '</td>'
+						+ '</tr>'
+						);
+						
+	var getStartRows = document.getElementById(rows);
+	var getStopRows = document.getElementById("row"+rowCount);
+
+	var firstRow = table.rows[getStartRows.rowIndex];
+    var secondRow = table.rows[getStopRows.rowIndex];
+    firstRow.parentNode.insertBefore (secondRow, firstRow);
+	
+	rowCount += 1;
+}
+
+
 function getvalonchange(point, weight, totalpoint) {
 
 	//count is from models
