@@ -137,7 +137,7 @@ td.highlight {
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>เลือกตำแหน่ง *</label>
-											<select name="position1" class="form-control" onChange="get_division(this.value)" required>
+											<select name="position1" class="form-control" required>
 													<option value="0">กรุณาเลือกตำแหน่ง</option>
 												<?php foreach($position as $loop2){ ?>
 													<option value="<?php echo $loop2['PWPOSITION']; ?>"><?php echo $loop2['PWNAME']; ?></option>

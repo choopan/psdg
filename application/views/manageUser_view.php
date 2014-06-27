@@ -178,7 +178,6 @@ td.highlight {
                                         <th>กรม</th>
 										<th>กอง</th>
 										<th>ตำแหน่ง(ระดับ)</th>
-										<th>ตำแหน่งบริหาร</th>
                                         <th>E-mail</th>
 										<th>เครื่องมือ</th>
                                     </tr>
@@ -189,10 +188,9 @@ td.highlight {
 								?>
 									<tr>
                                         <td><?php echo $loop['PWFNAME']." ".$loop['PWLNAME']; ?></td>
-                                        <td><?php echo $loop['department']; ?></td>
-                                        <td><?php echo $loop['division']; ?></td>
-                                        <td><?php echo $loop['PWPOSITION']."(".$loop['PWLEVEL'].")"; ?></td>
-                                        <td><?php echo $loop['PWPOSITION2']; ?></td>
+                                        <td><?php echo $loop['dep_name']; ?></td>
+                                        <td><?php echo $loop['div_name']; ?></td>
+                                        <td><?php echo $loop['position_name']."(".$loop['PWLEVEL'].")"; ?></td>
                                         <td><?php echo $loop['PWEMAIL']; ?></td>
 										<td>
 											<a href='<?php echo "user_view_info/".$loop['USERID']; ?>' class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>

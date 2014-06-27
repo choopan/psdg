@@ -103,13 +103,13 @@ td.highlight {
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>กรม *</label>
-											<input type="text" class="form-control" value="<?php echo $data[0]['department']?>" readonly>
+											<input type="text" class="form-control" value="<?php echo $data[0]['dep_name']?>" readonly>
 										</div>
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>กอง *</label>
-                                            <input type="text" class="form-control" value="<?php echo $data[0]['division']?>" readonly>
+                                            <input type="text" class="form-control" value="<?php echo $data[0]['div_name']?>" readonly>
 										</div>
 										</div>
 									</div>
@@ -117,7 +117,7 @@ td.highlight {
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>ตำแหน่ง *</label>
-											<input type="text" class="form-control" value="<?php echo $data[0]['PWPOSITION']?>" readonly>
+											<input type="text" class="form-control" value="<?php echo $data[0]['position_name']?>" readonly>
 										</div>
 										</div>
 										<div class="col-lg-4">

@@ -89,7 +89,6 @@ class Manageuser extends CI_Controller {
 		$division=$this->input->post('division');
 		$position1=$this->input->post('position1');
 		$level=$this->input->post('level');
-		$position2=$this->input->post('position2');
 		$admin_min_0=$this->input->post('admin_min');
 		$admin_dep_0=$this->input->post('admin_dep');
 		$admin_div_0=$this->input->post('admin_div');
@@ -115,7 +114,7 @@ class Manageuser extends CI_Controller {
 		
 		if($password==$retry_password)
 		{
-			$this->user_manage->addUser_save($username,md5($password),$fname,$lname,$efname,$elname,$gender,$email,$tel,$mobile,$department,$division,$position1,$level,$position2,$admin_min,$admin_dep,$admin_div,$execode);
+			$this->user_manage->addUser_save($username,md5($password),$fname,$lname,$efname,$elname,$gender,$email,$tel,$mobile,$department,$division,$position1,$level,$admin_min,$admin_dep,$admin_div,$execode);
 			redirect('manageuser/user_view');
 		}else{
 			echo "Can't insert data";
@@ -134,10 +133,10 @@ class Manageuser extends CI_Controller {
 	
 	function user_edit_info($id)
 	{
-		$data['data']=$this->user_manage->get_department();
+		$data['department']=$this->user_manage->get_department();
 		$data['position']=$this->user_manage->get_position();
 		$data['title'] = "MFA - User Management";
-		$data['data2']=$this->user_manage->user_view_info($id);
+		$data['data']=$this->user_manage->user_view_info($id);
 		/* echo "<pre>";
 		print_r($data);
 		echo "</pre>"; */
@@ -158,7 +157,6 @@ class Manageuser extends CI_Controller {
 		$division=$this->input->post('division');
 		$position1=$this->input->post('position1');
 		$level=$this->input->post('level');
-		$position2=$this->input->post('position2');
 		$admin_min_0=$this->input->post('admin_min');
 		$admin_dep_0=$this->input->post('admin_dep');
 		$admin_div_0=$this->input->post('admin_div');
@@ -182,7 +180,7 @@ class Manageuser extends CI_Controller {
 			$admin_div=0;
 		}
 		
-		$this->user_manage->editUser_save($id,$fname,$lname,$efname,$elname,$email,$tel,$mobile,$department,$division,$position1,$level,$position2,$admin_min,$admin_dep,$admin_div,$execode);
+		$this->user_manage->editUser_save($id,$fname,$lname,$efname,$elname,$email,$tel,$mobile,$department,$division,$position1,$level,$admin_min,$admin_dep,$admin_div,$execode);
 		redirect('manageuser/user_view');
 
 	}
