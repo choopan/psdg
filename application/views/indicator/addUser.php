@@ -154,18 +154,6 @@ td.highlight {
 											</select>
 										</div>
 										</div>
-										<div class="col-lg-4">
-										<div class="form-group">
-                                            <label>เลือกตำแหน่งที่ 2 *</label>
-											<select name="position2" class="form-control" onChange="get_division(this.value)">
-													<option value="-1">กรุณาเลือกตำแหน่งที่ 2</option>
-													<option value="0">ไม่มี</option>
-												<?php foreach($position as $loop3){ ?>
-													<option value="<?php echo $loop3['PWPOSITION']; ?>"><?php echo $loop3['PWNAME']; ?></option>
-												<?php } ?>
-											</select>
-										</div>
-										</div>
 									</div>
 									<div class="row">
 										<div class="col-lg-8">
@@ -198,13 +186,11 @@ td.highlight {
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-lg-1">
 										<div class="form-group">
+										<div class="col-lg-1">
 											<input id="addNew" type="submit" class="btn btn-success" value="เพิ่ม">
-										</div>
-										</div>
-										<div class="col-lg-1">
-										<div class="form-group">
+											</div>
+											<div class="col-lg-1">
 											<a href="javascript:history.go(-1)" class="btn btn-primary">กลับ</a>
 										</div>
 										</div>

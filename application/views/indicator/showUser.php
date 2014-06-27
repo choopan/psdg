@@ -126,12 +126,6 @@ td.highlight {
                                             <input type="text" class="form-control" value="<?php echo $data[0]['PWLEVEL']?>" readonly>
 										</div>
 										</div>
-										<div class="col-lg-4">
-										<div class="form-group">
-                                            <label>เลือกตำแหน่งที่ 2 *</label>
-											<input type="text" class="form-control" value="<?php echo $data[0]['PWPOSITION2']?>" readonly>
-										</div>
-										</div>
 									</div>
 									<div class="row">
 										<div class="col-lg-8">
@@ -147,17 +141,17 @@ td.highlight {
 												
 												<label class="checkbox-inline">
 													<?php if($data[0]['admin_dep']==1): ?>
-													<input type="checkbox" checked disabled>ระดับกระกรม
+													<input type="checkbox" checked disabled>ระดับกรม
 													<?php else:?>
-													<input type="checkbox" disabled>ระดับกระกรม
+													<input type="checkbox" disabled>ระดับกรม
 													<?php endif?>
 												</label>
 												
 												<label class="checkbox-inline">
 													<?php if($data[0]['admin_div']==1): ?>
-													<input type="checkbox" checked disabled>ระดับกระกอง
+													<input type="checkbox" checked disabled>ระดับกอง
 													<?php else:?>
-													<input type="checkbox" disabled>ระดับกระกอง
+													<input type="checkbox" disabled>ระดับกอง
 													<?php endif?>
 												</label>
 											</div>

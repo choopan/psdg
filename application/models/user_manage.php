@@ -96,21 +96,9 @@ Class User_manage extends CI_Model
 	return $query;
  }
  
- function get_search($username,$fname,$lname,$department,$division,$position,$admin_min,$admin_dep,$admin_div,$execode)
+ function get_search($sql)
  {
-	$query=$this->db->query('SELECT DISTINCT USERID,PWFNAME,PWLNAME,department,division,PWPOSITION,PWLEVEL,PWPOSITION2,PWEMAIL 
-							 FROM pwemployee 
-							 WHERE PWUSERNAME = "'.$username.'" 
-							 OR PWFNAME ="'.$fname.'"
-							 OR PWLNAME ="'.$lname.'"
-							 OR department ="'.$department.'"
-							 OR division ="'.$division.'"
-							 OR PWPOSITION ="'.$position.'"
-							 OR admin_min ="'.$admin_min.'"
-							 OR admin_dep ="'.$admin_dep.'"
-							 OR admin_div ="'.$admin_div.'"
-							 OR execode ="'.$execode.'"	
-					')
+	$query=$this->db->query($sql)
 					->result_array();
 	return $query;
  }

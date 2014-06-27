@@ -220,16 +220,30 @@ class Manageuser extends CI_Controller {
 				$admin_div = "1";
 			}
 		}else{
-			$admin_min = null;
+				$admin_min = null;
 				$admin_dep = null;
 				$admin_div = null;
 		}
 		
-		$data=$this->user_manage->get_search($username,$fname,$lname,$department,$division,$position,$admin_min,$admin_dep,$admin_div,$execode);
-		echo "<pre>";
+		if($username!=null){$username="WHERE PWUSERNAME='".$username."'";}
+		if($fname!=null){$fname="AND PWFNAME='".$fname."'";}
+		if($lname!=null){$lname="AND PWLNAME='".$lname."'";}
+		if($department==-1){$department=" ";}else{$department="AND department=".$department;}
+		if($division==-1){$division=" ";}else{$division="AND division=".$division;}
+		if($position==-1){$position=" ";}else{$position="AND PWPOSITION=".$position;}
+		if($admin_min!=null){$admin_min="AND admin_min=".$admin_min;}
+		if($admin_dep!=null){$admin_dep="AND admin_dep=".$admin_dep;}
+		if($admin_div!=null){$admin_div="AND admin_div=".$admin_div;}
+		if($execode==-1){$execode=" ";}else{$execode="AND execode=".$execode.")";}
+		
+		$sql="SELECT USERID, PWFNAME, PWLNAME, department, division, PWPOSITION, PWLEVEL, PWPOSITION2, PWEMAIL  
+			  FROM pwemployee ".$username.' '.$fname.' '.$lname.' '.$department.' '.$division.' '.$position.' '.$admin_min.' '.$admin_dep.' '.$admin_div.' '.$execode;
+		
+		$data=$this->user_manage->get_search($sql);
+		/* echo "<pre>";
 		print_r($data);
-		echo "</pre>";
-		//echo json_encode($data);
+		echo "</pre>"; */
+		echo json_encode($data);
 	}
 	
 	

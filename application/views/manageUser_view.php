@@ -30,9 +30,11 @@ td.highlight {
 		<div class="row">
             <div class="panel panel-default">
 					<div class="panel-heading">
-						<button type="button" class="btn btn-outline btn-success" onClick="window.location.href='<?php echo site_url("manageuser/adduser"); ?>'">เพิ่มผู้ใช้งาน</button>
-						
-						<button class="btn btn-outline btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">กดเพื่อค้นหา</button>
+					
+							<button type="button" class="btn btn-outline btn-success" onClick="window.location.href='<?php echo site_url("manageuser/adduser"); ?>'">เพิ่มผู้ใช้งาน</button>
+							<button class="btn btn-outline btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">กดเพื่อค้นหา</button>
+							<div id="cancle"></div>
+							
 							<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 							  <div class="modal-dialog modal-lg">
 								<div class="modal-content">
@@ -46,7 +48,7 @@ td.highlight {
 											<div class="col-lg-4">
 											<div class="form-group">
 												<label>Username *</label>
-												<input type="text" id="username" class="form-control">
+												<input type="text" id="username" class="form-control" value="username" required>
 											</div>
 											</div>
 											<div class="col-lg-4">
@@ -67,7 +69,7 @@ td.highlight {
 											<div class="form-group">
 												<label>กรม *</label>
 												<select id="department" class="form-control" onChange="get_division(this.value)">
-													<option value="0">เลือกกรม</option>
+													<option value="-1">---</option>
 													<?php foreach($department as $value0){?>
 													<option value="<?php echo $value0['id'];?>"><?php echo $value0['name'];?></option>
 													<?php } ?>
@@ -78,7 +80,7 @@ td.highlight {
 											<div class="form-group">
 												<label>กอง *</label>
 												<select class="form-control" id="division_db">
-													<option value="0">---</option>
+													<option value="-1">---</option>
 												</select>
 											</div>
 											</div>
@@ -88,7 +90,7 @@ td.highlight {
 											<div class="form-group">
 												<label>ตำแหน่ง *</label>
 												<select id="position" class="form-control" >
-													<option value="0">เลือกตำแหน่ง</option>
+													<option value="-1">---</option>
 													<?php foreach($position as $value1){?>
 													<option value="<?php echo $value1['PWPOSITION'];?>"><?php echo $value1['PWNAME'];?></option>
 													<?php } ?>
@@ -109,6 +111,7 @@ td.highlight {
 											<div class="form-group">
 												<label>สิทธิบริหาร *</label>
 												<select id="execode" class="form-control" >
+													<option value="-1">---</option>
 													<option value="0">ไม่มี</option>
 													<option value="1">ผู้อำนวยการกอง</option>
 													<option value="2">อธิบดีกรม</option>
@@ -132,7 +135,7 @@ td.highlight {
                     <div class="panel-body">
 					
                         <div class="table-responsive">
-						<div class="row">
+						<div class="row" id="page_bott">
 							<div class="col-lg-2">
 							<div class="form-group">
 							<select id="page_select" class="form-control">
@@ -175,7 +178,7 @@ td.highlight {
                                         <th>กรม</th>
 										<th>กอง</th>
 										<th>ตำแหน่ง(ระดับ)</th>
-										<th>ต่ำแหน่งบริหาร</th>
+										<th>ตำแหน่งบริหาร</th>
                                         <th>E-mail</th>
 										<th>เครื่องมือ</th>
                                     </tr>
@@ -268,7 +271,11 @@ td.highlight {
 						alert('error');
                     },
 					'success' : function(data){
+						$("#page_bott").empty();
 						$("#user_db").empty();
+						$("#cancle").empty();
+						var bt = '<br><a href="user_view" class="btn btn-outline btn-danger" >ยกเลิกการค้นหา</a>';
+						$('#cancle').append(bt);
 						var user_num=data.length;
 						for(i=0;i<user_num;i++)
 						{
