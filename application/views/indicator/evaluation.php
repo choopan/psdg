@@ -16,7 +16,7 @@
 				<div class="panel-body">
 					<div class="col-md-3 col-md-offset-3">
 						<label>รอบที่</label>
-						<select class="form-control" name="" id="">
+						<select class="form-control" name="" id="" style="width: 20%">
 							<option value=""></option>
 							<option value="1">1</option>
 							<option value="2">2</option>
@@ -24,7 +24,7 @@
 					</div>
 					<div class="col-md-3 col-md-offset-3">
 						<label>สังกัดกอง</label>
-						<select class="form-control" name="" id="">
+						<select class="form-control" name="" id="" style="width: 30%">
 							<option value=""></option>
 							
 							
@@ -248,20 +248,18 @@
 													-->
 												
 													<tr id="row1">
-														<td><input type="text" class="form-control" name="" id="" value="1" style="width: 200px"></td>
-														<td><textarea class="form-control" name="" id="" rows="1" cols="100"></textarea></td>
-														<td><textarea class="form-control" name="" id="" rows="1" cols="40"></textarea></td>
+														<td><input type="text" class="form-control" id="test" style="width: 200px"></td>
+														<td><textarea class="form-control" rows="1" cols="100"></textarea></td>
+														<td><textarea class="form-control" rows="1" cols="40"></textarea></td>
 														<td>
-															<div class="form-group"><input type="file" name="" id=""></div>
-															<button type="button" name="" id="" class="btn btn-primary btn-xs" onclick="addUp('test2', 'row1');"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>
-															<button type="button" name="" id="" class="btn btn-info btn-xs" onclick="addDown('test2', 'row1');"><span class="glyphicon glyphicon-chevron-down" onclick()></span> Add Down</button>
-															<button type="button" name="" id="" class="btn btn-danger btn-xs" onclick="deleteRow('test2', 'row1');"><span class="glyphicon glyphicon-minus" onclick()></span> Delete</button>
+															<div class="form-group"><input type="file" id="exampleInputFile"></div>
+															<button type="button" class="btn btn-primary btn-xs" onclick="addUp('test2', 'row1');"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>
+															<button type="button" class="btn btn-info btn-xs" onclick="addDown('test2', 'row1');"><span class="glyphicon glyphicon-chevron-down"></span> Add Down</button>
+															<button type="button" class="btn btn-danger btn-xs" onclick="deleteRow('test2', 'row1');"><span class="glyphicon glyphicon-minus"></span> Delete</button>
 														</td>
 													</tr>
-													
-													
 													<tr id="row2">
-														<td><input type="text" class="form-control" id="test" value="2" style="width: 200px"></td>
+														<td><input type="text" class="form-control" id="test" style="width: 200px"></td>
 														<td><textarea class="form-control" rows="1" cols="100"></textarea></td>
 														<td><textarea class="form-control" rows="1" cols="40"></textarea></td>
 														<td>
@@ -306,6 +304,7 @@
 		</div>
     </div>
 
+
 </div>
 </div>
 
@@ -320,7 +319,7 @@ var rowCount = 3;
 function addUp(tmpid, rows){
 	var table = document.getElementById(tmpid);
 	$("#"+tmpid).append('<tr id="row' + rowCount + '">'
-						+ '<td><input type="text" class="form-control" name="" id="" value="' + rowCount + '" style="width: 200px"></td>'
+						+ '<td><input type="text" class="form-control" name="" id="" value="" style="width: 200px"></td>'
 						+ '<td><textarea class="form-control" name="" id="" rows="1" cols="100"></textarea></td>'
 						+ '<td><textarea class="form-control" name="" id="" rows="1" cols="40"></textarea></td>'
 						+ '<td>'
@@ -345,7 +344,7 @@ function addUp(tmpid, rows){
 function addDown(tmpid, rows){
 	var table = document.getElementById(tmpid);
 	$("#"+tmpid).append('<tr id="row' + rowCount + '">'
-						+ '<td><input type="text" class="form-control" name="" id="" value="' + rowCount + '" style="width: 200px"></td>'
+						+ '<td><input type="text" class="form-control" name="" id="" value="" style="width: 200px"></td>'
 						+ '<td><textarea class="form-control" name="" id="" rows="1" cols="100"></textarea></td>'
 						+ '<td><textarea class="form-control" name="" id="" rows="1" cols="40"></textarea></td>'
 						+ '<td>'
