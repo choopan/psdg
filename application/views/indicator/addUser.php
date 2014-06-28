@@ -160,15 +160,15 @@ td.highlight {
 											<div class="form-group">
 											<label>ผู้ดูแลระบบ * |</label>
 												<label class="checkbox-inline">
-													<input type="checkbox" name="admin_min">ระดับกระทรวง
+													<input type="radio" value="admin_min" name="admin">ระดับกระทรวง
 												</label>
 												
 												<label class="checkbox-inline">
-													<input type="checkbox" name="admin_dep">ระดับกรม
+													<input type="radio" value="admin_dep" name="admin">ระดับกรม
 												</label>
 												
 												<label class="checkbox-inline">
-													<input type="checkbox" name="admin_div">ระดับกอง
+													<input type="radio" value="admin_div"  name="admin">ระดับกอง
 												</label>
 											</div>
 										</div>

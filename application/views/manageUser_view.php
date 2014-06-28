@@ -33,7 +33,7 @@ td.highlight {
 					
 							<button type="button" class="btn btn-outline btn-success" onClick="window.location.href='<?php echo site_url("manageuser/adduser"); ?>'">เพิ่มผู้ใช้งาน</button>
 							<button class="btn btn-outline btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">กดเพื่อค้นหา</button>
-							<div id="cancle"></div>
+							<b id="cancle"></b>
 							
 							<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 							  <div class="modal-dialog modal-lg">
@@ -101,6 +101,7 @@ td.highlight {
 											<div class="form-group">
 												<label>สิทธิผู้ดูแล *</label>
 												<select id="admin_mdd" class="form-control" >
+													<option value="-1">---</option>
 													<option value="admin_min">ระดับกระทรวง</option>
 													<option value="admin_dep">ระดับกรม</option>
 													<option value="admin_div">ระดับกอง</option>
@@ -161,7 +162,7 @@ td.highlight {
 								<?php }else{?>
 									<a  class="btn btn-danger"> << </a> 
 								<?php }?>
-									<input type="text" value=" หน้าที่ <?php echo $currentPage;?> ทั้งหมด <?php echo $i;?> หน้า " style="width:170px; height:35px; margin-left:auto; margin-right:auto; border-style: none;" readonly> 
+									<input type="text" value=" หน้าที่ <?php echo $currentPage;?> ทั้งหมด <?php echo $i;?> หน้า " style="width:170px; height:35px; margin-left:auto; margin-right:auto; border-style: none;" readonly>
 								<?php if($currentPage < $i){?>
 									<a href="user_view?pagenum=<?php echo $currentPage+1;?>" class="btn btn-warning btn-outline"> >> </a>
 								<?php }else{?>
@@ -170,7 +171,7 @@ td.highlight {
 							</p>
 						
 						</div>
-							
+						<div id="user_db">	
 						<table class="table table-striped table-bordered table-hover">
                                 <thead>
                                     <tr>
@@ -182,7 +183,7 @@ td.highlight {
 										<th>เครื่องมือ</th>
                                     </tr>
                                 </thead>
-								<tbody id="user_db">
+								<tbody>
 								<?php 
 									foreach($data2 as $loop){
 								?>
@@ -190,7 +191,7 @@ td.highlight {
                                         <td><?php echo $loop['PWFNAME']." ".$loop['PWLNAME']; ?></td>
                                         <td><?php echo $loop['dep_name']; ?></td>
                                         <td><?php echo $loop['div_name']; ?></td>
-                                        <td><?php echo $loop['position_name']."(".$loop['PWLEVEL'].")"; ?></td>
+                                        <td><?php echo $loop['position_name']." (ระดับ ".$loop['PWLEVEL'].")"; ?></td>
                                         <td><?php echo $loop['PWEMAIL']; ?></td>
 										<td>
 											<a href='<?php echo "user_view_info/".$loop['USERID']; ?>' class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
@@ -201,6 +202,7 @@ td.highlight {
 							     <?php  } ?>
                                 </tbody>
 							</table>
+						</div>
 						</div>
 					</div>
 				</div>
@@ -240,7 +242,7 @@ td.highlight {
 					'success' : function(data){
 						$("#division_db").empty();
 						var division_num=data.length;
-						var tr='<option>เลือกกอง</option>';
+						var tr='<option value="-1">เลือกกอง</option>';
 						for(i=0;i<division_num;i++)
 						{
 							tr+='<option value="'+data[i]['id']+'">'+data[i]['name']+'</option>';
@@ -260,11 +262,11 @@ td.highlight {
 			var position = $('#position').val();
 			var admin_mdd = $('#admin_mdd').val();
 			var execode = $('#execode').val();
-			
 			$.ajax({
 					'url' : '<?php echo site_url('manageuser/get_search'); ?>/',
 					'type':'get',
 					'data':{username:username,fname:fname,lname:lname,department:department,division:division,position:position,admin_mdd:admin_mdd,execode:execode},
+					'dayaType':'json',
 					'error' : function(data){ 
 						alert('error');
                     },
@@ -272,22 +274,9 @@ td.highlight {
 						$("#page_bott").empty();
 						$("#user_db").empty();
 						$("#cancle").empty();
-						var bt = '<br><a href="user_view" class="btn btn-outline btn-danger" >ยกเลิกการค้นหา</a>';
+						var bt = '<a href="user_view" class="btn btn-outline btn-danger" >ยกเลิกการค้นหา</a>';
 						$('#cancle').append(bt);
-						var user_num=data.length;
-						for(i=0;i<user_num;i++)
-						{
-							var tr ='<tr>';
-								tr+='<td>'+data[i]['PWFNAME']+' '+data[i]['PWLNAME']+'</td>';
-								tr+='<td>'+data[i]['department']+'</td>';
-								tr+='<td>'+data[i]['division']+'</td>';
-								tr+='<td>'+data[i]['PWPOSITION']+'('+data[i]['PWLEVEL']+')</td>';
-								tr+='<td>'+data[i]['PWPOSITION2']+'</td>';
-								tr+='<td>'+data[i]['execode']+'</td>';
-								tr+='<td>เครื่องมือ</td>';
-								tr+='</tr>';
-							$(tr).appendTo('#user_db');
-						}
+						$('#user_db').html(data);
                     }
 				});
 			

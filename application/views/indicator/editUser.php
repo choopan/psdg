@@ -131,30 +131,30 @@ td.highlight {
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-lg-8">
+										<div class="col-lg-6">
 											<div class="form-group">
 											<label>ผู้ดูแลระบบ * |</label>
 												<label class="checkbox-inline">
 													<?php if($data[0]['admin_min']==1): ?>
-													<input type="checkbox" name="admin_min" checked >ระดับกระทรวง
+													<input type="radio" value="admin_min" name="admin" checked >ระดับกระทรวง
 													<?php else:?>
-													<input type="checkbox" name="admin_min" >ระดับกระทรวง
+													<input type="radio" value="admin_min" name="admin" >ระดับกระทรวง
 													<?php endif?>
 												</label>
 												
 												<label class="checkbox-inline">
 													<?php if($data[0]['admin_dep']==1): ?>
-													<input type="checkbox" name="admin_dep" checked >ระดับกรม
+													<input type="radio" value="admin_dep" name="admin" checked >ระดับกรม
 													<?php else:?>
-													<input type="checkbox" name="admin_dep" >ระดับกรม
+													<input type="radio" value="admin_dep" name="admin" >ระดับกรม
 													<?php endif?>
 												</label>
 												
 												<label class="checkbox-inline">
 													<?php if($data[0]['admin_div']==1): ?>
-													<input type="checkbox" name="admin_div" checked >ระดับกอง
+													<input type="radio" value="admin_div" name="admin" checked >ระดับกอง
 													<?php else:?>
-													<input type="checkbox" name="admin_div" >ระดับกอง
+													<input type="radio" value="admin_div" name="admin" >ระดับกอง
 													<?php endif?>
 												</label>
 											</div>

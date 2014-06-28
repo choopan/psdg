@@ -89,24 +89,22 @@ class Manageuser extends CI_Controller {
 		$division=$this->input->post('division');
 		$position1=$this->input->post('position1');
 		$level=$this->input->post('level');
-		$admin_min_0=$this->input->post('admin_min');
-		$admin_dep_0=$this->input->post('admin_dep');
-		$admin_div_0=$this->input->post('admin_div');
+		$admin_min_0=$this->input->post('admin');
 		$execode=$this->input->post('execode');
 		
-		if($admin_min_0=="on"){
+		if($admin_min_0=="admin_min"){
 			$admin_min=1;
 		}else{
 			$admin_min=0;
 		}
 		
-		if($admin_dep_0=="on"){
+		if($admin_min_0=="admin_dep"){
 			$admin_dep=1;
 		}else{
 			$admin_dep=0;
 		}
 		
-		if($admin_div_0=="on"){
+		if($admin_min_0=="admin_div"){
 			$admin_div=1;
 		}else{
 			$admin_div=0;
@@ -157,24 +155,22 @@ class Manageuser extends CI_Controller {
 		$division=$this->input->post('division');
 		$position1=$this->input->post('position1');
 		$level=$this->input->post('level');
-		$admin_min_0=$this->input->post('admin_min');
-		$admin_dep_0=$this->input->post('admin_dep');
-		$admin_div_0=$this->input->post('admin_div');
+		$admin_min_0=$this->input->post('admin');
 		$execode=$this->input->post('execode');
 		
-		if($admin_min_0=="on"){
+		if($admin_min_0=="admin_min"){
 			$admin_min=1;
 		}else{
 			$admin_min=0;
 		}
 		
-		if($admin_dep_0=="on"){
+		if($admin_min_0=="admin_dep"){
 			$admin_dep=1;
 		}else{
 			$admin_dep=0;
 		}
 		
-		if($admin_div_0=="on"){
+		if($admin_min_0=="admin_div"){
 			$admin_div=1;
 		}else{
 			$admin_div=0;
@@ -203,19 +199,19 @@ class Manageuser extends CI_Controller {
 		$admin_mdd = $this->input->get('admin_mdd');
 		$execode = $this->input->get('execode');
 		
-		if(!empty($admin_mdd)){
+		if($admin_mdd!=-1){
 			if($admin_mdd=="admin_min"){
-				$admin_min = "1";
+				$admin_min = 1;
 				$admin_dep = null;
 				$admin_div = null;
 			}else if($admin_mdd=="admin_dep"){
 				$admin_min = null;
-				$admin_dep = "1";
+				$admin_dep = 1;
 				$admin_div = null;
 			}else if($admin_mdd=="admin_div"){
 				$admin_min = null;
 				$admin_dep = null;
-				$admin_div = "1";
+				$admin_div = 1;
 			}
 		}else{
 				$admin_min = null;
@@ -234,14 +230,20 @@ class Manageuser extends CI_Controller {
 		if($admin_div!=null){$admin_div="AND admin_div=".$admin_div;}
 		if($execode==-1){$execode=" ";}else{$execode="AND execode=".$execode.")";}
 		
-		$sql="SELECT USERID, PWFNAME, PWLNAME, department, division, PWPOSITION, PWLEVEL, PWPOSITION2, PWEMAIL  
-			  FROM pwemployee ".$username.' '.$fname.' '.$lname.' '.$department.' '.$division.' '.$position.' '.$admin_min.' '.$admin_dep.' '.$admin_div.' '.$execode;
-		
-		$data=$this->user_manage->get_search($sql);
+		$sql="SELECT USERID, PWFNAME, PWLNAME, PWEFNAME, PWELNAME, department.name AS dep_name, division.name AS div_name, PWPOSITION.PWNAME AS position_name, PWLEVEL, PWEMAIL   
+			  FROM pwemployee  INNER JOIN division INNER JOIN department INNER JOIN pwposition
+			  ON pwemployee.department = department.id
+			  AND pwemployee.division = division.id
+			  AND pwemployee.PWPOSITION = pwposition.PWPOSITION 
+			  ".$username.' '.$fname.' '.$lname.' '.$department.' '.$division.' '.$position.' '.$admin_min.' '.$admin_dep.' '.$admin_div.' '.$execode;
+		$dta['sql']=$sql;
+		$data2['data2']=$this->user_manage->get_search($sql);
 		/* echo "<pre>";
-		print_r($data);
+		print_r($data2);
+		print_r($dta);
 		echo "</pre>"; */
-		echo json_encode($data);
+		//echo json_encode($data);
+		$this->load->view('indicator/showUser_search',$data2);
 	}
 	
 	

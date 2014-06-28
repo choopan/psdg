@@ -87,7 +87,10 @@ Class User_manage extends CI_Model
  
  function user_view_info($id)
  {
-	$query=$this->db->query('SELECT USERID, PWUSERNAME,PWFNAME, PWLNAME,PWEFNAME, PWELNAME, PWSEX, PWTELOFFICE, mobile, department.name AS dep_name, division.name AS div_name, pwemployee.PWPOSITION AS position, pwemployee.department AS dep_id, pwemployee.division AS div_id, PWPOSITION.PWNAME AS position_name, PWLEVEL, PWEMAIL,admin_min, admin_dep, admin_div, execode
+	$query=$this->db->query('SELECT USERID, PWUSERNAME,PWFNAME, PWLNAME,PWEFNAME, PWELNAME, PWSEX, PWTELOFFICE, mobile, department.name AS dep_name,
+							 division.name AS div_name, pwemployee.PWPOSITION AS position, pwemployee.department AS dep_id, 
+							 pwemployee.division AS div_id, PWPOSITION.PWNAME AS position_name, PWLEVEL, PWEMAIL,admin_min, admin_dep, admin_div, 
+							 execode
 							 FROM  pwemployee  INNER JOIN division INNER JOIN department INNER JOIN pwposition 
 							 ON pwemployee.department = department.id
 							 AND pwemployee.division = division.id
