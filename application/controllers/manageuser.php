@@ -90,7 +90,6 @@ class Manageuser extends CI_Controller {
 		$position1=$this->input->post('position1');
 		$level=$this->input->post('level');
 		$admin_min_0=$this->input->post('admin');
-		$execode=$this->input->post('execode');
 		
 		if($admin_min_0=="admin_min"){
 			$admin_min=1;
@@ -112,7 +111,7 @@ class Manageuser extends CI_Controller {
 		
 		if($password==$retry_password)
 		{
-			$this->user_manage->addUser_save($username,md5($password),$fname,$lname,$efname,$elname,$gender,$email,$tel,$mobile,$department,$division,$position1,$level,$admin_min,$admin_dep,$admin_div,$execode);
+			$this->user_manage->addUser_save($username,md5($password),$fname,$lname,$efname,$elname,$gender,$email,$tel,$mobile,$department,$division,$position1,$level,$admin_min,$admin_dep,$admin_div);
 			redirect('manageuser/user_view');
 		}else{
 			echo "Can't insert data";
@@ -253,26 +252,37 @@ class Manageuser extends CI_Controller {
 	{
 		$data['data']=$this->user_manage->get_department();
 		$data['title'] = "MFA - Department Management";
+		/* echo "<pre>";
+		print_r($data);
+		echo "</pre>"; */ 
 		$this->load->view('manageDepartment_view',$data);
 	}
 	
 	function addDepartment()
 	{
 		$data['title'] = "MFA - Department Management";
+		$data['user'] = $this->user_manage->get_user_1();
 		$this->load->view('indicator/addDepartment',$data);
 	}
 	
 	function addDepartmaent_save()
 	{
 		$department_name=$this->input->post('department');
-		$this->user_manage->addDepartmaent_save($department_name);
+		$userid=$this->input->post('execode');
+		$execode=1;
+		$this->user_manage->update_execode($userid,$execode);
+		$this->user_manage->addDepartmaent_save($department_name,$userid);
 		redirect('manageuser/department_view');
 	}
 	
 	function dep_edit_info($id)
 	{
 		$data['data']=$this->user_manage->dep_edit_info($id);
+		$data['user'] = $this->user_manage->get_user_1();
 		$data['title'] = "MFA - Department Management";
+		/* echo "<pre>";
+		print_r($data);
+		echo "</pre>"; */
 		$this->load->view('indicator/editDepartment',$data);
 	}
 	
@@ -280,7 +290,8 @@ class Manageuser extends CI_Controller {
 	{
 		$id=$this->input->post('id');
 		$department=$this->input->post('department');
-		$this->user_manage->updateDepartmaent_save($id,$department);
+		$userid=$this->input->post('userid');
+		$this->user_manage->updateDepartmaent_save($id,$department,$userid);
 		redirect('manageuser/department_view');
 	}
 	
@@ -304,15 +315,19 @@ class Manageuser extends CI_Controller {
 	function addDivision()
 	{
 		$data['title'] = "MFA - Department Management";
+		$data['user'] = $this->user_manage->get_user_1();
 		$data['data']=$this->user_manage->get_department();
 		$this->load->view('indicator/addDivision',$data);
 	}
 	
 	function addDivision_save()
 	{	
-		echo $department_id=$this->input->post('department');
-		echo $division_name=$this->input->post('division');
-		$this->user_manage->addDivision_save($department_id,$division_name);
+		$department_id=$this->input->post('department');
+		$division_name=$this->input->post('division');
+		$userid=$this->input->post('userid');
+		$execode=2;
+		$this->user_manage->update_execode($userid,$execode);
+		$this->user_manage->addDivision_save($department_id,$division_name,$userid);
 		redirect('manageuser/division_view');
 	}
 	
@@ -326,6 +341,7 @@ class Manageuser extends CI_Controller {
 	{
 		$data['title'] = "MFA - Department Management";
 		$data['div']=$this->user_manage->div_edit_info($id);
+		$data['user'] = $this->user_manage->get_user_1();
 		$dep_id=$data['div'][0]['dep_id'];
 		$data['dep']=$this->user_manage->dep_edit_info($dep_id);
 		$data['data']=$this->user_manage->get_department();
@@ -340,7 +356,8 @@ class Manageuser extends CI_Controller {
 		$id=$this->input->post('id');
 		$dep_id=$this->input->post('department');
 		$division=$this->input->post('division');
-		$this->user_manage->updateDivision_save($id,$dep_id,$division);
+		$userid=$this->input->post('userid');
+		$this->user_manage->updateDivision_save($id,$dep_id,$division,$userid);
 		redirect('manageuser/division_view');
 	}
 	

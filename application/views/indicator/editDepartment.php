@@ -41,6 +41,19 @@ td.highlight {
                                             <input type="text" class="form-control" name="department" value="<?php echo $data[0]['name'];?>">
 										</div>
 										</div>
+										<div class="col-lg-4">
+										<div class="form-group">
+											<label>อธิบดีกรม *</label>
+                                            <select name="userid" class="form-control" required >
+											<option value="<?php echo $data[0]['USERID'];?>">default <?php echo $data[0]['PWFNAME'].' '.$data[0]['PWLNAME']; ?></option>
+											<?php 
+												foreach($user as $value){
+													echo "<option value='".$value['USERID']."'>".$value['PWFNAME']." ".$value['PWLNAME']."</option>";
+												}
+											?>
+											</select>
+										</div>
+										</div>
 									</div>
 									<div class="row">
 										<div class="form-group">

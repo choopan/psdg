@@ -32,7 +32,7 @@ td.highlight {
 					</div>
 					<div class="panel-body">
 							
-								<form action="<?php echo site_url("manageuser/addDivision_save"); ?>" method="post" name="addDivision">
+								<form action="<?php echo site_url("manageuser/addDivision_save"); ?>" method="post">
 									<div class="row">
 										<div class="col-lg-4">
 										<div class="form-group">
@@ -48,9 +48,20 @@ td.highlight {
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
-											<input type="hidden" name="uidperson" id="uidperson" value="">
                                             <label>ชื่อกอง *</label>
-                                            <input type="text" class="form-control" name="division" id="residperson">
+                                            <input type="text" class="form-control" name="division">
+										</div>
+										</div>
+										<div class="col-lg-4">
+										<div class="form-group">
+											<label>ผู้อำนวยการกอง *</label>
+                                            <select name="userid" class="form-control" required >
+											<?php 
+												foreach($user as $value){
+													echo "<option value='".$value['USERID']."'>".$value['PWFNAME']." ".$value['PWLNAME']."</option>";
+												}
+											?>
+											</select>
 										</div>
 										</div>
 									</div>

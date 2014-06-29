@@ -174,18 +174,6 @@ td.highlight {
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-lg-2">
-										<div class="form-group">
-											<label>สิทธิบริหาร *</label>
-											<select name="execode" class="form-control" required>
-												<option value="0">ไม่มี</option>
-												<option value="1">ผู้อำนวยการกอง</option>
-												<option value="2">อธิบดีกรม</option>
-											</select>
-										</div>
-										</div>
-									</div>
-									<div class="row">
 										<div class="form-group">
 										<div class="col-lg-1">
 											<input id="addNew" type="submit" class="btn btn-success" value="เพิ่ม">

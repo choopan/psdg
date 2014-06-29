@@ -36,12 +36,25 @@ td.highlight {
 									<div class="row">
 										<div class="col-lg-4">
 										<div class="form-group">
-											<input type="hidden" name="uidperson" id="uidperson" value="">
                                             <label>ชื่อกรม *</label>
                                             <input type="text" class="form-control" name="department" id="residperson">
 										</div>
 										</div>
+
+										<div class="col-lg-4">
+										<div class="form-group">
+											<label>อธิบดีกรม *</label>
+                                            <select name="execode" class="form-control" required >
+											<?php 
+												foreach($user as $value){
+													echo "<option value='".$value['USERID']."'>".$value['PWFNAME']." ".$value['PWLNAME']."</option>";
+												}
+											?>
+											</select>
+										</div>
+										</div>
 									</div>
+									
 									<div class="row">
 										<div class="form-group">
 										<div class="col-lg-1">

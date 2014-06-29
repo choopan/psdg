@@ -55,6 +55,20 @@ td.highlight {
                                             <input type="text" class="form-control" name="division" value="<?php echo $div[0]['name'];?>">
 										</div>
 										</div>
+										<div class="col-lg-4">
+										<div class="form-group">
+                                            <label>ผู้อำนวยการกอง *</label>
+											<select name="userid" class="form-control">
+												
+												<?php if(is_array($data) && count($data) ) {?>
+													<option value="<?php echo $dep[0]['id']; ?>"><?php echo "ข้อมูลเดิมคือ ".$dep[0]['PWFNAME'].' '.$dep[0]['PWLNAME']; ?></option>
+												<?php foreach($user as $loop2){
+												?>
+													<option value="<?php echo $loop2['USERID']; ?>"><?php echo $loop2['PWFNAME'].' '.$loop2['PWLNAME']; ?></option>
+												<?php } } ?>
+											</select>
+										</div>
+										</div>
 									</div>
 									<div class="row">
 										<div class="form-group">

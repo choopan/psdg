@@ -7,7 +7,7 @@ Class User_manage extends CI_Model
 	parent::__construct();	
 	}
 //------------------------------------------------------------ User --------------------------------------------
- function get_user_()
+ function get_user_1()
  {
 	$query=$this->db->select('USERID, PWFNAME, PWLNAME, department, division, PWPOSITION, PWLEVEL, PWPOSITION2, PWEMAIL')
 					->get('pwemployee')
@@ -64,7 +64,7 @@ Class User_manage extends CI_Model
 			 ->insert('pwemployee');
  }
  
- function editUser_save($id,$fname,$lname,$efname,$elname,$email,$tel,$mobile,$department,$division,$position1,$level,$admin_min,$admin_dep,$admin_div,$execode)
+ function editUser_save($id,$fname,$lname,$efname,$elname,$email,$tel,$mobile,$department,$division,$position1,$level,$admin_min,$admin_dep,$admin_div)
  {
 	$this->db->where('USERID',$id)
 			 ->set('PWFNAME',$fname)
@@ -81,7 +81,6 @@ Class User_manage extends CI_Model
 			 ->set('admin_min',$admin_min)
 			 ->set('admin_dep',$admin_dep)
 			 ->set('admin_div',$admin_div)
-			 ->set('execode',$execode)
 			 ->update('pwemployee');
  }
  
@@ -124,33 +123,42 @@ Class User_manage extends CI_Model
  }
  
  //============================================================= Department =====================================
- function addDepartmaent_save($department_name)
+ function addDepartmaent_save($department_name,$userid)
  {
 	$this->db->set('name',$department_name)
 			 ->set('fid',0)
+			 ->set('USERID',$userid)
 			 ->insert('department');
  }
  
  function get_department()
  {
-	$query=$this->db->distinct()
-					->get('department')
+	$query=$this->db->query('SELECT DISTINCT id,name,PWFNAME,PWLNAME FROM department INNER JOIN pwemployee
+							 ON department.USERID = pwemployee.USERID')
 					->result_array();
 	return $query;
+ }
+ 
+ function update_execode($userid,$execode)
+ {
+	$this->db->where('USERID',$userid)
+			 ->set('execode',$execode)
+			 ->update('pwemployee');
  }
  
  function dep_edit_info($id)
  {
-	$query=$this->db->where('id',$id)
-					->get('department')
+	$query=$this->db->query('SELECT id,department.USERID AS USERID,name,PWFNAME,PWLNAME FROM department INNER JOIN pwemployee
+							 ON department.USERID = pwemployee.USERID WHERE id = '.$id)
 					->result_array();
 	return $query;
  }
  
- function updateDepartmaent_save($id,$department)
+ function updateDepartmaent_save($id,$department,$userid)
  {
 	$this->db->where('id',$id)
 			 ->set('name',$department)
+			 ->set('USERID',$userid)
 			 ->update('department');
  }
  
@@ -173,17 +181,20 @@ Class User_manage extends CI_Model
  
   function get_division_show()
  {
-	$query=$this->db->query('select division.id AS id,department.name AS dep_name,division.name AS div_name 
-							 from department inner join division 
-							 on department.id = division.dep_id')
+	$query=$this->db->query('select division.id AS id,department.name AS dep_name,division.name AS div_name, pwemployee.PWFNAME as PWFNAME,
+							 pwemployee.PWLNAME as PWLNAME
+							 from department inner join division inner join pwemployee
+							 on department.id = division.dep_id
+							 and division.USERID = pwemployee.USERID')
 					->result_array();
 	return $query;
  }
  
- function addDivision_save($department_id,$division_name)
+ function addDivision_save($department_id,$division_name,$userid)
  {
 	$this->db->set('dep_id',$department_id)
 			 ->set('name',$division_name)
+			 ->set('USERID',$userid)
 			 ->insert('division');
  }
 
@@ -195,11 +206,12 @@ Class User_manage extends CI_Model
 	return $query;
  }
  
- function updateDivision_save($id,$dep_id,$division)
+ function updateDivision_save($id,$dep_id,$division,$userid)
  {
 	$this->db->where('id',$id)
 			 ->set('dep_id',$dep_id)
 			 ->set('name',$division)
+			 ->set('USERID',$userid)
 			 ->update('division');
  }
  
