@@ -88,34 +88,20 @@
 									<td>4</td>
 									<td>5</td>
 									<td>
-										<select class="form-control" name="" id="point1" onchange="getvalonchange('point1', 'weight1', 'totalpoint1');">
-											<option value=""></option>
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-											<option value="5">5</option>
-										</select>
+										<input type="text" class="form-control" name="" id="point1" value="" onchange="getvalonchange('point1', 'weight1', 'totalpoint1');">
 									</td>
 									<td style="text-align: center;" id="weight1">0.15</td>
 									<td style="text-align: center;" id="totalpoint1"></td>
 								</tr>
 								<tr>
 									<td>ระดับความสำเร็จ 2</td>
-									<td>ร้อยละ 50</td>
-									<td>ร้อยละ 60</td>
-									<td>ร้อยละ 70</td>
-									<td>ร้อยละ 80</td>
-									<td>ร้อยละ 90</td>
+									<td>1</td>
+									<td>2</td>
+									<td>3</td>
+									<td>4</td>
+									<td>5</td>
 									<td>
-										<select class="form-control" name="" id="point2" onchange="getvalonchange('point2', 'weight2', 'totalpoint2');">
-											<option value=""></option>
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-											<option value="5">5</option>
-										</select>
+										<input type="text" class="form-control" name="" id="point2" value="" onchange="getvalonchange('point2', 'weight2', 'totalpoint2');">
 									</td>
 									<td style="text-align: center;" id="weight2">0.30</td>
 									<td style="text-align: center;" id="totalpoint2"></td>
@@ -373,7 +359,8 @@ function deleteRow(tmpid, rows){
 }
 
 function getvalonchange(point, weight, totalpoint) {
-
+	
+	
 	//count is from models
 	var count = 1;
 	
@@ -384,6 +371,12 @@ function getvalonchange(point, weight, totalpoint) {
 	var _point = document.getElementById(point).value;
 	var _weight = document.getElementById(weight);
 	var _totalpoint = document.getElementById(totalpoint);
+	if(_point < 1 | _point > 5){
+		alert("กรุณากรอกเฉพาะตัวเลข 1 - 5 เท่านั้น");
+		_totalpoint.innerText = "0.00";
+		_caltotalpoint.innerText = "0.00";
+		return;
+	}
 	_totalpoint.innerText = (_point * _weight.innerText).toFixed(2);
 
 	//wait for count from models
