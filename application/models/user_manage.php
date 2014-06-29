@@ -17,7 +17,7 @@ Class User_manage extends CI_Model
  
  function get_user()
  {
-	$query=$this->db->query('SELECT USERID, PWFNAME, PWLNAME, department.name AS dep_name, division.name AS div_name, PWPOSITION.PWNAME, PWLEVEL, PWEMAIL
+	$query=$this->db->query('SELECT pwemployee.USERID as USERID, PWFNAME, PWLNAME, department.name AS dep_name, division.name AS div_name, PWPOSITION.PWNAME, PWLEVEL, PWEMAIL
 							 FROM  pwemployee  INNER JOIN division INNER JOIN department INNER JOIN pwposition 
 							 ON pwemployee.department = department.id
 							 AND pwemployee.division = division.id
@@ -31,7 +31,7 @@ Class User_manage extends CI_Model
  }
  
  function get_user_limit($start, $limit) {
- 	$query=$this->db->query('SELECT USERID, PWFNAME, PWLNAME, department.name AS dep_name, division.name AS div_name, PWPOSITION.PWNAME AS position_name, PWLEVEL, PWEMAIL
+ 	$query=$this->db->query('SELECT pwemployee.USERID as USERID, PWFNAME, PWLNAME, department.name AS dep_name, division.name AS div_name, PWPOSITION.PWNAME AS position_name, PWLEVEL, PWEMAIL
 							 FROM  pwemployee  INNER JOIN division INNER JOIN department INNER JOIN pwposition 
 							 ON pwemployee.department = department.id
 							 AND pwemployee.division = division.id
@@ -41,7 +41,7 @@ Class User_manage extends CI_Model
 	return $query;
  }
  
- function addUser_save($username,$password,$fname,$lname,$efname,$elname,$gender,$email,$tel,$mobile,$department,$division,$position1,$level,$admin_min,$admin_dep,$admin_div,$execode)
+ function addUser_save($username,$password,$fname,$lname,$efname,$elname,$gender,$email,$tel,$mobile,$department,$division,$position1,$level,$admin_min,$admin_dep,$admin_div)
  {
 	$this->db->set('PWUSERNAME',$username)
 			 ->set('PWPASSWORD',$password)
@@ -60,7 +60,6 @@ Class User_manage extends CI_Model
 			 ->set('admin_min',$admin_min)
 			 ->set('admin_dep',$admin_dep)
 			 ->set('admin_div',$admin_div)
-			 ->set('execode',$execode)
 			 ->insert('pwemployee');
  }
  
@@ -86,10 +85,9 @@ Class User_manage extends CI_Model
  
  function user_view_info($id)
  {
-	$query=$this->db->query('SELECT USERID, PWUSERNAME,PWFNAME, PWLNAME,PWEFNAME, PWELNAME, PWSEX, PWTELOFFICE, mobile, department.name AS dep_name,
+	$query=$this->db->query('SELECT pwemployee.USERID as USERID, PWUSERNAME,PWFNAME, PWLNAME,PWEFNAME, PWELNAME, PWSEX, PWTELOFFICE, mobile, department.name AS dep_name,
 							 division.name AS div_name, pwemployee.PWPOSITION AS position, pwemployee.department AS dep_id, 
-							 pwemployee.division AS div_id, PWPOSITION.PWNAME AS position_name, PWLEVEL, PWEMAIL,admin_min, admin_dep, admin_div, 
-							 execode
+							 pwemployee.division AS div_id, PWPOSITION.PWNAME AS position_name, PWLEVEL, PWEMAIL,admin_min, admin_dep, admin_div 
 							 FROM  pwemployee  INNER JOIN division INNER JOIN department INNER JOIN pwposition 
 							 ON pwemployee.department = department.id
 							 AND pwemployee.division = division.id
@@ -139,11 +137,11 @@ Class User_manage extends CI_Model
 	return $query;
  }
  
- function update_execode($userid,$execode)
+ function get_department_1()
  {
-	$this->db->where('USERID',$userid)
-			 ->set('execode',$execode)
-			 ->update('pwemployee');
+	$query=$this->db->query('SELECT DISTINCT id,name FROM department')
+					->result_array();
+	return $query;
  }
  
  function dep_edit_info($id)

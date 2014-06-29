@@ -158,20 +158,6 @@ td.highlight {
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-lg-3">
-										<div class="form-group">
-											<label>สิทธิบริหาร *</label>
-											<?php if($data[0]['execode']==0){ ?>
-												<input type="text" class="form-control" value="ไม่มี" readonly>
-											<?php }else if($data[0]['execode']==1){?>
-												<input type="text" class="form-control" value="ผู้อำนวยการกอง" readonly>
-											<?php }else if($data[0]['execode']==2){ ?>
-												<input type="text" class="form-control" value="อธิบดีกรม" readonly>
-											<?php } ?>
-										</div>
-										</div>
-									</div>
-									<div class="row">
 										<div class="form-group">
 										<div class="col-lg-1">
 											<a href="javascript:history.go(-1)" class="btn btn-primary">กลับ</a>
