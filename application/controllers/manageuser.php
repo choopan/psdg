@@ -254,7 +254,7 @@ class Manageuser extends CI_Controller {
 		$data['title'] = "MFA - Department Management";
 		/* echo "<pre>";
 		print_r($data);
-		echo "</pre>"; */ 
+		echo "</pre>"; */
 		$this->load->view('manageDepartment_view',$data);
 	}
 	
