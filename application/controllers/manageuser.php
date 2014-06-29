@@ -63,7 +63,7 @@ class Manageuser extends CI_Controller {
 	
 	function adduser()
 	{
-		$data['data']=$this->user_manage->get_department();
+		$data['data']=$this->user_manage->get_department_1();
 		$data['position']=$this->user_manage->get_position();
 		$data['title'] = "MFA - User Management";
 		/* echo "<pre>";
@@ -269,8 +269,6 @@ class Manageuser extends CI_Controller {
 	{
 		$department_name=$this->input->post('department');
 		$userid=$this->input->post('execode');
-		$execode=1;
-		$this->user_manage->update_execode($userid,$execode);
 		$this->user_manage->addDepartmaent_save($department_name,$userid);
 		redirect('manageuser/department_view');
 	}
@@ -325,8 +323,6 @@ class Manageuser extends CI_Controller {
 		$department_id=$this->input->post('department');
 		$division_name=$this->input->post('division');
 		$userid=$this->input->post('userid');
-		$execode=2;
-		$this->user_manage->update_execode($userid,$execode);
 		$this->user_manage->addDivision_save($department_id,$division_name,$userid);
 		redirect('manageuser/division_view');
 	}
