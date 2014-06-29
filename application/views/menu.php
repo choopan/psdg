@@ -122,14 +122,27 @@
                                     <a href="<?php echo site_url("reportperson/department"); ?>">ระดับกรม</a>
                                 </li>
 								<li>
-                                    <a href="<?php echo site_url("reportperson/division"); ?>">ระดับกอง (choopan)</a>
+                                    <a href="<?php echo site_url("reportperson/division"); ?>">ระดับกอง </a>
                                 </li>
 								<li>
-                                    <a href="<?php echo site_url("evaluation_controller/evaluation"); ?>">ระดับบุคคล (puwarun)</a>
+                                    <a href="<?php echo site_url("evaluation_controller/evaluation"); ?>">ระดับบุคคล </a>
                                 </li>
                             </ul>
                         </li>
                         
+                        
+  						<li>
+                            <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> แบบประเมินสมรรณะ<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="<?php echo site_url("core_competency/manageSkill"); ?>">จัดการชื่อสมรรณะ</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo site_url("core_competency/manageCoreSet"); ?>">จัดการชุุดประเมินสมรรณะ</a>
+                                </li>
+                            </ul>
+                        </li>
+                                                
   
                     </ul>
                 </div>
