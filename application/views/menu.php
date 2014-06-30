@@ -157,6 +157,15 @@
                                 </li>
                             </ul>
                         </li>
+						
+						<li>
+                            <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> สร้างตัวชี้วัดรายบุคคล(puwarun)<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="<?php echo site_url("personindicatorcontroller/personindicator"); ?>">สร้างตัวชี้วัดรายบุคคล(puwarun)</a>
+                                </li>
+                            </ul>
+                        </li>
                                                 
   
                     </ul>
