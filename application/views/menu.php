@@ -102,10 +102,10 @@
                             <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> คำรับรองการปฏิบัติราชการ<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="<?php echo site_url("managewarranty/addDepartment"); ?>">ระดับกรม</a>
+                                    <a href="<?php echo site_url("managewarranty/department"); ?>">ระดับกรม</a>
                                 </li>
 								<li>
-                                    <a href="<?php echo site_url("managewarranty/addDivision"); ?>">ระดับกอง</a>
+                                    <a href="<?php echo site_url("managewarranty/division"); ?>">ระดับกอง</a>
                                 </li>
                             </ul>
                         </li>

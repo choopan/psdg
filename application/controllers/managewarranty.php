@@ -12,12 +12,12 @@ class Managewarranty extends CI_Controller {
 
 	}
     
-    function addDepartment()
+    function department()
     {
         // Form เพิ่ม ผู้ทำคำรับรอง และ ผู้รับคำรับรอง ระดับกรม อาจจะมีมากกว่า 1 คน
     }
     
-    function addDivision()
+    function division()
     {
         // Form เพิ่ม ผู้ทำคำรับรอง และ ผู้รับคำรับรอง ระดับกอง อาจจะมีมากกว่า 1 คน   
     }
