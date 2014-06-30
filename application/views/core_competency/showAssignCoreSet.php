@@ -52,7 +52,7 @@
                                         </td>
 										<td>
 											<div id="button<?php echo $user['userID']; ?>">
-												<button onclick="editAssignCoreSet('<?php echo $user['userID']; ?>', '<?php echo $user['coresetID']?>')" id="coresetUser<?php echo $user['userID']; ?>"  class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="แก้ไขแบบประเมินสมรรณะ"><span class="glyphicon glyphicon-pencil"></span></button>
+												<button onclick="editAssignCoreSet('<?php echo $user['userID']; ?>', '<?php echo $user['coresetID']?>', '<?php echo $user['coreset_name']?>')" id="coresetUser<?php echo $user['userID']; ?>"  class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="แก้ไขแบบประเมินสมรรณะ"><span class="glyphicon glyphicon-pencil"></span></button>
 											</div>																		
 										</td>
                                     </tr>
@@ -76,11 +76,13 @@
 <script src="<?php echo base_url(); ?>/js/bootbox.min.js"></script>
 
 <script type="text/javascript" charset="utf-8">
-	function cancelAssignCoreSet(userID, oldCoreSetName) {
-		var editButton = '<button onclick="editAssignCoreSet(\'' + userID  + '\', \'' 
-			+ coresetID + '\', \'' + oldCoreSetName +  '\')" id="coresetUser' + userID 
+	function cancelAssignCoreSet(userID, oldCoreSetID, oldCoreSetName) {
+		//alert("cancel : userID" + userID + ", oldCoreSetName = " + oldCoreSetName);
+		var editButton = '<button onclick="editAssignCoreSet(\'' + userID  + '\', \''
+			+ oldCoreSetID + '\', \'' + oldCoreSetName +  '\')" id="coresetUser' + userID
 			+ '" class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="แก้ไขแบบประเมินสมรรณะ"><span class="glyphicon glyphicon-pencil"></span></button>';
 
+		//alert(editButton);
 		$('#coreset' + userID).html(oldCoreSetName);
 		$('#button'  + userID).html(editButton);
 	}
@@ -102,7 +104,7 @@
 			+ ' data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top"'
 			+ ' rel="tooltip" title="บันทึกข้อมูล"><span class="glyphicon glyphicon-floppy-save"></span></button>';
 			
-		var cancelButton = 	'<button onclick="cancelAssignCoreSet(\'' + userID + '\', \'' + oldCoreSetName + '\')"'
+		var cancelButton = 	'<button onclick="cancelAssignCoreSet(\'' + userID + '\', \'' + oldCoreSetID + '\', \'' + oldCoreSetName + '\')"'
 			+ ' id="cancelButton' + userID + '"  class="btn btn-danger btn-xs"'
 			+ ' data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top"'
 			+ ' rel="tooltip" title="ยกเลิก"><span class="glyphicon glyphicon-floppy-remove"></span></button>';		
@@ -114,9 +116,6 @@
 	
 	function saveAssignCoreSet(userID) {
 		var coresetID = $('#select' + userID).val();
-		var editButton = '<button onclick="editAssignCoreSet(\'' + userID  + '\', \'' 
-			+ coresetID + '\', \'' + oldCoreSetName +  '\')" id="coresetUser' + userID
-			+ '" class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="แก้ไขแบบประเมินสมรรณะ"><span class="glyphicon glyphicon-pencil"></span></button>';
 
 		//Call ajax to save 
 		$.ajax({
@@ -128,8 +127,14 @@
 						alert('Something wrong with your server.' + data);
             			},
 			'success' : function(data){
+						var newCoreSetName = data[0]['name'];
+						var editButton = '<button onclick="editAssignCoreSet(\'' + userID  + '\', \'' 
+						+ coresetID + '\', \'' + newCoreSetName +  '\')" id="coresetUser' + userID
+						+ '" class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="แก้ไขแบบประเมินสมรรณะ"><span class="glyphicon glyphicon-pencil"></span></button>';
+
+
 							$('#button'  + userID).html(editButton);
-							$('#coreset' + userID).html(data[0]['name']);									
+							$('#coreset' + userID).html(newCoreSetName);									
             			},
 			'async' :	false            			
 		});
