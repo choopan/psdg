@@ -97,6 +97,18 @@
                                 </li>
                             </ul>
                         </li>
+                        
+                        <li>
+                            <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> คำรับรองการปฏิบัติราชการ<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="<?php echo site_url("managewarranty/addDepartment"); ?>">ระดับกรม</a>
+                                </li>
+								<li>
+                                    <a href="<?php echo site_url("managewarranty/addDivision"); ?>">ระดับกอง</a>
+                                </li>
+                            </ul>
+                        </li>
 
                         <li>
                             <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> ผลการปฏิบัติการตามตัวชี้วัด<span class="fa arrow"></span></a>
