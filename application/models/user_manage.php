@@ -18,7 +18,7 @@ Class User_manage extends CI_Model
  function getUserandCoreSet()
  {
 	$query=$this->db
-			->select('userID, PWFNAME, PWLNAME, department.name AS dep_name, division.name AS div_name, PWPOSITION.PWNAME AS position_name, PWLEVEL, core_competency_set.id AS coresetID, core_competency_set.name AS coreset_name')
+			->select('pwemployee.userID AS userID, PWFNAME, PWLNAME, department.name AS dep_name, division.name AS div_name, PWPOSITION.PWNAME AS position_name, PWLEVEL, core_competency_set.id AS coresetID, core_competency_set.name AS coreset_name')
 			->from('PWEMPLOYEE')
 			->join('division', 'pwemployee.division = division.id', 'left')
 			->join('department', 'pwemployee.department = department.id', 'left')
@@ -44,12 +44,12 @@ Class User_manage extends CI_Model
  }
  
  function get_user_limit($start, $limit) {
- 	$query=$this->db->query('SELECT pwemployee.USERID as USERID, PWFNAME, PWLNAME, department.name AS dep_name, division.name AS div_name, PWPOSITION.PWNAME AS position_name, PWLEVEL, PWEMAIL
-							 FROM  pwemployee  INNER JOIN division INNER JOIN department INNER JOIN pwposition 
-							 ON pwemployee.department = department.id
-							 AND pwemployee.division = division.id
-							 AND pwemployee.PWPOSITION = pwposition.PWPOSITION 
-							 LIMIT '.$start.','.$limit)
+ 	$query=$this->db->select('pwemployee.USERID as USERID, PWFNAME, PWLNAME, department.name AS dep_name, division.name AS div_name, PWPOSITION.PWNAME AS position_name, PWLEVEL, PWEMAIL')
+ 					->from('PWEMPLOYEE')
+					->join('department', 'pwemployee.department = department.id', 'left')
+					->join('division', 'pwemployee.division = division.id', 'left' )
+					->join('pwposition', 'pwemployee.PWPOSITION = pwposition.PWPOSITION', 'left')
+					->get($start, $limit)
 					->result_array();
 	return $query;
  }

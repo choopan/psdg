@@ -143,6 +143,7 @@ class Core_competency extends CI_Controller {
 		$result = $this->core_competency_model->updateUserCoreSet($userID, $coreSetID);
 		echo json_encode($result);
 	}
+
 }
 
 ?>

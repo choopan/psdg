@@ -76,7 +76,16 @@
 <script src="<?php echo base_url(); ?>/js/bootbox.min.js"></script>
 
 <script type="text/javascript" charset="utf-8">
-	function editAssignCoreSet(userID, oldValue) {
+	function cancelAssignCoreSet(userID, oldCoreSetName) {
+		var editButton = '<button onclick="editAssignCoreSet(\'' + userID  + '\', \'' 
+			+ coresetID + '\', \'' + oldCoreSetName +  '\')" id="coresetUser' + userID 
+			+ '" class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="แก้ไขแบบประเมินสมรรณะ"><span class="glyphicon glyphicon-pencil"></span></button>';
+
+		$('#coreset' + userID).html(oldCoreSetName);
+		$('#button'  + userID).html(editButton);
+	}
+	
+	function editAssignCoreSet(userID, oldCoreSetID, oldCoreSetName) {
 		var coresetBox = "<select id='select" + userID + "' class='form-control'>"
 		<?php
 			foreach($coresets as $coreset) {
@@ -89,19 +98,24 @@
 			
 		
 		var saveButton = '<button onclick="saveAssignCoreSet(\'' + userID + '\')"'
-			+ ' id="saveButton' + userID + '"  class="btn btn-success btn-sm"'
+			+ ' id="saveButton' + userID + '"  class="btn btn-success btn-xs"'
 			+ ' data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top"'
-			+ ' rel="tooltip" title="บันทึก">บันทึกข้อมูล</button>';
+			+ ' rel="tooltip" title="บันทึกข้อมูล"><span class="glyphicon glyphicon-floppy-save"></span></button>';
+			
+		var cancelButton = 	'<button onclick="cancelAssignCoreSet(\'' + userID + '\', \'' + oldCoreSetName + '\')"'
+			+ ' id="cancelButton' + userID + '"  class="btn btn-danger btn-xs"'
+			+ ' data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top"'
+			+ ' rel="tooltip" title="ยกเลิก"><span class="glyphicon glyphicon-floppy-remove"></span></button>';		
 		
 		$('#coreset' + userID).html(coresetBox);
-		$('#button'  + userID).html(saveButton);
-		$('#select'  + userID).val(oldValue);
+		$('#button'  + userID).html(saveButton + ' ' + cancelButton);
+		$('#select'  + userID).val(oldCoreSetID);
 	}
 	
 	function saveAssignCoreSet(userID) {
 		var coresetID = $('#select' + userID).val();
 		var editButton = '<button onclick="editAssignCoreSet(\'' + userID  + '\', \'' 
-			+ coresetID + '\')" id="coresetUser' + userID 
+			+ coresetID + '\', \'' + oldCoreSetName +  '\')" id="coresetUser' + userID
 			+ '" class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="แก้ไขแบบประเมินสมรรณะ"><span class="glyphicon glyphicon-pencil"></span></button>';
 
 		//Call ajax to save 
