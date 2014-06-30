@@ -140,6 +140,9 @@
                                 <li>
                                     <a href="<?php echo site_url("core_competency/manageCoreSet"); ?>">จัดการชุุดประเมินสมรรณะ</a>
                                 </li>
+                                <li>
+                                    <a href="<?php echo site_url("core_competency/assignCoreSetIndex"); ?>">กำหนดชุุดประเมินสมรรณะ</a>
+                                </li>
                             </ul>
                         </li>
                                                 

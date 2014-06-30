@@ -15,6 +15,19 @@ Class User_manage extends CI_Model
 	return $query;
  }
  
+ function getUserandCoreSet()
+ {
+	$query=$this->db
+			->select('userID, PWFNAME, PWLNAME, department.name AS dep_name, division.name AS div_name, PWPOSITION.PWNAME AS position_name, PWLEVEL, core_competency_set.id AS coresetID, core_competency_set.name AS coreset_name')
+			->from('PWEMPLOYEE')
+			->join('division', 'pwemployee.division = division.id', 'left')
+			->join('department', 'pwemployee.department = department.id', 'left')
+			->join('pwposition', 'pwemployee.pwposition = pwposition.pwposition', 'left')
+			->join('core_competency_set', 'pwemployee.coresetID = core_competency_set.ID', 'left')
+			->get() -> result_array();
+	return $query;
+ }
+ 
  function get_user()
  {
 	$query=$this->db->query('SELECT pwemployee.USERID as USERID, PWFNAME, PWLNAME, department.name AS dep_name, division.name AS div_name, PWPOSITION.PWNAME, PWLEVEL, PWEMAIL

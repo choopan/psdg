@@ -6,6 +6,7 @@ class Core_competency extends CI_Controller {
 	{
 	   parent::__construct();
 	   $this->load->model('core_competency_model', '',TRUE);
+	   $this->load->model('user_manage', '',TRUE);
 	   $this->load->helper('url');
 	}
 	
@@ -127,6 +128,20 @@ class Core_competency extends CI_Controller {
 			$this->core_competency_model->addSkilltoCoreSet($id, $skills[$i], $expectVals[$i]);
 		}
 		redirect(site_url("core_competency/manageCoreSet"), 'location');	
+	}
+	
+	function assignCoreSetIndex() {
+		$data['title'] = "Testing";
+		$data['users'] = $this->user_manage->getUserandCoreSet();
+		$data['coresets'] = $this->core_competency_model->listCoreSet();
+		$this->load->view('core_competency/showAssignCoreSet.php', $data);
+	}
+	
+	function saveAssignCoreSet() {
+		$userID = $this->input->post("userID");
+		$coreSetID = $this->input->post("coreSetID");
+		$result = $this->core_competency_model->updateUserCoreSet($userID, $coreSetID);
+		echo json_encode($result);
 	}
 }
 
