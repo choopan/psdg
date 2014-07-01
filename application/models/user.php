@@ -3,7 +3,7 @@ Class User extends CI_Model
 {
  function login($username, $password)
  {
-   $this -> db -> select('USERID, PWUSERNAME, PWPASSWORD, PWEFNAME, PWELNAME');
+   $this -> db -> select('USERID, PWUSERNAME, PWPASSWORD, PWEFNAME, PWELNAME, admin_min, admin_dep, admin_div, division, department');
    $this -> db -> from('pwemployee');
    $this -> db -> where('PWUSERNAME', $username);
    $this -> db -> where('PWPASSWORD', MD5($password));
@@ -84,5 +84,32 @@ Class User extends CI_Model
  }
  
 
+ function getExecDiv($userID) {
+ 	$result = $this->db->get_where('division', array('userID'=> $userID))->result_array();
+	if(count($result) == 0) {
+		return false;
+	} else {
+		return true;
+	}			
+ }
+
+ function getExecDep($userID) {
+ 	$result = $this->db->get_where('department', array('userID'=> $userID))->result_array();
+	if(count($result) == 0) {
+		return false;
+	} else {
+		return true;
+	}			
+ }
+/*
+ function getUserFromDiv($userID, $divID, $year) {
+ 	$result = $this->db->select('PWFNAME, PWLNAME, PWPOSITION, PWLEVEL, person_indicator.ID AS PID')
+ 						->from('pwemployee')
+ 						->join('pwposition', 'pwposition.pwposition = pwemployee.pwposition', 'left')
+ 						->join('person_indicator', 'pwemployee.USERID = person_indicator.userID')
+ 						->where(array('person_indicator.year' => $year, 'division' => $divID, 'userID !=' => $userID))->result_array();
+	return $result;
+ }
+ */
 }
 ?>

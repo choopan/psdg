@@ -110,19 +110,6 @@
 		$('#skillRow'+rnum).remove();
 	}
 	
-	$(document).ready(function() {
-		$('#skillTable').dataTable({			
- 			"bJQueryUI": false,
-            "bProcessing": true,
-            "sPaginationType": "simple_numbers",
-         	'bFilter'  : false,
-			"bInfo": false,
-			"bLengthChange" : false,
-			"bPaginate" : false,
-			"iDisplayLength": 10000,
-            "bDeferRender": false,
-		});
-	});	
 </script>
 </body>
 </html>

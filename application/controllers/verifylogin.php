@@ -46,11 +46,25 @@ class VerifyLogin extends CI_Controller {
      $sess_array = array();
      foreach($result as $row)
      {
+     	
+		//Check executive Priviledge	
+		$userID = $row->USERID;
+		$execDep = $this->user->getExecDep($userID);
+		$execDiv = $this->user->getExecDiv($userID);
+		
+		
        $sess_array = array(
          'sessid' => $row->USERID,
          'sessusername' => $row->PWUSERNAME,
 		 'sessfirstname' => $row->PWEFNAME,
 		 'sesslastname' => $row->PWELNAME,
+		 'sessadmin_min' => $row->admin_min,
+		 'sessadmin_dep' => $row->admin_dep,
+		 'sessadmin_div' => $row->admin_div,
+		 'sessdep' => $row->department,
+		 'sessdiv' => $row->division,		 
+		 'sessexecdep' => $execDep,
+		 'sessexecdiv' => $execDiv,
          'sessyear' => date("Y")+543
        );
        $this->session->set_userdata($sess_array);

@@ -10,7 +10,7 @@
 	
 	<div class="row">
 		<div class="col-lg-12">
-            <div class="panel panel-primary">
+            <div class="panel panel-default">
 				<div class="panel-heading"><strong>แบบประเมินผลสัมฤทธิ์ของงาน</strong></div>
 				<div class="panel-body">
 					<form class="form-inline" role="form">
@@ -28,7 +28,6 @@
 					  </div>
 					  <button type="button" class="btn btn-primary" onclick="addIndicator('order','indicatorname','weight');"><span class="glyphicon glyphicon-floppy-saved"></span> เพิ่มตัวชี้วัด</button>
 					</form>
-						
 				</div>
 			</div>
 		</div>
@@ -37,6 +36,7 @@
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="panel panel-primary">
+				<div class="panel-heading"><strong>ตัวชี้วัดรายบุคคลที่กำหนดแล้ว</strong></div>
 				<div class="panel-body">
 					<table class="table table-hover" id="table1">
 						<thead>
