@@ -10,15 +10,17 @@ Class Ministerindicator extends CI_Model
 	return $query->result();
  }
 
- function getIndicatorGroupDepartment()
+ function getIndicatorGroupDepartment($year)
  {
-	$this->db->select("number, name, GROUP_CONCAT( DISTINCT(ThDepName) SEPARATOR ' <br> ' ) AS TDepName, criteria1, criteria2, criteria3, criteria4, criteria5, goal, weight, min_indicator.id as mid");
+	$this->db->select("number, min_indicator.name, GROUP_CONCAT( DISTINCT(department.name) SEPARATOR ' <br> ' ) AS TDepName, criteria1, criteria2, criteria3, criteria4, criteria5, goal, weight, min_indicator.id as mid");
 	$this->db->order_by("number", "asc");
 	$this->db->from('min_indicator');		
 	$this->db->join('minIndicatorResponse','minIndicatorResponse.minIndicatorID=min_indicator.id');	
-	$this->db->join('pwdepartment','pwdepartment.DepID=minIndicatorResponse.resDepartmentID');	
+	$this->db->join('pwemployee','pwemployee.userid=minIndicatorResponse.userID');	
+	$this->db->join('department','department.id=pwemployee.department');	
 	//$this->db->group_by('minIndicatorResponse.resDepartmentID');
-	$this->db->group_by('name');
+	$this->db->group_by('min_indicator.name');
+	$this->db->where('year', $year);
 	$query = $this->db->get();	
 	return $query->result();
  }
@@ -234,11 +236,13 @@ Class Ministerindicator extends CI_Model
  
  function getOneIndicatorResponse($id=NULL)
  {
-	$this->db->select("userID, resName, pwposition.pwname as poname, resTelephone, ThDepName");
-	$this->db->order_by("id", "asc");
+	$this->db->_protect_identifiers=false;
+	$this->db->select("minIndicatorResponse.userID, CONCAT(pwfname,' ', pwlname) as resName, pwposition.pwname as poname, pwemployee.pwteloffice as resTelephone, department.name as ThDepName, isControl");
+	$this->db->order_by("minIndicatorResponse.id", "asc");
 	$this->db->from('minIndicatorResponse');
-	$this->db->join('pwdepartment','pwdepartment.DepID=minIndicatorResponse.resDepartmentID');	
-	$this->db->join('pwposition','pwposition.pwposition=minIndicatorResponse.resPosition');	
+	$this->db->join('pwemployee','pwemployee.userid=minIndicatorResponse.userID');	
+	$this->db->join('department','department.id=pwemployee.department');	
+	$this->db->join('pwposition','pwposition.pwposition=pwemployee.pwposition');	
 	$this->db->where('minIndicatorID', $id);
 	$query = $this->db->get();		
 	return $query->result();

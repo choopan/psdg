@@ -61,13 +61,11 @@ Class User extends CI_Model
  function searchName($term)
  {
 	$this->db->_protect_identifiers=false;
-	$this->db->select("userid, CONCAT(pwfname,' ', pwlname) as pwname, pwposition.PWNAME as poname, PWTELOFFICE as pwtelephone, pwemployee.PWPOSITION as positionid");
+	$this->db->select("pwemployee.userid, CONCAT(pwfname,' ', pwlname) as pwname, pwposition.PWNAME as poname, PWTELOFFICE as pwtelephone, pwemployee.PWPOSITION as positionid, department.name as depname");
 	$this->db->from('pwemployee');	
 	$this->db->join('pwposition', 'pwposition.pwposition = pwemployee.pwposition');	
+	$this->db->join('department', 'pwemployee.department = department.id');
 	$this->db->like('pwfname', $term,'after');
-	//$this->db->or_like('PWFNAME', $options['keyword'],'after');
-	//$this->db->or_like('PWLNAME', $options['keyword'],'after');
-	//$this->db->or_like('PWELNAME', $options['keyword'],'after');
 	$query = $this->db->get();
 	return $query->result();
  }

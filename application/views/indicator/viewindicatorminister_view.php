@@ -26,13 +26,13 @@
 							foreach($minis_indicator_array as $loop){
 					?>
 						<div class="row">
-							<div class="col-lg-2">
+							<div class="col-md-2">
 									<div class="form-group has-success">
                                         <label class="control-label" for="inputSuccess">ตัวชี้วัดที่</label>
                                         <input type="text" class="form-control" name="indicatorNO" id="indicatorNO" value="<?php echo $loop->number; ?>" readonly>
                                     </div>
 							</div>
-							<div class="col-lg-8">
+							<div class="col-md-8">
 									<div class="form-group has-success">
                                         <label class="control-label" for="inputSuccess">ชื่อตัวชี้วัด</label> 
                                         <input type="text" class="form-control" name="indicatorName" id="indicatorName" value="<?php echo $loop->name; ?>" readonly>
@@ -40,64 +40,112 @@
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-lg-2">
+							<div class="col-md-2">
 									<div class="form-group has-success">
                                         <label class="control-label" for="inputSuccess">ค่าเป้าหมาย</label>
                                         <input type="text" class="form-control" name="goal" id="goal" value="<?php echo $loop->goal; ?>" readonly>
                                     </div>
 							</div>
-							<div class="col-lg-2">
+							<div class="col-md-2">
 									<div class="form-group has-success">
                                         <label class="control-label" for="inputSuccess">น้ำหนัก</label> 
                                         <input type="text" class="form-control" name="weight" id="weight" value="<?php echo $loop->weight; ?>" readonly>
                                     </div>
 							</div>
 						</div>
+						<hr>
 						<div class="row">
 							
-							<div class="col-lg-3 has-success">
-                                            <label class="control-label" for="inputSuccess">ผู้รับผิดชอบ</label>
+							<div class="col-md-3 has-success">
+                                            <label class="control-label" for="inputSuccess">ผู้กำกับดูแล</label>
 							</div>
-							<div class="col-lg-3 has-success">
+							<div class="col-md-3 has-success">
                                             <label class="control-label" for="inputSuccess">ตำแหน่ง</label>
 							</div>
-							<div class="col-lg-3 has-success">
+							<div class="col-md-3 has-success">
                                             <label class="control-label" for="inputSuccess">หน่วยงาน</label>
 							</div>
-							<div class="col-lg-3 has-success">
+							<div class="col-md-3 has-success">
                                            <label class="control-label" for="inputSuccess">โทร.</label>
 							</div>
 
 						</div>
 						<?php if(is_array($res_indicator_array)) {
 							foreach($res_indicator_array as $loopres){
+								if ($loopres->isControl > 0) {
 						?>
 						<div class="row">
-                            <div class="col-lg-3">
+                            <div class="col-md-3">
                                     <div class="form-group has-success">
 									<input type="hidden" name="uid" id="uid" value="">
                                             <input type="text" class="form-control" name="resid" id="resid" value="<?php echo $loopres->resName; ?>" readonly>
                                     </div>
 							</div>
-							<div class="col-lg-3">
+							<div class="col-md-3">
                                     <div class="form-group has-success">
                                             <input type="text" class="form-control" name="position" id="position" value="<?php echo $loopres->poname; ?>" readonly>
                                     </div>
 							</div>
-							<div class="col-lg-3">
+							<div class="col-md-3">
                                     <div class="form-group has-success">
                                             <input type="text" class="form-control" name="telephone" id="telephone" value="<?php echo $loopres->ThDepName; ?>" readonly>
                                     </div>
 							</div>
-							<div class="col-lg-3">
+							<div class="col-md-3">
                                     <div class="form-group has-success">
                                             <input type="text" class="form-control" name="telephone" id="telephone" value="<?php echo $loopres->resTelephone; ?>" readonly>
                                     </div>
 							</div>
 						</div>
-						<?php } } ?>
+						<?php } } } ?>
+						<hr>
+						<div class="row">
+							
+							<div class="col-md-3 has-success">
+                                            <label class="control-label" for="inputSuccess">ผู้จัดเก็บข้อมูล</label>
+							</div>
+							<div class="col-md-3 has-success">
+                                            <label class="control-label" for="inputSuccess">ตำแหน่ง</label>
+							</div>
+							<div class="col-md-3 has-success">
+                                            <label class="control-label" for="inputSuccess">หน่วยงาน</label>
+							</div>
+							<div class="col-md-3 has-success">
+                                           <label class="control-label" for="inputSuccess">โทร.</label>
+							</div>
+
+						</div>
+						<?php if(is_array($res_indicator_array)) {
+							foreach($res_indicator_array as $loopres){
+								if ($loopres->isControl < 1) {
+						?>
+						<div class="row">
+                            <div class="col-md-3">
+                                    <div class="form-group has-success">
+									<input type="hidden" name="uid" id="uid" value="">
+                                            <input type="text" class="form-control" name="resid" id="resid" value="<?php echo $loopres->resName; ?>" readonly>
+                                    </div>
+							</div>
+							<div class="col-md-3">
+                                    <div class="form-group has-success">
+                                            <input type="text" class="form-control" name="position" id="position" value="<?php echo $loopres->poname; ?>" readonly>
+                                    </div>
+							</div>
+							<div class="col-md-3">
+                                    <div class="form-group has-success">
+                                            <input type="text" class="form-control" name="telephone" id="telephone" value="<?php echo $loopres->ThDepName; ?>" readonly>
+                                    </div>
+							</div>
+							<div class="col-md-3">
+                                    <div class="form-group has-success">
+                                            <input type="text" class="form-control" name="telephone" id="telephone" value="<?php echo $loopres->resTelephone; ?>" readonly>
+                                    </div>
+							</div>
+						</div>
+						<?php } } } ?>
+						<hr>
 		<div class="row">
-            <div class="col-lg-10">
+            <div class="col-md-10">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="table-responsive">
@@ -126,7 +174,7 @@
 		</div>
 
 		<div class="row">
-            <div class="col-lg-5">
+            <div class="col-md-5">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="table-responsive">
@@ -154,7 +202,7 @@
 			</div>	
 		</div>
 						<div class="row">
-							<div class="col-lg-8">
+							<div class="col-md-8">
 									<div class="form-group has-success">
                                             <label class="control-label" for="inputSuccess">Technical Note</label>
 											<textarea class="form-control" name="technote" id="technote" rows="3" style="font-weight: bold;" readonly><?php echo $loop->technicalnote; ?></textarea>
@@ -164,7 +212,7 @@
                         
 						
 						<div class="row">
-							<div class="col-lg-5">
+							<div class="col-md-5">
 									<button type="button" class="btn btn-warning" onClick="window.location.href='<?php echo site_url("manageindicator/showMinister"); ?>'"> กลับไปหน้าแสดงตัวชี้วัดระดับกระทรวง </button>
 							</div>
 						</div>

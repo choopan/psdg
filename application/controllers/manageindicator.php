@@ -31,7 +31,7 @@ class Manageindicator extends CI_Controller {
 
 	function showMinister()
 	{
-		$query = $this->ministerindicator->getIndicatorGroupDepartment();
+		$query = $this->ministerindicator->getIndicatorGroupDepartment($this->session->userdata('sessyear'));
 		if($query){
 			$data['view_array'] =  $query;
 		}else{
@@ -643,6 +643,9 @@ class Manageindicator extends CI_Controller {
 		$this->form_validation->set_rules('goalmin', 'goalmin', 'trim|required|maxlength[1]|xss_clean');
 		$this->form_validation->set_rules('weightmin', 'weightmin', 'trim|xss_clean|required');
 		
+		// validate only control name
+		$this->form_validation->set_rules('controlname', 'controlname', 'trim|xss_clean|required');
+		
 		// validate only first response name
 		$this->form_validation->set_rules('resid0', 'resid0', 'trim|xss_clean|callback_required_resid0');
 		//$this->form_validation->set_rules('position0', 'position0', 'trim|xss_clean|required');
@@ -663,12 +666,16 @@ class Manageindicator extends CI_Controller {
 			$goalmin= ($this->input->post('goalmin'));
 			$weightmin= ($this->input->post('weightmin'));
 			
+			$controluserid= ($this->input->post('controluserid'));
+			
 			// array
 			$uid= ($this->input->post('uid'));
+			/*
 			$resid= ($this->input->post('resid'));
 			$position= ($this->input->post('position'));
 			$depid= ($this->input->post('depid'));
 			$telephone= ($this->input->post('telephone'));
+			*/
 
 			//array
 			$goalNO = $this->input->post('goalNO');
@@ -703,16 +710,25 @@ class Manageindicator extends CI_Controller {
 			if ($resultMin) {
 
 				$indicatorid = $this->db->insert_id();
+				$control = array(
+					'minIndicatorID' => $indicatorid,
+					'userID' => $controluserid,
+					'isControl' => 1
+				);
+				$resultRes = $this->ministerindicator->addIndicatorResponse($control);
 				$response = array();
 				for ($i=0; $i<count($uid); $i++) {
 					if ($uid[$i]>0) {
 						$response['minIndicatorID'] = $indicatorid;
 						$response['userID'] = $uid[$i];
+						$response['isControl'] = 0;
+						/*
 						$response['resName'] = $resid[$i];
 						$response['resPosition'] = $position[$i];
 						$response['resTelephone'] = $telephone[$i];
 						$response['resDepartmentID'] = $depid[$i];
-
+						*/
+					
 
 						$resultRes = $this->ministerindicator->addIndicatorResponse($response);
 						/*
@@ -1763,7 +1779,7 @@ class Manageindicator extends CI_Controller {
 			);
 
 		$result = $this->ministerindicator->editNumber($indicator);
-		$query = $this->ministerindicator->getIndicatorGroupDepartment();
+		$query = $this->ministerindicator->getIndicatorGroupDepartment($this->session->userdata('sessyear'));
 		if($query){
 			$data['view_array'] =  $query;
 		}else{

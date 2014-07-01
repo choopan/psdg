@@ -24,7 +24,7 @@ td.highlight {
 	
 <div id="page-wrapper">
 	<div class="row">
-        <div class="col-lg-11">
+        <div class="col-lg-12">
             <div class="panel panel-default">
 				<div class="panel-heading">
 					<strong>กำหนดตัวชี้วัดและประเด็นความสำเร็จ <u>ระดับกระทรวง</u></strong>
@@ -48,14 +48,14 @@ td.highlight {
 						<?php echo form_open('manageindicator/saveMinister'); ?>
 						
 						<div class="row">
-							<div class="col-lg-3">
+							<div class="col-md-3">
 									<div class="form-group">
                                         <label>ตัวชี้วัดที่ *</label>
                                         <input type="text" class="form-control" name="indicatorNO" id="indicatorNO" value="<?php echo set_value('indicatorNO'); ?>">
 											<p class="help-block"><?php echo form_error('indicatorNO'); ?></p>
                                     </div>
 							</div>
-							<div class="col-lg-9">
+							<div class="col-md-9">
 									<div class="form-group">
                                         <label>ชื่อตัวชี้วัด *</label>
                                         <input type="text" class="form-control" name="indicatorName" id="indicatorName" value="<?php echo set_value('indicatorName'); ?>">
@@ -65,7 +65,7 @@ td.highlight {
 						</div>
 						<div class="row">
 							
-							<div class="col-lg-3">
+							<div class="col-md-3">
 									<div class="form-group">
                                         <label>น้ำหนัก *</label>
                                         <input type="text" class="form-control" name="weightmin" id="weightmin" value="<?php echo set_value('weightmin'); ?>">
@@ -73,66 +73,96 @@ td.highlight {
                                     </div>
 							</div>
 						</div>
+						<hr>
 						<div class="row">
-							<div class="col-lg-3">
-                                            <label>ผู้รับผิดชอบ *</label>
+							<div class="col-md-3">
+                                            <label>ผู้กำกับดูแล *</label>
 							</div>
-							<div class="col-lg-3">
+							<div class="col-md-3">
                                             <label>ตำแหน่ง *</label>
 							</div>
-							<div class="col-lg-3">
+							<div class="col-md-3">
                                             <label>หน่วยงาน *</label>
 							</div>
-							<div class="col-lg-2">
+							<div class="col-md-2">
                                             <label>โทร. *</label>
+							</div>
+						</div>
+						<div class="row">
+                            <div class="col-md-3">
+                                    <div class="form-group">
+									<input type="hidden" name="controluserid" id="controluserid" value="">
+                                            <input type="text" class="form-control" name="controlname" id="controlname" value="">
+											<p class="help-block"><?php echo form_error('controlname'); ?></p>
+                                    </div>
+							</div>
+							<div class="col-md-3">
+                                    <div class="form-group">
+                                            <input type="text" class="form-control" name="controlposition" id="controlposition" value="<?php echo set_value('controlposition'); ?>" disabled>
+											<p class="help-block"><?php echo form_error('controlposition'); ?></p>
+                                    </div>
+							</div>
+							<div class="col-md-3">
+                                    <div class="form-group">
+										<input type="text" class="form-control" name="controldepid" id="controldepid" value="<?php echo set_value('controldepid'); ?>" disabled>
+											<p class="help-block"><?php echo form_error('controldepid'); ?></p>
+                                    </div>
+							</div>
+							<div class="col-md-2">
+                                    <div class="form-group">
+                                            <input type="text" class="form-control" name="controltelephone" id="controltelephone" value="<?php echo set_value('controltelephone'); ?>" disabled>
+											<p class="help-block"><?php echo form_error('controltelephone'); ?></p>
+                                    </div>
+							</div>
+						</div>
+						<hr>
+						<div class="row">
+							<div class="col-md-3">
+                                            <label>ผู้จัดเก็บข้อมูล *</label>
+							</div>
+							<div class="col-md-3">
+                                            <label>ตำแหน่ง *</label>
+							</div>
+							<div class="col-md-3">
+                                            <label>หน่วยงาน *</label>
+							</div>
+							<div class="col-md-2">
+                                            <label>โทร. *</label>
+							</div>
+							<div class="col-md-1">
+                                            <label> </label>
 							</div>
 						</div>
 
 
 						<div id="addinputResponse0">
                         <div class="row">
-                            <div class="col-lg-3">
+                            <div class="col-md-3">
                                     <div class="form-group">
 									<input type="hidden" name="uid[]" id="uid0" value="">
                                             <input type="text" class="form-control" name="resid[]" id="resid0" value="<?php echo set_value('resid0'); ?>">
 											<p class="help-block"><?php echo form_error('resid0'); ?></p>
                                     </div>
 							</div>
-							<div class="col-lg-3">
+							<div class="col-md-3">
                                     <div class="form-group">
-										<select class="form-control" name="position[]" id="position0">
-											<option value=""> </option>
-											<?php 	
-													if(is_array($position_array)) {
-													foreach($position_array as $looppo){
-														echo "<option value='".$looppo->pwposition."'";
-														//if ($loop->ponumber == $looppo->pwposition) echo " selected";
-														echo ">".$looppo->pwname."</option>";
-											 } } ?>
-										</select>
+                                            <input type="text" class="form-control" name="position[]" id="position0" value="<?php echo set_value('position0'); ?>" disabled>
+											<p class="help-block"><?php echo form_error('position0'); ?></p>
                                     </div>
 							</div>
-							<div class="col-lg-3">
+							<div class="col-md-3">
                                     <div class="form-group">
-										<select class="form-control" name="depid[]" id="depid0">
-											<option value=""> </option>
-											<?php 	
-													if(is_array($dep_array)) {
-													foreach($dep_array as $loopdep){
-														echo "<option value='".$loopdep->depid."'";
-														//if ($loop->ponumber == $looppo->pwposition) echo " selected";
-														echo ">".$loopdep->thdepname."</option>";
-											 } } ?>
-										</select>
+										<input type="text" class="form-control" name="depid[]" id="depid0" value="<?php echo set_value('depid0'); ?>" disabled>
+											<p class="help-block"><?php echo form_error('depid0'); ?></p>
                                     </div>
 							</div>
-							<div class="col-lg-2">
+							<div class="col-md-2">
                                     <div class="form-group">
-                                            <input type="text" class="form-control" name="telephone[]" id="telephone0" value="<?php echo set_value('telephone0'); ?>">
+                                            <input type="text" class="form-control" name="telephone[]" id="telephone0" value="<?php echo set_value('telephone0'); ?>" disabled>
 											<p class="help-block"><?php echo form_error('telephone0'); ?></p>
                                     </div>
 							</div>
-							<div class="col-lg-1">
+							<div class="col-md-1">
 									<div class="form-group">
 										<button id="addNewResponse" type="button" onClick="addNewFormResponse(1);" class="btn btn-success">เพิ่ม</button>	
 									</div>
@@ -141,51 +171,48 @@ td.highlight {
 						<?php for ($i=1; $i<5; $i++) { ?>
 						<div id="addinputResponse<?php echo $i; ?>">
                         <div class="row">
-                            <div class="col-lg-3">
+                            <div class="col-md-3">
                                     <div class="form-group">
 									<input type="hidden" name="uid[]" id="uid<?php echo $i; ?>" value="">
                                             <input type="text" class="form-control" name="resid[]" id="resid<?php echo $i; ?>" value="">
                                     </div>
 							</div>
-							<div class="col-lg-3">
+							<div class="col-md-3">
                                     <div class="form-group">
-										<select class="form-control" name="position[]" id="position<?php echo $i; ?>">
-											
-										</select>
+										<input type="text" class="form-control" name="position[]" id="position<?php echo $i; ?>" value="" disabled>
                                     </div>
 							</div>
-							<div class="col-lg-3">
+							<div class="col-md-3">
                                     <div class="form-group">
-										<select class="form-control" name="depid[]" id="depid<?php echo $i; ?>">
-											
-										</select>
+										<input type="text" class="form-control" name="depid[]" id="depid<?php echo $i; ?>" value="" disabled>
                                     </div>
 							</div>
-							<div class="col-lg-2">
+							<div class="col-md-2">
                                     <div class="form-group">
-                                            <input type="text" class="form-control" name="telephone[]" id="telephone<?php echo $i; ?>" value="">
+                                            <input type="text" class="form-control" name="telephone[]" id="telephone<?php echo $i; ?>" value="" disabled>
                                     </div>
 							</div>
-							<div class="col-lg-1">
+							<div class="col-md-1">
 									<div class="form-group">
 										<button id="addNewResponse" type="button" onClick="removeNewFormResponse(<?php echo $i; ?>);" class="btn btn-danger">ลบ</button>	
 									</div>
 							</div>
 						</div></div>
 						<?php } ?>
-		<div class="panel panel-default">
+						<hr>
+		<div class="panel panel-success">
 				<div class="panel-heading">
 					<strong>ประเด็นความสำเร็จ</strong>
                 </div>
                 <div class="panel-body">
                 	
 						<div class="row">
-							<div class="col-lg-3">
+							<div class="col-md-3">
 									<div class="form-group">
                                             <label>ลำดับที่ *</label>
                                     </div>
 							</div>
-							<div class="col-lg-7">
+							<div class="col-md-7">
 									<div class="form-group">
                                         <label>คำอธิบาย *</label>
 
@@ -194,20 +221,20 @@ td.highlight {
 						</div>
 					<div class="addinput">
 						<div class="row">
-							<div class="col-lg-3">
+							<div class="col-md-3">
 									<div class="form-group">
                                             <input type="text" class="form-control" name="goalNO[]" id="goalNO" value="<?php echo set_value('goalNO[0]'); ?>">
 											<p class="help-block"><?php echo form_error('goalNO[0]'); ?></p>
                                     </div>
 							</div>
-							<div class="col-lg-7">
+							<div class="col-md-7">
 									<div class="form-group">
                                         <input type="text" class="form-control" name="goalName[]" id="goalName" value="<?php echo set_value('goalName'); ?>">
 										<p class="help-block"><?php echo form_error('goalName'); ?></p>
 
                                     </div>
 							</div>
-							<div class="col-lg-1">
+							<div class="col-md-1">
 									<div class="form-group">
 										<button id="addNew" type="button" onClick="addNewForm(this.form);" class="btn btn-success">เพิ่ม</button>	
 									</div>
@@ -215,13 +242,13 @@ td.highlight {
 						</div>
 					</div>
 				</div></div>
-				<div class="row"><div class="col-lg-5">
+				<div class="row"><div class="col-md-4">
 					<div class="table-responsive table-bordered">
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th class="col-lg-3">ระดับคะแนน</th>
-                                            <th class="col-lg-4">เกณฑ์การให้คะแนน</th>
+                                            <th class="col-md-1">ระดับคะแนน</th>
+                                            <th class="col-md-2">เกณฑ์การให้คะแนน</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -238,7 +265,7 @@ td.highlight {
                 </div></div>
 				<br>
 				<div class="row">
-					<div class="col-lg-3">
+					<div class="col-md-6">
 						<div class="form-group">
                             <label>ค่าเป้าหมาย *</label>
                                 <div class="form-group"><label class="radio-inline"><input type="radio" name="goalmin" id="goalmin" <?php echo set_radio('goalmin', '1'); ?> value="1">1</label>
@@ -252,7 +279,7 @@ td.highlight {
 					</div>		
 				</div>	
                 <div class="row">
-                	<div class="col-lg-10">
+                	<div class="col-md-10">
                 		<div class="form-group">
                             <label>Technical Note *</label>
 							<textarea class="form-control" name="technote" id="technote" rows="3"><?php echo set_value('technote'); ?></textarea>
@@ -261,7 +288,7 @@ td.highlight {
                 	</div>
                 </div>
 						<div class="row">
-							<div class="col-lg-6">
+							<div class="col-md-6">
 									<button type="submit" class="btn btn-primary">  เพิ่มตัวชี้วัด  </button>
 									<button type="button" class="btn btn-warning" onClick="window.location.href='<?php echo site_url("main"); ?>'"> ยกเลิก </button>
 							</div>
@@ -298,7 +325,7 @@ var rowNum = 0;
 var rowNumRes = 0;
 function addNewForm(frm) {
 	rowNum ++;
-	var row = '<div class="row" id="rowNum'+rowNum+'"><div class="col-lg-3"><div class="form-group"><input type="text" class="form-control" name="goalNO[]" id="goalNO" value="<?php echo set_value('goalNO'); ?>"><p class="help-block"><?php echo form_error('goalNO'); ?></p></div></div><div class="col-lg-7"><div class="form-group"><input type="text" class="form-control" name="goalName[]" id="goalName" value="<?php echo set_value('goalName'); ?>"><p class="help-block"><?php echo form_error('goalName'); ?></p></div></div><div class="col-lg-1"><div class="form-group"><button id="addNew" type="button" onClick="removeNewForm('+rowNum+');" class="btn btn-danger">ลบ</button></div></div></div>';
+	var row = '<div class="row" id="rowNum'+rowNum+'"><div class="col-md-3"><div class="form-group"><input type="text" class="form-control" name="goalNO[]" id="goalNO" value="<?php echo set_value('goalNO'); ?>"><p class="help-block"><?php echo form_error('goalNO'); ?></p></div></div><div class="col-md-7"><div class="form-group"><input type="text" class="form-control" name="goalName[]" id="goalName" value="<?php echo set_value('goalName'); ?>"><p class="help-block"><?php echo form_error('goalName'); ?></p></div></div><div class="col-md-1"><div class="form-group"><button id="addNew" type="button" onClick="removeNewForm('+rowNum+');" class="btn btn-danger">ลบ</button></div></div></div>';
 	$( ".addinput" ).append(row);
 	frm.add_qty.value = '';
 	frm.add_name.value = '';
@@ -376,11 +403,12 @@ $(document).ready(function()
                                 response($.map(data, function(pwemployee) {
                                 return {
 									id: pwemployee.userid,
-									//position: pwemployee.poname,
-									positionid: pwemployee.positionid,
+									position: pwemployee.poname,
+									//positionid: pwemployee.positionid,
                                     pwname: pwemployee.pwname,
 									value: pwemployee.pwname,
-									pwtelephone: pwemployee.pwtelephone
+									pwtelephone: pwemployee.pwtelephone,
+									depname: pwemployee.depname
 
                                     };
                             }));
@@ -393,9 +421,10 @@ $(document).ready(function()
 			autofocus: true,
 			select: function (event, ui) {
             event.preventDefault();
-            //$("#position").val(ui.item.position);
+            $("#position0").val(ui.item.position);
+			$("#depid0").val(ui.item.depname);
 			$("#resid0").val(ui.item.pwname);
-			$("#position0").val(ui.item.positionid);
+			//$("#position0").val(ui.item.positionid);
 			$("#telephone0").val(ui.item.pwtelephone);
 			$("#uid0").val(ui.item.id);
         }
@@ -425,11 +454,12 @@ $(document).ready(function()
                                 response($.map(data, function(pwemployee) {
                                 return {
 									id: pwemployee.userid,
-									//position: pwemployee.poname,
-									positionid: pwemployee.positionid,
+									position: pwemployee.poname,
+									//positionid: pwemployee.poname,
                                     pwname: pwemployee.pwname,
 									value: pwemployee.pwname,
-									pwtelephone: pwemployee.pwtelephone
+									pwtelephone: pwemployee.pwtelephone,
+									depname: pwemployee.depname
 
                                     };
                             }));
@@ -442,9 +472,10 @@ $(document).ready(function()
 			autofocus: true,
 			select: function (event, ui) {
             event.preventDefault();
-            //$("#position").val(ui.item.position);
+            $("#position1").val(ui.item.position);
 			$("#resid1").val(ui.item.pwname);
-			$("#position1").val(ui.item.positionid);
+			$("#depid1").val(ui.item.depname);
+			//$("#position1").val(ui.item.poname);
 			$("#telephone1").val(ui.item.pwtelephone);
 			$("#uid1").val(ui.item.id);
         }
@@ -474,11 +505,12 @@ $(document).ready(function()
                                 response($.map(data, function(pwemployee) {
                                 return {
 									id: pwemployee.userid,
-									//position: pwemployee.poname,
-									positionid: pwemployee.positionid,
+									position: pwemployee.poname,
+									//positionid: pwemployee.positionid,
                                     pwname: pwemployee.pwname,
 									value: pwemployee.pwname,
-									pwtelephone: pwemployee.pwtelephone
+									pwtelephone: pwemployee.pwtelephone,
+									depname: pwemployee.depname
 
                                     };
                             }));
@@ -491,9 +523,10 @@ $(document).ready(function()
 			autofocus: true,
 			select: function (event, ui) {
             event.preventDefault();
-            //$("#position").val(ui.item.position);
+            $("#position2").val(ui.item.position);
 			$("#resid2").val(ui.item.pwname);
-			$("#position2").val(ui.item.positionid);
+			$("#depid2").val(ui.item.depname);
+			//$("#position2").val(ui.item.positionid);
 			$("#telephone2").val(ui.item.pwtelephone);
 			$("#uid2").val(ui.item.id);
         }
@@ -523,11 +556,12 @@ $(document).ready(function()
                                 response($.map(data, function(pwemployee) {
                                 return {
 									id: pwemployee.userid,
-									//position: pwemployee.poname,
-									positionid: pwemployee.positionid,
+									position: pwemployee.poname,
+									//positionid: pwemployee.positionid,
                                     pwname: pwemployee.pwname,
 									value: pwemployee.pwname,
-									pwtelephone: pwemployee.pwtelephone
+									pwtelephone: pwemployee.pwtelephone,
+									depname: pwemployee.depname
 
                                     };
                             }));
@@ -540,9 +574,10 @@ $(document).ready(function()
 			autofocus: true,
 			select: function (event, ui) {
             event.preventDefault();
-            //$("#position").val(ui.item.position);
+            $("#position3").val(ui.item.position);
 			$("#resid3").val(ui.item.pwname);
-			$("#position3").val(ui.item.positionid);
+			$("#depid3").val(ui.item.depname);
+			//$("#position3").val(ui.item.positionid);
 			$("#telephone3").val(ui.item.pwtelephone);
 			$("#uid3").val(ui.item.id);
         }
@@ -572,11 +607,12 @@ $(document).ready(function()
                                 response($.map(data, function(pwemployee) {
                                 return {
 									id: pwemployee.userid,
-									//position: pwemployee.poname,
-									positionid: pwemployee.positionid,
+									position: pwemployee.poname,
+									//positionid: pwemployee.positionid,
                                     pwname: pwemployee.pwname,
 									value: pwemployee.pwname,
-									pwtelephone: pwemployee.pwtelephone
+									pwtelephone: pwemployee.pwtelephone,
+									depname: pwemployee.depname
 
                                     };
                             }));
@@ -589,11 +625,63 @@ $(document).ready(function()
 			autofocus: true,
 			select: function (event, ui) {
             event.preventDefault();
-            //$("#position").val(ui.item.position);
+            $("#position4").val(ui.item.position);
 			$("#resid4").val(ui.item.pwname);
-			$("#position4").val(ui.item.positionid);
+			$("#depid4").val(ui.item.depname);
+			//$("#position4").val(ui.item.positionid);
 			$("#telephone4").val(ui.item.pwtelephone);
 			$("#uid4").val(ui.item.id);
+        }
+		});
+
+		
+		
+	});
+
+	
+	
+});
+</script>
+<script type="text/javascript">
+$(document).ready(function()
+{
+	$(function(){
+		
+
+		$('#controlname').autocomplete({
+			source: function(request, response){
+				 $.ajax({
+                    url: "<?php echo site_url('manageindicator/autocompleteResponse'); ?>",
+                    dataType: "json",
+                    data: {term: request.term},
+                    success: function(data) {
+                                response($.map(data, function(pwemployee) {
+                                return {
+									id: pwemployee.userid,
+									position: pwemployee.poname,
+									//positionid: pwemployee.positionid,
+                                    pwname: pwemployee.pwname,
+									value: pwemployee.pwname,
+									pwtelephone: pwemployee.pwtelephone,
+									depname: pwemployee.depname
+
+                                    };
+                            }));
+                        }
+                    });
+    
+
+			},
+			minLength: 2,
+			autofocus: true,
+			select: function (event, ui) {
+            event.preventDefault();
+            $("#controlposition").val(ui.item.position);
+			$("#controlname").val(ui.item.pwname);
+			$("#controldepid").val(ui.item.depname);
+			//$("#position4").val(ui.item.positionid);
+			$("#controltelephone").val(ui.item.pwtelephone);
+			$("#controluserid").val(ui.item.id);
         }
 		});
 
