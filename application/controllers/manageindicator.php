@@ -792,7 +792,7 @@ class Manageindicator extends CI_Controller {
 
 	function viewIndicatorFromAdd() {
 
-		$query = $this->ministerindicator->getIndicatorGroupDepartment();
+		$query = $this->ministerindicator->getIndicatorGroupDepartment($this->session->userdata('sessyear'));
 		if($query){
 			$data['view_array'] =  $query;
 		}else{
