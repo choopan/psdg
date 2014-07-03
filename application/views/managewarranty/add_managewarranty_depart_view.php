@@ -300,6 +300,7 @@
 				if($(this).val()==''){
 					alert('กรุณาป้อนข้อมูลให้ครบ');
 					var num_tag=$(this).parent().attr('class');
+					$('#recip_employee'+num_tag).val('');
 					$('#recip_employee'+num_tag).focus();
 					ok = false;
 					return false;
@@ -310,6 +311,7 @@
 				if($(this).val()==''){
 					alert('กรุณาป้อนข้อมูลให้ครบ');
 					var num_tag=$(this).parent().attr('class');
+					$('#maker_employee'+num_tag).val('');
 					$('#maker_employee'+num_tag).focus();
 					ok = false;
 					return false;
