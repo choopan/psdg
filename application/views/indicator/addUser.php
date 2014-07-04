@@ -170,6 +170,10 @@ td.highlight {
 												<label class="checkbox-inline">
 													<input type="radio" value="admin_div"  name="admin">ระดับกอง
 												</label>
+												
+												<label class="checkbox-inline">
+													<input type="radio" value="admin_no"  name="admin">ไม่มีสิทธิ
+												</label>
 											</div>
 										</div>
 									</div>

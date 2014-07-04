@@ -108,17 +108,6 @@ td.highlight {
 												</select>
 											</div>
 											</div>
-											<div class="col-lg-4">
-											<div class="form-group">
-												<label>สิทธิบริหาร *</label>
-												<select id="execode" class="form-control" >
-													<option value="-1">---</option>
-													<option value="0">ไม่มี</option>
-													<option value="1">ผู้อำนวยการกอง</option>
-													<option value="2">อธิบดีกรม</option>
-												</select>
-											</div>
-											</div>
 										</div>
 										<div class="row">
 											<div class="col-lg-1">

@@ -195,10 +195,9 @@ class Manageuser extends CI_Controller {
 		$department = $this->input->get('department');
 		$division = $this->input->get('division');
 		$position = $this->input->get('position');
-		$admin_mdd = $this->input->get('admin_mdd');
-		$execode = $this->input->get('execode');
+		//$admin_mdd = $this->input->get('admin_mdd');
 		
-		if($admin_mdd!=-1){
+		/* if($admin_mdd!=-1){
 			if($admin_mdd=="admin_min"){
 				$admin_min = 1;
 				$admin_dep = null;
@@ -216,7 +215,7 @@ class Manageuser extends CI_Controller {
 				$admin_min = null;
 				$admin_dep = null;
 				$admin_div = null;
-		}
+		} */
 		
 		if($username!=null){$username="WHERE PWUSERNAME='".$username."'";}
 		if($fname!=null){$fname="AND PWFNAME='".$fname."'";}
@@ -224,17 +223,16 @@ class Manageuser extends CI_Controller {
 		if($department==-1){$department=" ";}else{$department="AND department=".$department;}
 		if($division==-1){$division=" ";}else{$division="AND division=".$division;}
 		if($position==-1){$position=" ";}else{$position="AND PWPOSITION=".$position;}
-		if($admin_min!=null){$admin_min="AND admin_min=".$admin_min;}
-		if($admin_dep!=null){$admin_dep="AND admin_dep=".$admin_dep;}
-		if($admin_div!=null){$admin_div="AND admin_div=".$admin_div;}
-		if($execode==-1){$execode=" ";}else{$execode="AND execode=".$execode.")";}
+		/* if($admin_min==1){$admin_min1="AND admin_min=".$admin_min;}
+		if($admin_dep==1){$admin_dep1="AND admin_dep=".$admin_dep;}
+		if($admin_div==1){$admin_div1="AND admin_div=".$admin_div;} */
 		
-		$sql="SELECT USERID, PWFNAME, PWLNAME, PWEFNAME, PWELNAME, department.name AS dep_name, division.name AS div_name, PWPOSITION.PWNAME AS position_name, PWLEVEL, PWEMAIL   
+		$sql="SELECT pwemployee.USERID AS USERID, PWFNAME, PWLNAME, PWEFNAME, PWELNAME, department.name AS dep_name, division.name AS div_name, PWPOSITION.PWNAME AS position_name, PWLEVEL, PWEMAIL   
 			  FROM pwemployee  INNER JOIN division INNER JOIN department INNER JOIN pwposition
 			  ON pwemployee.department = department.id
 			  AND pwemployee.division = division.id
 			  AND pwemployee.PWPOSITION = pwposition.PWPOSITION 
-			  ".$username.' '.$fname.' '.$lname.' '.$department.' '.$division.' '.$position.' '.$admin_min.' '.$admin_dep.' '.$admin_div.' '.$execode;
+			  ".$username.' '.$fname.' '.$lname.' '.$department.' '.$division.' '.$position;
 		$dta['sql']=$sql;
 		$data2['data2']=$this->user_manage->get_search($sql);
 		/* echo "<pre>";
