@@ -19,7 +19,7 @@
 			<?php	}?>
 				
             <div class="panel panel-default">
-				<div class="panel-heading"><strong>แบบประเมินผลสัมฤทธิ์ของงาน</strong></div>
+				<div class="panel-heading"><strong>แบบประเมินผลสัมฤทธิ์ของงาน</strong> ( ปีงบประมาณ  <?php echo $year; ?>  รอบที่  <?php echo $round ?> )</div>
 				<div class="panel-body">
 					<form class="form-inline" role="form">
 					  <div class="form-group">
@@ -46,7 +46,9 @@
 			<div class="panel panel-primary">
 				<div class="panel-heading"><strong>ตัวชี้วัดรายบุคคลที่กำหนดแล้ว</strong></div>
 				<div class="panel-body">
-					<form class="form-inline" role="form"  action="<?php echo site_url('person_evaluation/submitIndicatorForm'); ?>" method="POST">					
+					<form class="form-inline" role="form"  action="<?php echo site_url('person_evaluation/submitIndicatorForm'); ?>" method="POST">
+						<input type="hidden" name="year" value="<?php echo $year; ?>">
+						<input type="hidden" name="round" value="<?php echo $round; ?>">					
 					<table class="table table-hover" id="indicator_table">
 						<thead>
 							<tr>
@@ -58,6 +60,7 @@
 						</thead>
 						<tbody>	
 								<?php
+									
 									$numIndex = 0;
 									foreach($indicators as $ind) {
 										$numIndex++;
