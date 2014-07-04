@@ -37,14 +37,14 @@ td.highlight {
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>ชื่อกรม *</label>
-                                            <input type="text" class="form-control" name="department" id="residperson">
+                                            <input type="text" class="form-control" name="department" id="residperson" required>
 										</div>
 										</div>
 
 										<div class="col-lg-4">
 										<div class="form-group">
 											<label>อธิบดีกรม *</label>
-                                            <select name="execode" class="form-control" required >
+                                            <select name="userid" class="form-control">
 											<?php 
 												foreach($user as $value){
 													echo "<option value='".$value['USERID']."'>".$value['PWFNAME']." ".$value['PWLNAME']."</option>";

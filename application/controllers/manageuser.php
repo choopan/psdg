@@ -37,7 +37,7 @@ class Manageuser extends CI_Controller {
 	//--------------------------------------------------------- User --------------------------------------------------
 	function user_view()
 	{
-		$data['data']=$this->user_manage->get_user();
+		//$data['data']=$this->user_manage->get_user();
 		$data['title'] = "MFA - User Management";
 		$data['department']=$this->user_manage->get_department();
 		$data['position']=$this->user_manage->get_position();
@@ -108,7 +108,7 @@ class Manageuser extends CI_Controller {
 		}else{
 			$admin_div=0;
 		}
-		
+
 		if($password==$retry_password)
 		{
 			$this->user_manage->addUser_save($username,md5($password),$fname,$lname,$efname,$elname,$gender,$email,$tel,$mobile,$department,$division,$position1,$level,$admin_min,$admin_dep,$admin_div);
@@ -266,7 +266,7 @@ class Manageuser extends CI_Controller {
 	function addDepartmaent_save()
 	{
 		$department_name=$this->input->post('department');
-		$userid=$this->input->post('execode');
+		$userid=$this->input->post('userid');
 		$this->user_manage->addDepartmaent_save($department_name,$userid);
 		redirect('manageuser/department_view');
 	}
@@ -287,6 +287,9 @@ class Manageuser extends CI_Controller {
 		$id=$this->input->post('id');
 		$department=$this->input->post('department');
 		$userid=$this->input->post('userid');
+		if($userid==-1){
+			$userid=null;
+		}
 		$this->user_manage->updateDepartmaent_save($id,$department,$userid);
 		redirect('manageuser/department_view');
 	}
@@ -351,6 +354,9 @@ class Manageuser extends CI_Controller {
 		$dep_id=$this->input->post('department');
 		$division=$this->input->post('division');
 		$userid=$this->input->post('userid');
+		if($userid==-1){
+		$userid=null;
+		}
 		$this->user_manage->updateDivision_save($id,$dep_id,$division,$userid);
 		redirect('manageuser/division_view');
 	}

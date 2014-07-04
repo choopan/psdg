@@ -61,11 +61,16 @@ td.highlight {
 											<select name="userid" class="form-control">
 												
 												<?php if(is_array($data) && count($data) ) {?>
-													<option value="<?php echo $dep[0]['id']; ?>"><?php echo "ข้อมูลเดิมคือ ".$dep[0]['PWFNAME'].' '.$dep[0]['PWLNAME']; ?></option>
-												<?php foreach($user as $loop2){
-												?>
-													<option value="<?php echo $loop2['USERID']; ?>"><?php echo $loop2['PWFNAME'].' '.$loop2['PWLNAME']; ?></option>
-												<?php } } ?>
+												
+													<?php if(!empty($dep[0]['PWFNAME'])){?>
+														<option value="<?php echo $dep[0]['id']; ?>"><?php echo "ข้อมูลเดิมคือ ".$dep[0]['PWFNAME'].' '.$dep[0]['PWLNAME']; ?></option>
+													<?php }?>
+													<?php if(!empty($user)){?>
+														<?php foreach($user as $loop2){?>
+															<option value="<?php echo $loop2['USERID']; ?>"><?php echo $loop2['PWFNAME'].' '.$loop2['PWLNAME']; ?></option>
+													<?php }} else{ ?>
+															<option value="-1">ไม่มีข้อมูล</option>
+												<?php }} ?>
 											</select>
 										</div>
 										</div>

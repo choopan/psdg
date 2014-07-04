@@ -144,7 +144,7 @@ Class User_manage extends CI_Model
  
  function get_department()
  {
-	$query=$this->db->query('SELECT DISTINCT id,name,PWFNAME,PWLNAME FROM department INNER JOIN pwemployee
+	$query=$this->db->query('SELECT DISTINCT id,name,PWFNAME,PWLNAME FROM department LEFT JOIN pwemployee  
 							 ON department.USERID = pwemployee.USERID')
 					->result_array();
 	return $query;
@@ -159,7 +159,7 @@ Class User_manage extends CI_Model
  
  function dep_edit_info($id)
  {
-	$query=$this->db->query('SELECT id,department.USERID AS USERID,name,PWFNAME,PWLNAME FROM department INNER JOIN pwemployee
+	$query=$this->db->query('SELECT id,department.USERID AS USERID,name,PWFNAME,PWLNAME FROM department LEFT JOIN pwemployee
 							 ON department.USERID = pwemployee.USERID WHERE id = '.$id)
 					->result_array();
 	return $query;
@@ -192,12 +192,12 @@ Class User_manage extends CI_Model
  
   function get_division_show()
  {
- 	
-	$query=$this->db-> select('division.id AS id,department.name AS dep_name,division.name AS div_name, pwemployee.PWFNAME as PWFNAME, pwemployee.PWLNAME as PWLNAME')
-					-> from('division')
-					-> join('department', 'division.dep_id = department.ID', 'left')
-					-> join('pwemployee', 'division.userID = pwemployee.userID', 'left')
-					-> get() -> result_array();				
+	$query=$this->db->query('select k.id as div_id,k.dep_name as dep_name,k.div_name as div_name,pwemployee.PWFNAME as PWFNAME,pwemployee.PWLNAME as PWLNAME
+from 						(select division.id AS id,department.name AS dep_name,division.name AS div_name 
+							 from division left join department 
+							 on department.id = division.dep_id)k left join pwemployee
+on k.						 id = pwemployee.division')
+					->result_array();
 	return $query;
  }
  

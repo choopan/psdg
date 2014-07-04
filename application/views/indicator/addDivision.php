@@ -37,7 +37,7 @@ td.highlight {
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>เลือกกรม *</label>
-											<select name="department" class="form-control">
+											<select name="department" class="form-control" required>
 												<?php if(is_array($data) && count($data) ) {
 													foreach($data as $loop){
 												?>
@@ -49,13 +49,13 @@ td.highlight {
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>ชื่อกอง *</label>
-                                            <input type="text" class="form-control" name="division">
+                                            <input type="text" class="form-control" name="division" required>
 										</div>
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
 											<label>ผู้อำนวยการกอง *</label>
-                                            <select name="userid" class="form-control" required >
+                                            <select name="userid" class="form-control">
 											<?php 
 												foreach($user as $value){
 													echo "<option value='".$value['USERID']."'>".$value['PWFNAME']." ".$value['PWLNAME']."</option>";
