@@ -145,14 +145,14 @@ Class User_manage extends CI_Model
  function get_department()
  {
 	$query=$this->db->query('SELECT DISTINCT id,name,PWFNAME,PWLNAME FROM department LEFT JOIN pwemployee  
-							 ON department.USERID = pwemployee.USERID')
+							 ON department.USERID = pwemployee.USERID WHERE department.enabled = 1')
 					->result_array();
 	return $query;
  }
  
  function get_department_1()
  {
-	$query=$this->db->query('SELECT DISTINCT id,name FROM department')
+	$query=$this->db->query('SELECT DISTINCT id,name FROM department WHERE department.enabled = 1')
 					->result_array();
 	return $query;
  }
@@ -195,7 +195,8 @@ Class User_manage extends CI_Model
 	$query=$this->db->query('select k.id as div_id,k.dep_name as dep_name,k.div_name as div_name,pwemployee.PWFNAME as PWFNAME,pwemployee.PWLNAME as PWLNAME
 							 from (select division.id AS id,department.name AS dep_name,division.name AS div_name,division.USERID as USERID 
 							 from division inner join department 
-							 on department.id = division.dep_id)k left join pwemployee
+							 on department.id = division.dep_id 
+							 where division.enabled = 1 )k left join pwemployee
 							 on k.USERID = pwemployee.USERID')
 					->result_array();
 	return $query;
