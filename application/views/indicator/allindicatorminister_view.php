@@ -34,7 +34,7 @@
 									<th colspan="5">เกณฑ์การให้คะแนน</th>
 									<th rowspan="2">น้ำหนัก</th>
 									<th rowspan="2">หน่วยงาน</th>
-									<th rowspan="2">จัดการ</th>
+									<th rowspan="2" width="125">จัดการ</th>
 								</tr>
 								<tr>
 									<th>1</th>

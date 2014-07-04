@@ -100,14 +100,14 @@ td.highlight {
 					<div class="panel-heading"><strong>รายการตัวชี้วัดของกระทรวงทั้งหมด</strong> </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-						<button id="buttonselect" type="button" class="btn btn-primary">แสดงเฉพาะตัวชี้วัดที่เลือก</button>
+						<!--<button id="buttonselect" type="button" class="btn btn-primary">แสดงเฉพาะตัวชี้วัดที่เลือก</button> -->
 						<!-- show all indicator minister -->
-						<a id="fancyboxall" href="<?php echo site_url("manageindicator/selectIndicatorMinisterList");  ?>"><button id="buttonselect" type="button" class="btn btn-primary">แสดงเฉพาะตัวชี้วัดของกระทรวงทั้งหมด</button></a>
+						<a id="fancyboxall" href="<?php echo site_url("manageindicator/selectIndicatorMinisterList");  ?>"><button id="buttonselect" type="button" class="btn btn-primary">แสดงตัวชี้วัดของกระทรวงทั้งหมด</button></a>
                             <table class="display" id="dataTables-example" cellspacing="0px" width="100%">
                                 <thead>
                                     <tr>
-										<th width="80">ตัวชี้วัดที่</th>
-										<th width="500">ชื่อตัวชี้วัด</th>
+										<th width="80">เลือก</th>
+										<th width="500">ตัวชี้วัดและประเด็นความสำเร็จ</th>
 										<th width="200">ค่าเป้าหมาย</th>
 										<th width="80">น้ำหนัก</th>
                                     </tr>
@@ -335,8 +335,8 @@ function removeNewFormResponse(idd) {
 <script type='text/javascript'> 
 $(document).ready(function() {
 $('#fancyboxall').fancybox({ 
-'width': '70%',
-'height': '100%', 
+'width': '80%',
+'height': '80%', 
 'autoScale':false,
 'transitionIn':'none', 
 'transitionOut':'none', 

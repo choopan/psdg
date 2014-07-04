@@ -12,12 +12,13 @@ Class Ministerindicator extends CI_Model
 
  function getIndicatorGroupDepartment($year)
  {
+	$this->db->_protect_identifiers=false;
 	$this->db->select("number, min_indicator.name, GROUP_CONCAT( DISTINCT(department.name) SEPARATOR ' <br> ' ) AS TDepName, criteria1, criteria2, criteria3, criteria4, criteria5, goal, weight, min_indicator.id as mid");
-	$this->db->order_by("number", "asc");
+	$this->db->order_by("number*1", "asc");
 	$this->db->from('min_indicator');		
-	$this->db->join('minIndicatorResponse','minIndicatorResponse.minIndicatorID=min_indicator.id');	
-	$this->db->join('pwemployee','pwemployee.userid=minIndicatorResponse.userID');	
-	$this->db->join('department','department.id=pwemployee.department');	
+	$this->db->join('minIndicatorResponse','minIndicatorResponse.minIndicatorID=min_indicator.id', 'left');	
+	$this->db->join('pwemployee','pwemployee.userid=minIndicatorResponse.userID', 'left');	
+	$this->db->join('department','department.id=pwemployee.department', 'left');	
 	//$this->db->group_by('minIndicatorResponse.resDepartmentID');
 	$this->db->group_by('min_indicator.name');
 	$this->db->where('year', $year);
@@ -27,8 +28,9 @@ Class Ministerindicator extends CI_Model
  
  function getIndicatorMin($year=NULL)
  {
+	$this->db->_protect_identifiers=false;
 	$this->db->select("min_indicator.id as id, number, name");
-	$this->db->order_by("number", "asc");
+	$this->db->order_by("number*1", "asc");
 	$this->db->from('min_indicator');
 	//$this->db->join('minIndicatorResponse','minIndicatorResponse.minIndicatorID=min_indicator.id');	
 	//$this->db->join('pwdepartment','pwdepartment.DepID=minIndicatorResponse.resDepartmentID');	
