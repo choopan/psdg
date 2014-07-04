@@ -45,12 +45,16 @@
 									</thead>
 									<tbody>
 										<tr>
-											<td>ทดสอบ</td>
+											<td>
+												<a href="<?php echo site_url('managewarranty/gen_managewarranty_docx'); ?>"><img src="<?php echo base_url().'images/word_k005.png';?>" height="20" width="20" class="img-rounded"></a>
+												ทดสอบ
+											</td>
 											<td>											
 												<a data-toggle="modal" data-target="#myModal" href='#' class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
 												<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 													<div class="modal-dialog">
 														<div class="modal-content">
+															test
 														</div> 
 													</div>
 												</div> 
