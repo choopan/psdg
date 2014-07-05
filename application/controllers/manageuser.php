@@ -367,5 +367,54 @@ class Manageuser extends CI_Controller {
 		redirect('manageuser/division_view');
 	}
 	
-
+//===================== Position ===================
+	function position_view()
+	{
+		$data['title'] = "MFA - Position Management";
+		$data['data']=$this->user_manage->position_view();
+		/* echo "<pre>";
+		print_r($data);
+		echo "</pre>"; */
+		$this->load->view('managePosition_view',$data);
+	}
+	
+	function addPosition()
+	{
+		$data['title'] = "MFA - Position Management";
+		$this->load->view('indicator/addPosition',$data);
+	}
+	
+	function addPosition_save()
+	{	
+		$tposition=$this->input->post('tposition');
+		$eposition=$this->input->post('eposition');
+		$this->user_manage->addPosition_save($tposition,$eposition);
+		redirect('manageuser/position_view');
+	}
+	
+	function pos_edit_info($id)
+	{
+		$data['title'] = "MFA - Position Management";
+		$data['data']=$this->user_manage->get_edit_position($id);
+		/* echo "<pre>";
+		print_r($data);
+		echo "</pre>"; */
+		$this->load->view('indicator/editPosition',$data);
+	}
+	
+	function updatePosition_save()
+	{
+		$id=$this->input->post('id');
+		$tposition=$this->input->post('tposition');
+		$eposition=$this->input->post('eposition');
+		
+		$this->user_manage->updatePosition_save($id,$tposition,$eposition);
+		redirect('manageuser/position_view');
+	}
+	
+	function pos_del_info($id)
+	{
+		$this->user_manage->deletePosition($id);
+		redirect('manageuser/position_view');
+	}
 }

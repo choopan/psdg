@@ -45,7 +45,8 @@ Class User_manage extends CI_Model
  
  function get_user_limit($start, $limit) {
  	$query=$this->db->select('pwemployee.USERID as USERID, PWFNAME, PWLNAME, department.name AS dep_name, division.name AS div_name, PWPOSITION.PWNAME AS position_name, PWLEVEL, PWEMAIL')
- 					->from('PWEMPLOYEE')
+ 					->where('pwemployee.enabled',1)
+					->from('PWEMPLOYEE')
 					->join('department', 'pwemployee.department = department.id', 'left')
 					->join('division', 'pwemployee.division = division.id', 'left' )
 					->join('pwposition', 'pwemployee.PWPOSITION = pwposition.PWPOSITION', 'left')
@@ -121,6 +122,7 @@ Class User_manage extends CI_Model
  {
 	$query=$this->db->distinct()
 					->select('PWPOSITION,PWNAME')
+					->order_by('PWNAME')
 					->get('pwposition')
 					->result_array();
 	return $query;
@@ -152,7 +154,7 @@ Class User_manage extends CI_Model
  
  function get_department_1()
  {
-	$query=$this->db->query('SELECT DISTINCT id,name FROM department WHERE department.enabled = 1')
+	$query=$this->db->query('SELECT DISTINCT id,name FROM department WHERE department.enabled = 1 ORDER BY name')
 					->result_array();
 	return $query;
  }
@@ -177,7 +179,7 @@ Class User_manage extends CI_Model
  {
 	$this->db->where('id',$id)
 			 ->set('enabled',0)
-			 ->delete('department');
+			 ->update('department');
  }
  
  //============================================================= Division =======================================
@@ -237,6 +239,48 @@ Class User_manage extends CI_Model
 	$this->db->where('id',$id)
 			 ->set('enabled',0)
 			 ->update('division');
+ }
+ 
+ //====================== Position =======================
+ function position_view()
+ {
+	$query=$this->db->distinct()
+			 ->order_by('PWNAME')
+			 ->get('pwposition')
+			 ->result_array();
+	return $query;
+ }
+ 
+ function addPosition_save($tposition,$eposition)
+ {
+	$this->db->set('PWNAME',$tposition)
+			 ->set('PWENAME',$eposition)
+			 ->set('PWSTATUS',1)
+			 ->set('ISDELETE',0)
+			 ->insert('pwposition');
+ }
+ 
+ function get_edit_position($id)
+ {
+	$query=$this->db->distinct()
+					->where('PWPOSITION',$id)
+					->get('pwposition')
+					->result_array();
+	return $query;
+ }
+ 
+ function updatePosition_save($id,$tposition,$eposition)
+ {
+	$this->db->where('PWPOSITION',$id)
+			 ->set('PWNAME',$tposition)
+			 ->set('PWENAME',$eposition)
+			 ->update('pwposition');
+ }
+ 
+ function deletePosition($id)
+ {
+	$this->db->where('PWPOSITION',$id)
+			 ->delete('pwposition');
  }
 }
 ?>

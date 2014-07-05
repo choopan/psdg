@@ -57,6 +57,9 @@
 								<li>
                                     <a href="<?php echo site_url("manageuser/division_view"); ?>">จัดการกอง</a>
                                 </li>
+								<li>
+                                    <a href="<?php echo site_url("manageuser/position_view"); ?>">จัดการตำแหน่ง</a>
+                                </li>
                                 <li>
                                     <a href="<?php echo site_url("person_evaluation/manageEvalRound"); ?>">จัดการรอบการประเมิน</a>
                                 </li>
