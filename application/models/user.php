@@ -87,11 +87,22 @@ Class User extends CI_Model
 			-> join('pwposition', 'pwposition.pwposition = pwemployee.pwposition', 'left')
 			-> join('department', 'pwemployee.department = department.id', 'left')
 			-> join('division', 'pwemployee.division = division.id', 'left')
-			-> where('pwemployee.userid', $id)
+			-> where(array('pwemployee.userid'=> $id, 'division.enabled' => 1, 'department.enabled' => 1))
 			-> get() ->result_array();
 	return $result;
  }
 
+ function getAllProfile() {
+ 	$result = $this->db->select("pwemployee.USERID as user_id, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, PWLEVEL, department.name as depname, division.name as divname")
+			-> from('pwemployee')
+			-> join('pwposition', 'pwposition.pwposition = pwemployee.pwposition', 'left')
+			-> join('department', 'pwemployee.department = department.id', 'left')
+			-> join('division', 'pwemployee.division = division.id', 'left')
+			-> where(array('division.enabled' => 1, 'department.enabled' => 1))
+			-> get() ->result_array();
+	return $result;
+ }
+ 
  function getExecDiv($userID) {
  	$result = $this->db->get_where('division', array('userID'=> $userID))->result_array();
 	if(count($result) == 0) {
@@ -119,5 +130,15 @@ Class User extends CI_Model
 	return $result;
  }
 
+
+ function getUserFromDep($userID, $depID) {
+ 	$result = $this->db->select('pwemployee.USERID as userID, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, PWLEVEL, division.name as divname')
+ 						->from('pwemployee')
+ 						->join('pwposition', 'pwposition.pwposition = pwemployee.pwposition', 'left')
+						->join('division', 'pwemployee.division = division.id', 'left')
+ 						->where(array('pwemployee.department' => $depID, 'pwemployee.userID !=' => $userID, 'division.enabled' => 1))
+ 						->get() -> result_array();
+	return $result;
+ }
 }
 ?>

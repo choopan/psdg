@@ -134,16 +134,16 @@
                                 <li><a href="<?php echo site_url("person_evaluation/managePersonIndicator"); ?>">กำหนดตัวชี้วัด</a></li>
                                 <li><a href="<?php echo site_url("person_evaluation/managePersonEvaluation"); ?>">รายงานผลการปฏิบัติการ (Puwarun)</a></li>
                                 
-                                <?php	if($this->session->userdata('sessexecdiv') == 1) { ?>
+								<?php   if ($this->session->userdata('sessadmin_min') == 1) { ?>
+                                	<li><a href="<?php echo site_url("person_evaluation/minManagePersonIndicator"); ?>">แสดงตัวชี้วัดรายบุคคล</a></li>
+                                	<li><a href="<?php echo site_url("#"); ?>">แสดงรายงานผลปฏิบัติการ (Puwarun)</a></li>									
+								<?php   } elseif($this->session->userdata('sessexecdiv') == 1) { ?>
                                 	<li><a href="<?php echo site_url("person_evaluation/divManagePersonIndicator"); ?>">แสดงตัวชี้วัดรายบุคคล</a></li>
                                 	<li><a href="<?php echo site_url("#"); ?>">แสดงรายงานผลปฏิบัติการ (Puwarun)</a></li>
                                 <?php   } elseif($this->session->userdata('sessexecdep') == 1) { ?>
                                 	<li><a href="<?php echo site_url("person_evaluation/depManagePersonIndicator"); ?>">แสดงตัวชี้วัดรายบุคคล</a></li>
                                 	<li><a href="<?php echo site_url("#"); ?>">แสดงรายงานผลปฏิบัติการ (Puwarun)</a></li>
-								<?php   } elseif ($this->session->userdata('sessadmin_min') == 1) { ?>
-                                	<li><a href="<?php echo site_url("#"); ?>">แสดงตัวชี้วัดรายบุคคล</a></li>
-                                	<li><a href="<?php echo site_url("#"); ?>">แสดงรายงานผลปฏิบัติการ (Puwarun)</a></li>									
-								<?php   } ?>                                
+                                <?php   } ?>
                                 
 
                             </ul>

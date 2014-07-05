@@ -26,6 +26,31 @@ class person_evaluation extends CI_Controller {
 		$this->session->set_flashdata('failed', 'ไม่อนุมัติตัวชี้วัดรายลุคคลเรียบร้อยแล้ว');
 		redirect('person_evaluation/divManagePersonIndicator', 'location');
 	}
+
+	function viewIndicatorFromDep($id) {
+		$userID = $id;
+		$depID  = $this->session->userdata('sessdep');
+		$divID  = $this->session->userdata('sessdiv');
+	
+		$active_evalround = $this->personindicator->getActiveEvalRound();
+
+		if(count($active_evalround) == 1) {
+			$year  = $active_evalround[0]['year'];
+			$round = $active_evalround[0]['round'];
+			$data['year'] = $year;
+			$data['round'] = $round;
+			$pi_set = $this->personindicator->getPINumber($userID, $year, $round, $depID, $divID);
+			$data['pi_set'] = $pi_set[0]['ID'];
+			$data['indicators'] = $this->personindicator->listIndicator($userID, $year, $round, $depID, $divID);	
+			$tmp = $this->user->getMinProfile($id);
+			$data['user'] =  $tmp[0];
+			$this->load->view('evaluate/viewPersonIndicatorFromDep.php', $data);
+		} else {
+			echo "No evaluate round selected";
+			die();
+		}		
+	}
+
 	
 	function viewIndicator($id) {
 		$userID = $id;
@@ -129,6 +154,52 @@ class person_evaluation extends CI_Controller {
 			$data['round'] = $round;
 			$data['user_info'] = $this->user->getUserFromDiv($data['userID'], $data['divID']); 
 			$this->load->view('evaluate/displayPersonIndicatorInDiv.php', $data);
+		} else {			
+			echo "No evaluate round selected";
+			die();
+		}
+	}
+
+	function depManagePersonIndicator() {
+		//Verify if this account is an executive of division
+		if(!$this->session->userdata('sessexecdep')) {
+			show_error("คุณไม่มีสิทธิในการเข้าถึงหน้านี้", 500);
+		}
+		$data['userID'] = $this->session->userdata('sessid');
+		$data['depID']  = $this->session->userdata('sessdep');
+		$data['divID']  = $this->session->userdata('sessdiv');
+	
+		$active_evalround = $this->personindicator->getActiveEvalRound();
+
+		if(count($active_evalround) == 1) {
+			$year  = $active_evalround[0]['year'];
+			$round = $active_evalround[0]['round'];
+			$data['year']  = $year;
+			$data['round'] = $round;
+			$data['user_info'] = $this->user->getUserFromDep($data['userID'], $data['depID']); 
+			$this->load->view('evaluate/displayPersonIndicatorInDep.php', $data);
+		} else {			
+			echo "No evaluate round selected";
+			die();
+		}
+	}
+
+
+	function minManagePersonIndicator() {
+		//Verify if this account is an executive of division
+		if(!$this->session->userdata('sessadmin_min')) {
+			show_error("คุณไม่มีสิทธิในการเข้าถึงหน้านี้", 500);
+		}
+
+		$active_evalround = $this->personindicator->getActiveEvalRound();
+
+		if(count($active_evalround) == 1) {
+			$year  = $active_evalround[0]['year'];
+			$round = $active_evalround[0]['round'];
+			$data['year']  = $year;
+			$data['round'] = $round;
+			$data['user_info'] = $this->user->getAllProfile(); 
+			$this->load->view('evaluate/displayPersonIndicatorInMin.php', $data);
 		} else {			
 			echo "No evaluate round selected";
 			die();
