@@ -94,7 +94,10 @@ td.highlight {
     $(document).ready(function()
     {
 		var table = $('#dataTables-example').DataTable();
-		$('#myModal').modal('show');
+		$('#myModal').modal({
+							show:true,
+							backdrop:false
+							});
     });
 </script>
 </body>

@@ -227,7 +227,10 @@ td.highlight {
     $(document).ready(function()
     {
 		var table = $('#dataTables-example').DataTable();
-		$('#myModal2').modal('show');
+		$('#myModal2').modal({
+							show:true,
+							backdrop:false
+							});
 		
 		$('#page_select').change(function() {
 			var pagenum = $("#page_select").val();
