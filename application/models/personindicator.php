@@ -79,7 +79,6 @@ Class PersonIndicator extends CI_Model
 						-> set('weight', $weights[$i])
 						-> insert('person_indicator_detail');
 		}		
-		
 	}
 
 	
@@ -87,6 +86,27 @@ Class PersonIndicator extends CI_Model
 	 	$this -> db -> set('status', $status)
 					-> where('ID', $pid)
 					-> update('person_indicator');
+	}					
+
+	function AddandUpdateScore($userID, $year,$score) {
+		$personIndicatorRes = $this -> db
+													-> select('id')
+													-> get_where('person_indicator', array('userID' => $userID, 'year' => $year))
+													-> result_array();
+													
+		$personIndicatorDetailRes = $this -> db
+															-> select('ID')
+															-> get_where('person_indicator_detail', array('PID' => (int)$personIndicatorRes[0]['id']))
+															-> result_array();
+						
+		$numrow = count($score); 		
+		for($i = 0; $i < $numrow; $i++) {
+			$this -> db 
+					-> set('userID', $userID)
+					-> set('personIndicatorID', $personIndicatorDetailRes[$i]['ID'])
+					-> set('score', (int)$score[$i])
+					-> insert('personal_score');
+		}
 	}
 	
 	function getPInumber($userID, $year, $round, $dep_id, $div_id) {

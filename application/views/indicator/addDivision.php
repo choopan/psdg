@@ -67,11 +67,8 @@ td.highlight {
 									</div>
 									<div class="row">
 										<div class="form-group">
-										<div class="col-lg-1">
-											<input id="addNew" type="submit" class="btn btn-success" value="เพิ่ม">
-											</div>
-											<div class="col-lg-1">
-											<a href="javascript:history.go(-1)" class="btn btn-primary">กลับ</a>
+										<div class="col-lg-3">
+											<input id="addNew" type="submit" class="btn btn-success" value="เพิ่ม"> <a href="javascript:history.go(-1)" class="btn btn-primary">กลับ</a>
 										</div>
 										</div>
 									</div>

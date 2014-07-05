@@ -6,52 +6,34 @@
 <body>
 <div id="wrapper">
 <?php $this->load->view('menu'); ?>
-<?php echo site_url("reportperson/person"); ?>
 <div id="page-wrapper">
 	
 	<div class="row">
 		<div class="col-lg-12">
+		<?php 	if($this->session->flashdata('success')) {
+			?>
+						<div class="alert alert-success alert-dismissable">
+  							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  			<?php			echo $this->session->flashdata('success'); ?>
+						</div>
+			<?php	} ?>
             <div class="panel panel-primary">
 				<div class="panel-heading"><strong>แบบประเมินผลสัมฤทธิ์ของงาน</strong></div>
 				<div class="panel-body">
-					<div class="col-md-3 col-md-offset-3">
+				
 						<label>รอบที่</label>
-						<select class="form-control" name="" id="" style="width: 20%">
+						<select class="form-control" name="" id="" style="width: 5%">
 							<option value=""></option>
 							<option value="1">1</option>
 							<option value="2">2</option>
                         </select>
-					</div>
-					<div class="col-md-3 col-md-offset-3">
-						<label>สังกัดกอง</label>
-						<select class="form-control" name="" id="" style="width: 30%">
-							<option value=""></option>
-							
-							
-							<!--
-							//when this selected will return "year", "round", "kong"
-							
-							<?php if(is_array($__data)) {
-								foreach($__data as $__tmp){ ?>
-							-->
-														
-							<!--
-							<?php } } ?>
-							-->
-							
-							<option value="1">กองที่ 1</option>
-							<option value="2">กองที่ 2</option>
-                        </select>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-lg-12">
+
+
+		<div class="col-lg-12" style="margin-top: 10px">
 			<div class="panel panel-primary">
 				<div class="panel-body">
 					<div class="table-responsive">
+					<form class="form-inline" role="form"  action="<?php echo site_url('person_evaluation/saveEvaluation'); ?>" method="POST">
                         <table class="table table-hover" id="dataTables-example">
 							<thead>
 								<tr class="success">
@@ -70,42 +52,27 @@
 								</tr>
 							</thead>
 							<tbody>
-							
-								<!--
-								<?php if(is_array($__data)) {
-									foreach($__data as $__tmp){ ?>
-								-->
-															
-								<!--
-								<?php } } ?>
-								-->
-							
-								<tr>
-									<td>ระดับความสำเร็จ 1</td>
+								<?php
+									$numIndex = 0;
+									foreach($indicators as $ind) {
+										$numIndex++;
+								?>
+								<tr id="indicator_row<?php echo $numIndex; ?>">
+									<td><?php echo $ind['name']; ?></td>
 									<td>1</td>
 									<td>2</td>
 									<td>3</td>
 									<td>4</td>
 									<td>5</td>
 									<td>
-										<input type="text" class="form-control" name="" id="point1" value="" onchange="getvalonchange('point1', 'weight1', 'totalpoint1');">
+										<input type="text" class="form-control" name="score[]" id="point<?php echo $numIndex; ?>"  onchange="getvalonchange('point<?php echo $numIndex; ?>', 'weight<?php echo $numIndex; ?>', 'totalpoint<?php echo $numIndex; ?>');">
 									</td>
-									<td style="text-align: center;" id="weight1">0.15</td>
-									<td style="text-align: center;" id="totalpoint1"></td>
+									<td style="text-align: center;" name="" id="weight<?php echo $numIndex; ?>"><?php echo $ind['weight']; ?></td>
+									<td style="text-align: center;" id="totalpoint<?php echo $numIndex; ?>" value=""></td>
 								</tr>
-								<tr>
-									<td>ระดับความสำเร็จ 2</td>
-									<td>1</td>
-									<td>2</td>
-									<td>3</td>
-									<td>4</td>
-									<td>5</td>
-									<td>
-										<input type="text" class="form-control" name="" id="point2" value="" onchange="getvalonchange('point2', 'weight2', 'totalpoint2');">
-									</td>
-									<td style="text-align: center;" id="weight2">0.30</td>
-									<td style="text-align: center;" id="totalpoint2"></td>
-								</tr>
+								<?php       		
+									}								
+								?>
 							</tbody>
 						</table>
 						<table class="table table-hover" id="dataTables-example">
@@ -124,32 +91,98 @@
 									<th rowspan="2" style="text-align: center;width: 80%">แปลงคะแนนรวม (ค) ข้างต้น เป็นคะแนนการประเมินผลสัมฤทธิ์ของงานที่มีฐานคะแนนเป็น 100 คะแนน (โดยนำ 20 มาคูณ)</th>
 									<th rowspan="2" style="text-align: center;width: 5%"></th>
 									<th colspan="2" style="text-align: center;width: 5%"> =====> </th>
-									<th rowspan="2" style="text-align: center;width: 10%" id="caltotalpoint"></th>
+									<th rowspan="2" style="text-align: center;width: 10%" id="caltotalpoint" name="totalCalPoint"></th>
 								</tr>
 							</thead>
 						</table>
+						<div class="col-lg-10 col-lg-offset-10">
+							<button type="submit" class="btn btn-primary" name="option" value="record"><span class="glyphicon glyphicon-floppy-save"></span> บันทึก</button>
+							<button type="submit" class="btn btn-success" name="option" value="prove"><span class="glyphicon glyphicon-envelope"></span> ส่งเพื่อพิจารณา</button>
+						</div>
+					</form>		
 					</div>
 				</div>
 			</div>
 		</div>
+		
+		<div class="col-lg-12" style="margin-top: 10px">
+			<div class="panel panel-primary">
+				<div class="panel-body">
+					<div class="table-responsive">
+					<form class="form-inline" role="form"  action="<?php echo site_url('person_evaluation/saveEvaluation'); ?>" method="POST">
+                        <table class="table table-hover" id="dataTables-example">
+							<thead>
+								<tr class="success">
+								<?php
+									$countRow = 0;
+									foreach($indicators as $ind) {
+										$countRow++;
+								?>
+								<?php       		
+									}								
+								?>
+									<th rowspan="2" style="width: 45%"></th>
+									<th colspan="<?php echo $countRow; ?>" style="text-align: center;">ผลการปฏิบัติงาน</th>									
+									<th rowspan="2" style="text-align: center;width: 10%">(ชื่อ) เอกสาร</th>
+								</tr>
+								<tr class="success">
+								<?php
+									$numIndex = 0;
+									foreach($indicators as $ind) {
+										$numIndex++;
+								?>
+									<th><?php echo $ind['name']; ?></th>
+								<?php       		
+									}								
+								?>	
+								</tr>
+							</thead>
+							
+							<tbody>
+								<?php
+									$numIndex = 0;
+									foreach($indicators as $ind) {
+										$numIndex++;
+								?>
+								<tr id="indicator_row<?php echo $numIndex; ?>">
+									<td>แบบประเมิน test</td>
+									
+									<?php
+									$numIndex = 0;
+									foreach($indicators as $ind) {
+										$numIndex++;
+									?>
+									<th>
+										<input type="text" class="form-control" name="score[]" id="score<?php echo $numIndex; ?>" >
+									</th>
+									<?php       		
+										}								
+									?>
+									<td>
+										<input type="text" class="form-control" name="score[]" id="point<?php echo $numIndex; ?>" >
+									</td>
+								</tr>
+								<?php       		
+									}								
+								?>
+							</tbody>
+						</table>
+					</form>		
+					</div>
+				</div>
+			</div>
+		</div>
+		
+				</div>
+			</div>
+		</div>
 	</div>
-	
+
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="panel panel-default">
 				<div class="panel-body">
 					<div class="panel-group" id="accordion">
-					
-						<!--
-						<?php if(is_array($__data)) {
-							foreach($__data as $__tmp){ ?>
-						-->
-													
-						<!--
-						<?php } } ?>
-						-->
-					
-					
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<h4 class="panel-title">
@@ -158,7 +191,7 @@
 									</a>
 								</h4>
 							</div>
-							<div id="collapseOne" class="panel-collapse collapse in">
+							<div id="collapseOne" class="panel-collapse collapse">
 								<div class="panel-body">
 									<div class="row">
 										<div class="table-responsive">
@@ -201,96 +234,11 @@
 								</div>
 							</div>
 						</div>
-						<div class="panel panel-primary">
-							<div class="panel-heading">
-								<h4 class="panel-title">
-									<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-										ระดับความสำเร็จ 2
-									</a>
-								</h4>
-							</div>
-							<div id="collapseTwo" class="panel-collapse collapse">
-								<div class="panel-body">
-									<div class="row">
-										<div class="table-responsive">
-											<table class="table table-hover" id="test2">
-												<thead>
-													<tr>
-														<th style="width: 200px">วันที่</th>
-														<th>ภาระกิจสำคัญที่ได้ดำเนินการ</th>
-														<th>ผลการปฏิบัติงาน</th>
-														<th>หลักฐาน(ใส่ชื่อแฟ้ม)</th>
-													</tr>
-												</thead>
-												<tbody>
-												
-													<!--
-													<?php if(is_array($__data)) {
-														foreach($__data as $__tmp){ ?>
-													-->
-													
-													<!--
-													<?php } } ?>
-													-->
-												
-													<tr id="row1">
-														<td><input type="text" class="form-control" id="test" style="width: 200px"></td>
-														<td><textarea class="form-control" rows="1" cols="100"></textarea></td>
-														<td><textarea class="form-control" rows="1" cols="40"></textarea></td>
-														<td>
-															<div class="form-group"><input type="file" id="exampleInputFile"></div>
-															<button type="button" class="btn btn-primary btn-xs" onclick="addUp('test2', 'row1');"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>
-															<button type="button" class="btn btn-info btn-xs" onclick="addDown('test2', 'row1');"><span class="glyphicon glyphicon-chevron-down"></span> Add Down</button>
-															<button type="button" class="btn btn-danger btn-xs" onclick="deleteRow('test2', 'row1');"><span class="glyphicon glyphicon-minus"></span> Delete</button>
-														</td>
-													</tr>
-													<tr id="row2">
-														<td><input type="text" class="form-control" id="test" style="width: 200px"></td>
-														<td><textarea class="form-control" rows="1" cols="100"></textarea></td>
-														<td><textarea class="form-control" rows="1" cols="40"></textarea></td>
-														<td>
-															<div class="form-group"><input type="file" id="exampleInputFile"></div>
-															<button type="button" class="btn btn-primary btn-xs" onclick="addUp('test2', 'row2');"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>
-															<button type="button" class="btn btn-info btn-xs" onclick="addDown('test2', 'row2');"><span class="glyphicon glyphicon-chevron-down"></span> Add Down</button>
-															<button type="button" class="btn btn-danger btn-xs" onclick="deleteRow('test2', 'row2');"><span class="glyphicon glyphicon-minus"></span> Delete</button>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col-lg-12">
-			<table class="table table-hover" id="dataTables-example">
-				<thead>
-					<tr>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-					</tr>
-				</thead>
-				<thead>
-					<tr>
-						<th style="width: 80%"></th>
-						<th><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-saved"></span> บันทึก</button></th>
-						<th></th>
-						<th><button type="button" class="btn btn-info"><span class="glyphicon glyphicon-paperclip"></span> ส่งรายงาน</button></th>
-					</tr>
-				</thead>
-			</table>
-		</div>
-    </div>
-
-
 </div>
 </div>
 
@@ -388,7 +336,8 @@ function getvalonchange(point, weight, totalpoint) {
 	}
 	_alltotalpoint.innerText = __alltotalpoint;
 	_caltotalpoint.innerText = 0.00;
-	_caltotalpoint.innerText = (_alltotalpoint.innerText * 20).toFixed(2)
+	_caltotalpoint.innerText = (_alltotalpoint.innerText * 20).toFixed(2);
+	_caltotalpoint.value = (_alltotalpoint.innerText * 20).toFixed(2);
 }
 </script>
 <script type="text/javascript">

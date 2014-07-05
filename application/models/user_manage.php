@@ -145,14 +145,14 @@ Class User_manage extends CI_Model
  function get_department()
  {
 	$query=$this->db->query('SELECT DISTINCT id,name,PWFNAME,PWLNAME FROM department LEFT JOIN pwemployee  
-							 ON department.USERID = pwemployee.USERID')
+							 ON department.USERID = pwemployee.USERID WHERE department.enabled = 1')
 					->result_array();
 	return $query;
  }
  
  function get_department_1()
  {
-	$query=$this->db->query('SELECT DISTINCT id,name FROM department')
+	$query=$this->db->query('SELECT DISTINCT id,name FROM department WHERE department.enabled = 1')
 					->result_array();
 	return $query;
  }
@@ -193,10 +193,11 @@ Class User_manage extends CI_Model
   function get_division_show()
  {
 	$query=$this->db->query('select k.id as div_id,k.dep_name as dep_name,k.div_name as div_name,pwemployee.PWFNAME as PWFNAME,pwemployee.PWLNAME as PWLNAME
-from 						(select division.id AS id,department.name AS dep_name,division.name AS div_name 
-							 from division left join department 
-							 on department.id = division.dep_id)k left join pwemployee
-on k.						 id = pwemployee.division')
+							 from (select division.id AS id,department.name AS dep_name,division.name AS div_name,division.USERID as USERID 
+							 from division inner join department 
+							 on department.id = division.dep_id 
+							 where division.enabled = 1 )k left join pwemployee
+							 on k.USERID = pwemployee.USERID')
 					->result_array();
 	return $query;
  }
@@ -211,8 +212,13 @@ on k.						 id = pwemployee.division')
 
  function div_edit_info($id)
  {
-	$query=$this->db->where('id',$id)
-					->get('division')
+	$query=$this->db->query('select k.div_id as div_id,k.div_name as div_name,k.dep_id as dep_id,k.dep_name as dep_name,pwemployee.USERID as USERID,pwemployee.PWFNAME as PWFNAME,pwemployee.PWLNAME as PWLNAME
+							 from
+							 (select division.id as div_id,division.name as div_name,department.id as dep_id,department.name as dep_name,division.USERID as USERID
+							 from division inner join department
+							 on division.dep_id = department.id
+							 where division.id = '.$id.')k left join pwemployee
+							 on k.USERID = pwemployee.USERID')
 					->result_array();
 	return $query;
  }

@@ -46,7 +46,7 @@ class Manageuser extends CI_Controller {
 		$data['limit'] = $limit;
 		
 		
-		if(empty($this->input->get('pagenum'))) { 
+		if($this->input->get('pagenum',true)==false) { 
 			$data['data2']=$this->user_manage->get_user_limit(0, $limit);
 			$data['currentPage'] = 1;
 		} else {

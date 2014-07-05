@@ -202,14 +202,55 @@ class person_evaluation extends CI_Controller {
 		redirect('person_evaluation/managePersonIndicator', 'location');
 	}
 	
-	function evaluation()
+	function managePersonEvaluation()
 	{
-		//
-		//waiting data from models
-		//
-		//$this->load->view('indicator/evaluation',$data);
-		$data['title'] = "MFA - View Indicator ";
-		$this->load->view('indicator/evaluation',$data);
+		$userID = $this->session->userdata('sessid');
+		$divID  = $this->session->userdata('sessdiv');
+		$depID  = $this->session->userdata('sessdep');
+		
+		$active_evalround = $this->personindicator->getActiveEvalRound();
+
+		if(count($active_evalround) == 1) {
+			$year  = $active_evalround[0]['year'];
+			$round = $active_evalround[0]['round'];
+			$data['year']  = $year;
+			$data['round'] = $round;
+			$data['indicators'] = $this->personindicator->listIndicator($userID, $year, $round, $depID, $divID);	
+			$data['title'] = "MFA - View Indicator ";	
+			$piStatus = $this->personindicator->getIndicatorStatus($userID, $year, $round, $depID, $divID);
+
+			if($piStatus == 0) {
+				$this->load->view('evaluate/managePersonEvaluation.php', $data);
+			} else {
+				switch($piStatus) {
+					case 1 : $data['status_msg'] = '<span class="label label-success">รอผู้บังคับบัญชาพิจารณา</span>'; break;
+					default :$data['status_msg'] = 'undefined status'; break;
+				}
+				$this->load->view('evaluate/managePersonEvaluation.php', $data);
+			}	
+
+		} else {			
+			echo "No evaluate round selected";
+			die();
+		}
+		
+	}
+	function saveEvaluation() {
+		$userID = $this->session->userdata('sessid');
+		$year = $this->session->userdata('sessyear');
+		
+		$score = $this->input->post("score");
+		$option = $this->input->post("option");
+		
+		$this->personindicator->AddandUpdateScore($userID, $year ,$score);		
+	
+		if($option == "record") {
+			$this->session->set_flashdata('success', 'บันทึกข้อมูลตัวชี้วัดผลสัมฤทธิ์เรียบร้อยแล้ว');	
+		} else if($option == "prove") {
+			$this->personindicator->setIndicatorStatus($userID, $year, 1);		
+			$this->session->set_flashdata('success', 'ส่งข้อมูลข้อมูลตัวชี้วัดผลสัมฤทธิ์ให้ผู้บังคับบัญชาพิจารณาเรียบร้อยแล้ว');				
+		}
+		redirect('person_evaluation/managePersonEvaluation', 'location');
 	}
 }
 
