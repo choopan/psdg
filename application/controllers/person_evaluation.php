@@ -128,22 +128,35 @@ class person_evaluation extends CI_Controller {
 	function managePersonEvaluation()
 	{
 		$userID = $this->session->userdata('sessid');
-		$year = $this->session->userdata('sessyear');
+		$divID  = $this->session->userdata('sessdiv');
+		$depID  = $this->session->userdata('sessdep');
 		
-		$data['title'] = "MFA - View Indicator ";	
-		$data['indicators'] = $this->personindicator->listIndicator($userID, $year);	
-		$data['year'] = $year;
-		$piStatus = $this->personindicator->getIndicatorStatus($userID, $year);
-		print_r($piStatus);
-		if($piStatus == 0) {
-			$this->load->view('evaluate/managePersonEvaluation', $data);
-		} else {
-			switch($piStatus) {
-				case 1 : $data['status_msg'] = '<span class="label label-success">รอผู้บังคับบัญชาพิจารณา</span>'; break;
-				default :$data['status_msg'] = 'undefined status'; break;
-			}
-			$this->load->view('evaluate/managePersonEvaluation', $data);
-		}	
+		$active_evalround = $this->personindicator->getActiveEvalRound();
+
+		if(count($active_evalround) == 1) {
+			$year  = $active_evalround[0]['year'];
+			$round = $active_evalround[0]['round'];
+			$data['year']  = $year;
+			$data['round'] = $round;
+			$data['indicators'] = $this->personindicator->listIndicator($userID, $year, $round, $depID, $divID);	
+			$data['title'] = "MFA - View Indicator ";	
+			$piStatus = $this->personindicator->getIndicatorStatus($userID, $year, $round, $depID, $divID);
+
+			if($piStatus == 0) {
+				$this->load->view('evaluate/managePersonEvaluation.php', $data);
+			} else {
+				switch($piStatus) {
+					case 1 : $data['status_msg'] = '<span class="label label-success">รอผู้บังคับบัญชาพิจารณา</span>'; break;
+					default :$data['status_msg'] = 'undefined status'; break;
+				}
+				$this->load->view('evaluate/managePersonEvaluation.php', $data);
+			}	
+
+		} else {			
+			echo "No evaluate round selected";
+			die();
+		}
+		
 	}
 	function saveEvaluation() {
 		$userID = $this->session->userdata('sessid');

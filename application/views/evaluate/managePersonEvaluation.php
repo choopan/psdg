@@ -16,7 +16,7 @@
   							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
   			<?php			echo $this->session->flashdata('success'); ?>
 						</div>
-			<?php	}?>
+			<?php	} ?>
             <div class="panel panel-primary">
 				<div class="panel-heading"><strong>แบบประเมินผลสัมฤทธิ์ของงาน</strong></div>
 				<div class="panel-body">
@@ -177,10 +177,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row">
-		
-	</div>
-	
+
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="panel panel-default">
@@ -228,67 +225,6 @@
 															<button type="button" class="btn btn-primary btn-xs" onclick="addUp('test1', 'row2');"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>
 															<button type="button" class="btn btn-info btn-xs" onclick="addDown('test1', 'row2');"><span class="glyphicon glyphicon-chevron-down"></span> Add Down</button>
 															<button type="button" class="btn btn-danger btn-xs" onclick="deleteRow('test1', 'row2');"><span class="glyphicon glyphicon-minus"></span> Delete</button>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="panel panel-primary">
-							<div class="panel-heading">
-								<h4 class="panel-title">
-									<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-										ระดับความสำเร็จ 2
-									</a>
-								</h4>
-							</div>
-							<div id="collapseTwo" class="panel-collapse collapse">
-								<div class="panel-body">
-									<div class="row">
-										<div class="table-responsive">
-											<table class="table table-hover" id="test2">
-												<thead>
-													<tr>
-														<th style="width: 200px">วันที่</th>
-														<th>ภาระกิจสำคัญที่ได้ดำเนินการ</th>
-														<th>ผลการปฏิบัติงาน</th>
-														<th>หลักฐาน(ใส่ชื่อแฟ้ม)</th>
-													</tr>
-												</thead>
-												<tbody>
-												
-													<!--
-													<?php if(is_array($__data)) {
-														foreach($__data as $__tmp){ ?>
-													-->
-													
-													<!--
-													<?php } } ?>
-													-->
-												
-													<tr id="row1">
-														<td><input type="text" class="form-control" id="test" style="width: 200px"></td>
-														<td><textarea class="form-control" rows="1" cols="100"></textarea></td>
-														<td><textarea class="form-control" rows="1" cols="40"></textarea></td>
-														<td>
-															<div class="form-group"><input type="file" id="exampleInputFile"></div>
-															<button type="button" class="btn btn-primary btn-xs" onclick="addUp('test2', 'row1');"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>
-															<button type="button" class="btn btn-info btn-xs" onclick="addDown('test2', 'row1');"><span class="glyphicon glyphicon-chevron-down"></span> Add Down</button>
-															<button type="button" class="btn btn-danger btn-xs" onclick="deleteRow('test2', 'row1');"><span class="glyphicon glyphicon-minus"></span> Delete</button>
-														</td>
-													</tr>
-													<tr id="row2">
-														<td><input type="text" class="form-control" id="test" style="width: 200px"></td>
-														<td><textarea class="form-control" rows="1" cols="100"></textarea></td>
-														<td><textarea class="form-control" rows="1" cols="40"></textarea></td>
-														<td>
-															<div class="form-group"><input type="file" id="exampleInputFile"></div>
-															<button type="button" class="btn btn-primary btn-xs" onclick="addUp('test2', 'row2');"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>
-															<button type="button" class="btn btn-info btn-xs" onclick="addDown('test2', 'row2');"><span class="glyphicon glyphicon-chevron-down"></span> Add Down</button>
-															<button type="button" class="btn btn-danger btn-xs" onclick="deleteRow('test2', 'row2');"><span class="glyphicon glyphicon-minus"></span> Delete</button>
 														</td>
 													</tr>
 												</tbody>
