@@ -29,6 +29,15 @@ class Main extends CI_Controller {
 	   $this->session->unset_userdata('sessfirstname');
 	   $this->session->unset_userdata('sesslastname');
 	   $this->session->unset_userdata('sessyear');
+	   
+	   $this->session->unset_userdata('sessadmin_min');
+	   $this->session->unset_userdata('sessadmin_dep');
+	   $this->session->unset_userdata('sessadmin_div');
+	   $this->session->unset_userdata('sessdep');
+	   $this->session->unset_userdata('sessdiv');
+	   $this->session->unset_userdata('sessexecdep');
+	   $this->session->unset_userdata('sessexecdiv');
+	    
 	   session_destroy();
 	   redirect('main', 'refresh');
 	 }

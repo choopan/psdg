@@ -114,14 +114,9 @@ class person_evaluation extends CI_Controller {
 
 	function divManagePersonIndicator() {
 		//Verify if this account is an executive of division
-		/*if(!$this->session->userdata('sessexecdiv') || !$this->session->userdata('sessexecdep')) {
-			echo "ERROR: NO PERMISSION";
-			die();
-		} else {
-			$divID = $this->session->userdata('sessdiv');
-			$userID = $this->session->userdata('sessid');
-			//$data['users'] = $this->user->listUserInDivWithIndicator($userID, $divID);
-		}*/
+		if(!$this->session->userdata('sessexecdiv')) {
+			show_error("คุณไม่มีสิทธิในการเข้าถึงหน้านี้", 500);
+		}
 		$data['userID'] = $this->session->userdata('sessid');
 		$data['divID']  = $this->session->userdata('sessdiv');
 	

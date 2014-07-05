@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head>	
+<meta charset="UTF-8">
 <title>Error</title>
 <style type="text/css">
 

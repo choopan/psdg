@@ -129,17 +129,22 @@
                             </ul>
                         </li>
                         <li>
-                            <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> ผลการปฏิบัติราชการระดับบุคคล<span class="fa arrow"></span></a>
+                            <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> รายงานปฏิบัติราชการระดับบุคคล<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="<?php echo site_url("reportperson/minister"); ?>">ระดับกระทรวง</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo site_url("reportperson/department"); ?>">ระดับกรม</a>
-                                </li>
-                                <li><a href="<?php echo site_url("person_evaluation/divManagePersonIndicator"); ?>">แสดงข้อมูลระดับกอง</a></li>
-                                <li><a href="<?php echo site_url("person_evaluation/managePersonIndicator"); ?>">สร้างและแสดงตัวชี้วัดรายบุคคล</a></li>
-                                <li><a href="<?php echo site_url("person_evaluation/managePersonEvaluation"); ?>">Evaluation Puwarun</a></li>
+                                <li><a href="<?php echo site_url("person_evaluation/managePersonIndicator"); ?>">กำหนดตัวชี้วัด</a></li>
+                                <li><a href="<?php echo site_url("person_evaluation/managePersonEvaluation"); ?>">รายงานผลการปฏิบัติการ (Puwarun)</a></li>
+                                
+                                <?php	if($this->session->userdata('sessexecdiv') == 1) { ?>
+                                	<li><a href="<?php echo site_url("person_evaluation/divManagePersonIndicator"); ?>">แสดงตัวชี้วัดรายบุคคล</a></li>
+                                	<li><a href="<?php echo site_url("#"); ?>">แสดงรายงานผลปฏิบัติการ (Puwarun)</a></li>
+                                <?php   } elseif($this->session->userdata('sessexecdep') == 1) { ?>
+                                	<li><a href="<?php echo site_url("person_evaluation/depManagePersonIndicator"); ?>">แสดงตัวชี้วัดรายบุคคล</a></li>
+                                	<li><a href="<?php echo site_url("#"); ?>">แสดงรายงานผลปฏิบัติการ (Puwarun)</a></li>
+								<?php   } elseif ($this->session->userdata('sessadmin_min') == 1) { ?>
+                                	<li><a href="<?php echo site_url("#"); ?>">แสดงตัวชี้วัดรายบุคคล</a></li>
+                                	<li><a href="<?php echo site_url("#"); ?>">แสดงรายงานผลปฏิบัติการ (Puwarun)</a></li>									
+								<?php   } ?>                                
+                                
 
                             </ul>
                         </li>
