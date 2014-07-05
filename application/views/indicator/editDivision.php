@@ -45,11 +45,12 @@ td.highlight {
 											<select name="department" class="form-control">
 												
 												<?php if(is_array($data) && count($data) ) {?>
-													<option value="<?php echo $div[0]['dep_id']; ?>"><?php echo "ข้อมูลเดิมคือ ".$div[0]['dep_name']; ?></option>
-												<?php foreach($data as $loop){
-												?>
-													<option value="<?php echo $loop['id']; ?>"><?php echo $loop['name']; ?></option>
-												<?php } } ?>
+												<?php foreach($data as $loop){?>
+														<?php if($loop['id']==$div[0]['dep_id']){?>
+															<option value="<?php echo $loop['id']; ?>" selected><?php echo $loop['name']; ?></option>
+														<?php }else{?>
+															<option value="<?php echo $loop['id']; ?>"><?php echo $loop['name']; ?></option>
+												<?php } } } ?>
 											</select>
 										</div>
 										</div>
@@ -65,15 +66,14 @@ td.highlight {
 											<select name="userid" class="form-control">
 												
 												<?php if(is_array($data) && count($data) ) {?>
-												
-													<?php if(!empty($dep[0]['PWFNAME'])){?>
-														<option value="<?php echo $div[0]['USERID']; ?>"><?php echo "ข้อมูลเดิมคือ ".$div[0]['PWFNAME'].' '.$div[0]['PWLNAME']; ?></option>
-													<?php }?>
 													<?php if(!empty($user)){?>
 														<?php foreach($user as $loop2){?>
-															<option value="<?php echo $loop2['USERID']; ?>"><?php echo $loop2['PWFNAME'].' '.$loop2['PWLNAME']; ?></option>
-													<?php }} else{ ?>
-															<option value="-1">ไม่มีข้อมูล</option>
+															<?php if($loop2['USERID']==$div[0]['USERID']){?>
+																<option value="<?php echo $loop2['USERID']; ?>" selected><?php echo $loop2['PWFNAME'].' '.$loop2['PWLNAME']; ?></option>
+															<?php }else{?>
+																<option value="<?php echo $loop2['USERID']; ?>"><?php echo $loop2['PWFNAME'].' '.$loop2['PWLNAME']; ?></option>
+													<?php }}} else{ ?>
+																<option value="-1">ไม่มีข้อมูล</option>
 												<?php }} ?>
 											</select>
 										</div>

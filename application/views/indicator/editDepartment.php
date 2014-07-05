@@ -49,13 +49,14 @@ td.highlight {
 										<div class="form-group">
 											<label>อธิบดีกรม *</label>
                                             <select name="userid" class="form-control" required >
-											<?php if(!empty($data[0]['PWFNAME'])){?>
-												<option value="<?php echo $data[0]['USERID'];?>">default <?php echo $data[0]['PWFNAME'].' '.$data[0]['PWLNAME']; ?></option>
-											<?php }?>
 											<?php 
 												if(!empty($user)){
 													foreach($user as $value){
-														echo "<option value='".$value['USERID']."'>".$value['PWFNAME']." ".$value['PWLNAME']."</option>";
+														if($value['USERID']==$data[0]['USERID']){
+															echo "<option value='".$value['USERID']."' selected>".$value['PWFNAME']." ".$value['PWLNAME']."</option>";
+														}else{
+															echo "<option value='".$value['USERID']."'>".$value['PWFNAME']." ".$value['PWLNAME']."</option>";
+														}
 													}
 												}else{
 													echo "<option value='-1'>ไม่มีข้อมูล</option>";

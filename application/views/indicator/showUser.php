@@ -114,7 +114,7 @@ td.highlight {
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-lg-4">
+										<div class="col-lg-8">
 										<div class="form-group">
                                             <label>ตำแหน่ง *</label>
 											<input type="text" class="form-control" value="<?php echo $data[0]['position_name']?>" readonly>

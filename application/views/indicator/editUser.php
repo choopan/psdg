@@ -91,12 +91,13 @@ td.highlight {
 										<div class="form-group">
                                             <label>เลือกกรม *</label>
 											<select name="department" id="department" class="form-control" onChange="get_division(this.value)" required>
-													<option value="<?php echo $data[0]['dep_id'];?>"><?php echo "default ".$data[0]['dep_name'];?></option>
 												<?php if(is_array($department) && count($department) ) {
-													foreach($department as $loop){
-												?>
-													<option value="<?php echo $loop['id']; ?>"><?php echo $loop['name']; ?></option>
-												<?php } } ?>
+													foreach($department as $loop){?>
+														<?php if($loop['id']==$data[0]['dep_id']){?>
+															<option value="<?php echo $loop['id']; ?>" selected><?php echo $loop['name']; ?></option>
+														<?php }else{?>
+															<option value="<?php echo $loop['id']; ?>"><?php echo $loop['name']; ?></option>
+												<?php } } } ?>
 											</select>
 										</div>
 										</div>
@@ -106,7 +107,7 @@ td.highlight {
 												<input type="hidden" value="<?php echo $data[0]['div_id'];?>" id="div_id">
 												<input type="hidden" value="<?php echo $data[0]['div_name'];?>" id="div_name">
                                             <select name="division" class="form-control" id="division_db" required>
-												<option value="<?php echo $data[0]['div_id'];?>"><?php echo "default ".$data[0]['div_name'];?></option>
+												<option value="<?php echo $data[0]['div_id'];?>"><?php echo $data[0]['div_name'];?></option>
 											</select>
 										</div>
 										</div>
@@ -116,9 +117,12 @@ td.highlight {
 										<div class="form-group">
                                             <label>เลือกตำแหน่ง *</label>
 											<select name="position1" class="form-control"  required>
-													<option value="<?php echo $data[0]['position'];?>"><?php echo "default ".$data[0]['position_name'];?></option>
-												<?php foreach($position as $loop2){ ?>
-													<option value="<?php echo $loop2['PWPOSITION']; ?>"><?php echo $loop2['PWNAME']; ?></option>
+													<?php foreach($position as $loop2){ ?>
+													<?php if($data[0]['position']==$loop2['PWPOSITION']){?>
+														<option value="<?php echo $loop2['PWPOSITION']; ?>" selected><?php echo $loop2['PWNAME']; ?></option>
+													<?php }else{?>
+														<option value="<?php echo $loop2['PWPOSITION']; ?>"><?php echo $loop2['PWNAME']; ?></option>
+													<?php }?>
 												<?php } ?>
 											</select>
 										</div>
@@ -127,9 +131,13 @@ td.highlight {
 										<div class="form-group">
                                             <label>เลือกระดับ *</label>
                                             <select name="level" class="form-control" id="division_db" required>
-												<option value="<?php echo $data[0]['PWLEVEL'];?>"><?php echo "default ".$data[0]['PWLEVEL'];?></option>
-												<option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
-												<option>7</option><option>8</option><option>9</option><option>10</option><option>11</option>
+												<?php for($i=1;$i<12;$i++){?>
+													<?php if($data[0]['PWLEVEL']==$i){?>
+														<option value="<?php echo $i;?>" selected><?php echo $i;?></option>
+													<?php }else{?>
+														<option value="<?php echo $i;?>"><?php echo $i;?></option>
+													<?php }?>
+												<?php }?>
 											</select>
 										</div>
 										</div>
@@ -209,11 +217,14 @@ function get_division(val){
 						$("#division_db").empty();
 						var division_num=data.length;
 						if(division_num>0){
-							var tr='<option value="'+div_id+'">defualt '+div_name+'</option>';
+							var tr='';
 							for(i=0;i<division_num;i++)
 							{
-								
-								tr+='<option value="'+data[i]['id']+'">'+data[i]['name']+'</option>';
+								if(div_id==data[i]['id']){
+									tr+='<option value="'+data[i]['id']+'" selected>'+data[i]['name']+'</option>';
+								}else{
+									tr+='<option value="'+data[i]['id']+'">'+data[i]['name']+'</option>';
+								}
 								
 							}
 							
