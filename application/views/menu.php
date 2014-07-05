@@ -157,6 +157,9 @@
                                 <li>
                                     <a href="<?php echo site_url("core_competency/assignCoreSetIndex"); ?>">กำหนดชุุดประเมินสมรรณะ</a>
                                 </li>
+								<li>
+                                    <a href="<?php echo site_url("core_competency/coreAbility"); ?>">แบบประเมินสมรรถนะ</a>
+                                </li>
                             </ul>
                         </li>
 						<?php	//} ?>
