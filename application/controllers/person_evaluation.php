@@ -287,6 +287,7 @@ class person_evaluation extends CI_Controller {
 			$data['round'] = $round;
 			$data['indicators'] = $this->personindicator->listIndicator($userID, $year, $round, $depID, $divID);
 			$data['array_i'] = $this->personindicator->getCoreName($userID);
+			
 			$data['title'] = "MFA - View Indicator ";	
 			$piStatus = $this->personindicator->getIndicatorStatus($userID, $year, $round, $depID, $divID);
 
@@ -306,6 +307,8 @@ class person_evaluation extends CI_Controller {
 	function saveEvaluation() {
 		$userID = $this->session->userdata('sessid');
 		$year = $this->session->userdata('sessyear');
+		$divID  = $this->session->userdata('sessdiv');
+		$depID  = $this->session->userdata('sessdep');
 		$option = $this->input->post("option");
 		
 		$score = $this->input->post("score");
@@ -319,13 +322,24 @@ class person_evaluation extends CI_Controller {
 			$data['active_round']= 0;			
 		}
 		
+		
 		$evalRound = $data['active_round'];
 		$coreSkillName = $this->input->post("evalName");
 		$expectVal = $this->input->post("expVal");
 		$selfscore = $this->input->post("evalScore");
+		$res = $this->personindicator->getCoreName($userID);
+		
+		$round = $data['active_round'];
+		
+		$activityName = $this->input->post("activityName");
+		$documentName = $this->input->post("documentName");
+		$date = date('Y-m-d');
+		$indicatorID = $this->personindicator->listIndicator($userID, $year, $round, $depID, $divID);
+		$indicatorVal = $this->input->post("indicatorVal");
 		
 		$this->personindicator->evalAddScore($userID, $year ,$score);	
-		$this->personindicator->coreAddScore($userID, $year ,$evalRound, $coreSkillName ,$expectVal, $selfscore);	
+		$this->personindicator->coreAddScore($userID, $year ,$evalRound, $coreSkillName ,$expectVal, $selfscore, $res);	
+		$this->personindicator->activityAddScore($userID, $year ,$activityName, $documentName ,$date, $indicatorID, $indicatorVal);	
 		
 		if($option == "record") {
 			$this->session->set_flashdata('success', 'บันทึกข้อมูลตัวชี้วัดผลสัมฤทธิ์เรียบร้อยแล้ว');	

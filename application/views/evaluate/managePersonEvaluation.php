@@ -109,10 +109,10 @@
 										?>
 										<tr>
 											<td >
-												<input type="text" class="form-control" name="evalName[]" value="<?php echo $ind['name']; ?>" >
+												<?php echo $ind['name']; ?>
 											</td>
 											<td>
-												<input type="text" class="form-control" name="expVal[]" value="<?php echo $ind['expectVal']; ?>" >
+												<?php echo $ind['expectVal']; ?>
 											</td>
 											<td>
 												<input type="text" class="form-control" name="evalScore[]">
@@ -172,13 +172,11 @@
 							</thead>
 							
 							<tbody>
-								<?php
-									$numIndex = 0;
-									foreach($indicators as $ind) {
-										$numIndex++;
-								?>
+								
 								<tr id="indicator_row<?php echo $numIndex; ?>">
-									<td>แบบประเมิน test</td>
+									<td>
+										<input type="text" class="form-control" name="activityName[]" id="" >
+									</td>
 									
 									<?php
 									$numIndex = 0;
@@ -186,20 +184,22 @@
 										$numIndex++;
 									?>
 									<th>
-										<input type="text" class="form-control" name="score[]" id="score<?php echo $numIndex; ?>" >
+										<input type="text" class="form-control" name="indicatorVal[]" id="score<?php echo $numIndex; ?>" >
 									</th>
 									<?php       		
 										}								
 									?>
 									<td>
-										<input type="text" class="form-control" name="score[]" id="point<?php echo $numIndex; ?>" >
+										<input type="text" class="form-control" name="documentName[]" id="point<?php echo $numIndex; ?>" >
 									</td>
 								</tr>
-								<?php       		
-									}								
-								?>
+								
 							</tbody>
 						</table>
+						<div class="col-lg-10 col-lg-offset-6">
+							<button type="submit" class="btn btn-primary" name="option" value="record"><span class="glyphicon glyphicon-floppy-save"></span> บันทึก</button>
+							<button type="submit" class="btn btn-success" name="option" value="prove"><span class="glyphicon glyphicon-envelope"></span> ส่งเพื่อพิจารณา</button>
+						</div>
 					</form>		
 					</div>
 				</div>
@@ -360,14 +360,13 @@ function getvalonchange(point, weight, totalpoint) {
 	}
 	_totalpoint.innerText = (_point * _weight.innerText).toFixed(2);
 
-	//wait for count from models
-	for(i = 0; i < count; i++){
-		_alltotalpoint.innerText = 0.00;
-		var _totalpoint1 = document.getElementById('totalpoint1');
-		var _totalpoint2 = document.getElementById('totalpoint2');
-		__alltotalpoint = parseInt((_totalpoint1.innerText*100) + (_totalpoint2.innerText*100)) / 100;
+	var rowCount = document.getElementById('dataTables-example').rows.length - 2;
+	
+	for(i = 1; i <= rowCount; i++){
+		var _totalpoint = document.getElementById('totalpoint'+i);
+		__alltotalpoint += parseInt((_totalpoint.innerText*100));
 	}
-	_alltotalpoint.innerText = __alltotalpoint;
+	_alltotalpoint.innerText = (__alltotalpoint / 100).toFixed(2);
 	_caltotalpoint.innerText = 0.00;
 	_caltotalpoint.innerText = (_alltotalpoint.innerText * 20).toFixed(2);
 	_caltotalpoint.value = (_alltotalpoint.innerText * 20).toFixed(2);
@@ -382,13 +381,13 @@ $(document).ready(function()
 	var _totalweight = document.getElementById('totalweight');
 	var __totalweight = 0;
 	
-	//wait for count from models
-	for(i = 0; i < count; i++){
-		var _weight1 = document.getElementById('weight1');
-		var _weight2 = document.getElementById('weight2');
-		__totalweight = parseInt((_weight1.innerText*100) + (_weight2.innerText*100)) / 100;
+	var rowCount = document.getElementById('dataTables-example').rows.length - 2;
+	
+	for(i = 1; i <= rowCount; i++){
+		var _weight1 = document.getElementById('weight'+i);
+		__totalweight += parseInt((_weight1.innerText*100) );
 	}
-	_totalweight.innerText = __totalweight;
+	_totalweight.innerText = __totalweight / 100;
 	
 	
 });

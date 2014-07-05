@@ -81,7 +81,6 @@ Class PersonIndicator extends CI_Model
 		}		
 	}
 
-	
 	function setPIStatus($pid, $status) {
 	 	$this -> db -> set('status', $status)
 					-> where('ID', $pid)
@@ -89,7 +88,6 @@ Class PersonIndicator extends CI_Model
 	}					
 
 	function getCoreName($userID) {
-		
 		$coreID = $this -> db
 					-> select('coresetID')
 					-> from('pwemployee')
@@ -103,8 +101,6 @@ Class PersonIndicator extends CI_Model
 					-> join('core_competency_skill', 'core_competency_expect.coreskillID = core_competency_skill.ID')
 					-> where('coresetID', $coreID[0]['coresetID'])
 					-> get() -> result_array();
-					
-
 		return $result;
 	}
 	
@@ -129,22 +125,38 @@ Class PersonIndicator extends CI_Model
 		}
 	}
 	
-	function coreAddScore($userID, $year ,$evalRound, $coreSkillName ,$expectVal, $selfscore){
-	
-		$xx = count($coreSkillName); 		
-
-		print_r($expectVal);
-		
-		$numrow = count($expectVal); 		
+	function coreAddScore($userID, $year ,$evalRound, $coreSkillName ,$expectVal, $selfscore, $res){
+		$numrow = count($selfscore); 		
 		for($i = 0; $i < $numrow; $i++) {
 			$this -> db 
 					-> set('userID', $userID)
 					-> set('year', $year)
 					-> set('evalRound', $evalRound)
-					-> set('coreSkillName', $coreSkillName[$i])
-					-> set('expectVal', (int)$expectVal[$i])
+					-> set('coreSkillName', $res[$i]['name'])
+					-> set('expectVal', (int)$res[$i]['expectVal'])
 					-> set('selfscore', (int)$selfscore[$i])
 					-> insert('core_competency_score');
+		}
+	}
+	
+	function activityAddScore($userID, $year ,$activityName, $documentName ,$date, $indicatorID, $indicatorVal){
+		
+		$xx = count($indicatorID); 	
+		print_r($indicatorID['0']['ID']);		
+		
+		
+		
+		$numrow = count($indicatorID); 		
+		for($i = 0; $i < $numrow; $i++) {
+			$this -> db 
+					-> set('userID', $userID)
+					-> set('year', $year)
+					-> set('activityName', $activityName['0'])
+					-> set('documentName', $documentName['0'])
+					-> set('date', $date)
+					-> set('indicatorID', $indicatorID[$i]['ID'])
+					-> set('indicatorVal', (int)$indicatorVal[$i])
+					-> insert('person_indicator_activity');
 		}
 	}
 	
