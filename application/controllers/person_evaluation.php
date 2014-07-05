@@ -138,13 +138,15 @@ class person_evaluation extends CI_Controller {
 	
 
 	function divManagePersonIndicator() {
+		$data['title'] = "MFA - Personal Indicator Management";	
 		//Verify if this account is an executive of division
 		if(!$this->session->userdata('sessexecdiv')) {
 			show_error("คุณไม่มีสิทธิในการเข้าถึงหน้านี้", 500);
 		}
 		$data['userID'] = $this->session->userdata('sessid');
+		$data['depID']  = $this->session->userdata('sessdep');	
 		$data['divID']  = $this->session->userdata('sessdiv');
-	
+		
 		$active_evalround = $this->personindicator->getActiveEvalRound();
 
 		if(count($active_evalround) == 1) {
@@ -161,6 +163,7 @@ class person_evaluation extends CI_Controller {
 	}
 
 	function depManagePersonIndicator() {
+		$data['title'] = "MFA - Personal Indicator Management";	
 		//Verify if this account is an executive of division
 		if(!$this->session->userdata('sessexecdep')) {
 			show_error("คุณไม่มีสิทธิในการเข้าถึงหน้านี้", 500);
@@ -186,6 +189,7 @@ class person_evaluation extends CI_Controller {
 
 
 	function minManagePersonIndicator() {
+		$data['title'] = "MFA - Personal Indicator Management";	
 		//Verify if this account is an executive of division
 		if(!$this->session->userdata('sessadmin_min')) {
 			show_error("คุณไม่มีสิทธิในการเข้าถึงหน้านี้", 500);

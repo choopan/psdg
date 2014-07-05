@@ -170,10 +170,10 @@ Class PersonIndicator extends CI_Model
 		return $result;
 	}
 	
-	function getPIStatus($userID, $div_id, $year, $round) {
+	function getPIStatus($userID, $dep_id, $div_id, $year, $round) {
 		$result = $this	-> db
 						-> select('status')
-					 	-> get_where('person_indicator', array('userID' => $userID, 'year' => $year, 'round' => $round, 'div_id' => $div_id))
+					 	-> get_where('person_indicator', array('userID' => $userID, 'year' => $year, 'round' => $round, 'div_id' => $div_id, 'dep_id' => $dep_id))
 				 		-> result_array();
 		if(count($result) == 0) {
 			$status = 0;

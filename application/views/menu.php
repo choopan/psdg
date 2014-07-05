@@ -45,6 +45,8 @@
 						<li>
                             <a href="<?php echo site_url("main/changeyear"); ?>"><i class="fa fa-calendar fa-fw"></i> ปีงบประมาณ <strong><u><?php echo $this->session->userdata('sessyear'); ?></u></strong></a>
                         </li>
+                        
+                        <?php	if($this->session->userdata('sessadmin_min') == 1) { ?>
                         <li>
                             <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> จัดการข้อมูล <span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
@@ -67,6 +69,8 @@
                             </ul>
                            
                         </li>
+                        <?php } ?>
+                        
 						<li>
                             <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> กำหนดตัวชี้วัด<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
@@ -152,7 +156,7 @@
                             </ul>
                         </li>
                         
-                        <?php	//if($this->session->userdata('sessadmin_min') == 1) { ?>
+                        <?php	if($this->session->userdata('sessadmin_min') == 1) { ?>
   						<li>
                             <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> แบบประเมินสมรรณะ<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
@@ -170,7 +174,7 @@
                                 </li>
                             </ul>
                         </li>
-						<?php	//} ?>
+						<?php	} ?>
                                                 
   
                     </ul>

@@ -41,7 +41,7 @@
 										<td><?php echo $ui['divname']; ?></td>
 										<td><?php echo $ui['position']." (ระดับ ".$ui['PWLEVEL'].")"; ?> </td>
 										<?php 
-											switch($this->personindicator->getPIStatus($ui['userID'], $divID, $year, $round)) {
+											switch($this->personindicator->getPIStatus($ui['userID'], $depID, $divID, $year, $round)) {
 												case 0 : echo "<td><span class='label label-danger'>ยังไม่ส่งตัวชี้วัด</span></td><td> - </td>"; break;
 												case 1 : echo "<td><span class='label label-success'>รอการพิจารณา</span></td><td> - </td>"; break;
 												case 2 : echo "<td><span class='label label-primary'>อนุมัติแล้ว</span></td><td><a href='". site_url('person_evaluation/viewIndicatorFromDep') ."/". $ui['userID'] ."' class='btn btn-info' type='button'> ดูรายละเอียด</a></td>"; break;											

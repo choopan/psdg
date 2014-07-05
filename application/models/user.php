@@ -93,7 +93,7 @@ Class User extends CI_Model
  }
 
  function getAllProfile() {
- 	$result = $this->db->select("pwemployee.USERID as user_id, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, PWLEVEL, department.name as depname, division.name as divname")
+ 	$result = $this->db->select("pwemployee.USERID as user_id, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, PWLEVEL, department.id as dep_id, division.id as div_id, department.name as depname, division.name as divname")
 			-> from('pwemployee')
 			-> join('pwposition', 'pwposition.pwposition = pwemployee.pwposition', 'left')
 			-> join('department', 'pwemployee.department = department.id', 'left')
