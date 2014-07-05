@@ -89,25 +89,7 @@ Class Core_competency_model extends CI_Model
 		return $result;					
 	}
 	
-	function getCoreName($userID) {
-		
-		$coreID = $this -> db
-					-> select('coresetID')
-					-> from('pwemployee')
-					-> where('USERID', $userID)
-					-> get()
-					-> result_array('');
-	
-		$result = $this -> db
-					-> select('name, expectVal')
-					-> from('core_competency_expect')
-					-> join('core_competency_skill', 'core_competency_expect.coreskillID = core_competency_skill.ID')
-					-> where('coresetID', $coreID[0]['coresetID'])
-					-> get() -> result_array();
-		return $result;
-	}
-	
-	
-	
+
+
 }
 ?>

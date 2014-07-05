@@ -88,7 +88,27 @@ Class PersonIndicator extends CI_Model
 					-> update('person_indicator');
 	}					
 
-	function AddandUpdateScore($userID, $year,$score) {
+	function getCoreName($userID) {
+		
+		$coreID = $this -> db
+					-> select('coresetID')
+					-> from('pwemployee')
+					-> where('USERID', $userID)
+					-> get()
+					-> result_array('');
+	
+		$result = $this -> db
+					-> select('name, expectVal')
+					-> from('core_competency_expect')
+					-> join('core_competency_skill', 'core_competency_expect.coreskillID = core_competency_skill.ID')
+					-> where('coresetID', $coreID[0]['coresetID'])
+					-> get() -> result_array();
+					
+
+		return $result;
+	}
+	
+	function evalAddScore($userID, $year,$score) {
 		$personIndicatorRes = $this -> db
 													-> select('id')
 													-> get_where('person_indicator', array('userID' => $userID, 'year' => $year))
@@ -98,7 +118,7 @@ Class PersonIndicator extends CI_Model
 															-> select('ID')
 															-> get_where('person_indicator_detail', array('PID' => (int)$personIndicatorRes[0]['id']))
 															-> result_array();
-						
+															
 		$numrow = count($score); 		
 		for($i = 0; $i < $numrow; $i++) {
 			$this -> db 
@@ -106,6 +126,25 @@ Class PersonIndicator extends CI_Model
 					-> set('personIndicatorID', $personIndicatorDetailRes[$i]['ID'])
 					-> set('score', (int)$score[$i])
 					-> insert('personal_score');
+		}
+	}
+	
+	function coreAddScore($userID, $year ,$evalRound, $coreSkillName ,$expectVal, $selfscore){
+	
+		$xx = count($coreSkillName); 		
+
+		print_r($expectVal);
+		
+		$numrow = count($expectVal); 		
+		for($i = 0; $i < $numrow; $i++) {
+			$this -> db 
+					-> set('userID', $userID)
+					-> set('year', $year)
+					-> set('evalRound', $evalRound)
+					-> set('coreSkillName', $coreSkillName[$i])
+					-> set('expectVal', (int)$expectVal[$i])
+					-> set('selfscore', (int)$selfscore[$i])
+					-> insert('core_competency_score');
 		}
 	}
 	

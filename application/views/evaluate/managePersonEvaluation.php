@@ -89,6 +89,45 @@
 								</tr>
 							</thead>
 						</table>
+						
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="skillTable">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 400px">ชื่อสมรรณะ</th>
+                                        <th>คะแนนคาดหวัง</th>
+										<th>คะแนนประเมิน</th>
+                                    </tr>
+                                </thead>
+								<tbody>
+										<?php
+											$numIndex = 0;
+											foreach($array_i as $ind) {
+												$numIndex++;
+										?>
+										<tr>
+											<td >
+												<input type="text" class="form-control" name="evalName[]" value="<?php echo $ind['name']; ?>" >
+											</td>
+											<td>
+												<input type="text" class="form-control" name="expVal[]" value="<?php echo $ind['expectVal']; ?>" >
+											</td>
+											<td>
+												<input type="text" class="form-control" name="evalScore[]">
+											</td>
+										</tr>
+										<?php
+											}
+										?>
+                                </tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+						
 						<div class="col-lg-10 col-lg-offset-6">
 							<button type="submit" class="btn btn-primary" name="option" value="record"><span class="glyphicon glyphicon-floppy-save"></span> บันทึก</button>
 							<button type="submit" class="btn btn-success" name="option" value="prove"><span class="glyphicon glyphicon-envelope"></span> ส่งเพื่อพิจารณา</button>

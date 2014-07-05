@@ -210,7 +210,8 @@ class person_evaluation extends CI_Controller {
 			$round = $active_evalround[0]['round'];
 			$data['year']  = $year;
 			$data['round'] = $round;
-			$data['indicators'] = $this->personindicator->listIndicator($userID, $year, $round, $depID, $divID);	
+			$data['indicators'] = $this->personindicator->listIndicator($userID, $year, $round, $depID, $divID);
+			$data['array_i'] = $this->personindicator->getCoreName($userID);
 			$data['title'] = "MFA - View Indicator ";	
 			$piStatus = $this->personindicator->getIndicatorStatus($userID, $year, $round, $depID, $divID);
 
@@ -230,12 +231,27 @@ class person_evaluation extends CI_Controller {
 	function saveEvaluation() {
 		$userID = $this->session->userdata('sessid');
 		$year = $this->session->userdata('sessyear');
-		
-		$score = $this->input->post("score");
 		$option = $this->input->post("option");
 		
-		$this->personindicator->AddandUpdateScore($userID, $year ,$score);		
-	
+		$score = $this->input->post("score");
+
+		$active_evalround = $this->personindicator->getActiveEvalRound();
+		if(count($active_evalround) == 1) {
+			$data['active_year'] = $active_evalround[0]['year'];
+			$data['active_round'] = $active_evalround[0]['round'];
+		} else {
+			$data['active_year'] = 0;
+			$data['active_round']= 0;			
+		}
+		
+		$evalRound = $data['active_round'];
+		$coreSkillName = $this->input->post("evalName");
+		$expectVal = $this->input->post("expVal");
+		$selfscore = $this->input->post("evalScore");
+		
+		$this->personindicator->evalAddScore($userID, $year ,$score);	
+		$this->personindicator->coreAddScore($userID, $year ,$evalRound, $coreSkillName ,$expectVal, $selfscore);	
+		
 		if($option == "record") {
 			$this->session->set_flashdata('success', 'บันทึกข้อมูลตัวชี้วัดผลสัมฤทธิ์เรียบร้อยแล้ว');	
 		} else if($option == "prove") {

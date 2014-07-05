@@ -143,14 +143,6 @@ class Core_competency extends CI_Controller {
 		$result = $this->core_competency_model->updateUserCoreSet($userID, $coreSetID);
 		echo json_encode($result);
 	}
-
-	function coreAbility() {
-		$userID = $this->session->userdata('sessid');
-		$data['title'] = "MFA - Core Competency Management";
-		$data['array_i'] = $this->core_competency_model->getCoreName($userID);
-		
-		$this->load->view('core_competency/personalAbility.php',$data);
-	}
 	
 }
 
