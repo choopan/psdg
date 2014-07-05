@@ -34,6 +34,22 @@ td.highlight {
 						<button type="button" class="btn btn-outline btn-success" onClick="window.location.href='<?php echo site_url("manageuser/addPosition"); ?>'">เพิ่มตำแหน่ง</button>
 					</div>
                     <div class="panel-body">
+						<?php if($result==1){?>
+							<div class="modal fade" id="myModal">
+							  <div class="modal-dialog">
+								<div class="modal-content">
+								  <div class="modal-header model-info">
+									<a href="<?php echo site_url("manageuser/position_view");?>" type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></a>
+									<h4 class="modal-title">แจ้งเตือน</h4>
+								  </div>
+								  <div class="modal-body">
+									<p>ทำการลบข้อมูลแล้ว</p>
+								  </div>
+								</div>
+							  </div>
+							</div>
+						<?php }?>
+					
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 <thead>
@@ -78,6 +94,7 @@ td.highlight {
     $(document).ready(function()
     {
 		var table = $('#dataTables-example').DataTable();
+		$('#myModal').modal('show');
     });
 </script>
 </body>

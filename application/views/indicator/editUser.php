@@ -31,7 +31,11 @@ td.highlight {
 						<strong>แก้ไขข้อมูลผู้ใช้</strong>
 					</div>
 					<div class="panel-body">
-							
+						<?php if($result==1){?>
+							<div class="alert alert-success" role="alert">
+							  <p>แก้ไขข้อมูลเรียบร้อยแล้ว</p>
+							</div>
+						<?php }?>	
 								<form action="<?php echo site_url("manageuser/editUser_save"); ?>" method="post" name="editUser">
 									<input type="hidden" name="id" value="<?php echo $data[0]['USERID'];?>" class="form-control" required>
 									<div class="row">
@@ -131,7 +135,7 @@ td.highlight {
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-lg-6">
+										<div class="col-lg-8">
 											<div class="form-group">
 											<label>ผู้ดูแลระบบ * |</label>
 												<label class="checkbox-inline">
@@ -157,35 +161,21 @@ td.highlight {
 													<input type="radio" value="admin_div" name="admin" >ระดับกอง
 													<?php endif?>
 												</label>
+												
+												<label class="checkbox-inline">
+													<?php if($data[0]['admin_div']==0&&$data[0]['admin_min']==0&&$data[0]['admin_dep']==0): ?>
+													<input type="radio" value="admin_no" name="admin" checked >ไม่มีสิทธิ์
+													<?php else:?>
+													<input type="radio" value="admin_no" name="admin" >ไม่มีสิทธิ์
+													<?php endif?>
+												</label>
 											</div>
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-lg-3">
-										<div class="form-group">
-											<label>สิทธิบริหาร *</label>
-											<select name="execode" class="form-control" >
-												<?php if($data[0]['execode']==0){?>
-													<option value="0" selected>ไม่มี</option>
-													<option value="1">ผู้อำนวยการกอง</option>
-													<option value="2">อธิบดีกรม</option>
-												<?php }else if($data[0]['execode']==1){?>
-													<option value="0">ไม่มี</option>
-													<option value="1"selected>ผู้อำนวยการกอง</option>
-													<option value="2">อธิบดีกรม</option>
-												<?php }else if($data[0]['execode']==2){?>
-													<option value="0">ไม่มี</option>
-													<option value="1">ผู้อำนวยการกอง</option>
-													<option value="2"selected>อธิบดีกรม</option>
-												<?php }?>
-											</select>
-										</div>
-										</div>
-									</div>
-									<div class="row">
 										<div class="form-group">
 										<div class="col-lg-3">
-											<input id="addNew" type="submit" class="btn btn-success" value="แก้ไข"> <a href="javascript:history.go(-1)" class="btn btn-primary">กลับ</a>
+											<input id="addNew" type="submit" class="btn btn-success" value="แก้ไข"> <a href="<?php echo site_url("manageuser/user_view");?>" class="btn btn-primary">กลับ</a>
 										</div>
 										</div>
 									</div>

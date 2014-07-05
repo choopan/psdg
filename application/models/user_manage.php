@@ -28,17 +28,6 @@ Class User_manage extends CI_Model
 	return $query;
  }
  
- function get_user()
- {
-	$query=$this->db->query('SELECT pwemployee.USERID as USERID, PWFNAME, PWLNAME, department.name AS dep_name, division.name AS div_name, PWPOSITION.PWNAME, PWLEVEL, PWEMAIL
-							 FROM  pwemployee  INNER JOIN division INNER JOIN department INNER JOIN pwposition 
-							 ON pwemployee.department = department.id
-							 AND pwemployee.division = division.id
-							 AND pwemployee.PWPOSITION = pwposition.PWPOSITION')
-					->result_array();
-	return $query;
- }
- 
  function get_num_user() {
  	return $this->db->count_all('pwemployee');
  }
@@ -57,7 +46,7 @@ Class User_manage extends CI_Model
  
  function addUser_save($username,$password,$fname,$lname,$efname,$elname,$gender,$email,$tel,$mobile,$department,$division,$position1,$level,$admin_min,$admin_dep,$admin_div)
  {
-	$this->db->set('PWUSERNAME',$username)
+	$query=$this->db->set('PWUSERNAME',$username)
 			 ->set('PWPASSWORD',$password)
 			 ->set('PWFNAME',$fname)
 			 ->set('PWLNAME',$lname)
@@ -75,11 +64,15 @@ Class User_manage extends CI_Model
 			 ->set('admin_dep',$admin_dep)
 			 ->set('admin_div',$admin_div)
 			 ->insert('pwemployee');
+	if($query){
+		return 1;
+	}else{
+		return 0;}
  }
  
  function editUser_save($id,$fname,$lname,$efname,$elname,$email,$tel,$mobile,$department,$division,$position1,$level,$admin_min,$admin_dep,$admin_div)
  {
-	$this->db->where('USERID',$id)
+	$query=$this->db->where('USERID',$id)
 			 ->set('PWFNAME',$fname)
 			 ->set('PWLNAME',$lname)
 			 ->set('PWEFNAME',$efname)
@@ -95,6 +88,10 @@ Class User_manage extends CI_Model
 			 ->set('admin_dep',$admin_dep)
 			 ->set('admin_div',$admin_div)
 			 ->update('pwemployee');
+	if($query){
+		return 1;
+	}else{
+		return 0;}
  }
  
  function user_view_info($id)
@@ -113,9 +110,13 @@ Class User_manage extends CI_Model
  
  function user_del_info($user_id)
  {
-	$this->db->where('USERID',$user_id)
+	$query=$this->db->where('USERID',$user_id)
 			 ->set('enabled','0')
 			 ->update('pwemployee');
+	if($query){
+		return 1;
+	}else{
+		return 0;}
  }
  
  function get_position()
@@ -138,10 +139,15 @@ Class User_manage extends CI_Model
  //============================================================= Department =====================================
  function addDepartmaent_save($department_name,$userid)
  {
-	$this->db->set('name',$department_name)
+	$query=$this->db->set('name',$department_name)
 			 ->set('fid',0)
 			 ->set('USERID',$userid)
+			 ->set('enabled',1)
 			 ->insert('department');
+	if($query){
+		return 1;
+	}else{
+		return 0;}
  }
  
  function get_department()
@@ -169,17 +175,25 @@ Class User_manage extends CI_Model
  
  function updateDepartmaent_save($id,$department,$userid)
  {
-	$this->db->where('id',$id)
+	$query=$this->db->where('id',$id)
 			 ->set('name',$department)
 			 ->set('USERID',$userid)
 			 ->update('department');
+	if($query){
+		return 1;
+	}else{
+		return 0;}
  }
  
  function deleteDepartment($id)
  {
-	$this->db->where('id',$id)
+	$query=$this->db->where('id',$id)
 			 ->set('enabled',0)
 			 ->update('department');
+	if($query){
+		return 1;
+	}else{
+		return 0;}
  }
  
  //============================================================= Division =======================================
@@ -206,10 +220,15 @@ Class User_manage extends CI_Model
  
  function addDivision_save($department_id,$division_name,$userid)
  {
-	$this->db->set('dep_id',$department_id)
+	$query=$this->db->set('dep_id',$department_id)
 			 ->set('name',$division_name)
 			 ->set('USERID',$userid)
+			 ->set('enabled',1)
 			 ->insert('division');
+	if($query){
+		return 1;
+	}else{
+		return 0;}
  }
 
  function div_edit_info($id)
@@ -227,18 +246,26 @@ Class User_manage extends CI_Model
  
  function updateDivision_save($id,$dep_id,$division,$userid)
  {
-	$this->db->where('id',$id)
+	$query=$this->db->where('id',$id)
 			 ->set('dep_id',$dep_id)
 			 ->set('name',$division)
 			 ->set('USERID',$userid)
 			 ->update('division');
+	if($query){
+		return 1;
+	}else{
+		return 0;}
  }
  
  function deleteDivision($id)
  {
-	$this->db->where('id',$id)
+	$query=$this->db->where('id',$id)
 			 ->set('enabled',0)
 			 ->update('division');
+	if($query){
+		return 1;
+	}else{
+		return 0;}
  }
  
  //====================== Position =======================
@@ -253,11 +280,15 @@ Class User_manage extends CI_Model
  
  function addPosition_save($tposition,$eposition)
  {
-	$this->db->set('PWNAME',$tposition)
+	$query=$this->db->set('PWNAME',$tposition)
 			 ->set('PWENAME',$eposition)
 			 ->set('PWSTATUS',1)
 			 ->set('ISDELETE',0)
 			 ->insert('pwposition');
+	if($query){
+		return 1;
+	}else{
+		return 0;}
  }
  
  function get_edit_position($id)
@@ -271,16 +302,24 @@ Class User_manage extends CI_Model
  
  function updatePosition_save($id,$tposition,$eposition)
  {
-	$this->db->where('PWPOSITION',$id)
+	$query=$this->db->where('PWPOSITION',$id)
 			 ->set('PWNAME',$tposition)
 			 ->set('PWENAME',$eposition)
 			 ->update('pwposition');
+	if($query){
+		return 1;
+	}else{
+		return 0;}
  }
  
  function deletePosition($id)
  {
-	$this->db->where('PWPOSITION',$id)
+	$query=$this->db->where('PWPOSITION',$id)
 			 ->delete('pwposition');
+	if($query){
+		return 1;
+	}else{
+		return 0;}
  }
 }
 ?>

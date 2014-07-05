@@ -31,7 +31,11 @@ td.highlight {
 						<strong>แก้ไขรายละเอียดกอง</strong>
 					</div>
 					<div class="panel-body">
-							
+						<?php if($result==1){?>
+							<div class="alert alert-success" role="alert">
+							  <p>แก้ไขข้อมูลเรียบร้อยแล้ว</p>
+							</div>
+						<?php }?>
 								<form action="<?php echo site_url("manageuser/updateDivision_save"); ?>" method="post" name="addDivision">
 									<div class="row">
 										<div class="col-lg-4">
@@ -78,7 +82,7 @@ td.highlight {
 									<div class="row">
 										<div class="form-group">
 										<div class="col-lg-3">
-											<input id="addNew" type="submit" class="btn btn-success" value="แก้ไข"> <a href="javascript:history.go(-1)" class="btn btn-primary">กลับ</a>
+											<input id="addNew" type="submit" class="btn btn-success" value="แก้ไข"> <a href="<?php echo site_url("manageuser/division_view");?>" class="btn btn-primary">กลับ</a>
 										</div>
 										</div>
 									</div>

@@ -31,7 +31,11 @@ td.highlight {
 						<strong>เพิ่มผู้ใช้</strong>
 					</div>
 					<div class="panel-body">
-							
+						<?php if($result==1){?>
+							<div class="alert alert-success" role="alert">
+							  <p>เพิ่มข้อมูลเรียบร้อยแล้ว</p>
+							</div>
+						<?php }?>	
 								<form action="<?php echo site_url("manageuser/addUser_save"); ?>" method="post" name="addUser">
 									<div class="row">
 										<div class="col-lg-4">
@@ -172,7 +176,7 @@ td.highlight {
 												</label>
 												
 												<label class="checkbox-inline">
-													<input type="radio" value="admin_no"  name="admin">ไม่มีสิทธิ
+													<input type="radio" value="admin_no"  name="admin" checked>ไม่มีสิทธิ
 												</label>
 											</div>
 										</div>
@@ -180,7 +184,7 @@ td.highlight {
 									<div class="row">
 										<div class="form-group">
 										<div class="col-lg-3">
-											<input id="addNew" type="submit" class="btn btn-success" value="เพิ่ม"> <a href="javascript:history.go(-1)" class="btn btn-primary">กลับ</a>
+											<input id="addNew" type="submit" class="btn btn-success" value="เพิ่ม"> <a href="<?php echo site_url("manageuser/user_view");?>" class="btn btn-primary">กลับ</a>
 										</div>
 										</div>
 									</div>

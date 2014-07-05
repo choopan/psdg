@@ -30,7 +30,7 @@ td.highlight {
 		<div class="row">
             <div class="panel panel-default">
 					<div class="panel-heading">
-					
+						
 							<button type="button" class="btn btn-outline btn-success" onClick="window.location.href='<?php echo site_url("manageuser/adduser"); ?>'">เพิ่มผู้ใช้งาน</button>
 							<button class="btn btn-outline btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">กดเพื่อค้นหา</button>
 							<b id="cancle"></b>
@@ -123,7 +123,22 @@ td.highlight {
 							</div>
 					</div>
                     <div class="panel-body">
-					
+						<?php if($result==1){?>
+							<div class="modal fade" id="myModal2">
+							  <div class="modal-dialog">
+								<div class="modal-content">
+								  <div class="modal-header model-info">
+									<a href="<?php echo site_url("manageuser/user_view");?>" type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></a>
+									<h4 class="modal-title">แจ้งเตือน</h4>
+								  </div>
+								  <div class="modal-body">
+									<p>ทำการลบข้อมูลแล้ว</p>
+								  </div>
+								</div>
+							  </div>
+							</div>
+						<?php }?>
+						
                         <div class="table-responsive">
 						<div class="row" id="page_bott">
 							<div class="col-lg-2">
@@ -212,6 +227,7 @@ td.highlight {
     $(document).ready(function()
     {
 		var table = $('#dataTables-example').DataTable();
+		$('#myModal2').modal('show');
 		
 		$('#page_select').change(function() {
 			var pagenum = $("#page_select").val();

@@ -37,8 +37,8 @@ class Manageuser extends CI_Controller {
 	//--------------------------------------------------------- User --------------------------------------------------
 	function user_view()
 	{
-		//$data['data']=$this->user_manage->get_user();
 		$data['title'] = "MFA - User Management";
+		$data['result'] = 0;
 		$data['department']=$this->user_manage->get_department();
 		$data['position']=$this->user_manage->get_position();
 		$data['numuser'] = $this->user_manage->get_num_user();				
@@ -66,6 +66,7 @@ class Manageuser extends CI_Controller {
 		$data['data']=$this->user_manage->get_department_1();
 		$data['position']=$this->user_manage->get_position();
 		$data['title'] = "MFA - User Management";
+		$data['result'] = 0;
 		/* echo "<pre>";
 		print_r($data);
 		echo "</pre>"; */
@@ -111,8 +112,14 @@ class Manageuser extends CI_Controller {
 
 		if($password==$retry_password)
 		{
-			$this->user_manage->addUser_save($username,md5($password),$fname,$lname,$efname,$elname,$gender,$email,$tel,$mobile,$department,$division,$position1,$level,$admin_min,$admin_dep,$admin_div);
-			redirect('manageuser/user_view');
+			$result=$this->user_manage->addUser_save($username,md5($password),$fname,$lname,$efname,$elname,$gender,$email,$tel,$mobile,$department,$division,$position1,$level,$admin_min,$admin_dep,$admin_div);
+			
+			$data['data']=$this->user_manage->get_department_1();
+			$data['position']=$this->user_manage->get_position();
+			$data['title'] = "MFA - User Management";
+			$data['result'] = $result;
+			
+			$this->load->view('indicator/addUser',$data);
 		}else{
 			echo "Can't insert data";
 		}
@@ -133,7 +140,9 @@ class Manageuser extends CI_Controller {
 		$data['department']=$this->user_manage->get_department();
 		$data['position']=$this->user_manage->get_position();
 		$data['title'] = "MFA - User Management";
+		$data['result'] = 0;
 		$data['data']=$this->user_manage->user_view_info($id);
+		
 		/* echo "<pre>";
 		print_r($data);
 		echo "</pre>"; */
@@ -175,16 +184,44 @@ class Manageuser extends CI_Controller {
 			$admin_div=0;
 		}
 		
-		$this->user_manage->editUser_save($id,$fname,$lname,$efname,$elname,$email,$tel,$mobile,$department,$division,$position1,$level,$admin_min,$admin_dep,$admin_div,$execode);
-		redirect('manageuser/user_view');
+		$result=$this->user_manage->editUser_save($id,$fname,$lname,$efname,$elname,$email,$tel,$mobile,$department,$division,$position1,$level,$admin_min,$admin_dep,$admin_div,$execode);
+		
+		$data['department']=$this->user_manage->get_department();
+		$data['position']=$this->user_manage->get_position();
+		$data['title'] = "MFA - User Management";
+		$data['result'] = $result;
+		$data['data']=$this->user_manage->user_view_info($id);
+		
+		$this->load->view('indicator/editUser',$data);
 
 	}
 	
 	function user_del_info($user_id)
 	{
-		echo $user_id;
-		$this->user_manage->user_del_info($user_id);
-		redirect('manageuser/user_view');
+		$result=$this->user_manage->user_del_info($user_id);
+		
+		$data['title'] = "MFA - User Management";
+		$data['result'] = $result;
+		$data['department']=$this->user_manage->get_department();
+		$data['position']=$this->user_manage->get_position();
+		$data['numuser'] = $this->user_manage->get_num_user();				
+		$limit = 15;
+		$data['limit'] = $limit;
+		
+		
+		if($this->input->get('pagenum',true)==false) { 
+			$data['data2']=$this->user_manage->get_user_limit(0, $limit);
+			$data['currentPage'] = 1;
+		} else {
+			$data['data2']=$this->user_manage->get_user_limit(($this->input->get('pagenum') - 1) * $limit, $limit);
+			$data['currentPage'] = $this->input->get('pagenum'); 			
+		}
+		
+		/* echo "<pre>";
+		print_r($data);
+		echo "</pre>"; */
+
+		$this->load->view('manageUser_view',$data);
 	}
 	
 	function get_search()
@@ -250,6 +287,7 @@ class Manageuser extends CI_Controller {
 	{
 		$data['data']=$this->user_manage->get_department();
 		$data['title'] = "MFA - Department Management";
+		$data['result']=0;
 		/* echo "<pre>";
 		print_r($data);
 		echo "</pre>"; */
@@ -260,6 +298,7 @@ class Manageuser extends CI_Controller {
 	{
 		$data['title'] = "MFA - Department Management";
 		$data['user'] = $this->user_manage->get_user_1();
+		$data['result']=0;
 		$this->load->view('indicator/addDepartment',$data);
 	}
 	
@@ -267,8 +306,13 @@ class Manageuser extends CI_Controller {
 	{
 		$department_name=$this->input->post('department');
 		$userid=$this->input->post('userid');
-		$this->user_manage->addDepartmaent_save($department_name,$userid);
-		redirect('manageuser/department_view');
+		$result=$this->user_manage->addDepartmaent_save($department_name,$userid);
+		
+		$data['title'] = "MFA - Department Management";
+		$data['user'] = $this->user_manage->get_user_1();
+		$data['result']=$result;
+		
+		$this->load->view('indicator/addDepartment',$data);
 	}
 	
 	function dep_edit_info($id)
@@ -276,6 +320,7 @@ class Manageuser extends CI_Controller {
 		$data['data']=$this->user_manage->dep_edit_info($id);
 		$data['user'] = $this->user_manage->get_user_1();
 		$data['title'] = "MFA - Department Management";
+		$data['result']=0;
 		/* echo "<pre>";
 		print_r($data);
 		echo "</pre>"; */
@@ -290,14 +335,27 @@ class Manageuser extends CI_Controller {
 		if($userid==-1){
 			$userid=null;
 		}
-		$this->user_manage->updateDepartmaent_save($id,$department,$userid);
-		redirect('manageuser/department_view');
+		$result=$this->user_manage->updateDepartmaent_save($id,$department,$userid);
+		
+		$data['data']=$this->user_manage->dep_edit_info($id);
+		$data['user'] = $this->user_manage->get_user_1();
+		$data['title'] = "MFA - Department Management";
+		$data['result']=$result;
+		
+		$this->load->view('indicator/editDepartment',$data);
 	}
 	
 	function dep_del_info($id)
 	{
-		$this->user_manage->deleteDepartment($id);
-		redirect('manageuser/department_view');
+		$result=$this->user_manage->deleteDepartment($id);
+		
+		$data['data']=$this->user_manage->get_department();
+		$data['title'] = "MFA - Department Management";
+		$data['result']=$result;
+		/* echo "<pre>";
+		print_r($data);
+		echo "</pre>"; */
+		$this->load->view('manageDepartment_view',$data);
 	}
 	
 	//---------------------------------------------------------------------- Division -------------------------------------------
@@ -305,6 +363,7 @@ class Manageuser extends CI_Controller {
 	{
 		$data['data']=$this->user_manage->get_division_show();
 		$data['title'] = "MFA - Division Management";
+		$data['result']=0;
 		/* echo "<pre>";
 		print_r($data);
 		echo "</pre>"; */
@@ -316,6 +375,7 @@ class Manageuser extends CI_Controller {
 		$data['title'] = "MFA - Department Management";
 		$data['user'] = $this->user_manage->get_user_1();
 		$data['data']=$this->user_manage->get_department();
+		$data['result'] = 0;
 		$this->load->view('indicator/addDivision',$data);
 	}
 	
@@ -324,8 +384,14 @@ class Manageuser extends CI_Controller {
 		$department_id=$this->input->post('department');
 		$division_name=$this->input->post('division');
 		$userid=$this->input->post('userid');
-		$this->user_manage->addDivision_save($department_id,$division_name,$userid);
-		redirect('manageuser/division_view');
+		$result=$this->user_manage->addDivision_save($department_id,$division_name,$userid);
+		
+		$data['title'] = "MFA - Department Management";
+		$data['user'] = $this->user_manage->get_user_1();
+		$data['data']=$this->user_manage->get_department();
+		$data['result'] = $result;
+		
+		$this->load->view('indicator/addDivision',$data);
 	}
 	
 	function get_division($dep_id)
@@ -342,6 +408,7 @@ class Manageuser extends CI_Controller {
 		$dep_id=$data['div'][0]['dep_id'];
 		$data['dep']=$this->user_manage->dep_edit_info($dep_id);
 		$data['data']=$this->user_manage->get_department();
+		$data['result']=0;
 		/* echo "<pre>";
 		print_r($data);
 		echo "</pre>"; */
@@ -357,20 +424,37 @@ class Manageuser extends CI_Controller {
 		if($userid==-1){
 		$userid=null;
 		}
-		$this->user_manage->updateDivision_save($id,$dep_id,$division,$userid);
-		redirect('manageuser/division_view');
+		$result=$this->user_manage->updateDivision_save($id,$dep_id,$division,$userid);
+		
+		$data['title'] = "MFA - Department Management";
+		$data['div']=$this->user_manage->div_edit_info($id);
+		$data['user'] = $this->user_manage->get_user_1();
+		$dep_id=$data['div'][0]['dep_id'];
+		$data['dep']=$this->user_manage->dep_edit_info($dep_id);
+		$data['data']=$this->user_manage->get_department();
+		$data['result']=$result;
+		
+		$this->load->view('indicator/editDivision',$data);
 	}
 	
 	function div_del_info($id)
 	{
-		$this->user_manage->deleteDivision($id);
-		redirect('manageuser/division_view');
+		$result=$this->user_manage->deleteDivision($id);
+		
+		$data['data']=$this->user_manage->get_division_show();
+		$data['title'] = "MFA - Division Management";
+		$data['result']=$result;
+		/* echo "<pre>";
+		print_r($data);
+		echo "</pre>"; */
+		$this->load->view('manageDivision_view',$data);
 	}
 	
 //===================== Position ===================
 	function position_view()
 	{
 		$data['title'] = "MFA - Position Management";
+		$data['result'] = 0;
 		$data['data']=$this->user_manage->position_view();
 		/* echo "<pre>";
 		print_r($data);
@@ -381,6 +465,7 @@ class Manageuser extends CI_Controller {
 	function addPosition()
 	{
 		$data['title'] = "MFA - Position Management";
+		$data['result'] = 0;
 		$this->load->view('indicator/addPosition',$data);
 	}
 	
@@ -388,14 +473,19 @@ class Manageuser extends CI_Controller {
 	{	
 		$tposition=$this->input->post('tposition');
 		$eposition=$this->input->post('eposition');
-		$this->user_manage->addPosition_save($tposition,$eposition);
-		redirect('manageuser/position_view');
+		$result=$this->user_manage->addPosition_save($tposition,$eposition);
+		
+		$data['title'] = "MFA - Position Management";
+		$data['result'] = $result;
+		
+		$this->load->view('indicator/addPosition',$data);
 	}
 	
 	function pos_edit_info($id)
 	{
 		$data['title'] = "MFA - Position Management";
 		$data['data']=$this->user_manage->get_edit_position($id);
+		$data['result']=0;
 		/* echo "<pre>";
 		print_r($data);
 		echo "</pre>"; */
@@ -407,14 +497,29 @@ class Manageuser extends CI_Controller {
 		$id=$this->input->post('id');
 		$tposition=$this->input->post('tposition');
 		$eposition=$this->input->post('eposition');
+		$result=$this->user_manage->updatePosition_save($id,$tposition,$eposition);
 		
-		$this->user_manage->updatePosition_save($id,$tposition,$eposition);
-		redirect('manageuser/position_view');
+		$data['data']=$this->user_manage->get_edit_position($id);
+		$data['title'] = "MFA - Position Management";
+		$data['result']=$result;
+		
+		/* echo "<pre>";
+		print_r($data);
+		echo "</pre>"; */
+		
+		$this->load->view('indicator/editPosition',$data);
 	}
 	
 	function pos_del_info($id)
 	{
-		$this->user_manage->deletePosition($id);
-		redirect('manageuser/position_view');
+		$result=$this->user_manage->deletePosition($id);
+		
+		$data['title'] = "MFA - Position Management";
+		$data['result'] = $result;
+		$data['data']=$this->user_manage->position_view();
+		/* echo "<pre>";
+		print_r($data);
+		echo "</pre>"; */
+		$this->load->view('managePosition_view',$data);
 	}
 }
