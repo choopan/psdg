@@ -7,7 +7,7 @@
 <div id="wrapper">
 <?php $this->load->view('menu'); ?>
 <div id="page-wrapper">
-	
+	<h2>รายงานผลการปฏิบัติงาน รอบปีงบประมาณ <?php echo $year; ?> รอบที่ <?php echo $round ?></h2>
 	<div class="row">
 		<div class="col-lg-12">
 		<?php 	if($this->session->flashdata('success')) {
@@ -21,12 +21,6 @@
 				<div class="panel-heading"><strong>แบบประเมินผลสัมฤทธิ์ของงาน</strong></div>
 				<div class="panel-body">
 				
-						<label>รอบที่</label>
-						<select class="form-control" name="" id="" style="width: 5%">
-							<option value=""></option>
-							<option value="1">1</option>
-							<option value="2">2</option>
-                        </select>
 
 
 		<div class="col-lg-12" style="margin-top: 10px">
@@ -95,7 +89,7 @@
 								</tr>
 							</thead>
 						</table>
-						<div class="col-lg-10 col-lg-offset-10">
+						<div class="col-lg-10 col-lg-offset-6">
 							<button type="submit" class="btn btn-primary" name="option" value="record"><span class="glyphicon glyphicon-floppy-save"></span> บันทึก</button>
 							<button type="submit" class="btn btn-success" name="option" value="prove"><span class="glyphicon glyphicon-envelope"></span> ส่งเพื่อพิจารณา</button>
 						</div>

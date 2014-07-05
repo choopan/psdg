@@ -219,13 +219,10 @@ class person_evaluation extends CI_Controller {
 			$data['title'] = "MFA - View Indicator ";	
 			$piStatus = $this->personindicator->getIndicatorStatus($userID, $year, $round, $depID, $divID);
 
-			if($piStatus == 0) {
-				$this->load->view('evaluate/managePersonEvaluation.php', $data);
+			if($piStatus != 2) {
+				echo "ERROR: NO agreement on person indicator yet";
+				die();
 			} else {
-				switch($piStatus) {
-					case 1 : $data['status_msg'] = '<span class="label label-success">รอผู้บังคับบัญชาพิจารณา</span>'; break;
-					default :$data['status_msg'] = 'undefined status'; break;
-				}
 				$this->load->view('evaluate/managePersonEvaluation.php', $data);
 			}	
 
