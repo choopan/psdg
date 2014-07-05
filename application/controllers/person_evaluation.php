@@ -328,7 +328,35 @@ class person_evaluation extends CI_Controller {
 		$expectVal = $this->input->post("expVal");
 		$selfscore = $this->input->post("evalScore");
 		$res = $this->personindicator->getCoreName($userID);
+
+		$this->personindicator->evalAddScore($userID, $year ,$score);	
+		$this->personindicator->coreAddScore($userID, $year ,$evalRound, $coreSkillName ,$expectVal, $selfscore, $res);
 		
+		if($option == "record") {
+			$this->session->set_flashdata('success', 'บันทึกข้อมูลตัวชี้วัดผลสัมฤทธิ์เรียบร้อยแล้ว');	
+		} else if($option == "prove") {
+			$this->personindicator->setIndicatorStatus($userID, $year, 1);		
+			$this->session->set_flashdata('success', 'ส่งข้อมูลข้อมูลตัวชี้วัดผลสัมฤทธิ์ให้ผู้บังคับบัญชาพิจารณาเรียบร้อยแล้ว');				
+		}
+		redirect('person_evaluation/managePersonEvaluation', 'location');
+	}
+	
+	function saveActivity() {
+		$userID = $this->session->userdata('sessid');
+		$year = $this->session->userdata('sessyear');
+		$divID  = $this->session->userdata('sessdiv');
+		$depID  = $this->session->userdata('sessdep');
+		$option = $this->input->post("option");
+
+		$active_evalround = $this->personindicator->getActiveEvalRound();
+		if(count($active_evalround) == 1) {
+			$data['active_year'] = $active_evalround[0]['year'];
+			$data['active_round'] = $active_evalround[0]['round'];
+		} else {
+			$data['active_year'] = 0;
+			$data['active_round']= 0;			
+		}
+
 		$round = $data['active_round'];
 		
 		$activityName = $this->input->post("activityName");
@@ -336,9 +364,7 @@ class person_evaluation extends CI_Controller {
 		$date = date('Y-m-d');
 		$indicatorID = $this->personindicator->listIndicator($userID, $year, $round, $depID, $divID);
 		$indicatorVal = $this->input->post("indicatorVal");
-		
-		$this->personindicator->evalAddScore($userID, $year ,$score);	
-		$this->personindicator->coreAddScore($userID, $year ,$evalRound, $coreSkillName ,$expectVal, $selfscore, $res);	
+
 		$this->personindicator->activityAddScore($userID, $year ,$activityName, $documentName ,$date, $indicatorID, $indicatorVal);	
 		
 		if($option == "record") {

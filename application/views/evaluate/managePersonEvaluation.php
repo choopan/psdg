@@ -142,7 +142,7 @@
 			<div class="panel panel-primary">
 				<div class="panel-body">
 					<div class="table-responsive">
-					<form class="form-inline" role="form"  action="<?php echo site_url('person_evaluation/saveEvaluation'); ?>" method="POST">
+					<form class="form-inline" role="form"  action="<?php echo site_url('person_evaluation/saveActivity'); ?>" method="POST">
                         <table class="table table-hover" id="dataTables-example">
 							<thead>
 								<tr class="success">
