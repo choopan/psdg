@@ -81,8 +81,22 @@ Class PersonIndicator extends CI_Model
 		}		
 		
 	}
+
 	
+	function setPIStatus($pid, $status) {
+	 	$this -> db -> set('status', $status)
+					-> where('ID', $pid)
+					-> update('person_indicator');
+	}
 	
+	function getPInumber($userID, $year, $round, $dep_id, $div_id) {
+		$result = $this	-> db
+						-> select('ID')
+					 	-> get_where('person_indicator', array('userID' => $userID, 'year' => $year, 'round' => $round, 'dep_id' => $dep_id, 'div_id' => $div_id))
+				 		-> result_array();
+		return $result;
+	}
+
 	function listIndicator($userID, $year, $round, $dep_id, $div_id) {
 		$result = $this	-> db
 						-> select('ID')
@@ -95,6 +109,19 @@ Class PersonIndicator extends CI_Model
 		}
 		
 		return $result;
+	}
+	
+	function getPIStatus($userID, $div_id, $year, $round) {
+		$result = $this	-> db
+						-> select('status')
+					 	-> get_where('person_indicator', array('userID' => $userID, 'year' => $year, 'round' => $round, 'div_id' => $div_id))
+				 		-> result_array();
+		if(count($result) == 0) {
+			$status = 0;
+		} else {
+			$status = $result[0]['status'];
+		}
+		return $status;
 	}
 }
 ?>

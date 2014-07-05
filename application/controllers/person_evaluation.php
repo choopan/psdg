@@ -6,7 +6,7 @@ class person_evaluation extends CI_Controller {
 	{
 	   parent::__construct();
 	   $this->load->model('personindicator', '',TRUE);
-	   //$this->load->model('user_manage', '',TRUE);
+	   $this->load->model('user', '',TRUE);
 	   $this->load->helper('url');
 	}
 	
@@ -15,6 +15,66 @@ class person_evaluation extends CI_Controller {
 
 	}
 	
+	function execAgreeIndicator($id) {
+		$this->personindicator->setPIStatus($id, 2);
+		$this->session->set_flashdata('success', 'อนุมัติตัวชี้วัดรายบุคคลเรียบร้อยแล้ว');
+		redirect('person_evaluation/divManagePersonIndicator', 'location');
+	}
+	
+	function execCancelIndicator($id) {
+		$this->personindicator->setPIStatus($id, 0);
+		$this->session->set_flashdata('failed', 'ไม่อนุมัติตัวชี้วัดรายลุคคลเรียบร้อยแล้ว');
+		redirect('person_evaluation/divManagePersonIndicator', 'location');
+	}
+	
+	function viewIndicator($id) {
+		$userID = $id;
+		$depID  = $this->session->userdata('sessdep');
+		$divID  = $this->session->userdata('sessdiv');
+	
+		$active_evalround = $this->personindicator->getActiveEvalRound();
+
+		if(count($active_evalround) == 1) {
+			$year  = $active_evalround[0]['year'];
+			$round = $active_evalround[0]['round'];
+			$data['year'] = $year;
+			$data['round'] = $round;
+			$pi_set = $this->personindicator->getPINumber($userID, $year, $round, $depID, $divID);
+			$data['pi_set'] = $pi_set[0]['ID'];
+			$data['indicators'] = $this->personindicator->listIndicator($userID, $year, $round, $depID, $divID);	
+			$tmp = $this->user->getMinProfile($id);
+			$data['user'] =  $tmp[0];
+			$this->load->view('evaluate/viewPersonIndicator.php', $data);
+		} else {
+			echo "No evaluate round selected";
+			die();
+		}		
+	}
+
+
+	function confirmIndicator($id) {
+		$userID = $id;
+		$depID  = $this->session->userdata('sessdep');
+		$divID  = $this->session->userdata('sessdiv');
+	
+		$active_evalround = $this->personindicator->getActiveEvalRound();
+
+		if(count($active_evalround) == 1) {
+			$year  = $active_evalround[0]['year'];
+			$round = $active_evalround[0]['round'];
+			$data['year'] = $year;
+			$data['round'] = $round;
+			$pi_set = $this->personindicator->getPINumber($userID, $year, $round, $depID, $divID);
+			$data['pi_set'] = $pi_set[0]['ID'];
+			$data['indicators'] = $this->personindicator->listIndicator($userID, $year, $round, $depID, $divID);	
+			$tmp = $this->user->getMinProfile($id);
+			$data['user'] =  $tmp[0];
+			$this->load->view('evaluate/confirmPersonIndicator.php', $data);
+		} else {
+			echo "No evaluate round selected";
+			die();
+		}		
+	}
 	
 	function delEvalRound($id) {
 		$this->personindicator->delEvalRound($id);
@@ -54,13 +114,29 @@ class person_evaluation extends CI_Controller {
 
 	function divManagePersonIndicator() {
 		//Verify if this account is an executive of division
-		if(!$this->session->userdata('sessexecdiv') || !$this->session->userdata('sessexecdep')) {
+		/*if(!$this->session->userdata('sessexecdiv') || !$this->session->userdata('sessexecdep')) {
 			echo "ERROR: NO PERMISSION";
 			die();
 		} else {
 			$divID = $this->session->userdata('sessdiv');
 			$userID = $this->session->userdata('sessid');
 			//$data['users'] = $this->user->listUserInDivWithIndicator($userID, $divID);
+		}*/
+		$data['userID'] = $this->session->userdata('sessid');
+		$data['divID']  = $this->session->userdata('sessdiv');
+	
+		$active_evalround = $this->personindicator->getActiveEvalRound();
+
+		if(count($active_evalround) == 1) {
+			$year  = $active_evalround[0]['year'];
+			$round = $active_evalround[0]['round'];
+			$data['year']  = $year;
+			$data['round'] = $round;
+			$data['user_info'] = $this->user->getUserFromDiv($data['userID'], $data['divID']); 
+			$this->load->view('evaluate/displayPersonIndicatorInDiv.php', $data);
+		} else {			
+			echo "No evaluate round selected";
+			die();
 		}
 	}
 	
@@ -87,8 +163,9 @@ class person_evaluation extends CI_Controller {
 				$this->load->view('evaluate/managePersonIndicator.php', $data);
 			} else {
 				switch($piStatus) {
-					case 1 : $data['status_msg'] = '<span class="label label-success">รอผู้บังคับบัญชาพิจารณา</span>'; break;
-					default :$data['status_msg'] = 'undefined status'; break;
+					case 1  : $data['status_msg'] = '<span class="label label-success">รอผู้บังคับบัญชาพิจารณา</span>'; break;
+					case 2  : $data['status_msg'] = '<span class="label label-primary">ผ่านการอนุมัติแล้ว</span>'; break;
+					default : $data['status_msg'] = '<span class="label label-danger">undefined</span>'; break;
 				}
 				$this->load->view('evaluate/displayPersonIndicator.php', $data);
 			}	

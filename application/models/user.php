@@ -81,6 +81,16 @@ Class User extends CI_Model
 	return $query->result();
  }
  
+ function getMinProfile($id=null) {
+ 	$result = $this->db->select("pwemployee.USERID as user_id, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, PWLEVEL, department.name as depname, division.name as divname")
+			-> from('pwemployee')
+			-> join('pwposition', 'pwposition.pwposition = pwemployee.pwposition', 'left')
+			-> join('department', 'pwemployee.department = department.id', 'left')
+			-> join('division', 'pwemployee.division = division.id', 'left')
+			-> where('pwemployee.userid', $id)
+			-> get() ->result_array();
+	return $result;
+ }
 
  function getExecDiv($userID) {
  	$result = $this->db->get_where('division', array('userID'=> $userID))->result_array();
@@ -99,15 +109,15 @@ Class User extends CI_Model
 		return true;
 	}			
  }
-/*
- function getUserFromDiv($userID, $divID, $year) {
- 	$result = $this->db->select('PWFNAME, PWLNAME, PWPOSITION, PWLEVEL, person_indicator.ID AS PID')
+
+ function getUserFromDiv($userID, $divID) {
+ 	$result = $this->db->select('pwemployee.USERID as userID, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, PWLEVEL')
  						->from('pwemployee')
  						->join('pwposition', 'pwposition.pwposition = pwemployee.pwposition', 'left')
- 						->join('person_indicator', 'pwemployee.USERID = person_indicator.userID')
- 						->where(array('person_indicator.year' => $year, 'division' => $divID, 'userID !=' => $userID))->result_array();
+ 						->where(array('pwemployee.division' => $divID, 'pwemployee.userID !=' => $userID))
+ 						->get() -> result_array();
 	return $result;
  }
- */
+
 }
 ?>
