@@ -87,76 +87,97 @@ Class PersonIndicator extends CI_Model
 					-> update('person_indicator');
 	}					
 
-	function getCoreName($userID) {
-		$coreID = $this -> db
-					-> select('coresetID')
-					-> from('pwemployee')
-					-> where('USERID', $userID)
-					-> get()
-					-> result_array('');
-	
-		$result = $this -> db
-					-> select('name, expectVal')
-					-> from('core_competency_expect')
-					-> join('core_competency_skill', 'core_competency_expect.coreskillID = core_competency_skill.ID')
-					-> where('coresetID', $coreID[0]['coresetID'])
-					-> get() -> result_array();
+	function getCoreName($userID, $year, $round, $depID, $divID) {
+		//Check if user already add score on core competency	
+		$result = $this -> db -> select('id, coreSkillName as name, expectVal, selfscore')
+							  -> get_where('core_competency_score', 
+								 array('userID' => $userID, 'year' => $year, 'evalRound' => $round,
+								       'depID' => $depID, 'divID' => $divID))
+							  -> result_array();
+							  
+		if(count($result) == 0) {			
+			$coreID = $this -> db
+						-> select('coresetID')
+						-> from('pwemployee')
+						-> where('USERID', $userID)
+						-> get()
+						-> result_array();	
+		
+			$result = $this -> db
+						-> select('name, expectVal')
+						-> from('core_competency_expect')
+						-> join('core_competency_skill', 'core_competency_expect.coreskillID = core_competency_skill.ID')
+						-> where('coresetID', $coreID[0]['coresetID'])
+						-> get() -> result_array();
+		}						
 		return $result;
 	}
 	
-	function evalAddScore($userID, $year,$score) {
+	function evalAddScore($userID, $year, $round, $dep_id, $div_id, $score) {
 		$personIndicatorRes = $this -> db
 													-> select('id')
-													-> get_where('person_indicator', array('userID' => $userID, 'year' => $year))
+													-> get_where('person_indicator', 
+														array('userID' => $userID, 'year' => $year, 'round' => $round, 'dep_id' => $dep_id, 'div_id' => $div_id))
 													-> result_array();
 													
 		$personIndicatorDetailRes = $this -> db
-															-> select('ID')
-															-> get_where('person_indicator_detail', array('PID' => (int)$personIndicatorRes[0]['id']))
-															-> result_array();
+													-> select('ID')
+													-> order_by('order', 'asc')
+													-> get_where('person_indicator_detail', 
+														array('PID' => $personIndicatorRes[0]['id']))
+													-> result_array();
 															
 		$numrow = count($score); 		
 		for($i = 0; $i < $numrow; $i++) {
-			$this -> db 
-					-> set('userID', $userID)
-					-> set('personIndicatorID', $personIndicatorDetailRes[$i]['ID'])
-					-> set('score', (int)$score[$i])
-					-> insert('personal_score');
+			$this -> db -> where('id', $personIndicatorDetailRes[$i]['ID'])
+					-> set('score', $score[$i])
+					-> update('person_indicator_detail');
 		}
 	}
 	
-	function coreAddScore($userID, $year ,$evalRound, $coreSkillName ,$expectVal, $selfscore, $res){
-		$numrow = count($selfscore); 		
-		for($i = 0; $i < $numrow; $i++) {
-			$this -> db 
-					-> set('userID', $userID)
-					-> set('year', $year)
-					-> set('evalRound', $evalRound)
-					-> set('coreSkillName', $res[$i]['name'])
-					-> set('expectVal', (int)$res[$i]['expectVal'])
-					-> set('selfscore', (int)$selfscore[$i])
-					-> insert('core_competency_score');
-		}
+	function coreAddScore($userID, $year ,$evalRound, $depID, $divID, $coreSkillName ,$expectVal, $selfscore, $res){
+		//Check if already exists
+		$result = $this -> db -> get_where('core_competency_score',
+						array('userID' => $userID, 'year' => $year, 'evalRound' => $evalRound, 'depID' => $depID,
+							  'divID' => $divID))
+					-> result_array();
+							
+		if(count($result) == 0) {
+			//insert
+			$numrow = count($res); 		
+			for($i = 0; $i < $numrow; $i++) {
+				$this -> db 
+						-> set('userID', $userID)
+						-> set('year', $year)
+						-> set('evalRound', $evalRound)
+						-> set('coreSkillName', $res[$i]['name'])
+						-> set('expectVal', (int)$res[$i]['expectVal'])
+						-> set('selfscore', (int)$selfscore[$i])
+						-> set('depID', $depID)
+						-> set('divID', $divID)
+						-> insert('core_competency_score');
+			}
+		} else {
+			//update
+			$numrow = count($res); 		
+			for($i = 0; $i < $numrow; $i++) {
+				$this -> db -> where('id', $res[$i]['id']) 
+						-> set('selfscore', $selfscore[$i])
+						-> update('core_competency_score');
+			}
+			
+		}		
 	}
 	
-	function activityAddScore($userID, $year ,$activityName, $documentName ,$date, $indicatorID, $indicatorVal){
-		
-		$xx = count($indicatorID); 	
-		print_r($indicatorID['0']['ID']);		
-		
-		
+	function activityAddScore($activityID, $indicatorID, $indicatorVal){
 		
 		$numrow = count($indicatorID); 		
 		for($i = 0; $i < $numrow; $i++) {
 			$this -> db 
-					-> set('userID', $userID)
-					-> set('year', $year)
-					-> set('activityName', $activityName['0'])
-					-> set('documentName', $documentName['0'])
-					-> set('date', $date)
-					-> set('indicatorID', $indicatorID[$i]['ID'])
-					-> set('indicatorVal', (int)$indicatorVal[$i])
-					-> insert('person_indicator_activity');
+					-> set('activity_id', $activityID)
+					-> set('pid', $indicatorID[$i]['ID'])
+					-> set('score', (int)$indicatorVal[$i])
+					-> insert('person_indicator_activity_score');
 		}
 	}
 	
@@ -193,6 +214,50 @@ Class PersonIndicator extends CI_Model
 			$status = $result[0]['status'];
 		}
 		return $status;
+	}
+	
+	function getSavedActivities($userID, $year, $round, $dep_id, $div_id) {
+		/*$result = $this -> db	-> from('person_indicator_activity')
+								-> join('person_indicator_detail', 'person_indicator_detail.id = person_indicator_activity.indicatorID', 'left')
+								-> join('person_indicator', 'person_indicator.id = person_indicator_detail.PID')
+								-> where(array('person_indicator.userID' => $userID, 'person_indicator.year' => $year, 'person_indicator.round' => $round, 'person_indicator.dep_id' => $dep_id, 'person_indicator.div_id' => $div_id))
+								-> get() -> result_array();*/
+
+		$result = $this -> db -> get_where('person_indicator_activity'
+											,array('userID' => $userID, 'year' => $year, 
+												   'round' => $round, 'dep_id' => $dep_id, 
+												   'div_id' => $div_id)
+										  )
+							  -> result_array(); 										  
+		return $result;
+	}
+	
+	function addActivity($userID, $dep_id, $div_id, $year, $round, $activityDate, $activityName, $documentName) {
+		$this -> db ->	set('userID', $userID)
+					->	set('dep_id', $dep_id)
+					-> 	set('div_id', $div_id)
+					->	set('year', $year)
+					->	set('round', $round)
+					->	set('activityName', $activityName)
+					->	set('documentName', $documentName)
+					-> 	set('date', $activityDate)
+					->	insert('person_indicator_activity');
+		return $this->db->insert_id();					
+	}
+	
+	function getActivityScore($activity_id) {
+		$result = $this -> db -> get_where('person_indicator_activity_score', array('activity_id' => $activity_id))
+							  -> result_array();
+		return $result;							  
+	}
+	
+	function deleteActivity($activity_id) {
+		$this -> db -> where('ID', $activity_id)
+					-> delete('person_indicator_activity');
+	}
+	function deleteActivityScore($activity_id) {
+		$this -> db -> where('activity_id', $activity_id)
+					-> delete('person_indicator_activity_score');
 	}
 }
 ?>

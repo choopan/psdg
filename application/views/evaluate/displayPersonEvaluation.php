@@ -6,19 +6,12 @@
 <body>
 <div id="wrapper">
 <?php $this->load->view('menu'); ?>
-<form action="<?php echo site_url('person_evaluation/saveEvaluation'); ?>" method="POST">
 <div id="page-wrapper">
-	<h2>รายงานผลการปฏิบัติงาน รอบปีงบประมาณ <?php echo $year; ?> รอบที่ <?php echo $round ?> <button type="submit" class="btn btn-success pull-right" name="option" value="prove"><span class="glyphicon glyphicon-envelope"></span> ส่งเพื่อพิจารณา</button></h2>
+	<h2>รายงานผลการปฏิบัติงาน รอบปีงบประมาณ <?php echo $year; ?> รอบที่ <?php echo $round ?>
+		<span class="label label-warning pull-right">สถานะ : รอการพิจารณาผลการประเมิน</span>
+	</h2>
 	<div class="row">
 		<div class="col-lg-12">
-		<?php 	if($this->session->flashdata('success')) {
-			?>
-						<div class="alert alert-success alert-dismissable">
-  							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-  			<?php			echo $this->session->flashdata('success'); ?>
-						</div>
-			<?php	} ?>
-			
             <div class="panel panel-primary">
 				<div class="panel-heading"><strong>แบบประเมินผลสัมฤทธิ์ของงาน</strong></div>
 				<div class="panel-body">
@@ -49,7 +42,7 @@
 									foreach($indicators as $ind) {
 										$numIndex++;
 								?>
-								<tr id="indicator_row<?php echo $numIndex; ?>">
+								<tr>
 									<td><?php echo $ind['order']; ?></td>
 									<td><?php echo $ind['name']; ?></td>
 									<td>1</td>
@@ -57,11 +50,11 @@
 									<td>3</td>
 									<td>4</td>
 									<td>5</td>
-									<td>
-										<input type="text" class="form-control" name="score[]" id="point<?php echo $numIndex; ?>" value="<?php echo $ind['score']; ?>" onchange="getvalonchange('point<?php echo $numIndex; ?>', 'weight<?php echo $numIndex; ?>', 'totalpoint<?php echo $numIndex; ?>');">
+									<td style="text-align: center;">
+										<?php echo $ind['score']; ?>
 									</td>
-									<td style="text-align: center;" name="" id="weight<?php echo $numIndex; ?>"><?php echo $ind['weight']; ?></td>
-									<td style="text-align: center;" id="totalpoint<?php echo $numIndex; ?>">
+									<td style="text-align: center;"><?php echo $ind['weight']; ?></td>
+									<td style="text-align: center;">
 										<?php if($ind['score'] != 0) {
 												$this_score = $ind['score'] * $ind['weight'];
 												$total_score += $this_score;
@@ -77,6 +70,7 @@
 								?>
 							</tbody>
 						</table>
+						
 						<table class="table table-hover" id="dataTables-example">
 							<thead>
 								<tr>
@@ -126,12 +120,7 @@
 											<td>
 												<?php echo $ind['expectVal']; ?>
 											</td>
-											<td>
-												<input type="text" class="form-control" name="evalScore[]" value="<?php 
-													if(isset($ind['selfscore'])) {
-														echo $ind['selfscore'];
-													} 														
-												?>">
+											<td><?php echo $ind['selfscore']; ?>
 											</td>
 										</tr>
 										<?php
@@ -142,88 +131,9 @@
 						</div>
 					</div>
 				</div>
-
-						
-						<div class="col-lg-10 col-lg-offset-5">
-							<button type="submit" class="btn btn-primary" name="option" value="record"><span class="glyphicon glyphicon-floppy-save"></span> บันทึกผลประเมิน</button>
-							
-						</div>
-					
 					</div>
 </form>						
-		<div class="col-lg-12"><br><hr><br></div>		
 	
-		<div class="col-lg-12">
-			<div class="panel panel-success">
-				<div class="panel-heading"><strong>ผลการดำเนินงานตามภารกิจ</strong></div>
-				<div class="panel-body">
-					<form  action="<?php echo site_url('person_evaluation/saveActivity'); ?>" method="POST">                    
-						<div class="table-responsive">
-					    <table class="table table-hover" id="dataTables-example">
-							<thead>
-								<tr class="success">
-								<?php
-									$countRow = 0;
-									foreach($indicators as $ind) {
-										$countRow++;
-								?>
-								<?php       		
-									}								
-								?>
-									<th rowspan="2" style="width: 12%;">วันที่</th>
-									<th rowspan="2">ผลการดำเนินงาน</th>
-									<th colspan="<?php echo $countRow; ?>" style="text-align: center;">ผลการปฏิบัติงาน</th>									
-									<th rowspan="2" style="text-align: center; width: 20%">(ชื่อ) เอกสาร</th>
-								</tr>
-								
-								<tr class="success">
-								<?php
-									$numIndex = 0;
-									foreach($indicators as $ind) {
-										$numIndex++;
-								?>
-									<th style="width: 7%;"><span rel="tooltip" title="<?php echo $ind['name']; ?>"><?php echo "ตัวชี้วัดที่  ". $numIndex; ?></span></th>
-								<?php       		
-									}								
-								?>	
-								</tr>
-							</thead>
-							
-							<tbody>
-								
-								<tr id="indicator_row<?php echo $numIndex; ?>">
-									<td><input type="text" class="form-control" name="activity_date"></td>
-									<td><input type="text" class="form-control" name="activityName"></td>									
-									<?php
-									$numIndex = 0;
-									foreach($indicators as $ind) {
-										$numIndex++;
-									?>
-									<td>
-										<input type="text" class="form-control" name="indicatorVal[]" id="score<?php echo $numIndex; ?>" >
-									</td>
-									<?php       		
-										}								
-									?>
-									<td>
-										<input type="text" class="form-control" name="documentName">
-									</td>
-								</tr>
-								
-							</tbody>
-						</table>
-						<div class="col-lg-10 col-lg-offset-5">
-							<button type="submit" class="btn btn-success" name="option"><span class="glyphicon glyphicon-plus"></span> เพิ่มผลการดำเนินงาน</button>
-						</div>
-					</form>		
-					</div>
-				</div>
-			</div>
-		</div>
-
-
-
-
 	<div class="col-lg-12">
 			<div class="panel panel-warning">
 				<div class="panel-heading"><strong>ผลการดำเนินงานตามภารกิจ</strong></div>
@@ -244,7 +154,6 @@
 									<th rowspan="2">ผลการดำเนินงาน</th>
 									<th colspan="<?php echo $countRow; ?>" style="text-align: center;">ผลการปฏิบัติงาน</th>									
 									<th rowspan="2" style="width: 20%">(ชื่อ) เอกสาร</th>
-									<th rowspan="2" style="width: 5%">ลบ</th>
 								</tr>
 								
 								<tr class="warning">
@@ -277,7 +186,6 @@
 										}
 									?>
 									<td><?php echo $act['documentName']; ?></td>
-									<td><a href='<?php echo site_url("person_evaluation/deleteSavedActivity")."/".$act['ID']; ?>' class="btnDelete btn btn-danger btn-xs" onClick='return confirm(" คุณต้องการลบหรือไม่ ")' title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></a></td>
 								</tr>
 							<?php } ?>
 							</tbody>

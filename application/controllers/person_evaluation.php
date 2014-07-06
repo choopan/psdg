@@ -137,6 +137,7 @@ class person_evaluation extends CI_Controller {
 	}
 	
 
+
 	function divManagePersonIndicator() {
 		$data['title'] = "MFA - Personal Indicator Management";	
 		//Verify if this account is an executive of division
@@ -161,6 +162,32 @@ class person_evaluation extends CI_Controller {
 			die();
 		}
 	}
+
+	function divManagePersonEvaluation() {
+		$data['title'] = "MFA - Personal Indicator Management";	
+		//Verify if this account is an executive of division
+		if(!$this->session->userdata('sessexecdiv')) {
+			show_error("คุณไม่มีสิทธิในการเข้าถึงหน้านี้", 500);
+		}
+		$data['userID'] = $this->session->userdata('sessid');
+		$data['depID']  = $this->session->userdata('sessdep');	
+		$data['divID']  = $this->session->userdata('sessdiv');
+		
+		$active_evalround = $this->personindicator->getActiveEvalRound();
+
+		if(count($active_evalround) == 1) {
+			$year  = $active_evalround[0]['year'];
+			$round = $active_evalround[0]['round'];
+			$data['year']  = $year;
+			$data['round'] = $round;
+			$data['user_info'] = $this->user->getUserFromDiv($data['userID'], $data['divID']); 
+			$this->load->view('evaluate/displayPersonEvaluationInDiv.php', $data);
+		} else {			
+			echo "No evaluate round selected";
+			die();
+		}
+	}
+
 
 	function depManagePersonIndicator() {
 		$data['title'] = "MFA - Personal Indicator Management";	
@@ -281,21 +308,45 @@ class person_evaluation extends CI_Controller {
 		$active_evalround = $this->personindicator->getActiveEvalRound();
 
 		if(count($active_evalround) == 1) {
+			$data['title'] = "MFA - View Indicator ";
+				
 			$year  = $active_evalround[0]['year'];
 			$round = $active_evalround[0]['round'];
 			$data['year']  = $year;
 			$data['round'] = $round;
 			$data['indicators'] = $this->personindicator->listIndicator($userID, $year, $round, $depID, $divID);
-			$data['array_i'] = $this->personindicator->getCoreName($userID);
+			$data['array_i'] = $this->personindicator->getCoreName($userID, $year, $round, $depID, $divID);
+			$saved_activities = $this->personindicator->getSavedActivities($userID, $year, $round, $depID, $divID);
 			
-			$data['title'] = "MFA - View Indicator ";	
+			$numSavedActivity = count($saved_activities);
+			for($i = 0; $i < $numSavedActivity; $i++) {
+				$score = array();
+				$activity_score = $this->personindicator->getActivityScore($saved_activities[$i]['ID']);
+				$numind = count($activity_score);
+				for($j = 0; $j < $numind; $j++) {
+					$pid = $activity_score[$j]['pid'];
+					$score[(string)$pid] = $activity_score[$j]['score'];
+				}
+				$saved_activities[$i]['score'] = $score;
+			}
+			
+			$data['saved_activities'] = $saved_activities;
+			
 			$piStatus = $this->personindicator->getIndicatorStatus($userID, $year, $round, $depID, $divID);
 
-			if($piStatus != 2) {
-				echo "ERROR: NO agreement on person indicator yet";
-				die();
-			} else {
+			if($piStatus < 2) {
+				$data['error_msg'] = "กรุณาทำข้อตกลงตัวชี้วัดรายบุคคลกับผู้บังคับบัญชาก่อน";
+				$this->load->view('evaluate/errorPersonEvaluation.php', $data);				
+			} else if($piStatus == 2) {
 				$this->load->view('evaluate/managePersonEvaluation.php', $data);
+			} else if(($piStatus == 3) || ($piStatus == 4)) {
+				$data['piStatus'] = $piStatus;
+				$this->load->view('evaluate/displayPersonEvaluation.php', $data);
+			} else if($piStatus == 5) {
+				//OK now
+			} else {
+				$data['error_msg'] = "กรุณาทำข้อตกลงตัวชี้วัดรายบุคคลกับผู้บังคับบัญชาก่อน ".$piStatus;
+				$this->load->view('evaluate/errorPersonEvaluation.php', $data);
 			}	
 
 		} else {			
@@ -304,77 +355,119 @@ class person_evaluation extends CI_Controller {
 		}
 		
 	}
+
 	function saveEvaluation() {
 		$userID = $this->session->userdata('sessid');
-		$year = $this->session->userdata('sessyear');
-		$divID  = $this->session->userdata('sessdiv');
-		$depID  = $this->session->userdata('sessdep');
+		$div_id  = $this->session->userdata('sessdiv');
+		$dep_id  = $this->session->userdata('sessdep');
 		$option = $this->input->post("option");
 		
 		$score = $this->input->post("score");
 
 		$active_evalround = $this->personindicator->getActiveEvalRound();
 		if(count($active_evalround) == 1) {
-			$data['active_year'] = $active_evalround[0]['year'];
-			$data['active_round'] = $active_evalround[0]['round'];
+			$year = $active_evalround[0]['year'];
+			$round = $active_evalround[0]['round'];
 		} else {
-			$data['active_year'] = 0;
-			$data['active_round']= 0;			
+			echo "Please set evaluation year and round first";
+			die();
 		}
 		
-		
-		$evalRound = $data['active_round'];
 		$coreSkillName = $this->input->post("evalName");
 		$expectVal = $this->input->post("expVal");
 		$selfscore = $this->input->post("evalScore");
-		$res = $this->personindicator->getCoreName($userID);
-
-		$this->personindicator->evalAddScore($userID, $year ,$score);	
-		$this->personindicator->coreAddScore($userID, $year ,$evalRound, $coreSkillName ,$expectVal, $selfscore, $res);
+		$res = $this->personindicator->getCoreName($userID, $year, $round, $dep_id, $div_id);
 		
+		$this->personindicator->evalAddScore($userID, $year ,$round, $dep_id, $div_id, $score);	
+		
+		$this->personindicator->coreAddScore($userID, $year ,$round, $dep_id, $div_id, $coreSkillName ,$expectVal, $selfscore, $res);
+
 		if($option == "record") {
 			$this->session->set_flashdata('success', 'บันทึกข้อมูลตัวชี้วัดผลสัมฤทธิ์เรียบร้อยแล้ว');	
 		} else if($option == "prove") {
-			$this->personindicator->setIndicatorStatus($userID, $year, 1);		
+			$this->personindicator->setIndicatorStatus($userID, $year, $round, $dep_id, $div_id, 3);		
 			$this->session->set_flashdata('success', 'ส่งข้อมูลข้อมูลตัวชี้วัดผลสัมฤทธิ์ให้ผู้บังคับบัญชาพิจารณาเรียบร้อยแล้ว');				
 		}
 		redirect('person_evaluation/managePersonEvaluation', 'location');
 	}
 	
+	function deleteSavedActivity($id) {
+		//delete person_indicator_activity
+		$this -> personindicator->deleteActivity($id);
+		//delete person_indicator_activity_score
+		$this -> personindicator -> deleteActivityScore($id);
+		$this->session->set_flashdata('success', 'ลบผลการดำเนินการเรียบร้อยแล้ว');
+		redirect('person_evaluation/managePersonEvaluation', 'location');
+	}
+	
+	
 	function saveActivity() {
 		$userID = $this->session->userdata('sessid');
-		$year = $this->session->userdata('sessyear');
 		$divID  = $this->session->userdata('sessdiv');
 		$depID  = $this->session->userdata('sessdep');
-		$option = $this->input->post("option");
 
 		$active_evalround = $this->personindicator->getActiveEvalRound();
-		if(count($active_evalround) == 1) {
-			$data['active_year'] = $active_evalround[0]['year'];
-			$data['active_round'] = $active_evalround[0]['round'];
-		} else {
-			$data['active_year'] = 0;
-			$data['active_round']= 0;			
-		}
-
-		$round = $data['active_round'];
-		
+		$year = $active_evalround[0]['year'];
+		$round = $active_evalround[0]['round'];
+				
+		$activityDate = $this->input->post("activity_date");		
 		$activityName = $this->input->post("activityName");
 		$documentName = $this->input->post("documentName");
-		$date = date('Y-m-d');
+		
 		$indicatorID = $this->personindicator->listIndicator($userID, $year, $round, $depID, $divID);
 		$indicatorVal = $this->input->post("indicatorVal");
 
-		$this->personindicator->activityAddScore($userID, $year ,$activityName, $documentName ,$date, $indicatorID, $indicatorVal);	
+		$activityID = $this->personindicator->addActivity($userID, $depID, $divID, $year, $round, $activityDate, $activityName, $documentName);
+
+		$this->personindicator->activityAddScore($activityID, $indicatorID, $indicatorVal);	
 		
-		if($option == "record") {
-			$this->session->set_flashdata('success', 'บันทึกข้อมูลตัวชี้วัดผลสัมฤทธิ์เรียบร้อยแล้ว');	
-		} else if($option == "prove") {
-			$this->personindicator->setIndicatorStatus($userID, $year, 1);		
-			$this->session->set_flashdata('success', 'ส่งข้อมูลข้อมูลตัวชี้วัดผลสัมฤทธิ์ให้ผู้บังคับบัญชาพิจารณาเรียบร้อยแล้ว');				
-		}
+		$this->session->set_flashdata('success', 'บันทึกผลการดำเนินภารกิจเรียบร้อยแล้ว');	
+		
 		redirect('person_evaluation/managePersonEvaluation', 'location');
 	}
+
+	function confirmEvaluation($id)
+	{
+		//todo add execscore
+		$userID = $id;
+		$divID  = $this->session->userdata('sessdiv');
+		$depID  = $this->session->userdata('sessdep');
+		
+		$active_evalround = $this->personindicator->getActiveEvalRound();
+
+		if(count($active_evalround) == 1) {
+			$data['title'] = "MFA - View Indicator ";
+				
+			$year  = $active_evalround[0]['year'];
+			$round = $active_evalround[0]['round'];
+			$data['year']  = $year;
+			$data['round'] = $round;
+			$data['indicators'] = $this->personindicator->listIndicator($userID, $year, $round, $depID, $divID);
+			$data['array_i'] = $this->personindicator->getCoreName($userID, $year, $round, $depID, $divID);
+			$saved_activities = $this->personindicator->getSavedActivities($userID, $year, $round, $depID, $divID);
+			
+			$numSavedActivity = count($saved_activities);
+			for($i = 0; $i < $numSavedActivity; $i++) {
+				$score = array();
+				$activity_score = $this->personindicator->getActivityScore($saved_activities[$i]['ID']);
+				$numind = count($activity_score);
+				for($j = 0; $j < $numind; $j++) {
+					$pid = $activity_score[$j]['pid'];
+					$score[(string)$pid] = $activity_score[$j]['score'];
+				}
+				$saved_activities[$i]['score'] = $score;
+			}
+			
+			$data['saved_activities'] = $saved_activities;
+			
+			$this->load->view('evaluate/confirmPersonEvaluation.php', $data);
+		} else {			
+			echo "No evaluate round selected";
+			die();
+		}
+		
+	}
+
 }
 
 ?>

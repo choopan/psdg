@@ -139,17 +139,17 @@
                             <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> รายงานปฏิบัติราชการระดับบุคคล<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li><a href="<?php echo site_url("person_evaluation/managePersonIndicator"); ?>">กำหนดตัวชี้วัด</a></li>
-                                <li><a href="<?php echo site_url("person_evaluation/managePersonEvaluation"); ?>">รายงานผลการปฏิบัติการ (Puwarun)</a></li>
+                                <li><a href="<?php echo site_url("person_evaluation/managePersonEvaluation"); ?>">รายงานผลการปฏิบัติการ </a></li>
                                 
 								<?php   if ($this->session->userdata('sessadmin_min') == 1) { ?>
                                 	<li><a href="<?php echo site_url("person_evaluation/minManagePersonIndicator"); ?>">แสดงตัวชี้วัดรายบุคคล</a></li>
-                                	<li><a href="<?php echo site_url("#"); ?>">แสดงรายงานผลปฏิบัติการ (Puwarun)</a></li>									
+                                	<li><a href="<?php echo site_url("person_evaluation/minManagePersonEvaluation"); ?>">แสดงรายงานผลปฏิบัติการ</a></li>									
 								<?php   } elseif($this->session->userdata('sessexecdiv') == 1) { ?>
                                 	<li><a href="<?php echo site_url("person_evaluation/divManagePersonIndicator"); ?>">แสดงตัวชี้วัดรายบุคคล</a></li>
-                                	<li><a href="<?php echo site_url("#"); ?>">แสดงรายงานผลปฏิบัติการ (Puwarun)</a></li>
+                                	<li><a href="<?php echo site_url("person_evaluation/divManagePersonEvaluation"); ?>">แสดงรายงานผลปฏิบัติการ</a></li>
                                 <?php   } elseif($this->session->userdata('sessexecdep') == 1) { ?>
                                 	<li><a href="<?php echo site_url("person_evaluation/depManagePersonIndicator"); ?>">แสดงตัวชี้วัดรายบุคคล</a></li>
-                                	<li><a href="<?php echo site_url("#"); ?>">แสดงรายงานผลปฏิบัติการ (Puwarun)</a></li>
+                                	<li><a href="<?php echo site_url("person_evaluation/depManagePersonEvaluation"); ?>">แสดงรายงานผลปฏิบัติการ</a></li>
                                 <?php   } ?>
                                 
 
