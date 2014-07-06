@@ -6,8 +6,9 @@
 <body>
 <div id="wrapper">
 <?php $this->load->view('menu'); ?>
+<form action="<?php echo site_url('person_evaluation/saveEvaluation'); ?>" method="POST">
 <div id="page-wrapper">
-	<h2>รายงานผลการปฏิบัติงาน รอบปีงบประมาณ <?php echo $year; ?> รอบที่ <?php echo $round ?></h2>
+	<h2>รายงานผลการปฏิบัติงาน รอบปีงบประมาณ <?php echo $year; ?> รอบที่ <?php echo $round ?> <button type="submit" class="btn btn-success pull-right" name="option" value="prove"><span class="glyphicon glyphicon-envelope"></span> ส่งเพื่อพิจารณา</button></h2>
 	<div class="row">
 		<div class="col-lg-12">
 		<?php 	if($this->session->flashdata('success')) {
@@ -17,41 +18,38 @@
   			<?php			echo $this->session->flashdata('success'); ?>
 						</div>
 			<?php	} ?>
+			
             <div class="panel panel-primary">
 				<div class="panel-heading"><strong>แบบประเมินผลสัมฤทธิ์ของงาน</strong></div>
 				<div class="panel-body">
-				
-
-
-		<div class="col-lg-12" style="margin-top: 10px">
-			<div class="panel panel-primary">
-				<div class="panel-body">
 					<div class="table-responsive">
-					<form class="form-inline" role="form"  action="<?php echo site_url('person_evaluation/saveEvaluation'); ?>" method="POST">
-                        <table class="table table-hover" id="dataTables-example">
-							<thead>
-								<tr class="success">
-									<th rowspan="2" style="width: 45%">ตัวชี้วัดผลงาน</th>
-									<th colspan="5" style="text-align: center;">คะแนนตามระดับค่าเป้าหมาย</th>
-									<th rowspan="2" style="text-align: center;width: 5%">คะแนน(ก)</th>
-									<th rowspan="2" style="text-align: center;width: 5%">น้ำหนัก(ข)</th>
-									<th rowspan="2" style="text-align: center;width: 10%">คะแนนรวม(ค)<br />(ค = ก x ข)</th>
-								</tr>
-								<tr class="success">
-									<th>1</th>
-									<th>2</th>
-									<th>3</th>
-									<th>4</th>
-									<th>5</th>
-								</tr>
-							</thead>
-							<tbody>
+                        	<table class="table table-hover" id="dataTables-example">
+								<thead>
+									<tr class="success">
+										<th rowspan="2">ตัวชี้วัดที่</th>
+										<th rowspan="2" style="width: 45%">ตัวชี้วัดผลงาน</th>
+										<th colspan="5" style="text-align: center;">คะแนนตามระดับค่าเป้าหมาย</th>
+										<th rowspan="2" style="text-align: center;width: 5%">คะแนน(ก)</th>
+										<th rowspan="2" style="text-align: center;width: 5%">น้ำหนัก(ข)</th>
+										<th 
+										rowspan="2" style="text-align: center;width: 10%">คะแนนรวม(ค)<br />(ค = ก x ข)</th>
+									</tr>
+									<tr class="success">
+										<th>1</th>
+										<th>2</th>
+										<th>3</th>
+										<th>4</th>
+										<th>5</th>
+									</tr>
+								</thead>
+								<tbody>
 								<?php
 									$numIndex = 0;
 									foreach($indicators as $ind) {
 										$numIndex++;
 								?>
 								<tr id="indicator_row<?php echo $numIndex; ?>">
+									<td><?php echo $ind['order']; ?></td>
 									<td><?php echo $ind['name']; ?></td>
 									<td>1</td>
 									<td>2</td>
@@ -89,11 +87,15 @@
 								</tr>
 							</thead>
 						</table>
+					</div>
+				</div>
+				</div>
 						
-                <div class="panel panel-default">
+                <div class="panel panel-primary">
+                	<div class="panel-heading"><strong>แบบประเมินสมรรณะประจำตำแหน่ง</strong></div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered table-hover" id="skillTable">
+                            <table class="table table-striped table-hover" id="skillTable">
                                 <thead>
                                     <tr>
                                         <th style="width: 400px">ชื่อสมรรณะ</th>
@@ -128,22 +130,22 @@
 				</div>
 
 						
-						<div class="col-lg-10 col-lg-offset-6">
-							<button type="submit" class="btn btn-primary" name="option" value="record"><span class="glyphicon glyphicon-floppy-save"></span> บันทึก</button>
-							<button type="submit" class="btn btn-success" name="option" value="prove"><span class="glyphicon glyphicon-envelope"></span> ส่งเพื่อพิจารณา</button>
+						<div class="col-lg-10 col-lg-offset-5">
+							<button type="submit" class="btn btn-primary" name="option" value="record"><span class="glyphicon glyphicon-floppy-save"></span> บันทึกผลประเมิน</button>
+							
 						</div>
-					</form>		
+					
 					</div>
-				</div>
-			</div>
-		</div>
-		
-		<div class="col-lg-12" style="margin-top: 10px">
-			<div class="panel panel-primary">
+</form>						
+		<div class="col-lg-12"><br><hr><br></div>		
+	
+		<div class="col-lg-12">
+			<div class="panel panel-success">
+				<div class="panel-heading"><strong>ผลการดำเนินงานตามภารกิจ</strong></div>
 				<div class="panel-body">
-					<div class="table-responsive">
-					<form class="form-inline" role="form"  action="<?php echo site_url('person_evaluation/saveActivity'); ?>" method="POST">
-                        <table class="table table-hover" id="dataTables-example">
+					<form  action="<?php echo site_url('person_evaluation/saveActivity'); ?>" method="POST">                    
+						<div class="table-responsive">
+					    <table class="table table-hover" id="dataTables-example">
 							<thead>
 								<tr class="success">
 								<?php
@@ -154,17 +156,19 @@
 								<?php       		
 									}								
 								?>
-									<th rowspan="2" style="width: 45%"></th>
+									<th rowspan="2" style="width: 12%;">วันที่</th>
+									<th rowspan="2">ผลการดำเนินงาน</th>
 									<th colspan="<?php echo $countRow; ?>" style="text-align: center;">ผลการปฏิบัติงาน</th>									
-									<th rowspan="2" style="text-align: center;width: 10%">(ชื่อ) เอกสาร</th>
+									<th rowspan="2" style="text-align: center; width: 20%">(ชื่อ) เอกสาร</th>
 								</tr>
+								
 								<tr class="success">
 								<?php
 									$numIndex = 0;
 									foreach($indicators as $ind) {
 										$numIndex++;
 								?>
-									<th><?php echo $ind['name']; ?></th>
+									<th style="width: 7%;"><?php echo "ตัวชี้วัดที่  ". $numIndex;//echo $ind['name']; ?></th>
 								<?php       		
 									}								
 								?>	
@@ -174,100 +178,110 @@
 							<tbody>
 								
 								<tr id="indicator_row<?php echo $numIndex; ?>">
-									<td>
-										<input type="text" class="form-control" name="activityName[]" id="" >
-									</td>
-									
+									<td><input type="text" class="form-control" name="activity_date"></td>
+									<td><input type="text" class="form-control" name="activityName"></td>									
 									<?php
 									$numIndex = 0;
 									foreach($indicators as $ind) {
 										$numIndex++;
 									?>
-									<th>
+									<td>
 										<input type="text" class="form-control" name="indicatorVal[]" id="score<?php echo $numIndex; ?>" >
-									</th>
+									</td>
 									<?php       		
 										}								
 									?>
 									<td>
-										<input type="text" class="form-control" name="documentName[]" id="point<?php echo $numIndex; ?>" >
+										<input type="text" class="form-control" name="documentName">
 									</td>
 								</tr>
 								
 							</tbody>
 						</table>
-						<div class="col-lg-10 col-lg-offset-6">
-							<button type="submit" class="btn btn-primary" name="option" value="record"><span class="glyphicon glyphicon-floppy-save"></span> บันทึก</button>
-							<button type="submit" class="btn btn-success" name="option" value="prove"><span class="glyphicon glyphicon-envelope"></span> ส่งเพื่อพิจารณา</button>
+						<div class="col-lg-10 col-lg-offset-5">
+							<button type="submit" class="btn btn-success" name="option"><span class="glyphicon glyphicon-plus"></span> เพิ่มผลการดำเนินงาน</button>
 						</div>
 					</form>		
 					</div>
 				</div>
 			</div>
 		</div>
-		
+
+
+
+
+	<div class="col-lg-12">
+			<div class="panel panel-warning">
+				<div class="panel-heading"><strong>ผลการดำเนินงานตามภารกิจ</strong></div>
+				<div class="panel-body">
+						<div class="table-responsive">
+					    <table class="table table-hover" id="dataTables-example">
+							<thead>
+								<tr class="warning">
+								<?php
+									$countRow = 0;
+									foreach($indicators as $ind) {
+										$countRow++;
+								?>
+								<?php       		
+									}								
+								?>
+									<th rowspan="2" style="width: 12%;">วันที่</th>
+									<th rowspan="2">ผลการดำเนินงาน</th>
+									<th colspan="<?php echo $countRow; ?>" style="text-align: center;">ผลการปฏิบัติงาน</th>									
+									<th rowspan="2" style="text-align: center; width: 20%">(ชื่อ) เอกสาร</th>
+									<th rowspan="2" style="text-align: center; width: 5%">ลบ</th>
+								</tr>
+								
+								<tr class="warning">
+								<?php
+									$numIndex = 0;
+									foreach($indicators as $ind) {
+										$numIndex++;
+								?>
+									<th style="width: 7%;"><?php echo "ตัวชี้วัดที่  ". $numIndex;//echo $ind['name']; ?></th>
+								<?php       		
+									}								
+								?>	
+								</tr>
+							</thead>
+							
+							<tbody>
+								
+								<tr id="indicator_row<?php echo $numIndex; ?>">
+									<td><input type="text" class="form-control" name="activity_date"></td>
+									<td><input type="text" class="form-control" name="activityName"></td>									
+									<?php
+									$numIndex = 0;
+									foreach($indicators as $ind) {
+										$numIndex++;
+									?>
+									<td>
+										<input type="text" class="form-control" name="indicatorVal[]" id="score<?php echo $numIndex; ?>" >
+									</td>
+									<?php       		
+										}								
+									?>
+									<td>
+										<input type="text" class="form-control" name="documentName">
+									</td>
+									<td>
+										<a href='<?php echo site_url("#"); ?>' class="btnDelete btn btn-danger btn-xs" onClick='return confirm(" คุณต้องการลบหรือไม่ ")' title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></a>
+									</td>
+
+								</tr>
+								
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<div class="row">
-		<div class="col-lg-12">
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<div class="panel-group" id="accordion">
-						<div class="panel panel-primary">
-							<div class="panel-heading">
-								<h4 class="panel-title">
-									<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-										ระดับความสำเร็จ 1
-									</a>
-								</h4>
-							</div>
-							<div id="collapseOne" class="panel-collapse collapse">
-								<div class="panel-body">
-									<div class="row">
-										<div class="table-responsive">
-											<table class="table table-hover" id="test1">
-												<thead>
-													<tr>
-														<th style="width: 200px">วันที่</th>
-														<th>ภาระกิจสำคัญที่ได้ดำเนินการ</th>
-														<th>ผลการปฏิบัติงาน</th>
-														<th>หลักฐาน(ใส่ชื่อแฟ้ม)</th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr id="row1">
-														<td><input type="text" class="form-control" id="test" style="width: 200px"></td>
-														<td><textarea class="form-control" rows="1" cols="100"></textarea></td>
-														<td><textarea class="form-control" rows="1" cols="40"></textarea></td>
-														<td>
-															<div class="form-group"><input type="file" id="exampleInputFile"></div>
-															<button type="button" class="btn btn-primary btn-xs" onclick="addUp('test1', 'row1');"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>
-															<button type="button" class="btn btn-info btn-xs" onclick="addDown('test1', 'row1');"><span class="glyphicon glyphicon-chevron-down"></span> Add Down</button>
-															<button type="button" class="btn btn-danger btn-xs" onclick="deleteRow('test1', 'row1');"><span class="glyphicon glyphicon-minus"></span> Delete</button>
-														</td>
-													</tr>
-													<tr id="row2">
-														<td><input type="text" class="form-control" id="test" style="width: 200px"></td>
-														<td><textarea class="form-control" rows="1" cols="100"></textarea></td>
-														<td><textarea class="form-control" rows="1" cols="40"></textarea></td>
-														<td>
-															<div class="form-group"><input type="file" id="exampleInputFile"></div>
-															<button type="button" class="btn btn-primary btn-xs" onclick="addUp('test1', 'row2');"><span class="glyphicon glyphicon-chevron-up"></span> Add Up</button>
-															<button type="button" class="btn btn-info btn-xs" onclick="addDown('test1', 'row2');"><span class="glyphicon glyphicon-chevron-down"></span> Add Down</button>
-															<button type="button" class="btn btn-danger btn-xs" onclick="deleteRow('test1', 'row2');"><span class="glyphicon glyphicon-minus"></span> Delete</button>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+
+
+
+		
 				</div>
 			</div>
 		</div>
@@ -282,6 +296,7 @@
 <script src="<?php echo base_url(); ?>js/jquery-ui-1.10.4.min.js"></script>
 
 <script type="text/javascript">
+/*
 var rowCount = 3;
 function addUp(tmpid, rows){
 	var table = document.getElementById(tmpid);
@@ -339,6 +354,7 @@ function deleteRow(tmpid, rows){
 	table.deleteRow(getRows.rowIndex);
 }
 
+*/
 function getvalonchange(point, weight, totalpoint) {
 	
 	
