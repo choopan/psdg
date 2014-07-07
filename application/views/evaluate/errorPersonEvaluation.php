@@ -9,7 +9,7 @@
 <div id="page-wrapper">
 	
 	<div class="row">
-		<div class="col-lg-10">				
+		<div class="col-lg-12">				
             <div class="panel panel-danger">
 				<div class="panel-heading"><strong>ข้อผิดพลาด</strong></div>
 				<div class="panel-body">

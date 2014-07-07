@@ -82,7 +82,7 @@ Class User extends CI_Model
  }
  
  function getMinProfile($id=null) {
- 	$result = $this->db->select("pwemployee.USERID as user_id, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, PWLEVEL, department.name as depname, division.name as divname")
+ 	$result = $this->db->select("pwemployee.USERID as user_id, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, PWLEVEL, department.name as depname, division.name as divname, department.id as depID, division.id as divID")
 			-> from('pwemployee')
 			-> join('pwposition', 'pwposition.pwposition = pwemployee.pwposition', 'left')
 			-> join('department', 'pwemployee.department = department.id', 'left')
@@ -122,7 +122,7 @@ Class User extends CI_Model
  }
 
  function getUserFromDiv($userID, $divID) {
- 	$result = $this->db->select('pwemployee.USERID as userID, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, PWLEVEL')
+ 	$result = $this->db->select('pwemployee.USERID as userID, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, PWLEVEL, department as depID, division as divID')
  						->from('pwemployee')
  						->join('pwposition', 'pwposition.pwposition = pwemployee.pwposition', 'left')
  						->where(array('pwemployee.division' => $divID, 'pwemployee.userID !=' => $userID))
@@ -132,7 +132,7 @@ Class User extends CI_Model
 
 
  function getUserFromDep($userID, $depID) {
- 	$result = $this->db->select('pwemployee.USERID as userID, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, PWLEVEL, division.name as divname')
+ 	$result = $this->db->select('pwemployee.USERID as userID, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, PWLEVEL, division.name as divname, pwemployee.department as depID, pwemployee.division as divID')
  						->from('pwemployee')
  						->join('pwposition', 'pwposition.pwposition = pwemployee.pwposition', 'left')
 						->join('division', 'pwemployee.division = division.id', 'left')
