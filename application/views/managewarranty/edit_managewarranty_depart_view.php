@@ -1,5 +1,5 @@
 <?php 
-	$data['title']='เพิ่มคำรับรองการปฏิบัติราชการ  ระดับกรม';
+	$data['title']='แก้ไขคำรับรองการปฏิบัติราชการ  ระดับกรม';
 	$this->load->view('header_view',$data);
 ?>
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/jquery-ui-1.10.4.min.css" >
@@ -11,7 +11,7 @@
 		
 			<div class="row">
 				<div class="col-lg-12">
-					<h3 class="page-header">เพิ่มคำรับรองการปฏิบัติราชการ  ระดับกรม</h3>
+					<h3 class="page-header">แก้ไขคำรับรองการปฏิบัติราชการ  ระดับกรม</h3>
 					<!--<div id="debug"></div>-->
 				</div>
 			</div>
