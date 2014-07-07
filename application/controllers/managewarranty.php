@@ -60,19 +60,38 @@ class Managewarranty extends CI_Controller {
 		$recip_depname_id=$this->input->post('recip_depname_id');
 		
 		$maker_employee_id=$this->input->post('maker_employee_id');
-		$maker_possition_id=$this->input->post('recip_employee_id');
-		$maker_depname_id=$this->input->post('recip_employee_id');
+		$maker_possition_id=$this->input->post('maker_possition_id');
+		$maker_depname_id=$this->input->post('maker_depname_id');
 		
 		echo '<pre>';
 		print_r($department_id);
+		
+		print_r('____________________________________________');
+		
 		print_r($recip_employee_id);
+		print_r($recip_possition_id);
+		print_r($recip_depname_id);
+		
+		print_r('____________________________________________');
+		
 		print_r($maker_employee_id);
+		print_r($maker_possition_id);
+		print_r($maker_depname_id);
 		echo '</pre>';
 		exit();
 		redirect('managewarranty/department/save_war_dep_success');
 	}
+	
+	function edit_ratification_depart()
+	{
+		$data['department'] = $this->managewarranty_model->get_data('*','department');
+		$this->load->view('managewarranty/edit_managewarranty_depart_view',$data);
+	}
 
-
+	function data_ratification_depart_fancybox()
+	{
+		$this->load->view('managewarranty/data_managewarranty_depart_view');
+	}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,7 +148,7 @@ class Managewarranty extends CI_Controller {
 		$table = $section->addTable();
 		$table->addRow();
 		$table->addCell(4000)->addText('         นายสีหศักดิ์ พวงเกตุแก้ว');
-		$table->addCell(3000)->addText('ปลัดกระทรวงการต่างประเทศ');
+		$table->addCell(4000)->addText('ปลัดกระทรวงการต่างประเทศ');
 		$table->addCell(3000)->addText('ผู้รับคำรับรอง');
 		
 		$table->addRow();
@@ -138,12 +157,12 @@ class Managewarranty extends CI_Controller {
 		
 		$table->addRow();
 		$table->addCell(4000)->addText('         นายวิชาวัฒน์ อิศรภัคดี');
-		$table->addCell(3000)->addText('รองปลัดกระทรวงต่างประเทศ');
+		$table->addCell(4000)->addText('รองปลัดกระทรวงการต่างประเทศ');
 		$table->addCell(3000)->addText('ผู้ทำคำรับรอง');
 		
 		$table->addRow();
 		$table->addCell(4000)->addText('         นายศรัณย์ เจริญสุวรรณ');
-		$table->addCell(3000)->addText('อธิบดีกรมยุโรป');
+		$table->addCell(4000)->addText('อธิบดีกรมยุโรป');
 		$table->addCell(3000)->addText('ผู้รับคำรับรอง');
 		
 		$section->addText('');
@@ -213,6 +232,152 @@ class Managewarranty extends CI_Controller {
 		
 		$table->addRow();
 		$table->addCell(4600)->addText('วันที่ .........................................',null,$st);
+		
+		// ------------------------------new page -------------------------------------------------------
+		
+		$section = $PHPWord->createSection(array('orientation'=>'landscape','marginTop'=>550,'marginBottom'=>550));
+		$PHPWord->setDefaultFontSize(16);
+		$PHPWord->addParagraphStyle('Textcenter', array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+		$section->addText('แบบประเมินผลการปฏิบัติราชการตามคำรับรองประจำปีงบประมาณ 2556',array('bold'=>true,'size'=>16),array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+		$section->addText('กรมยุโรป', array('bold'=>true,'size'=>16),array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+
+		$table = $section->addTable();
+		$table->addRow();
+		$table->addCell(8000)->addText('      ชื่อผู้รับการประเมิน  นายศรัณย์ เจริญสุวรรณ',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$table->addCell(8000)->addText('ลงนาม ………………………………………………………………………',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'right'));
+		$table->addRow();
+		$table->addCell(8000)->addText('      ชื่อผู้บังคับบัญชา/ผู้ประเมิน  นายวิชาวัฒน์ อิศรภัคดี',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$table->addCell(8000)->addText('ลงนาม ………………………………………………………………………',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'right'));
+		
+		$section->addTextBreak(0);
+		
+		$table = $section->addTable('myOwnTableStyle');
+		$table->addRow();
+		$table->addCell(500,array('vMerge' => 'restart','valign'=>'center'))->addText('ที่',array('bold'=>true),$HeadTables);
+		$table->addCell(7000,array('vMerge' => 'restart','valign'=>'center'))->addText('ตัวชี้วัดผลงาน',array('bold'=>true),$HeadTables);
+		$table->addCell(4000, array('gridSpan' => 5))->addText('คะแนนตามระดับค่าเป้าหมาย',array('bold'=>true),$HeadTables);
+		$table->addCell(1500,array('vMerge' => 'restart','valign'=>'center'))->addText('คะแนน (ก)',array('bold'=>true),$HeadTables);
+		$table->addCell(1500,array('vMerge' => 'restart','valign'=>'center'))->addText('น้ำหนัก (ข)',array('bold'=>true),$HeadTables);
+		$table->addCell(1500)->addText('คะแนนรวม',array('bold'=>true),$HeadTables);
+		$table->addRow();
+		$table->addCell(null,array('vMerge' => 'fusion'));
+		$table->addCell(null,array('vMerge' => 'fusion'));
+		$table->addCell(800)->addText('1',array('bold'=>true),$HeadTables);
+		$table->addCell(800)->addText('2',array('bold'=>true),$HeadTables);
+		$table->addCell(800)->addText('3',array('bold'=>true),$HeadTables);
+		$table->addCell(800)->addText('4',array('bold'=>true),$HeadTables);
+		$table->addCell(800)->addText('5',array('bold'=>true),$HeadTables);
+		$table->addCell(null,array('vMerge' => 'fusion'));
+		$table->addCell(null,array('vMerge' => 'fusion'));
+		$table->addCell(null)->addText('(ก x ข)',array('bold'=>true),$HeadTables);
+		$table->addRow();
+		$table->addCell(null)->addText('',null,$HeadTables);
+		$table->addCell(null)->addText('มิติภายนอก',array('bold'=>true),array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+		$table->addCell(null)->addText('',null,$HeadTables);
+		$table->addCell(null)->addText('',null,$HeadTables);
+		$table->addCell(null)->addText('',null,$HeadTables);
+		$table->addCell(null)->addText('',null,$HeadTables);
+		$table->addCell(null)->addText('',null,$HeadTables);
+		$table->addCell(null)->addText('',null,$HeadTables);
+		$table->addCell(null)->addText('0.50',null,$HeadTables);
+		$table->addCell(null)->addText('',null,$HeadTables);
+		$table->addRow();
+		$table->addCell(null)->addText('1.1',null,'Textcenter');
+		$table->addCell(null)->addText('ระดับความสำเร็จในการส่งเสริมความสัมพันธ์อันดีกับประเทศสมาชิกสหภาพยุโรป (*)',null,'TextShortStyle');
+		$table->addCell(null)->addText('1',null,'Textcenter');
+		$table->addCell(null)->addText('2',null,'Textcenter');
+		$table->addCell(null)->addText('3',null,'Textcenter');
+		$table->addCell(null)->addText('4',null,'Textcenter');
+		$table->addCell(null)->addText('5',null,'Textcenter');
+		$table->addCell(null)->addText('',null,'Textcenter');
+		$table->addCell(null)->addText('0.25',null,'Textcenter');
+		$table->addCell(null)->addText('',null,'Textcenter');
+		$table->addRow();
+		$table->addCell(null)->addText('1.2',null,'Textcenter');
+		$table->addCell(null)->addText('ระดับความสำเร็จในการส่งเสริมความสัมพันธ์อันดีกับประเทศสหพันธรัฐรัสเซีย (*)',null,'TextShortStyle');
+		$table->addCell(null)->addText('1',null,'Textcenter');
+		$table->addCell(null)->addText('2',null,'Textcenter');
+		$table->addCell(null)->addText('3',null,'Textcenter');
+		$table->addCell(null)->addText('4',null,'Textcenter');
+		$table->addCell(null)->addText('5',null,'Textcenter');
+		$table->addCell(null)->addText('',null,'Textcenter');
+		$table->addCell(null)->addText('0.25',null,'Textcenter');
+		$table->addCell(null)->addText('',null,'Textcenter');
+		$table->addRow();
+		$table->addCell(null)->addText('',null,$HeadTables);
+		$table->addCell(null)->addText('มิติภายใน',array('bold'=>true),$HeadTables);
+		$table->addCell(null)->addText('',null,$HeadTables);
+		$table->addCell(null)->addText('',null,$HeadTables);
+		$table->addCell(null)->addText('',null,$HeadTables);
+		$table->addCell(null)->addText('',null,$HeadTables);
+		$table->addCell(null)->addText('',null,$HeadTables);
+		$table->addCell(null)->addText('',null,$HeadTables);
+		$table->addCell(null)->addText('0.50',null,$HeadTables);
+		$table->addCell(null)->addText('',null,$HeadTables);
+		$table->addRow();
+		$table->addCell(null)->addText('2',null,'Textcenter');
+		$table->addCell(null)->addText('ร้อยละความพึงพอใจของผู้รับบริการและผู้มีส่วนได้ส่วนเสีย',null,'TextShortStyle');
+		$table->addCell(null)->addText('40',null,'Textcenter');
+		$table->addCell(null)->addText('50',null,'Textcenter');
+		$table->addCell(null)->addText('60',null,'Textcenter');
+		$table->addCell(null)->addText('60',null,'Textcenter');
+		$table->addCell(null)->addText('70',null,'Textcenter');
+		$table->addCell(null)->addText('',null,'Textcenter');
+		$table->addCell(null)->addText('0.10',null,'Textcenter');
+		$table->addCell(null)->addText('',null,'Textcenter');
+		$table->addRow();
+		$table->addCell(null)->addText('3',null,'Textcenter');
+		$table->addCell(null)->addText('ระดับความสำเร็จของการมีส่วนร่วมในการพัฒนาระบบราชการของกระทรวงฯ',null,'TextShortStyle');
+		$table->addCell(null)->addText('1',null,'Textcenter');
+		$table->addCell(null)->addText('2',null,'Textcenter');
+		$table->addCell(null)->addText('3',null,'Textcenter');
+		$table->addCell(null)->addText('4',null,'Textcenter');
+		$table->addCell(null)->addText('5',null,'Textcenter');
+		$table->addCell(null)->addText('',null,'Textcenter');
+		$table->addCell(null)->addText('0.10',null,'Textcenter');
+		$table->addCell(null)->addText('',null,'Textcenter');
+		$table->addRow();
+		$table->addCell(null)->addText('4',null,'Textcenter');
+		$table->addCell(null)->addText('ระดับความสำเร็จของการจัดทำ IPA ของหน่วยงาน',null,'TextShortStyle');
+		$table->addCell(null)->addText('1',null,'Textcenter');
+		$table->addCell(null)->addText('2',null,'Textcenter');
+		$table->addCell(null)->addText('3',null,'Textcenter');
+		$table->addCell(null)->addText('4',null,'Textcenter');
+		$table->addCell(null)->addText('5',null,'Textcenter');
+		$table->addCell(null)->addText('',null,'Textcenter');
+		$table->addCell(null)->addText('0.10',null,'Textcenter');
+		$table->addCell(null)->addText('',null,'Textcenter');
+		$table->addRow();
+		$table->addCell(null)->addText('5',null,'Textcenter');
+		$table->addCell(null)->addText('ระดับความสำเร็จของการจัดทำแผนการใช้จ่ายงบประมาณและรายงานการติดตามผลรายไตรมาส',null,'TextShortStyle');
+		$table->addCell(null)->addText('1',null,'Textcenter');
+		$table->addCell(null)->addText('2',null,'Textcenter');
+		$table->addCell(null)->addText('3',null,'Textcenter');
+		$table->addCell(null)->addText('4',null,'Textcenter');
+		$table->addCell(null)->addText('5',null,'Textcenter');
+		$table->addCell(null)->addText('',null,'Textcenter');
+		$table->addCell(null)->addText('0.10',null,'Textcenter');
+		$table->addCell(null)->addText('',null,'Textcenter');
+		$table->addRow();
+		$table->addCell(null)->addText('6',null,'Textcenter');
+		$table->addCell(null)->addText('ร้อยละของการเบิกจ่ายเงินงบประมาณให้เป็นไปตามเป้าหมายที่รัฐบาลกำหนด',null,'TextShortStyle');
+		$table->addCell(null)->addText('92',null,'Textcenter');
+		$table->addCell(null)->addText('93',null,'Textcenter');
+		$table->addCell(null)->addText('94',null,'Textcenter');
+		$table->addCell(null)->addText('95',null,'Textcenter');
+		$table->addCell(null)->addText('96',null,'Textcenter');
+		$table->addCell(null)->addText('',null,'Textcenter');
+		$table->addCell(null)->addText('0.10',null,'Textcenter');
+		$table->addCell(null)->addText('',null,'Textcenter');
+		$table->addRow();
+		$table->addCell(null)->addText('',null,$HeadTables);
+		$table->addCell(null,array('gridSpan' => 7))->addText('รวม',array('bold'=>true,'underline'=>PHPWord_Style_Font::UNDERLINE_SINGLE),$HeadTables);
+		$table->addCell(null)->addText('0.50',null,$HeadTables);
+		$table->addCell(null)->addText('',null,$HeadTables);
+		$textrun = $section->createTextRun($style);
+		$textrun->addText('      ');
+		$textrun->addText('หมายเหตุ',array('underline'=>PHPWord_Style_Font::UNDERLINE_SINGLE),'TextShortStyle');
+		$section->addText('      (*) รายละเอียดเกณฑ์การให้คะแนน ตามที่ปรากฏในคำรับรองฯ ระดับกระทรวงฯ',null,'TextShortStyle');
 		
 		$file_name=uniqid('managewarranty',true).'.docx';
 		$path='docs/word'.$file_name;
