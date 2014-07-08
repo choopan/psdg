@@ -6,7 +6,7 @@
 		<div class="row">
 			<div class="col-md-3">
 				<label>ชื่อกรม</label>
-				<label>กรม</label>
+				<label><?php echo $data_warranty[0]['depname'] ?></label>
 			</div>
 		</div>
 		<br/>
@@ -15,15 +15,17 @@
 				<tr>
 					<th>ผู้รับคำรับรอง</th>
 					<th>ตำแหน่ง</th>
-					<th>หน่วยงาน</th>
 				</tr>
 			</thead>
 			<tbody>
+			<?php foreach($data_warranty as $key=>$val){ ?>
+			<?php if($val['status']==1){ ?>
 				<tr>
-					<td>a</td>
-					<td>b</td>
-					<td>c</td>
+					<td><?php echo $val['pwfname'].' '.$val['pwlname']; ?></td>
+					<td><?php echo $val['poname']; ?></td>
 				</tr>
+			<?php } ?>
+			<?php } ?>
 			</tbody>
 		</table> 
 		<br/>
@@ -32,16 +34,16 @@
 				<tr>
 					<th>ผู้ทำคำรับรอง</th>
 					<th>ตำแหน่ง</th>
-					<th>หน่วยงาน</th>
 				</tr>
 			</thead>
-			<tbody>
+			<?php foreach($data_warranty as $key=>$val){ ?>
+			<?php if($val['status']==2){ ?>
 				<tr>
-					<td>a</td>
-					<td>b</td>
-					<td>c</td>
+					<td><?php echo $val['pwfname'].' '.$val['pwlname']; ?></td>
+					<td><?php echo $val['poname']; ?></td>
 				</tr>
-			</tbody>
+			<?php } ?>
+			<?php } ?>
 		</table> 
 		
 

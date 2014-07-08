@@ -24,7 +24,17 @@
 									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 									<strong><span class="glyphicon glyphicon-ok"></span> สำเร็จ !</strong> เพิ่มคำรับรองเรียบร้อยแล้ว
 								</div>
-						<?php } ?>
+						<?php }elseif($alert=='update_war_dep_success'){ ?>
+								<div class="alert alert-success alert-dismissable" >
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+									<strong><span class="glyphicon glyphicon-ok"></span> สำเร็จ !</strong> แก้ไขคำรับรองเรียบร้อยแล้ว
+								</div>
+						<?php }elseif($alert=='delete_war_dep_success'){ ?>
+								<div class="alert alert-success alert-dismissable" >
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+									<strong><span class="glyphicon glyphicon-ok"></span> สำเร็จ !</strong> ลบคำรับรองเรียบร้อยแล้ว
+								</div>
+						<?php } ?> 
 					</div>
 				</div>
 			</div>
@@ -46,10 +56,11 @@
 										</tr>
 									</thead>
 									<tbody>
+									<?php foreach($warranty as $key=>$val){ ?>
 										<tr>
 											<td>
-												<a href="<?php echo site_url('managewarranty/gen_managewarranty_docx'); ?>"><img src="<?php echo base_url().'images/word_k005.png';?>" height="20" width="20" class="img-rounded"></a>
-												ทดสอบ
+												<a href="<?php echo site_url('managewarranty/gen_managewarranty_docx/'.$val['war_id']); ?>"><img src="<?php echo base_url().'images/word_k005.png';?>" height="20" width="20" class="img-rounded"></a>
+												<?php echo $val['depname']; ?>
 											</td>
 											<td>											
 												<!-- <a data-toggle="modal" data-target="#myModal" href='#' class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
@@ -60,11 +71,12 @@
 														</div> 
 													</div>
 												</div>  -->
-												<a id="fancyboxall" class="btn btn-success btn-xs" href="<?php echo site_url("managewarranty/data_ratification_depart_fancybox"); ?>" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
-												<a href='<?php echo site_url('managewarranty/edit_ratification_depart'); ?>' class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
-												<a href='#' class="btnDelete btn btn-danger btn-xs" onClick='return confirm(" คุณต้องการลบหรือไม่ ")' title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></a>											
+												<a id="fancyboxall" class="btn btn-success btn-xs" href="<?php echo site_url("managewarranty/data_ratification_depart_fancybox/".$val['war_id']); ?>" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
+												<a href='<?php echo site_url('managewarranty/edit_ratification_depart/'.$val['war_id']); ?>' class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
+												<a href='<?php echo site_url('managewarranty/delete_ratification_depart/'.$val['war_id']); ?>' class="btnDelete btn btn-danger btn-xs" onClick='return confirm("ต้องการลบใช่หรือไม่")' title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></a>											
 											</td>
 										</tr>
+									<?php } ?>
 									</tbody>
 								</table>
 							</div>

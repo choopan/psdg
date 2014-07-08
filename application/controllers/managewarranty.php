@@ -41,6 +41,12 @@ class Managewarranty extends CI_Controller {
 	function department($alert=null)
     {
         // Form เพิ่ม ผู้ทำคำรับรอง และ ผู้รับคำรับรอง ระดับกรม อาจจะมีมากกว่า 1 คน
+		$year=$this->session->userdata('sessyear');
+		$data['warranty']=$this->managewarranty_model->get_warranty(array('year'=>$year,'flag'=>1));
+		/* echo '<pre>';
+		print_r($data);
+		echo '</pre>';
+		exit(); */
 		$data['alert']=$alert;
 		$this->load->view('managewarranty/managewarranty_depart_view',$data);
     }
@@ -56,41 +62,139 @@ class Managewarranty extends CI_Controller {
 		$department_id=$this->input->post('department_id');
 		
 		$recip_employee_id=$this->input->post('recip_employee_id');
-		$recip_possition_id=$this->input->post('recip_possition_id');
-		$recip_depname_id=$this->input->post('recip_depname_id');
+		$recip_possition_name=$this->input->post('recip_possition_name');
 		
 		$maker_employee_id=$this->input->post('maker_employee_id');
-		$maker_possition_id=$this->input->post('maker_possition_id');
-		$maker_depname_id=$this->input->post('maker_depname_id');
+		$maker_possition_name=$this->input->post('maker_possition_name');	
 		
-		echo '<pre>';
-		print_r($department_id);
-		
-		print_r('____________________________________________');
-		
-		print_r($recip_employee_id);
-		print_r($recip_possition_id);
-		print_r($recip_depname_id);
-		
-		print_r('____________________________________________');
-		
-		print_r($maker_employee_id);
-		print_r($maker_possition_id);
-		print_r($maker_depname_id);
+		$warranty=array('year'=>$this->session->userdata('sessyear'),
+						'department_id'=>$department_id,
+						'flag'=>1
+						);
+		$warranty_id=$this->managewarranty_model->save_warranty($warranty);
+		/* echo '<pre>';
+		print_r($warranty_id);
 		echo '</pre>';
-		exit();
-		redirect('managewarranty/department/save_war_dep_success');
+		exit(); */
+		$num=count($recip_employee_id);
+		for($i=0;$i<$num;$i++){
+			$data[]=array('warranty_id'=>$warranty_id[0]['warranty_id'],
+						  'user_id'=>$recip_employee_id[$i],
+						  'position_name'=>$recip_possition_name[$i],
+						  'status'=>1
+						  );
+
+		}
+		
+		$num=count($maker_employee_id);
+		for($i=0;$i<$num;$i++){
+			$data[]=array('warranty_id'=>$warranty_id[0]['warranty_id'],
+						  'user_id'=>$maker_employee_id[$i],
+						  'position_name'=>$maker_possition_name[$i],
+						  'status'=>2
+						  );
+
+		}
+		/* echo '<pre>';
+		print_r($data);
+		echo '</pre>';
+		exit(); */
+		
+		if($this->managewarranty_model->save_warranty_data($data)){
+			redirect('managewarranty/department/save_war_dep_success');
+		}else{
+			echo 'no';
+		}
+		
+		
 	}
 	
-	function edit_ratification_depart()
+	function edit_ratification_depart($warranty_id)
 	{
 		$data['department'] = $this->managewarranty_model->get_data('*','department');
+		$where=array('warranty.warranty_id'=>$warranty_id,'status'=>1);
+		$data['recip_employee']=$this->managewarranty_model->get_data_edit_warranty($where);
+		$where=array('warranty.warranty_id'=>$warranty_id,'status'=>2);
+		$data['maker_employee']=$this->managewarranty_model->get_data_edit_warranty($where);
+		/* echo '<pre>';
+		print_r($data);
+		echo '</pre>';
+		exit(); */
 		$this->load->view('managewarranty/edit_managewarranty_depart_view',$data);
 	}
-
-	function data_ratification_depart_fancybox()
+	
+	function update_ratification_depart()
 	{
-		$this->load->view('managewarranty/data_managewarranty_depart_view');
+		$warranty_id=$this->input->post('warranty_id');
+		$department_id=$this->input->post('department_id');
+		
+		$warranty[]=array('warranty_id'=>$warranty_id,
+						  'department_id'=>$department_id
+						  );
+						
+		/* print_r($warranty);
+		exit(); */
+		$this->managewarranty_model->update_warranty($warranty);
+		
+		$recip_employee_id=$this->input->post('recip_employee_id');
+		$recip_possition_name=$this->input->post('recip_possition_name');
+		
+		$maker_employee_id=$this->input->post('maker_employee_id');
+		$maker_possition_name=$this->input->post('maker_possition_name');
+		
+		$num=count($recip_employee_id);
+		for($i=0;$i<$num;$i++){
+			$data[]=array('warranty_id'=>$warranty_id,
+						  'user_id'=>$recip_employee_id[$i],
+						  'position_name'=>$recip_possition_name[$i],
+						  'status'=>1
+						  );
+
+		}
+		
+		$num=count($maker_employee_id);
+		for($i=0;$i<$num;$i++){
+			$data[]=array('warranty_id'=>$warranty_id,
+						  'user_id'=>$maker_employee_id[$i],
+						  'position_name'=>$maker_possition_name[$i],
+						  'status'=>2
+						  );
+
+		}
+		if($this->managewarranty_model->delete_data_where('warranty_data',array('warranty_id'=>$warranty_id))){
+			if($this->managewarranty_model->save_warranty_data($data)){
+				redirect('managewarranty/department/update_war_dep_success');
+			}else{
+				echo 'no';
+			}
+		}else{
+			echo 'no';
+		}
+	}
+	
+	function data_ratification_depart_fancybox($warranty_id)
+	{
+		
+		$data['data_warranty']=$this->managewarranty_model->get_data_warranty($warranty_id);
+		//$data['data_warranty']=$warranty_id;
+		$this->load->view('managewarranty/data_managewarranty_depart_view',$data);
+	}
+	
+	function delete_ratification_depart($warranty_id)
+	{
+		
+		$this->db->trans_begin();
+		
+		$this->managewarranty_model->delete_data_where('warranty_data',array('warranty_id'=>$warranty_id));
+		$this->managewarranty_model->delete_data_where('warranty',array('warranty_id'=>$warranty_id));
+		
+		$this->db->trans_complete();
+		if($this->db->trans_status()){
+			redirect('managewarranty/department/delete_war_dep_success');
+		}else{
+			echo 'no';
+			exit();
+		}
 	}
 
 
@@ -117,10 +221,25 @@ class Managewarranty extends CI_Controller {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	
-	function gen_managewarranty_docx()
+	function gen_managewarranty_docx($warranty_id)
 	{
+		$warranty=$this->managewarranty_model->get_data_where('*','warranty',array('warranty_id'=>$warranty_id));
+		//$data_warranty=$this->managewarranty_model->get_data_warranty($warranty_id);
+		
+		$where=array('warranty.warranty_id'=>$warranty_id,'status'=>1);
+		$recip_employee=$this->managewarranty_model->get_data_edit_warranty($where);
+		$where=array('warranty.warranty_id'=>$warranty_id,'status'=>2);
+		$maker_employee=$this->managewarranty_model->get_data_edit_warranty($where);
+		
+		
+		/* echo '<pre>';
+		print_r($warranty);
+		print_r($recip_employee);
+		print_r($maker_employee);
+		echo '</pre>';
+		exit(); */
 		$PHPWord = new PHPWord();
-		$PHPWord->setDefaultFontName('TH SarabunPSK');
+		$PHPWord->setDefaultFontName('Cordia New');
 		$PHPWord->setDefaultFontSize(16);
 		$PHPWord->addFontStyle('HeadStyle', array('bold'=>true,'size'=>18));
 		
@@ -138,37 +257,36 @@ class Managewarranty extends CI_Controller {
 		$section->addImage('images/garuda_logo.png',array('width'=>100, 'height'=>100, 'align'=>'center'));
 		$section->addText('คำรับรองการปฏิบัติราชการ', 'HeadStyle',array('align'=>'center','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
 		$section->addText('กรมยุโรป', 'HeadStyle', array('align'=>'center','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
-		$section->addText('ประจำปีงบประมาณ พ.ศ. 2556', 'HeadStyle', array('align'=>'center','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
-		$section->addTextBreak(2);
+		$section->addText('ประจำปีงบประมาณ พ.ศ. '.$warranty[0]['year'], 'HeadStyle', array('align'=>'center','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$section->addTextBreak(1);
 		
 		$section->addText('1. คำรับรองระหว่าง ');
 		
 		$section->addText('');
 		
 		$table = $section->addTable();
-		$table->addRow();
-		$table->addCell(4000)->addText('         นายสีหศักดิ์ พวงเกตุแก้ว');
-		$table->addCell(4000)->addText('ปลัดกระทรวงการต่างประเทศ');
-		$table->addCell(3000)->addText('ผู้รับคำรับรอง');
+		foreach($recip_employee as $key=>$val){
+			
+			$table->addRow();
+			$table->addCell(4000)->addText('         '.$val['PWFNAME'].' '.$val['PWLNAME']);
+			$table->addCell(4000)->addText($val['position_name']);
+			$table->addCell(3000)->addText('ผู้รับคำรับรอง');
+		}
 		
 		$table->addRow();
 		$table->addCell(180000, array('gridSpan' => 3))->addText('และ',null,array('align'=>'center'));
 		
-		
-		$table->addRow();
-		$table->addCell(4000)->addText('         นายวิชาวัฒน์ อิศรภัคดี');
-		$table->addCell(4000)->addText('รองปลัดกระทรวงการต่างประเทศ');
-		$table->addCell(3000)->addText('ผู้ทำคำรับรอง');
-		
-		$table->addRow();
-		$table->addCell(4000)->addText('         นายศรัณย์ เจริญสุวรรณ');
-		$table->addCell(4000)->addText('อธิบดีกรมยุโรป');
-		$table->addCell(3000)->addText('ผู้รับคำรับรอง');
+		foreach($maker_employee as $key=>$val){
+			$table->addRow();
+			$table->addCell(4000)->addText('         '.$val['PWFNAME'].' '.$val['PWLNAME']);
+			$table->addCell(4000)->addText($val['position_name']);
+			$table->addCell(3000)->addText('ผู้รับคำรับรอง');
+		}
 		
 		$section->addText('');
 		
 		$section->addText('2. คำรับรองนี้เป็นคำรับรองฝ่ายเดียว มิใช่สัญญาและใช้สำหรับระยะเวลา 1 ปี เริ่มตั้งแต่วันที่',null,'TextShortStyle');
-		$section->addText('    1 ตุลาคม 2555 ถึงวันที่ 30 กันยายน 2556',null,'TextShortStyle');
+		$section->addText('    1 ตุลาคม '.($warranty[0]['year']-1).' ถึงวันที่ 30 กันยายน '.$warranty[0]['year'],null,'TextShortStyle');
 		
 		$section->addText('');
 		
@@ -236,7 +354,7 @@ class Managewarranty extends CI_Controller {
 		// ------------------------------new page -------------------------------------------------------
 		
 
-		$section = $PHPWord->createSection(array('orientation'=>'landscape','marginTop'=>550,'marginBottom'=>550));
+		/* $section = $PHPWord->createSection(array('orientation'=>'landscape','marginTop'=>550,'marginBottom'=>550));
 		$PHPWord->setDefaultFontSize(16);
 		$PHPWord->addParagraphStyle('Textcenter', array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
 		$section->addText('แบบประเมินผลการปฏิบัติราชการตามคำรับรองประจำปีงบประมาณ 2556',array('bold'=>true,'size'=>16),array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
@@ -373,12 +491,12 @@ class Managewarranty extends CI_Controller {
 		$table->addRow();
 		$table->addCell(null)->addText('',null,$HeadTables);
 		$table->addCell(null,array('gridSpan' => 7))->addText('รวม',array('bold'=>true,'underline'=>PHPWord_Style_Font::UNDERLINE_SINGLE),$HeadTables);
-		$table->addCell(null)->addText('0.50',null,$HeadTables);
+		$table->addCell(null)->addText('1.00',null,$HeadTables);
 		$table->addCell(null)->addText('',null,$HeadTables);
 		$textrun = $section->createTextRun($style);
 		$textrun->addText('      ');
 		$textrun->addText('หมายเหตุ',array('underline'=>PHPWord_Style_Font::UNDERLINE_SINGLE),'TextShortStyle');
-		$section->addText('      (*) รายละเอียดเกณฑ์การให้คะแนน ตามที่ปรากฏในคำรับรองฯ ระดับกระทรวงฯ',null,'TextShortStyle');
+		$section->addText('      (*) รายละเอียดเกณฑ์การให้คะแนน ตามที่ปรากฏในคำรับรองฯ ระดับกระทรวงฯ',null,'TextShortStyle'); */
 
 		$file_name=uniqid('managewarranty',true).'.docx';
 		$path='docs/word'.$file_name;

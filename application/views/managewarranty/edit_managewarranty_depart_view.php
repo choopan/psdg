@@ -24,8 +24,8 @@
 						</div>				
 						<div class="panel-body">
 						
-						<form method="post" action="<?php echo site_url('managewarranty/save_ratification_depart'); ?>" onSubmit="return chk_add_managewarranty()">
-						
+						<form method="post" action="<?php echo site_url('managewarranty/update_ratification_depart'); ?>" onSubmit="return chk_add_managewarranty()">
+							<input type="hidden" name="warranty_id" value="<?php echo $recip_employee[0]['warranty_id']; ?>">
 							<div class="row">
 								<div class="col-lg-3">
 									<label>เลือกกรม <font color="red">*</font></label>
@@ -37,7 +37,7 @@
 										<select class="form-control" name="department_id" id="department_id">
 											<option value="0"> </option>
 											<?php foreach($department as $key=>$val){ ?>
-											<option value="<?php echo $val['id']; ?>"> <?php echo $val['name']; ?> </option>
+											<option value="<?php echo $val['id']; ?>" <?php if($recip_employee[0]['department_id']==$val['id']) echo 'selected'; ?>> <?php echo $val['name']; ?> </option>
 											<?php } ?>
 										</select>
 									</div>
@@ -45,91 +45,88 @@
 							</div>
 							
 							<div id="recip">
-								<input type="hidden" id="num_recip" value="1">
+								<input type="hidden" id="num_recip" value="<?php echo count($recip_employee); ?>">
 								<div class="row">
-									<div class="col-lg-3">
+									<div class="col-lg-5">
 										<label>ผู้รับคำรับรอง <font color="red">*</font></label>
 									</div>
-									<div class="col-lg-3">
+									<div class="col-lg-5">
 										<label>ตำแหน่ง <font color="red">*</font></label>
 									</div>
-									<div class="col-lg-3">
-										<label>หน่วยงาน <font color="red">*</font></label>
-									</div>
 								</div>
+								<?php $num=count($recip_employee); ?>
+								<?php for($i=0;$i<$num;$i++){ ?>
 								<div class="row">
-									<div class="col-lg-3">
+									<div class="col-lg-5">
 										<div class="form-group" >
-											<input type="hidden" name="recip_employee_id[]" id="recip_employee_id0" value="">
-											<input type="text" class="form-control" name="recip_employee[]" id="recip_employee0" value="" onChange="check_null(this)">
-										</div>
-									</div>
-									<div class="col-lg-3">
-										<div class="form-group has-success">
-											<input type="hidden" name="recip_possition_id[]" id="recip_possition_id0" value="">
-											<div class="0">
-											<input type="text" class="form-control" name="recip_possition_name[]" id="recip_possition_name0" value="" readonly>
+											<div class="<?php echo $i; ?>">
+												<input type="hidden" name="recip_employee_id[]" id="recip_employee_id<?php echo $i; ?>" value="<?php echo $recip_employee[$i]['user_id']; ?>">
+												<input type="text" class="form-control" name="recip_employee[]" id="recip_employee<?php echo $i; ?>" value="<?php echo $recip_employee[$i]['PWFNAME'].' '.$recip_employee[$i]['PWLNAME']; ?>" onChange="check_null(this)">
 											</div>
 										</div>
 									</div>
-									<div class="col-lg-3">
-										<div class="form-group has-success">
-											<input type="hidden" name="recip_depname_id[]" id="recip_depname_id0" value="">
-											<input type="text" class="form-control" name="recip_depname_name[]" id="recip_depname_name0" value="" readonly>
+									<div class="col-lg-5">
+										<div class="form-group">
+											<input type="text" class="form-control" name="recip_possition_name[]" id="recip_possition_name<?php echo $i; ?>" value="<?php echo $recip_employee[$i]['position_name']; ?>">
 										</div>
 									</div>
 									<div class="col-lg-1">
 										<div class="form-group">
+										<?php if($i==0){ ?>
 											<button type="button" class="btn btn-success" id="add_recip" ><span class="glyphicon glyphicon-plus"></span> เพิ่ม</button>	
+										<?php }else{ ?>
+											<div>
+											<button type="button" class="btn btn-danger" onclick="remove_tag(this)"><span class="glyphicon glyphicon-minus"></span> ลบ</button>
+											</div>
+										<?php }?>
 										</div>
 									</div>
 								</div>
+								<?php } ?>
 								
 							</div>
 							
 							<hr/>
 							
 							<div id="maker">
-								<input type="hidden" id="num_maker" value="1">
+								<input type="hidden" id="num_maker" value="<?php echo count($maker_employee); ?>">
 								<div class="row">
-									<div class="col-lg-3">
+									<div class="col-lg-5">
 										<label>ผู้ทำคำรับรอง <font color="red">*</font></label>
 									</div>
-									<div class="col-lg-3">
+									<div class="col-lg-5">
 										<label>ตำแหน่ง <font color="red">*</font></label>
 									</div>
-									<div class="col-lg-3">
-										<label>หน่วยงาน <font color="red">*</font></label>
-									</div>
 								</div>
+								<?php $num=count($maker_employee); ?>
+								<?php for($i=0;$i<$num;$i++){ ?>
 								<div class="row">
-									<div class="col-lg-3">
+									<div class="col-lg-5">
 										<div class="form-group">
-											<input type="hidden" name="maker_employee_id[]" id="maker_employee_id0" value="">
-											<input type="text" class="form-control" name="maker_employee[]" id="maker_employee0" value="" onChange="check_null(this)">
-										</div>
-									</div>
-									<div class="col-lg-3">
-										<div class="form-group has-success">
-											<input type="hidden" name="maker_possition_id[]" id="maker_possition_id0" value="">
-											<div class="0">
-											<input type="text" class="form-control" name="maker_possition_name[]" id="maker_possition_name0" value="" readonly>
+											<div class="<?php echo $i; ?>">
+												<input type="hidden" name="maker_employee_id[]" id="maker_employee_id<?php echo $i; ?>" value="<?php echo $maker_employee[$i]['user_id']; ?>">
+												<input type="text" class="form-control" name="maker_employee[]" id="maker_employee<?php echo $i; ?>" value="<?php echo $maker_employee[$i]['PWFNAME'].' '.$maker_employee[$i]['PWLNAME']; ?>" onChange="check_null(this)">
 											</div>
 										</div>
 									</div>
-									<div class="col-lg-3">
-										<div class="form-group has-success">
-											<input type="hidden" name="maker_depname_id[]" id="maker_depname_id0" value="">
-											<input type="text" class="form-control" name="maker_depname_name[]" id="maker_depname_name0" value="" readonly>
+									<div class="col-lg-5">
+										<div class="form-group">
+											<input type="text" class="form-control" name="maker_possition_name[]" id="maker_possition_name<?php echo $i; ?>" value="<?php echo $maker_employee[$i]['position_name']; ?>" >
 										</div>
 									</div>
 									<div class="col-lg-1">
 										<div class="form-group">
+										<?php if($i==0){ ?>
 											<button type="button" class="btn btn-success" id="add_maker" ><span class="glyphicon glyphicon-plus"></span> เพิ่ม</button>	
+										<?php }else{ ?>
+											<div>
+											<button type="button" class="btn btn-danger" onclick="remove_tag(this)"><span class="glyphicon glyphicon-minus"></span> ลบ</button>
+											</div>
+										<?php }?>
 										</div>
 									</div>
 								</div>
-								
+								<?php } ?>
 							</div>
 							
 							<div class="row">
@@ -159,24 +156,17 @@
 				var num_recip=$('#num_recip').val();
 				var recip='<div>'+
 						'<div class="row">'+
-							'<div class="col-lg-3">'+
+							'<div class="col-lg-5">'+
 								'<div class="form-group">'+
-									'<input type="hidden" name="recip_employee_id[]" id="recip_employee_id'+num_recip+'" value="">'+
-									'<input type="text" class="form-control" name="recip_employee[]" id="recip_employee'+num_recip+'" value="" onChange="check_null(this)">'+
-								'</div>'+
-							'</div>'+
-							'<div class="col-lg-3">'+
-								'<div class="form-group has-success">'+
-									'<input type="hidden" name="recip_possition_id[]" id="recip_possition_id'+num_recip+'" value="">'+
 									'<div class="'+num_recip+'">'+
-									'<input type="text" class="form-control" name="recip_possition_name[]" id="recip_possition_name'+num_recip+'" value="" readonly>'+
+										'<input type="hidden" name="recip_employee_id[]" id="recip_employee_id'+num_recip+'" value="">'+
+										'<input type="text" class="form-control" name="recip_employee[]" id="recip_employee'+num_recip+'" value="" onChange="check_null(this)">'+
 									'</div>'+
 								'</div>'+
 							'</div>'+
-							'<div class="col-lg-3">'+
-								'<div class="form-group has-success">'+
-									'<input type="hidden" name="recip_depname_id[]" id="recip_depname_id'+num_recip+'" value="">'+
-									'<input type="text" class="form-control" name="recip_depname_name[]" id="recip_depname_name'+num_recip+'" value="" readonly>'+
+							'<div class="col-lg-5">'+
+								'<div class="form-group">'+
+									'<input type="text" class="form-control" name="recip_possition_name[]" id="recip_possition_name'+num_recip+'" value="" >'+
 								'</div>'+
 							'</div>'+
 							'<div class="col-lg-1">'+
@@ -194,24 +184,17 @@
 				var num_maker=$('#num_maker').val();
 				var maker='<div>'+
 						'<div class="row">'+
-							'<div class="col-lg-3">'+
+							'<div class="col-lg-5">'+
 								'<div class="form-group">'+
-									'<input type="hidden" name="maker_employee_id[]" id="maker_employee_id'+num_maker+'" value="">'+
-									'<input type="text" class="form-control" name="maker_employee[]" id="maker_employee'+num_maker+'" value="" onChange="check_null(this)">'+
-								'</div>'+
-							'</div>'+
-							'<div class="col-lg-3">'+
-								'<div class="form-group has-success">'+
-									'<input type="hidden" name="maker_possition_id[]" id="maker_possition_id'+num_maker+'" value="">'+
 									'<div class="'+num_maker+'">'+
-									'<input type="text" class="form-control" name="maker_possition_name[]" id="maker_possition_name'+num_maker+'" value="" readonly>'+
+										'<input type="hidden" name="maker_employee_id[]" id="maker_employee_id'+num_maker+'" value="">'+
+										'<input type="text" class="form-control" name="maker_employee[]" id="maker_employee'+num_maker+'" value="" onChange="check_null(this)">'+
 									'</div>'+
 								'</div>'+
 							'</div>'+
-							'<div class="col-lg-3">'+
-								'<div class="form-group has-success">'+
-									'<input type="hidden" name="maker_depname_id[]" id="maker_depname_id'+num_maker+'" value="">'+
-									'<input type="text" class="form-control" name="maker_depname_name[]" id="maker_depname_name'+num_maker+'" value="" readonly>'+
+							'<div class="col-lg-5">'+
+								'<div class="form-group">'+
+									'<input type="text" class="form-control" name="maker_possition_name[]" id="maker_possition_name'+num_maker+'" value="">'+
 								'</div>'+
 							'</div>'+
 							'<div class="col-lg-1">'+
@@ -256,10 +239,6 @@
                                 return {
 									value: pwemployee.pwname,
 									userid: pwemployee.userid,
-									positionid: pwemployee.positionid,
-									position: pwemployee.poname,
-									depid: pwemployee.depid,
-									depname: pwemployee.depname
                                     };
                             }));
 							
@@ -275,16 +254,8 @@
 			select: function(event,ui){
 				if(select=='recip'){
 					$("#recip_employee_id"+num).val(ui.item.userid);
-					$("#recip_possition_id"+num).val(ui.item.positionid);
-					$("#recip_possition_name"+num).val(ui.item.position);
-					$("#recip_depname_id"+num).val(ui.item.depid);
-					$("#recip_depname_name"+num).val(ui.item.depname);
 				}else{
 					$("#maker_employee_id"+num).val(ui.item.userid);
-					$("#maker_possition_id"+num).val(ui.item.positionid);
-					$("#maker_possition_name"+num).val(ui.item.position);
-					$("#maker_depname_id"+num).val(ui.item.depid);
-					$("#maker_depname_name"+num).val(ui.item.depname);
 				}
 			}
 			});
@@ -300,12 +271,33 @@
 				return false;
 			}
 			var ok = true;
-			$.each($("input[name='recip_possition_name[]']"),function(index,value){
+			$.each($("input[name='recip_employee_id[]']"),function(index,value){
 				if($(this).val()==''){
-					alert('กรุณาป้อนข้อมูลให้ครบ');
+					alert('ป้อนข้อมูลไม่ครบหรือรายชื่อไม่ถูกต้อง');
 					var num_tag=$(this).parent().attr('class');
 					$('#recip_employee'+num_tag).val('');
 					$('#recip_employee'+num_tag).focus();
+					$(this).focus();
+					ok = false;
+					return false;
+				}
+			}); 
+			if(!ok) {return false;}
+			$.each($("input[name='recip_possition_name[]']"),function(index,value){
+				if($(this).val()==''){
+					alert('กรุณาป้อนข้อมูลให้ครบ');
+					$(this).focus();
+					ok = false;
+					return false;
+				}
+			}); 
+			if(!ok) {return false;}
+			$.each($("input[name='maker_employee_id[]']"),function(index,value){
+				if($(this).val()==''){
+					alert('ป้อนข้อมูลไม่ครบหรือรายชื่อไม่ถูกต้อง');
+					var num_tag=$(this).parent().attr('class');
+					$('#maker_employee'+num_tag).val('');
+					$('#maker_employee'+num_tag).focus();
 					ok = false;
 					return false;
 				}
@@ -314,9 +306,7 @@
 			$.each($("input[name='maker_possition_name[]']"),function(index,value){
 				if($(this).val()==''){
 					alert('กรุณาป้อนข้อมูลให้ครบ');
-					var num_tag=$(this).parent().attr('class');
-					$('#maker_employee'+num_tag).val('');
-					$('#maker_employee'+num_tag).focus();
+					$(this).focus();
 					ok = false;
 					return false;
 				}
