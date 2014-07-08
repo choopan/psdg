@@ -71,13 +71,15 @@ Class PersonIndicator extends CI_Model
 			$this -> db -> delete('person_indicator_detail', array('PID' => $pid));
 		}
 				
-		$numrow = count($orders); 		
-		for($i = 0; $i < $numrow; $i++) {
-			$this->db	-> set('PID', $pid)
-						-> set('order', $orders[$i])
-						-> set('name', $names[$i])
-						-> set('weight', $weights[$i])
-						-> insert('person_indicator_detail');
+		if(isset($orders[0])) {				
+			$numrow = count($orders); 		
+			for($i = 0; $i < $numrow; $i++) {
+				$this->db	-> set('PID', $pid)
+							-> set('order', $orders[$i])
+							-> set('name', $names[$i])
+							-> set('weight', $weights[$i])
+							-> insert('person_indicator_detail');
+			}
 		}		
 	}
 
