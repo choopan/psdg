@@ -278,13 +278,87 @@ Class User_manage extends CI_Model
 	return $query;
  }
  
- function addPosition_save($tposition,$eposition)
+ function addPosition_type_save($tposition)
  {
-	$query=$this->db->set('PWNAME',$tposition)
-			 ->set('PWENAME',$eposition)
-			 ->set('PWSTATUS',1)
-			 ->set('ISDELETE',0)
-			 ->insert('pwposition');
+	$query=$this->db->set('name',$tposition)
+					->insert('position_type');
+	if($query){
+		return 1;
+	}else{
+		return 0;}
+ }
+ 
+ function addPosition_save($tposition,$nposition)
+ {
+	$query=$this->db->set('position_type_id',$tposition)
+					->set('PWNAME',$nposition)
+					->set('enabled',1)
+					->insert('pwposition');
+	if($query){
+		return 1;
+	}else{
+		return 0;}
+ }
+ 
+ function addPosition_level_save($tposition,$eposition_level)
+ {
+	$query=$this->db->set('position_type_id',$tposition)
+					->set('name',$eposition_level)
+					->set('enabled',1)
+					->insert('position_level');
+	if($query){
+		return 1;
+	}else{
+		return 0;}
+ }
+ 
+ function get_position_type()
+ {
+	$query=$this->db->distinct()
+					->where('enabled',1)
+					->order_by('name')
+					->get('position_type')
+					->result_array();
+	return $query;
+ }
+ 
+ function get_postition()
+ {
+	$query=$this->db->query('SELECT DISTINCT position_type.id as id,position_type.name as name,pwposition.PWPOSITION as pos_id,pwposition.PWNAME as pwname
+							 FROM position_type inner join pwposition
+							 ON position_type.id = pwposition.position_type_id
+							 WHERE pwposition.enabled = 1
+							 ORDER BY pwposition.PWNAME')
+					->result_array();
+	return $query;
+ }
+ 
+ function get_position_level()
+ {
+	$query=$this->db->query('SELECT DISTINCT position_type.id as id,position_type.name as name,position_level.id as pos_id,position_level.name as pos_lv
+							 FROM position_type inner join position_level
+							 ON position_type.id = position_level.position_type_id
+							 WHERE position_level.enabled=1 
+							 ORDER BY position_level.name')
+					->result_array();
+	return $query;
+ }
+ 
+ function get_edit_position_type($id)
+ {
+	$query=$this->db->distinct()
+					->order_by('name')
+					->where('id',$id)
+					->get('position_type')
+					->result_array();
+	return $query;
+ }
+ 
+ function updatePosition_type_save($id,$name)
+ {
+	$query=$this->db->where('id',$id)
+			 ->set('name',$name)
+			 ->update('position_type');
 	if($query){
 		return 1;
 	}else{
@@ -293,18 +367,20 @@ Class User_manage extends CI_Model
  
  function get_edit_position($id)
  {
-	$query=$this->db->distinct()
-					->where('PWPOSITION',$id)
-					->get('pwposition')
+	$query=$this->db->query('SELECT DISTINCT position_type.id as id,position_type.name as name,pwposition.PWPOSITION as pos_id,pwposition.PWNAME as pos_name
+							 FROM position_type inner join pwposition
+                             ON  position_type.id = pwposition.position_type_id
+							 WHERE pwposition.PWPOSITION = '.$id.'
+							 ORDER BY pwposition.PWNAME ASC')
 					->result_array();
 	return $query;
  }
  
- function updatePosition_save($id,$tposition,$eposition)
+ function updatePosition_save($id,$tposition,$nposition)
  {
 	$query=$this->db->where('PWPOSITION',$id)
-			 ->set('PWNAME',$tposition)
-			 ->set('PWENAME',$eposition)
+			 ->set('position_type_id',$tposition)
+			 ->set('PWNAME',$nposition)
 			 ->update('pwposition');
 	if($query){
 		return 1;
@@ -315,7 +391,53 @@ Class User_manage extends CI_Model
  function deletePosition($id)
  {
 	$query=$this->db->where('PWPOSITION',$id)
-			 ->delete('pwposition');
+					->set('enabled',0)
+					->update('pwposition');
+	if($query){
+		return 1;
+	}else{
+		return 0;}
+ }
+ 
+ function deletePosition_level($id)
+ {
+	$query=$this->db->where('id',$id)
+					->set('enabled',0)
+					->update('position_level');
+	if($query){
+		return 1;
+	}else{
+		return 0;}
+ }
+ 
+ function get_edit_position_lv($id)
+ {
+	$query=$this->db->query('SELECT DISTINCT position_type.id as id,position_type.name as name,position_level.id as lv_id,position_level.name as lv_name
+							 FROM position_type inner join position_level
+                             ON  position_type.id = position_level.position_type_id
+							 WHERE position_level.id = '.$id.'
+							 ORDER BY position_level.name ASC')
+					->result_array();
+	return $query;
+ }
+ 
+ function updatePosition_lv_save($id,$tposition,$name)
+ {
+	$query=$this->db->where('id',$id)
+			 ->set('position_type_id',$tposition)
+			 ->set('name',$name)
+			 ->update('position_level');
+	if($query){
+		return 1;
+	}else{
+		return 0;}
+ }
+ 
+ function deletePosition_type($id)
+ {
+	$query=$this->db->where('id',$id)
+					->set('enabled',0)
+					->update('position_type');
 	if($query){
 		return 1;
 	}else{

@@ -28,31 +28,21 @@ td.highlight {
 			<div class="col-lg-11">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<strong>เพิ่มตำแหน่ง</strong>
+						<strong>แก้ไขชนิดตำแหน่ง</strong>
 					</div>
 					<div class="panel-body">
 						<?php if($result==1){?>
 							<div class="alert alert-success" role="alert">
-							  <p>เพิ่มข้อมูลเรียบร้อยแล้ว</p>
+							  <p>แก้ไขข้อมูลเรียบร้อยแล้ว</p>
 							</div>
 						<?php }?>	
-								<form action="<?php echo site_url("manageuser/addPosition_save"); ?>" method="post" name="addDepartment">
+								<form action="<?php echo site_url("manageuser/updatePosition_type_save"); ?>" method="post" name="addDepartment">
 									<div class="row">
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>ชนิดตำแหน่ง *</label>
-											<select type="text" class="form-control" name="tposition" id="residperson" required>
-											<?php foreach($data as $value){?>
-												<option value="<?php echo $value['id'];?>"><?php echo $value['name'];?></option>
-											<?php }?>
-											</select>
-										</div>
-										</div>
-
-										<div class="col-lg-4">
-										<div class="form-group">
-											<label>ชื่อตำแหน่ง *</label>
-                                            <input type="text" class="form-control" name="nposition" id="residperson" required>
+                                            <label>ชื่อชนิดตำแหน่ง *</label>
+											<input type="hidden" value="<?php echo $data[0]['id'];?>" name="id">
+                                            <input type="text" class="form-control" name="name" value="<?php echo $data[0]['name'];?>" id="residperson" required>
 										</div>
 										</div>
 									</div>
@@ -60,7 +50,7 @@ td.highlight {
 									<div class="row">
 										<div class="form-group">
 										<div class="col-lg-3">
-											<input id="addNew" type="submit" class="btn btn-success" value="เพิ่ม"> <a href="<?php echo site_url("manageuser/position_view");?>" class="btn btn-primary">กลับ</a>
+											<input id="addNew" type="submit" class="btn btn-success" value="แก้ไข"> <a href="<?php echo site_url("manageuser/position_view");?>" class="btn btn-primary">กลับ</a>
 										</div>
 										</div>
 									</div>

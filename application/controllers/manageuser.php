@@ -462,29 +462,123 @@ class Manageuser extends CI_Controller {
 		$this->load->view('managePosition_view',$data);
 	}
 	
-	function addPosition()
+	function get_data()
+	{
+		$id=$this->input->get('id');
+		if($id==1){
+			$data['data']=$this->user_manage->get_position_type();
+			$this->load->view('indicator/showPosition_type',$data);
+		}else if($id==2){
+			$data['data']=$this->user_manage->get_postition();
+			$this->load->view('indicator/showPosition',$data);
+		}else if($id==3){
+			$data['data']=$this->user_manage->get_position_level();
+			$this->load->view('indicator/showPosition_level',$data);
+		}
+	}
+	
+	function addPosition_type()
 	{
 		$data['title'] = "MFA - Position Management";
 		$data['result'] = 0;
+		$this->load->view('indicator/addPosition_type',$data);
+	}
+	
+	function addPosition()
+	{
+		$data['data']=$this->user_manage->get_position_type();
+		$data['title'] = "MFA - Position Management";
+		$data['result'] = 0;
+		/* echo "<pre>";
+		print_r($data);
+		echo "</pre>"; */
 		$this->load->view('indicator/addPosition',$data);
+	}
+	
+	function addPosition_level()
+	{
+		$data['data']=$this->user_manage->get_position_type();
+		$data['title'] = "MFA - Position Management";
+		$data['result'] = 0;
+		$this->load->view('indicator/addPosition_level',$data);
+	}
+	
+	function addPosition_type_save()
+	{	
+		$tposition=$this->input->post('tposition');
+		$result=$this->user_manage->addPosition_type_save($tposition);
+		
+		$data['title'] = "MFA - Position Management";
+		$data['result'] = $result;
+		
+		$this->load->view('indicator/addPosition_type',$data);
 	}
 	
 	function addPosition_save()
 	{	
 		$tposition=$this->input->post('tposition');
-		$eposition=$this->input->post('eposition');
-		$result=$this->user_manage->addPosition_save($tposition,$eposition);
+		$nposition=$this->input->post('nposition');
+		$result=$this->user_manage->addPosition_save($tposition,$nposition);
 		
 		$data['title'] = "MFA - Position Management";
+		$data['data']=$this->user_manage->get_position_type();
 		$data['result'] = $result;
 		
 		$this->load->view('indicator/addPosition',$data);
+	}
+	
+	function addPosition_level_save()
+	{	
+		$tposition=$this->input->post('tposition');
+		$eposition_level=$this->input->post('eposition_level');
+		$result=$this->user_manage->addPosition_level_save($tposition,$eposition_level);
+		
+		$data['title'] = "MFA - Position Management";
+		$data['data']=$this->user_manage->get_position_type();
+		$data['result'] = $result;
+		
+		$this->load->view('indicator/addPosition_level',$data);
+	}
+	
+	function pos_type_edit($id)
+	{
+		$data['title'] = "MFA - Position Management";
+		$data['data']=$this->user_manage->get_edit_position_type($id);
+		$data['result']=0;
+		$this->load->view('indicator/editPosition_type',$data);
+	}
+	
+	function updatePosition_type_save()
+	{
+		$id=$this->input->post('id');
+		$name=$this->input->post('name');
+		
+		$data['title'] = "MFA - Position Management";
+		$result=$this->user_manage->updatePosition_type_save($id,$name);
+		$data['result']=$result;
+		
+		$data['data']=$this->user_manage->get_edit_position_type($id);
+		$this->load->view('indicator/editPosition_type',$data);
+	}
+	
+	function pos_type_del($id)
+	{
+		$result=$this->user_manage->deletePosition_type($id);
+		
+		$data['title'] = "MFA - Position Management";
+		$data['result'] = $result;
+		$data['data']=$this->user_manage->position_view();
+		/* echo "<pre>";
+		print_r($data);
+		echo "</pre>"; */
+		$this->load->view('managePosition_view',$data);
 	}
 	
 	function pos_edit_info($id)
 	{
 		$data['title'] = "MFA - Position Management";
 		$data['data']=$this->user_manage->get_edit_position($id);
+		$data['type']=$this->user_manage->get_position_type();
 		$data['result']=0;
 		/* echo "<pre>";
 		print_r($data);
@@ -496,23 +590,59 @@ class Manageuser extends CI_Controller {
 	{
 		$id=$this->input->post('id');
 		$tposition=$this->input->post('tposition');
-		$eposition=$this->input->post('eposition');
-		$result=$this->user_manage->updatePosition_save($id,$tposition,$eposition);
+		$nposition=$this->input->post('nposition');
+		$result=$this->user_manage->updatePosition_save($id,$tposition,$nposition);
 		
-		$data['data']=$this->user_manage->get_edit_position($id);
 		$data['title'] = "MFA - Position Management";
+		$data['data']=$this->user_manage->get_edit_position($id);
+		$data['type']=$this->user_manage->get_position_type();
 		$data['result']=$result;
-		
-		/* echo "<pre>";
-		print_r($data);
-		echo "</pre>"; */
-		
 		$this->load->view('indicator/editPosition',$data);
 	}
+	
 	
 	function pos_del_info($id)
 	{
 		$result=$this->user_manage->deletePosition($id);
+		
+		$data['title'] = "MFA - Position Management";
+		$data['result'] = $result;
+		$data['data']=$this->user_manage->position_view();
+		/* echo "<pre>";
+		print_r($data);
+		echo "</pre>"; */
+		$this->load->view('managePosition_view',$data);
+	}
+	
+	function pos_lv_edit($id)
+	{
+		$data['title'] = "MFA - Position Management";
+		$data['data']=$this->user_manage->get_edit_position_lv($id);
+		$data['type']=$this->user_manage->get_position_type();
+		$data['result']=0;
+		/* echo "<pre>";
+		print_r($data);
+		echo "</pre>"; */
+		$this->load->view('indicator/editPosition_level',$data);
+	}
+	
+	function updatePosition_lv_save()
+	{
+		$id=$this->input->post('id');
+		$tposition=$this->input->post('tposition');
+		$name=$this->input->post('name');
+		$result=$this->user_manage->updatePosition_lv_save($id,$tposition,$name);
+		
+		$data['title'] = "MFA - Position Management";
+		$data['data']=$this->user_manage->get_edit_position_lv($id);
+		$data['type']=$this->user_manage->get_position_type();
+		$data['result']=$result;
+		$this->load->view('indicator/editPosition_level',$data);
+	}
+	
+	function pos_lv_del($id)
+	{
+		$result=$this->user_manage->deletePosition_level($id);
 		
 		$data['title'] = "MFA - Position Management";
 		$data['result'] = $result;

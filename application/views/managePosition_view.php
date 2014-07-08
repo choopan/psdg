@@ -7,6 +7,26 @@
 <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/jquery.fancybox.css" >
 <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/datepicker.css" >
 
+<script type="text/javascript" charset="uft-8">
+function get_data(val)
+	{
+	if(val==0){
+		exit();
+	}
+	$.ajax({
+					'url' : '<?php echo site_url('manageuser/get_data'); ?>',
+					'type':'get',
+					'data':{id:val},
+					'error' : function(data){ 
+						alert('error');
+                    },
+					'success' : function(data){
+						$('#a').empty();
+						$('#a').html(data);
+						}		   
+				});
+	}
+</script>
 <style type="text/css" class="init">
 td.highlight {
     background-color: red !important;
@@ -31,7 +51,9 @@ td.highlight {
             <div >
                 <div class="panel panel-default">
 					<div class="panel-heading">
-						<button type="button" class="btn btn-outline btn-success" onClick="window.location.href='<?php echo site_url("manageuser/addPosition"); ?>'">เพิ่มตำแหน่ง</button>
+						<button type="button" class="btn btn-outline btn-success" onClick="window.location.href='<?php echo site_url("manageuser/addPosition_type"); ?>'">เพิ่มชนิดตำแหน่ง</button>
+						<button type="button" class="btn btn-outline btn-info" onClick="window.location.href='<?php echo site_url("manageuser/addPosition"); ?>'">เพิ่มตำแหน่ง</button>
+						<button type="button" class="btn btn-outline btn-warning" onClick="window.location.href='<?php echo site_url("manageuser/addPosition_level"); ?>'">เพิ่มขั้นตำแหน่ง</button>
 					</div>
                     <div class="panel-body">
 						<?php if($result==1){?>
@@ -49,31 +71,19 @@ td.highlight {
 							  </div>
 							</div>
 						<?php }?>
+						
+						<div class="form-group">
+							<label>เลือกข้อมูลที่ต้องการจัดการ * <label>
+							<select name="position" class="form-control" id="position" onChange="get_data(this.value)">
+								<option value="0" selected>- select -</option>
+								<option value="1">ชนิดตำแหน่ง</option>
+								<option value="2">ตำแหน่ง</option>
+								<option value="3">ขั้นตำแหน่ง</option>
+							</select>
+						</div>
 					
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
-                                <thead>
-                                    <tr>
-                                        <th>ชื่อตำแหน่ง(ภาษาไทย)</th>
-										<th>ชื่อตำแหน่ง(ภาษาอังกฤษ)</th>
-										<th>เครื่องมือ</th>
-                                    </tr>
-                                </thead>
-								<tbody>
-								<?php if(is_array($data) && count($data) ) {
-									foreach($data as $loop){
-								?>
-									<tr>
-                                        <td><?php echo $loop['PWNAME']; ?></td>
-										<td><?php echo $loop['PWENAME']; ?></td>
-										<td>
-											<a href='<?php echo "pos_edit_info/".$loop['PWPOSITION']; ?>' class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
-											<a href='<?php echo "pos_del_info/".$loop['PWPOSITION']; ?>' class="btnDelete btn btn-danger btn-xs" onClick='return confirm(" คุณต้องการลบหรือไม่ ")' title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></a>
-										</td>
-                                    </tr>
-									<?php } } ?>
-                                </tbody>
-							</table>
+							<div id="a"></div>
 						</div>
 					</div>
 				</div>
