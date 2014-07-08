@@ -71,13 +71,15 @@ Class PersonIndicator extends CI_Model
 			$this -> db -> delete('person_indicator_detail', array('PID' => $pid));
 		}
 				
-		$numrow = count($orders); 		
-		for($i = 0; $i < $numrow; $i++) {
-			$this->db	-> set('PID', $pid)
-						-> set('order', $orders[$i])
-						-> set('name', $names[$i])
-						-> set('weight', $weights[$i])
-						-> insert('person_indicator_detail');
+		if(isset($orders[0])) {				
+			$numrow = count($orders); 		
+			for($i = 0; $i < $numrow; $i++) {
+				$this->db	-> set('PID', $pid)
+							-> set('order', $orders[$i])
+							-> set('name', $names[$i])
+							-> set('weight', $weights[$i])
+							-> insert('person_indicator_detail');
+			}
 		}		
 	}
 
@@ -89,7 +91,7 @@ Class PersonIndicator extends CI_Model
 
 	function getCoreName($userID, $year, $round, $depID, $divID) {
 		//Check if user already add score on core competency	
-		$result = $this -> db -> select('id, coreSkillName as name, expectVal, selfscore')
+		$result = $this -> db -> select('id, coreSkillName as name, expectVal, selfscore, exescore')
 							  -> get_where('core_competency_score', 
 								 array('userID' => $userID, 'year' => $year, 'evalRound' => $round,
 								       'depID' => $depID, 'divID' => $divID))
@@ -113,6 +115,27 @@ Class PersonIndicator extends CI_Model
 		return $result;
 	}
 	
+	function evalAddExecScore($userID, $year, $round, $dep_id, $div_id, $score) {
+		$personIndicatorRes = $this -> db
+													-> select('id')
+													-> get_where('person_indicator', 
+														array('userID' => $userID, 'year' => $year, 'round' => $round, 'dep_id' => $dep_id, 'div_id' => $div_id))
+													-> result_array();
+													
+		$personIndicatorDetailRes = $this -> db
+													-> select('ID')
+													-> order_by('order', 'asc')
+													-> get_where('person_indicator_detail', 
+														array('PID' => $personIndicatorRes[0]['id']))
+													-> result_array();
+															
+		$numrow = count($score); 		
+		for($i = 0; $i < $numrow; $i++) {
+			$this -> db -> where('id', $personIndicatorDetailRes[$i]['ID'])
+					-> set('exec_score', $score[$i])
+					-> update('person_indicator_detail');
+		}
+	}
 	function evalAddScore($userID, $year, $round, $dep_id, $div_id, $score) {
 		$personIndicatorRes = $this -> db
 													-> select('id')
@@ -134,6 +157,23 @@ Class PersonIndicator extends CI_Model
 					-> update('person_indicator_detail');
 		}
 	}
+
+	function coreAddExecScore($userID, $year ,$evalRound, $depID, $divID, $exec_score, $res){
+		//Check if already exists
+		$result = $this -> db -> get_where('core_competency_score',
+						array('userID' => $userID, 'year' => $year, 'evalRound' => $evalRound, 'depID' => $depID,
+							  'divID' => $divID))
+					-> result_array();
+							
+			//update
+			$numrow = count($res); 		
+			for($i = 0; $i < $numrow; $i++) {
+				$this -> db -> where('id', $res[$i]['id']) 
+						-> set('exescore', $exec_score[$i])
+						-> update('core_competency_score');
+			}		
+	}
+
 	
 	function coreAddScore($userID, $year ,$evalRound, $depID, $divID, $coreSkillName ,$expectVal, $selfscore, $res){
 		//Check if already exists
@@ -255,9 +295,16 @@ Class PersonIndicator extends CI_Model
 		$this -> db -> where('ID', $activity_id)
 					-> delete('person_indicator_activity');
 	}
+	
 	function deleteActivityScore($activity_id) {
 		$this -> db -> where('activity_id', $activity_id)
 					-> delete('person_indicator_activity_score');
+	}
+	
+	function setExecActivityScore($activity_id, $exec_score) {
+		$this -> db -> where('id', $activity_id)
+					-> set('execscore', $exec_score)
+					-> update('person_indicator_activity_score');
 	}
 }
 ?>

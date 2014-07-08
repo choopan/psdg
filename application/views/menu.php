@@ -10,6 +10,7 @@
             </div>
             <!-- /.navbar-header -->
 
+
             <ul class="nav navbar-top-links navbar-right">
 				ผู้ใช้งาน :  <strong><?php echo $this->session->userdata('sessfirstname')." ".$this->session->userdata('sesslastname'); ?></strong>
                 <li class="dropdown">
@@ -71,6 +72,28 @@
                         </li>
                         <?php } ?>
                         
+				       <?php	if($this->session->userdata('sessadmin_min') == 1) { ?>
+  						<li>
+                            <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> แบบประเมินสมรรณะ<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="<?php echo site_url("core_competency/manageSkill"); ?>">จัดการชื่อสมรรณะ</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo site_url("core_competency/manageCoreSet"); ?>">จัดการชุุดประเมินสมรรณะ</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo site_url("core_competency/assignCoreSetIndex"); ?>">กำหนดชุุดประเมินสมรรณะ</a>
+                                </li>
+								<li>
+                                    <a href="<?php echo site_url("core_competency/coreAbility"); ?>">แบบประเมินสมรรถนะ</a>
+                                </li>
+                            </ul>
+                        </li>
+						<?php	} ?>
+                                                
+  
+				
 						<li>
                             <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> กำหนดตัวชี้วัด<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
@@ -156,27 +179,7 @@
                             </ul>
                         </li>
                         
-                        <?php	if($this->session->userdata('sessadmin_min') == 1) { ?>
-  						<li>
-                            <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> แบบประเมินสมรรณะ<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="<?php echo site_url("core_competency/manageSkill"); ?>">จัดการชื่อสมรรณะ</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo site_url("core_competency/manageCoreSet"); ?>">จัดการชุุดประเมินสมรรณะ</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo site_url("core_competency/assignCoreSetIndex"); ?>">กำหนดชุุดประเมินสมรรณะ</a>
-                                </li>
-								<li>
-                                    <a href="<?php echo site_url("core_competency/coreAbility"); ?>">แบบประเมินสมรรถนะ</a>
-                                </li>
-                            </ul>
-                        </li>
-						<?php	} ?>
-                                                
-  
+                 
                     </ul>
                 </div>
             </div>  

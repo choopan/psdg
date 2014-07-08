@@ -9,7 +9,7 @@
 <div id="page-wrapper">
 	
 	<div class="row">
-		<div class="col-lg-10">
+		<div class="col-lg-12">
 			<?php 	if($this->session->flashdata('success')) {
 			?>
 						<div class="alert alert-success alert-dismissable">
@@ -82,7 +82,7 @@
 			<strong>สถานะ :</strong>&nbsp;&nbsp;<span class="label label-primary">ผ่านการอนุมัติแล้ว</span>
 		</div>
 		<div class="col-lg-6">
-			<a href="<?php echo site_url('person_evaluation/depManagePersonIndicator'); ?>" type="button" class="btn btn-primary">ย้อนกลับ</a>&nbsp;&nbsp;
+			<button type="button" onclick="javascript:history.go(-1);" class="btn btn-primary">ย้อนกลับ</button>
 		</div>
 
 	</div>

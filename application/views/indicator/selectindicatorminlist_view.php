@@ -23,7 +23,7 @@
 									<input type="checkbox" name="goal_min_id<?php echo $id; ?>" id="goal_min_id<?php echo $id; ?>" value="<?php echo $loop['goalid']; ?>">
 									<?php }else{ $id++; ?> 
 									<!-- minister indicators -->
-									<input type="checkbox" onclick="checkAll(<?php echo $id; ?>);" name="indicator_min_id<?php echo $id; ?>" id="indicator_min_id<?php echo $id; ?>" value="<?php echo $loop['number']; ?>">
+									<input type="checkbox" onclick="checkAll(<?php echo $id; ?>);" name="indicator_min_id<?php echo $id; ?>" id="indicator_min_id<?php echo $id; ?>" value="<?php echo $loop['id']; ?>">
 									<?php  } ?>
 									</td>
                                     <td><?php if ($loop['goalid'] > 0) { 
@@ -39,7 +39,7 @@
 
 						<div class="row">
 							<div class="col-lg-6">
-								<button type="button" class="btn btn-primary" onClick="sendval()">  เพิ่มตัวชี้วัดที่เลือก  </button>
+								<button type="button" class="btn btn-primary" onClick="sendval(<?php echo $id; ?>)">  เพิ่มตัวชี้วัดที่เลือก  </button>
 							</div>
 						</div>
 <br><br><br><br>
@@ -51,7 +51,7 @@
 function checkAll(id) {
 	var indicator = document.getElementById('indicator_min_id'+id);
 	var markgoal = document.getElementsByName("goal_min_id"+id);
-	if (indicator.checked ==true) {
+	if (indicator.checked) {
 		for (var i = 0; i < markgoal.length; i++) {
 			markgoal[i].checked = true;
 		}
@@ -62,19 +62,37 @@ function checkAll(id) {
 	}
 }
 
-function sendval() {
-	var sel= "";
-	item = new Array();
+function sendval(id) {
+	var indicator = [];
+	var goal =  [];
+	var result=20;
+	var in_temp;
+	var goal_temp;
+	for (var i=1; i<id+1; i++) {
+		in_temp = document.getElementById('indicator_min_id'+i);
+		if (in_temp.checked) {
+			indicator.push(in_temp.value);
+		}else{
+			goal_temp = document.getElementsByName("goal_min_id"+i);
+			for (var j = 0; j < goal_temp.length; j++) {
+				
+			}
+		}
+		
+	}
+	alert(indicator);
+	/*	
 	$(":checkbox:checked").each(function(index,data ) {
             item[index] = $(this).val(); 
     });
-
+	
 	$.ajax({
 		  type: "POST",
 		  url: "<?php echo site_url('manageindicator/saveindicatorsession'); ?>",
 		  data: { value: item }
 	   })
-	alert(item);
+	 */
+	
 	//window.parent.document.getElementById("selectIndicator").value = sel;
 	//parent.$.fancybox.close();
 }
