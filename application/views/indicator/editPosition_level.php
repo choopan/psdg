@@ -28,7 +28,7 @@ td.highlight {
 			<div class="col-lg-11">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<strong>แก้ไขตำแหน่ง</strong>
+						<strong>แก้ไขขั้นตำแหน่ง</strong>
 					</div>
 					<div class="panel-body">
 						<?php if($result==1){?>
@@ -36,11 +36,11 @@ td.highlight {
 							  <p>แก้ไขข้อมูลเรียบร้อยแล้ว</p>
 							</div>
 						<?php }?>	
-								<form action="<?php echo site_url("manageuser/updatePosition_save"); ?>" method="post" name="addDepartment">
+								<form action="<?php echo site_url("manageuser/updatePosition_lv_save"); ?>" method="post" name="addDepartment">
 									<div class="row">
 										<div class="col-lg-4">
 										<div class="form-group">
-										<input type="hidden" name="id" value="<?php echo $data[0]['pos_id'];?>">
+										<input type="hidden" name="id" value="<?php echo $data[0]['lv_id'];?>">
                                             <label>ชนิดตำแหน่ง *</label>
 											<select type="text" class="form-control" name="tposition" id="residperson" required>
 											<?php foreach($type as $value){?>
@@ -56,8 +56,8 @@ td.highlight {
 
 										<div class="col-lg-4">
 										<div class="form-group">
-											<label>ชื่อตำแหน่ง *</label>
-                                            <input type="text" class="form-control" value="<?php echo $data[0]['pos_name']?>" name="nposition" id="residperson" required>
+											<label>ขั้นตำแหน่ง *</label>
+                                            <input type="text" class="form-control" value="<?php echo $data[0]['lv_name']?>" name="name" id="residperson" required>
 										</div>
 										</div>
 									</div>
