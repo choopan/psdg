@@ -16,10 +16,10 @@
 	</div>
     <div class="container">
         <div class="row">
-            <div class="col-md-4 col-md-offset-4">
+            <div class="col-md-5 col-md-offset-3">
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">เข้าสู่ระบบ</h3>
+                        <h3 class="panel-title">เข้าสู่ระบบ<?php echo $system_name; ?></h3>
                     </div>
 					<?php echo validation_errors(); ?>
 					<div class="panel-body">
@@ -27,11 +27,14 @@
                             <fieldset>
                                 <div class="form-group">
                                     <input class="form-control" placeholder="Username" name="username" type="username" autofocus>
+                                    <input type="hidden" name="system" value="<?php echo $system; ?>">
+                                    <input type="hidden" name="system_name" value="<?php echo $system_name; ?>">
                                 </div>
                                 <div class="form-group">
                                     <input class="form-control" placeholder="Password" name="password" type="password" value="">
                                 </div>
                                 <!-- Change this to a button or input when using this as a form -->
+                                
                                 <button type="submit" class="btn btn-lg btn-success btn-block">Login</a>
                             </fieldset>
                         </form>

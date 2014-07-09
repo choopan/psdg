@@ -6,6 +6,7 @@ class Main extends CI_Controller {
 	{
 	   parent::__construct();
 	   $this->load->model('user','',TRUE);
+	   $this->load->model('personindicator', '', TRUE);
 	   $this->load->helper('url');
 	}
 	function index()
@@ -13,7 +14,12 @@ class Main extends CI_Controller {
 		if($this->session->userdata('sessusername'))
 		{
 			$data['title'] = "MFA - Main";
-			$this->load->view('main_view',$data);
+			switch($this->session->userdata('sess_system')) {
+				case 1: $this->load->view('main_view',$data); break;
+				case 2: $this->load->view('mainperson_view',$data); break;
+				case 3: $this->load->view('mainadmin_view',$data); break;
+				default: redirect('login', 'refresh'); break;
+			}			
 		}
 	   else
 	   {
@@ -21,6 +27,8 @@ class Main extends CI_Controller {
 		 redirect('login', 'refresh');
 	   }
 	}
+	
+
 	
 	 function logout()
 	 {

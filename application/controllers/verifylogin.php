@@ -23,6 +23,8 @@ class VerifyLogin extends CI_Controller {
 	 
 		$data['base'] = $this->config->item('base_url');
 		$data['title'] = "MFA - Login";
+		$data['system'] = $this->input->post('system');
+		$data['system_name'] = $this->input->post('system_name');
 		$this->load->view('login_view',$data);
    }
    else
@@ -36,40 +38,105 @@ class VerifyLogin extends CI_Controller {
  function check_database($password)
  {
    //Field validation succeeded.&nbsp; Validate against database
+   $system = $this->input->post('system');
    $username = $this->input->post('username');
-
    //query the database
    $result = $this->user->login($username, $password);
 
+
    if($result AND  $username)
    {
-     $sess_array = array();
-     foreach($result as $row)
-     {
+		switch($system) {
+   			case 1:		//minister indicator system
+     			$sess_array = array();
+     			foreach($result as $row) {
      	
-		//Check executive Priviledge	
-		$userID = $row->USERID;
-		$execDep = $this->user->getExecDep($userID);
-		$execDiv = $this->user->getExecDiv($userID);
+					//Check executive Priviledge	
+					$userID = $row->USERID;
+					$execDep = $this->user->getExecDep($userID);
+					$execDiv = $this->user->getExecDiv($userID);
 		
 		
-       $sess_array = array(
-         'sessid' => $row->USERID,
-         'sessusername' => $row->PWUSERNAME,
-		 'sessfirstname' => $row->PWEFNAME,
-		 'sesslastname' => $row->PWELNAME,
-		 'sessadmin_min' => $row->admin_min,
-		 'sessadmin_dep' => $row->admin_dep,
-		 'sessadmin_div' => $row->admin_div,
-		 'sessdep' => $row->department,
-		 'sessdiv' => $row->division,		 
-		 'sessexecdep' => $execDep,
-		 'sessexecdiv' => $execDiv,
-         'sessyear' => date("Y")+543
-       );
-       $this->session->set_userdata($sess_array);
-     }
-     return TRUE;
+       				$sess_array = array(
+         				'sessid' => $row->USERID,
+         				'sessusername' => $row->PWUSERNAME,
+		 				'sessfirstname' => $row->PWEFNAME,
+		 				'sesslastname' => $row->PWELNAME,
+		 				'sessadmin_min' => $row->admin_min,
+		 				'sessadmin_dep' => $row->admin_dep,
+		 				'sessadmin_div' => $row->admin_div,
+		 				'sessdep' => $row->department,
+		 				'sessdiv' => $row->division,		 
+		 				'sessexecdep' => $execDep,
+		 				'sessexecdiv' => $execDiv,
+         				'sessyear' => date("Y")+543,
+         				'sess_system' => 1       				
+					);
+       				$this->session->set_userdata($sess_array);
+     			}
+   			   			
+   				break;
+			case 2:		//person evaluation system
+				$sess_array = array();
+     			//Check executive Priviledge	
+				$userID = $result[0]->USERID;
+				$execDep = $this->user->getExecDep($userID);
+				$execDiv = $this->user->getExecDiv($userID);
+		
+		
+       			$sess_array = array(
+         				'sessid' => $result[0]->USERID,
+         				'sessusername' => $result[0]->PWUSERNAME,
+		 				'sessfirstname' => $result[0]->PWEFNAME,
+		 				'sesslastname' => $result[0]->PWELNAME,
+		 				'sessadmin_min' => $result[0]->admin_min,
+		 				'sessdep' => $result[0]->department,
+		 				'sessdiv' => $result[0]->division,		 
+		 				'sessexecdep' => $execDep,
+		 				'sessexecdiv' => $execDiv,
+		 				'sess_system' => 2
+         				//'sessyear' => date("Y")+543       				
+					);
+       				$this->session->set_userdata($sess_array);   			
+					break;
+					
+			case 3:		//admin system
+			$sess_array = array();
+				if($result[0]->admin_min != 1) {
+				     $this->form_validation->set_message('check_database', '<div class="alert alert-danger">คุณไม่มีสิทธิ์ผู้ดูแลระบบระดับกระทรวง</div>');
+     				return false;					
+				}
+     			foreach($result as $row) {
+     	
+					//Check executive Priviledge	
+					$userID = $row->USERID;
+					$execDep = $this->user->getExecDep($userID);
+					$execDiv = $this->user->getExecDiv($userID);
+		
+		
+       				$sess_array = array(
+         				'sessid' => $row->USERID,
+         				'sessusername' => $row->PWUSERNAME,
+		 				'sessfirstname' => $row->PWEFNAME,
+		 				'sesslastname' => $row->PWELNAME,
+		 				'sessadmin_min' => $row->admin_min,
+		 				'sessadmin_dep' => $row->admin_dep,
+		 				'sessadmin_div' => $row->admin_div,
+		 				'sessdep' => $row->department,
+		 				'sessdiv' => $row->division,		 
+		 				'sessexecdep' => $execDep,
+		 				'sessexecdiv' => $execDiv,
+         				'sessyear' => date("Y")+543,
+         				'sess_system' => 3       				
+					);
+       				$this->session->set_userdata($sess_array);
+     			}
+   					
+					break;
+			default : echo "ERROR!!"; die(); break;
+			
+   		}
+     	return TRUE;
    }
    else if (!$username)
    {
