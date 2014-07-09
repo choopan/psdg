@@ -72,16 +72,19 @@ td.highlight {
 							</div>
 						<?php }?>
 						
-						<div class="form-group">
-							<label>เลือกข้อมูลที่ต้องการจัดการ * <label>
-							<select name="position" class="form-control" id="position" onChange="get_data(this.value)">
-								<option value="0" selected>- select -</option>
-								<option value="1">ชนิดตำแหน่ง</option>
-								<option value="2">ตำแหน่ง</option>
-								<option value="3">ขั้นตำแหน่ง</option>
-							</select>
+						<div class="row">
+							<div class="col-lg-4">
+							<div class="form-group">
+								<label>เลือกข้อมูลที่ต้องการจัดการ * <label>
+								<select name="position" class="form-control" id="position" onChange="get_data(this.value)">
+									<option value="0" selected>- select -</option>
+									<option value="1">ชนิดตำแหน่ง</option>
+									<option value="2">ตำแหน่ง</option>
+									<option value="3">ขั้นตำแหน่ง</option>
+								</select>
+							</div>
+							</div>
 						</div>
-					
                         <div class="table-responsive">
 							<div id="a"></div>
 						</div>

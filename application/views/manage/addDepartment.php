@@ -44,19 +44,6 @@ td.highlight {
                                             <input type="text" class="form-control" name="department" id="residperson" required>
 										</div>
 										</div>
-
-										<div class="col-lg-4">
-										<div class="form-group">
-											<label>อธิบดีกรม *</label>
-                                            <select name="userid" class="form-control">
-											<?php 
-												foreach($user as $value){
-													echo "<option value='".$value['USERID']."'>".$value['PWFNAME']." ".$value['PWLNAME']."</option>";
-												}
-											?>
-											</select>
-										</div>
-										</div>
 									</div>
 									
 									<div class="row">

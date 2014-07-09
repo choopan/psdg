@@ -45,26 +45,6 @@ td.highlight {
                                             <input type="text" class="form-control" name="department" value="<?php echo $data[0]['name'];?>">
 										</div>
 										</div>
-										<div class="col-lg-4">
-										<div class="form-group">
-											<label>อธิบดีกรม *</label>
-                                            <select name="userid" class="form-control" required >
-											<?php 
-												if(!empty($user)){
-													foreach($user as $value){
-														if($value['USERID']==$data[0]['USERID']){
-															echo "<option value='".$value['USERID']."' selected>".$value['PWFNAME']." ".$value['PWLNAME']."</option>";
-														}else{
-															echo "<option value='".$value['USERID']."'>".$value['PWFNAME']." ".$value['PWLNAME']."</option>";
-														}
-													}
-												}else{
-													echo "<option value='-1'>ไม่มีข้อมูล</option>";
-												}
-											?>
-											</select>
-										</div>
-										</div>
 									</div>
 									<div class="row">
 										<div class="form-group">

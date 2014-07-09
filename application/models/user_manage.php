@@ -9,7 +9,8 @@ Class User_manage extends CI_Model
 //------------------------------------------------------------ User --------------------------------------------
  function get_user_1()
  {
-	$query=$this->db->select('USERID, PWFNAME, PWLNAME, department, division, PWPOSITION, PWLEVEL, PWPOSITION2, PWEMAIL')
+	$query=$this->db->order_by('PWFNAME')
+					->select('USERID, PWFNAME, PWLNAME, department, division, PWPOSITION, PWLEVEL, PWPOSITION2, PWEMAIL')
 					->get('pwemployee')
 					->result_array();
 	return $query;
@@ -137,11 +138,9 @@ Class User_manage extends CI_Model
  }
  
  //============================================================= Department =====================================
- function addDepartmaent_save($department_name,$userid)
+ function addDepartmaent_save($department_name)
  {
 	$query=$this->db->set('name',$department_name)
-			 ->set('fid',0)
-			 ->set('USERID',$userid)
 			 ->set('enabled',1)
 			 ->insert('department');
 	if($query){
@@ -150,10 +149,43 @@ Class User_manage extends CI_Model
 		return 0;}
  }
  
+ function addDepartmaent_user($id,$user,$status)
+ {
+	$query=$this->db->set('dep_id',$id)
+					 ->set('userID',$user)
+					 ->set('status',$status)
+					 ->insert('department_executive');
+	if($query){
+		return 1;
+	}else{
+		return 0;}
+ }
+ 
  function get_department()
  {
-	$query=$this->db->query('SELECT DISTINCT id,name,PWFNAME,PWLNAME FROM department LEFT JOIN pwemployee  
-							 ON department.USERID = pwemployee.USERID WHERE department.enabled = 1')
+	$query=$this->db->query('SELECT DISTINCT department.id as id,name,k.dep_ex_id as dep_id,k.PWFNAME as PWFNAME,k.PWLNAME as PWLNAME FROM department LEFT JOIN
+							(select  department_executive.id as dep_ex_id,department_executive.dep_id as dep_id,pwemployee.PWFNAME as PWFNAME,pwemployee.PWLNAME as PWLNAME
+							 from department_executive inner join pwemployee
+							 on department_executive.userID = pwemployee.USERID
+							 where department_executive.status=1)k
+							 ON department.id = k.dep_id
+							WHERE department.enabled = 1')
+					->result_array();
+	return $query;
+ }
+ 
+  function get_department_user($id)
+ {
+	$query=$this->db->query('SELECT DISTINCT department.id as id,name,k.dep_ex_id as dep_id,k.PWFNAME as PWFNAME,k.PWLNAME as PWLNAME,k.status as status 
+							 FROM department LEFT JOIN
+							(select  department_executive.id as dep_ex_id,department_executive.dep_id as dep_id,pwemployee.PWFNAME as PWFNAME,pwemployee.PWLNAME as PWLNAME,department_executive.status as status
+							 from department_executive inner join pwemployee
+							 on department_executive.userID = pwemployee.USERID
+							)k 
+							 ON department.id = k.dep_id
+							WHERE department.enabled = 1
+							AND department.id ='.$id.'
+							ORDER BY k.status ASC')
 					->result_array();
 	return $query;
  }
@@ -165,19 +197,25 @@ Class User_manage extends CI_Model
 	return $query;
  }
  
+ function dep_edit_name($id)
+ {
+	$query=$this->db->query('SELECT id,name FROM department WHERE id = '.$id)
+					->result_array();
+	return $query;
+ }
+ 
  function dep_edit_info($id)
  {
-	$query=$this->db->query('SELECT id,department.USERID AS USERID,name,PWFNAME,PWLNAME FROM department LEFT JOIN pwemployee
+	$query=$this->db->query('SELECT id,department.USERID AS USERID,name,PWFNAME,PWLNAME,department.status as status FROM department LEFT JOIN pwemployee
 							 ON department.USERID = pwemployee.USERID WHERE id = '.$id)
 					->result_array();
 	return $query;
  }
  
- function updateDepartmaent_save($id,$department,$userid)
+ function updateDepartmaent_save($id,$department)
  {
 	$query=$this->db->where('id',$id)
 			 ->set('name',$department)
-			 ->set('USERID',$userid)
 			 ->update('department');
 	if($query){
 		return 1;
@@ -190,6 +228,16 @@ Class User_manage extends CI_Model
 	$query=$this->db->where('id',$id)
 			 ->set('enabled',0)
 			 ->update('department');
+	if($query){
+		return 1;
+	}else{
+		return 0;}
+ }
+ 
+ function dep_del_user($id)
+ {
+	$query=$this->db->where('id',$id)
+			 ->delete('department_executive');
 	if($query){
 		return 1;
 	}else{

@@ -51,7 +51,7 @@ td.highlight {
 						<?php }?>
 					
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                            <table class="table table-striped table-bordered table-hover" id="indicator_table">
                                 <thead>
                                     <tr>
                                         <th>ชื่อ</th>
@@ -60,18 +60,29 @@ td.highlight {
                                     </tr>
                                 </thead>
 								<tbody>
-								<?php if(is_array($data) && count($data) ) {
-									foreach($data as $loop){
-								?>
-									<tr>
-                                        <td><?php echo $loop['name']; ?></td>
-										<td><?php echo $loop['PWFNAME'].' '.$loop['PWLNAME']; ?></td>
-										<td>
-											<a href='<?php echo "dep_edit_info/".$loop['id']; ?>' class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
-											<a href='<?php echo "dep_del_info/".$loop['id']; ?>' class="btnDelete btn btn-danger btn-xs" onClick='return confirm(" คุณต้องการลบหรือไม่ ")' title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></a>
-										</td>
-                                    </tr>
-									<?php } } ?>
+								<?php $i=0;?>
+								<?php foreach($data as $loop){ 
+										if($loop['id']==$data[$i]['id']){ ?>
+											<tr>
+												<td><?php echo $loop['name']; ?></td>
+												<td><?php echo $loop['PWFNAME'].' '.$loop['PWLNAME']; ?></td>
+												<td>
+													<a href='<?php echo "dep_edit_name/".$loop['id']; ?>' class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="แก้ไขชื่อกรม"><span class="glyphicon glyphicon-pencil"></span></a>
+													<a href='<?php echo "dep_show_user/".$loop['id']; ?>' class="btn btn-warning btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="แก้ไขผู้รับผิดชอบ"><span class="glyphicon glyphicon-tower"></span></a>
+													<a href='<?php echo "dep_del_info/".$loop['id']; ?>' class="btnDelete btn btn-danger btn-xs" onClick='return confirm(" คุณต้องการลบหรือไม่ ")' title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></a>
+												</td>
+											</tr>
+									<?php }else{ ?>
+											<tr>
+												<td><?php echo $loop['name']; ?></td>
+												<td><?php echo $loop['PWFNAME'].' '.$loop['PWLNAME']; ?></td>
+												<td>
+													<a href='<?php echo "dep_edit_name/".$loop['id']; ?>' class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="แก้ไขชื่อกรม"><span class="glyphicon glyphicon-pencil"></span></a>
+													<a href='<?php echo "dep_show_user/".$loop['id']; ?>' class="btn btn-warning btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="แก้ไขผู้รับผิดชอบ"><span class="glyphicon glyphicon-tower"></span></a>
+													<a href='<?php echo "dep_del_info/".$loop['id']; ?>' class="btnDelete btn btn-danger btn-xs" onClick='return confirm(" คุณต้องการลบหรือไม่ ")' title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></a>
+												</td>
+											</tr>
+									<?php }} ?>
                                 </tbody>
 							</table>
 						</div>
@@ -93,7 +104,7 @@ td.highlight {
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function()
     {
-		var table = $('#dataTables-example').DataTable();
+		$('#indicator_table').dataTable({"order": [[ 0, "asc" ]]});		
 		$('#myModal').modal({
 							show:true,
 							backdrop:false
