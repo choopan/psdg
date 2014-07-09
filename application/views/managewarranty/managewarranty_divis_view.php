@@ -1,5 +1,5 @@
 <?php 
-	$data['title']='คำรับรองการปฏิบัติราชการ  ระดับกรม';
+	$data['title']='คำรับรองการปฏิบัติราชการ  ระดับกอง';
 	$this->load->view('header_view',$data);
 ?>
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/jquery-ui-1.10.4.min.css" >
@@ -12,24 +12,24 @@
 		
 			<div class="row">
 				<div class="col-lg-12">
-					<h3 class="page-header">จัดการคำรับรองการปฏิบัติราชการ  ระดับกรม</h3>
+					<h3 class="page-header">จัดการคำรับรองการปฏิบัติราชการ  ระดับกอง</h3>
 				</div>
 			</div>
 			
 			<div class="row">
 				<div class="col-lg-12">
 					<div id="alert" hidden>
-						<?php if($alert=='save_war_dep_success'){ ?>
+						<?php if($alert=='save_war_div_success'){ ?>
 								<div class="alert alert-success alert-dismissable" >
 									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 									<strong><span class="glyphicon glyphicon-ok"></span> สำเร็จ !</strong> เพิ่มคำรับรองเรียบร้อยแล้ว
 								</div>
-						<?php }elseif($alert=='update_war_dep_success'){ ?>
+						<?php }elseif($alert=='update_war_div_success'){ ?>
 								<div class="alert alert-success alert-dismissable" >
 									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 									<strong><span class="glyphicon glyphicon-ok"></span> สำเร็จ !</strong> แก้ไขคำรับรองเรียบร้อยแล้ว
 								</div>
-						<?php }elseif($alert=='delete_war_dep_success'){ ?>
+						<?php }elseif($alert=='delete_war_div_success'){ ?>
 								<div class="alert alert-success alert-dismissable" >
 									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 									<strong><span class="glyphicon glyphicon-ok"></span> สำเร็จ !</strong> ลบคำรับรองเรียบร้อยแล้ว
@@ -43,7 +43,7 @@
 				<div class="col-md-12">
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<a href="<?php echo site_url('managewarranty/add_ratification_depart'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> เพิ่มคำรับรองการปฏิบัติราชการ ระดับกรม</a>
+							<a href="<?php echo site_url('managewarranty/add_ratification_divis'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> เพิ่มคำรับรองการปฏิบัติราชการ ระดับกอง</a>
 						</div>
 											
 						<div class="panel-body">
@@ -51,18 +51,18 @@
 								<table class="table table-striped table-bordered table-hover" id="skillTable">
 									<thead>
 										<tr>
-											<th>ชื่อกรม</th>
+											<th>ชื่อกอง</th>
 											<th width="20%">จัดการ</th>
 										</tr>
 									</thead>
 									<tbody>
-									<?php foreach($warranty as $key=>$val){ ?>
+									<?php foreach($division as $key=>$val){ ?>
 										<tr>
 											<td>
 												<!--
-												<a href="<?php echo site_url('managewarranty/gen_warranty_depart_docx/'.$val['war_id']); ?>"><img src="<?php echo base_url().'images/word_k005.png';?>" height="20" width="20" class="img-rounded"></a>
+												<a href="<?php echo site_url('managewarranty/gen_warranty_divis_docx/'.$val['war_id']); ?>"><img src="<?php echo base_url().'images/word_k005.png';?>" height="20" width="20" class="img-rounded"></a>
 												-->
-												<?php echo $val['depname']; ?>
+												<?php echo $val['divname']; ?>
 											</td>
 											<td>											
 												<!-- <a data-toggle="modal" data-target="#myModal" href='#' class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
@@ -73,9 +73,9 @@
 														</div> 
 													</div>
 												</div>  -->
-												<a id="fancyboxall" class="btn btn-success btn-xs" href="<?php echo site_url("managewarranty/data_ratification_depart_fancybox/".$val['war_id']); ?>" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
-												<a href='<?php echo site_url('managewarranty/edit_ratification_depart/'.$val['war_id']); ?>' class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
-												<a href='<?php echo site_url('managewarranty/delete_ratification_depart/'.$val['war_id']); ?>' class="btnDelete btn btn-danger btn-xs" onClick='return confirm("ต้องการลบใช่หรือไม่")' title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></a>											
+												<a id="fancyboxall" class="btn btn-success btn-xs" href="<?php echo site_url("managewarranty/data_ratification_divis_fancybox/".$val['war_id']); ?>" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
+												<a href='<?php echo site_url('managewarranty/edit_ratification_divis/'.$val['war_id']); ?>' class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
+												<a href='<?php echo site_url('managewarranty/delete_ratification_divis/'.$val['war_id']); ?>' class="btnDelete btn btn-danger btn-xs" onClick='return confirm("ต้องการลบใช่หรือไม่")' title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></a>											
 											</td>
 										</tr>
 									<?php } ?>

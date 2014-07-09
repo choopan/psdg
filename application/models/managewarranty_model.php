@@ -34,7 +34,7 @@ class Managewarranty_model extends CI_Model
 		return $query;
 	}
 	
-	function get_data_warranty($warranty_id)
+	function get_data_warranty_dep($warranty_id)
 	{
 		$query=$this->db->select("department.name as depname,pwemployee.pwfname,pwemployee.pwlname,warranty_data.position_name as poname,warranty_data.status")
 						->from('warranty')
@@ -47,12 +47,38 @@ class Managewarranty_model extends CI_Model
 		return $query;
 	}
 	
-	function get_data_edit_warranty($where)
+	function get_data_warranty_div($warranty_id)
+	{
+		$query=$this->db->select("division.name as divname,pwemployee.pwfname,pwemployee.pwlname,warranty_data.position_name as poname,warranty_data.status")
+						->from('warranty')
+						->join('warranty_data','warranty.warranty_id = warranty_data.warranty_id','inner')
+						->join('division','division.id = warranty.division_id','inner')
+						->join('pwemployee','pwemployee.userid = warranty_data.user_id','inner')
+						->where('warranty.warranty_id',$warranty_id)
+						->get()
+						->result_array();
+		return $query;
+	}
+	
+	function get_data_edit_warranty_dep($where)
 	{
 		$query=$this->db->select('*')
 						->from('warranty')
 						->join('warranty_data','warranty.warranty_id = warranty_data.warranty_id','inner')
 						->join('department','department.id = warranty.department_id','inner')
+						->join('pwemployee','pwemployee.userid = warranty_data.user_id','inner')
+						->where($where)
+						->get()
+						->result_array();
+		return $query;
+	}
+	
+	function get_data_edit_warranty_div($where)
+	{
+		$query=$this->db->select('*')
+						->from('warranty')
+						->join('warranty_data','warranty.warranty_id = warranty_data.warranty_id','inner')
+						->join('division','division.id = warranty.division_id','inner')
 						->join('pwemployee','pwemployee.userid = warranty_data.user_id','inner')
 						->where($where)
 						->get()
@@ -112,4 +138,14 @@ class Managewarranty_model extends CI_Model
 		return $result;
 	}
 	
+	function get_division($where)
+	{
+		$query=$this->db->select("warranty.warranty_id as war_id,division.name as divname")
+						->from('warranty')
+						->join('division','division.id = warranty.division_id','inner')
+						->where($where)
+						->get()
+						->result_array();
+		return $query;
+	}
 }
