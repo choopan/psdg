@@ -45,7 +45,7 @@ Class User_manage extends CI_Model
 	return $query;
  }
  
- function addUser_save($username,$password,$fname,$lname,$efname,$elname,$gender,$email,$tel,$mobile,$department,$division,$position1,$level,$admin_min,$admin_dep,$admin_div)
+ function addUser_save($username,$password,$fname,$lname,$efname,$elname,$gender,$email,$tel,$mobile,$department,$division,$level,$admin_min,$admin_dep,$admin_div,$position_ty,$position,$position_lv)
  {
 	$query=$this->db->set('PWUSERNAME',$username)
 			 ->set('PWPASSWORD',$password)
@@ -59,11 +59,14 @@ Class User_manage extends CI_Model
 			 ->set('mobile',$mobile)
 			 ->set('department',$department)
 			 ->set('division',$division)
-			 ->set('PWPOSITION',$position1)
 			 ->set('PWLEVEL',$level)
 			 ->set('admin_min',$admin_min)
 			 ->set('admin_dep',$admin_dep)
 			 ->set('admin_div',$admin_div)
+			 ->set('position_type',$position_ty)
+			 ->set('PWPOSITION',$position)
+			 ->set('position',$position)
+			 ->set('position_level',$position_lv)
 			 ->insert('pwemployee');
 	if($query){
 		return 1;
@@ -118,6 +121,29 @@ Class User_manage extends CI_Model
 		return 1;
 	}else{
 		return 0;}
+ }
+ 
+ function get_position_1($id)
+ {
+	$query=$this->db->distinct()
+					->where('enabled',1)
+					->where('position_type_id',$id)
+					->select('PWPOSITION,PWNAME')
+					->order_by('PWNAME','ASC')
+					->get('pwposition')
+					->result_array();
+	return $query;
+ }
+ 
+ function get_position_2($id)
+ {
+	$query=$this->db->distinct()
+					->where('enabled',1)
+					->where('position_type_id',$id)
+					->order_by('name','ASC')
+					->get('position_level')
+					->result_array();
+	return $query;
  }
  
  function get_position()

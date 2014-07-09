@@ -140,21 +140,28 @@ td.highlight {
 									<div class="row">
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>เลือกตำแหน่ง *</label>
-											<select name="position1" class="form-control" required>
+                                            <label>เลือกชนิดตำแหน่ง *</label>
+											<select name="position_ty" class="form-control" onChange="get_position(this.value)" required>
 													<option value="0">กรุณาเลือกตำแหน่ง</option>
 												<?php foreach($position as $loop2){ ?>
-													<option value="<?php echo $loop2['PWPOSITION']; ?>"><?php echo $loop2['PWNAME']; ?></option>
+													<option value="<?php echo $loop2['id']; ?>"><?php echo $loop2['name']; ?></option>
 												<?php } ?>
 											</select>
 										</div>
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>เลือกระดับ *</label>
-                                            <select name="level" class="form-control" id="division_db" required>
-												<option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
-												<option>7</option><option>8</option><option>9</option><option>10</option><option>11</option>
+                                            <label>เลือกตำแหน่ง *</label>
+                                            <select name="position" class="form-control" id="position"  required>
+												<option value="0">--select--</option>
+											</select>
+										</div>
+										</div>
+										<div class="col-lg-4">
+										<div class="form-group">
+                                            <label>เลือกระดับตำแหน่ง *</label>
+                                            <select name="position_lv" class="form-control" id="position_lv" required>
+												<option value="0">--select--</option>
 											</select>
 										</div>
 										</div>
@@ -223,6 +230,46 @@ function get_division(val){
 							
 						}
 						$(tr).appendTo('#division_db');
+                    }
+				});
+}
+
+function get_position(val1){
+	$.ajax({
+					'url' : '<?php echo site_url('manageuser/get_position_1'); ?>/'+val1,
+					'dataType': 'json',
+					'error' : function(data){ 
+						alert('error');
+                    },
+					'success' : function(data){
+						$("#position").empty();
+						var d1_num=data.length;
+						var tr='<option value="0">เลือก</option>';
+						for(i=0;i<d1_num;i++)
+						{
+							tr+='<option value="'+data[i]['PWPOSITION']+'">'+data[i]['PWNAME']+'</option>';
+							
+						}
+						$(tr).appendTo('#position');
+                    }
+				});
+				
+	$.ajax({
+					'url' : '<?php echo site_url('manageuser/get_position_2'); ?>/'+val1,
+					'dataType': 'json',
+					'error' : function(data2){ 
+						alert('error');
+                    },
+					'success' : function(data2){
+						$("#position_lv").empty();
+						var d2_num=data2.length;
+						var tr='<option value="0">เลือก</option>';
+						for(i=0;i<d2_num;i++)
+						{
+							tr+='<option value="'+data2[i]['id']+'">'+data2[i]['name']+'</option>';
+							
+						}
+						$(tr).appendTo('#position_lv');
                     }
 				});
 }

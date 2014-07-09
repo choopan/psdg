@@ -40,7 +40,7 @@ class Manageuser extends CI_Controller {
 		$data['title'] = "MFA - User Management";
 		$data['result'] = 0;
 		$data['department']=$this->user_manage->get_department();
-		$data['position']=$this->user_manage->get_position();
+		$data['position']=$this->user_manage->get_position_type();
 		$data['numuser'] = $this->user_manage->get_num_user();				
 		$limit = 15;
 		$data['limit'] = $limit;
@@ -64,9 +64,10 @@ class Manageuser extends CI_Controller {
 	function adduser()
 	{
 		$data['data']=$this->user_manage->get_department_1();
-		$data['position']=$this->user_manage->get_position();
+		$data['position']=$this->user_manage->get_position_type();
 		$data['title'] = "MFA - User Management";
 		$data['result'] = 0;
+		
 		/* echo "<pre>";
 		print_r($data);
 		echo "</pre>"; */
@@ -88,7 +89,10 @@ class Manageuser extends CI_Controller {
 		$mobile=$this->input->post('mobile');
 		$department=$this->input->post('department');
 		$division=$this->input->post('division');
-		$position1=$this->input->post('position1');
+		
+		$position_ty=$this->input->post('position_ty');
+		$position=$this->input->post('position');
+		$position_lv=$this->input->post('position_lv');
 		$level=$this->input->post('level');
 		$admin_min_0=$this->input->post('admin');
 		
@@ -112,10 +116,10 @@ class Manageuser extends CI_Controller {
 
 		if($password==$retry_password)
 		{
-			$result=$this->user_manage->addUser_save($username,md5($password),$fname,$lname,$efname,$elname,$gender,$email,$tel,$mobile,$department,$division,$position1,$level,$admin_min,$admin_dep,$admin_div);
+			$result=$this->user_manage->addUser_save($username,md5($password),$fname,$lname,$efname,$elname,$gender,$email,$tel,$mobile,$department,$division,$level,$admin_min,$admin_dep,$admin_div,$position_ty,$position,$position_lv);
 			
 			$data['data']=$this->user_manage->get_department_1();
-			$data['position']=$this->user_manage->get_position();
+			$data['position']=$this->user_manage->get_position_type();
 			$data['title'] = "MFA - User Management";
 			$data['result'] = $result;
 			
@@ -138,7 +142,7 @@ class Manageuser extends CI_Controller {
 	function user_edit_info($id)
 	{
 		$data['department']=$this->user_manage->get_department();
-		$data['position']=$this->user_manage->get_position();
+		$data['position']=$this->user_manage->get_position_type();
 		$data['title'] = "MFA - User Management";
 		$data['result'] = 0;
 		$data['data']=$this->user_manage->user_view_info($id);
@@ -187,7 +191,7 @@ class Manageuser extends CI_Controller {
 		$result=$this->user_manage->editUser_save($id,$fname,$lname,$efname,$elname,$email,$tel,$mobile,$department,$division,$position1,$level,$admin_min,$admin_dep,$admin_div,$execode);
 		
 		$data['department']=$this->user_manage->get_department();
-		$data['position']=$this->user_manage->get_position();
+		$data['position']=$this->user_manage->get_position_type();
 		$data['title'] = "MFA - User Management";
 		$data['result'] = $result;
 		$data['data']=$this->user_manage->user_view_info($id);
@@ -203,7 +207,7 @@ class Manageuser extends CI_Controller {
 		$data['title'] = "MFA - User Management";
 		$data['result'] = $result;
 		$data['department']=$this->user_manage->get_department();
-		$data['position']=$this->user_manage->get_position();
+		$data['position']=$this->user_manage->get_position_type();
 		$data['numuser'] = $this->user_manage->get_num_user();				
 		$limit = 15;
 		$data['limit'] = $limit;
@@ -647,6 +651,17 @@ class Manageuser extends CI_Controller {
 		$this->load->view('manage/editPosition',$data);
 	}
 	
+	function get_position_1($id)
+	{
+		$data=$this->user_manage->get_position_1($id);
+		echo json_encode($data);
+	}
+	
+	function get_position_2($id)
+	{
+		$data=$this->user_manage->get_position_2($id);
+		echo json_encode($data);
+	}
 	
 	function pos_del_info($id)
 	{
