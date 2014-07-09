@@ -376,7 +376,7 @@ Class User_manage extends CI_Model
 							 FROM position_type inner join pwposition
 							 ON position_type.id = pwposition.position_type_id
 							 WHERE pwposition.enabled = 1
-							 ORDER BY pwposition.PWNAME')
+							 ORDER BY position_type.id')
 					->result_array();
 	return $query;
  }
@@ -387,7 +387,7 @@ Class User_manage extends CI_Model
 							 FROM position_type inner join position_level
 							 ON position_type.id = position_level.position_type_id
 							 WHERE position_level.enabled=1 
-							 ORDER BY position_level.name')
+							 ORDER BY position_type.id')
 					->result_array();
 	return $query;
  }
@@ -490,6 +490,18 @@ Class User_manage extends CI_Model
 		return 1;
 	}else{
 		return 0;}
+ }
+ 
+ 
+ function getAllPotionTypeandLevel() {
+ 	$result = $this->db	->select("position_level.id AS position_level_id, position_type.name as position_type_name, position_level.name as position_level_name, core_competency_set.id as coresetID, core_competency_set.name as coreset_name")
+						->from('position_type')
+						->join('position_level', 'position_type.id = position_level.position_type_id')
+						->join('core_competency_set', 'position_level.coreset_id = core_competency_set.id', 'left')
+						->where(array('position_level.enabled' => 1, 'position_type.enabled' => 1))
+						->order_by('position_level.id', 'asc')
+						->get() -> result_array();
+	return $result;						
  }
 }
 ?>

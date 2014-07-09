@@ -44,6 +44,82 @@ Class PersonIndicator extends CI_Model
 					-> update('person_indicator');	
 	}	
 	
+	function deletePersonIndicator($id) {
+		 $this->db -> where('ID', $id)
+		 			-> delete('person_indicator_detail');
+	}
+	
+	function updatePersonIndicator($id, $order, $indicatorName, $weight,
+								$ind1, $ind2, $ind3, $ind4, $ind5, 
+								$ind_detail1, $ind_detail2, $ind_detail3, $ind_detail4, $ind_detail5) {
+		
+		$this->db -> where('ID', $id)
+				  -> set('order', $order)
+				  -> set('name', $indicatorName)
+				  -> set('weight', $weight)
+				  -> set('indicator1', $ind1)
+				  -> set('indicator2', $ind2)
+				  -> set('indicator3', $ind3)
+				  -> set('indicator4', $ind4)
+				  -> set('indicator5', $ind5)
+				  -> set('detail_indicator1', $ind_detail1)
+				  -> set('detail_indicator2', $ind_detail2)
+				  -> set('detail_indicator3', $ind_detail3)
+				  -> set('detail_indicator4', $ind_detail4)
+				  -> set('detail_indicator5', $ind_detail5)
+				  -> update('person_indicator_detail');
+		
+	}
+								
+								
+	function addPersonIndicator($userID, $year, $round, $dep_id, $div_id, $order, $indicatorName, $weight,
+								$ind1, $ind2, $ind3, $ind4, $ind5, 
+								$ind_detail1, $ind_detail2, $ind_detail3, $ind_detail4, $ind_detail5) {
+		
+		$r = $this -> db -> get_where('person_indicator', array('userID' => $userID, 'year' => $year, 'round' => $round))
+						 -> result_array();
+						 
+		$numberofevalinround = count($r);
+
+		$r = $this-> db -> order_by('order', 'desc') 
+						-> get_where('person_indicator', array('userID' => $userID, 'year' => $year, 'round' => $round, 'dep_id' => $dep_id, 'div_id' => $div_id))
+						-> result_array();
+		//Person Indicator Set is not exist, just create one
+		if(count($r) == 0) {
+			$this-> db 
+					-> set('userID', $userID)
+					-> set('year', $year)
+					-> set('round', $round)
+					-> set('dep_id', $dep_id)
+					-> set('div_id', $div_id)
+					-> set('last_update', date('Y-m-d'))
+					-> set('order', $numberofevalinround+1)
+					-> set('status', 0)
+					-> insert('person_indicator');
+			$pid = $this->db->insert_id();			
+		} else {
+			$pid = $r[0]['id'];
+			$this -> db -> set('last_update', date('Y-m-d')) -> update('person_indicator');
+		}
+			
+		$this->db -> set('PID', $pid)
+				  -> set('order', $order)
+				  -> set('name', $indicatorName)
+				  -> set('weight', $weight)
+				  -> set('indicator1', $ind1)
+				  -> set('indicator2', $ind2)
+				  -> set('indicator3', $ind3)
+				  -> set('indicator4', $ind4)
+				  -> set('indicator5', $ind5)
+				  -> set('detail_indicator1', $ind_detail1)
+				  -> set('detail_indicator2', $ind_detail2)
+				  -> set('detail_indicator3', $ind_detail3)
+				  -> set('detail_indicator4', $ind_detail4)
+				  -> set('detail_indicator5', $ind_detail5)
+				  -> insert('person_indicator_detail');								
+	}
+	
+	/*
 	function deleteandAddIndicator($userID, $year, $round, $dep_id, $div_id, $orders, $names, $weights) {
 		$r = $this -> db -> get_where('person_indicator', array('userID' => $userID, 'year' => $year, 'round' => $round))
 						 -> result_array();
@@ -82,7 +158,8 @@ Class PersonIndicator extends CI_Model
 			}
 		}		
 	}
-
+	*/
+	
 	function setPIStatus($pid, $status) {
 	 	$this -> db -> set('status', $status)
 					-> where('ID', $pid)
@@ -232,6 +309,7 @@ Class PersonIndicator extends CI_Model
 	function listIndicator($userID, $year, $round, $dep_id, $div_id) {
 		$result = $this	-> db
 						-> select('ID')
+						-> order_by('order', 'desc')
 					 	-> get_where('person_indicator', array('userID' => $userID, 'year' => $year, 'round' => $round, 'dep_id' => $dep_id, 'div_id' => $div_id))
 				 		-> result_array();
 		if(count($result) > 0) {
@@ -240,6 +318,12 @@ Class PersonIndicator extends CI_Model
 							-> result_array();			
 		}
 		
+		return $result;
+	}
+	
+	function getIndicatorDetail($id) {
+		$result = $this -> db -> where('ID', $id)
+							  -> get('person_indicator_detail') -> result_array();
 		return $result;
 	}
 	

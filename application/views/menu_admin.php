@@ -41,7 +41,7 @@
 
                         </li>
                         <li>
-                            <a href="<?php echo site_url("main"); ?>"><i class="fa fa-dashboard fa-fw"></i> หน้าแรก</a>
+                            <a href="<?php echo site_url("main"); ?>"><i class="fa fa-dashboard fa-fw"></i> หน้าแรก (MENU ADMIN)</a>
                         </li>
 						<li>
                             <a href="<?php echo site_url("main/changeyear"); ?>"><i class="fa fa-calendar fa-fw"></i> ปีงบประมาณ <strong><u><?php echo $this->session->userdata('sessyear'); ?></u></strong></a>
@@ -83,10 +83,7 @@
                                 </li>
                                 <li>
                                     <a href="<?php echo site_url("core_competency/assignCoreSetIndex"); ?>">กำหนดชุุดประเมินสมรรณะ</a>
-                                </li>
-								<li>
-                                    <a href="<?php echo site_url("core_competency/coreAbility"); ?>">แบบประเมินสมรรถนะ</a>
-                                </li>
+                                </li>								
                             </ul>
                         </li>
 						                        

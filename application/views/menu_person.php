@@ -41,15 +41,22 @@
 
                         </li>
                         <li>
-                            <a href="<?php echo site_url("main"); ?>"><i class="fa fa-dashboard fa-fw"></i> หน้าแรก</a>
+                            <a href="<?php echo site_url("main"); ?>"><i class="fa fa-dashboard fa-fw"></i> หน้าแรก (MENU PERSON)</a>
                         </li>
 						<li>
 							<?php
 								$evalRound = $this->personindicator->getActiveEvalRound();
+								if(count($evalRound) == 0) {
+									$year = "?";
+									$round = "?";
+								} else {
+									$year = $evalRound[0]['year'];
+									$round = $evalRound[0]['round'];
+								}
 							?>
 							<a href="#">
-                            <i class="fa fa-calendar fa-fw"></i> ปีงบประมาณ <strong><?php echo $evalRound[0]['year']; ?></strong>
-                            		รอบที่  <strong><?php echo $evalRound[0]['round']; ?></strong>
+                            <i class="fa fa-calendar fa-fw"></i> ปีงบประมาณ <strong><?php echo $year; ?></strong>
+                            		รอบที่  <strong><?php echo $round; ?></strong>
                             </a>
                         </li>
                         
@@ -60,14 +67,14 @@
                                 <!-- -->
                                 
 								<?php   if ($this->session->userdata('sessadmin_min') == 1) { ?>
-                                	<li><a href="<?php echo site_url("person_evaluation/minManagePersonIndicator"); ?>">แสดงตัวชี้วัดรายบุคคล</a></li>
-                                	<li><a href="<?php echo site_url("person_evaluation/minManagePersonEvaluation"); ?>">แสดงรายงานผลปฏิบัติการ</a></li>									
+                                	<li><a href="<?php echo site_url("person_evaluation/minManagePersonIndicator"); ?>"><i class='fa fa-bar-chart-o fa-fw'></i> แสดงตัวชี้วัดรายบุคคล</a></li>
+                                	<li><a href="<?php echo site_url("person_evaluation/minManagePersonEvaluation"); ?>"><i class='fa fa-bar-chart-o fa-fw'></i> แสดงรายงานผลปฏิบัติการ</a></li>									
 								<?php   } elseif($this->session->userdata('sessexecdiv') == 1) { ?>
-                                	<li><a href="<?php echo site_url("person_evaluation/divManagePersonIndicator"); ?>">แสดงตัวชี้วัดรายบุคคล</a></li>
-                                	<li><a href="<?php echo site_url("person_evaluation/divManagePersonEvaluation"); ?>">แสดงรายงานผลปฏิบัติการ</a></li>
+                                	<li><a href="<?php echo site_url("person_evaluation/divManagePersonIndicator"); ?>"><i class='fa fa-bar-chart-o fa-fw'></i> แสดงตัวชี้วัดรายบุคคล</a></li>
+                                	<li><a href="<?php echo site_url("person_evaluation/divManagePersonEvaluation"); ?>"><i class='fa fa-bar-chart-o fa-fw'></i> แสดงรายงานผลปฏิบัติการ</a></li>
                                 <?php   } elseif($this->session->userdata('sessexecdep') == 1) { ?>
-                                	<li><a href="<?php echo site_url("person_evaluation/depManagePersonIndicator"); ?>">แสดงตัวชี้วัดรายบุคคล</a></li>
-                                	<li><a href="<?php echo site_url("person_evaluation/depManagePersonEvaluation"); ?>">แสดงรายงานผลปฏิบัติการ</a></li>
+                                	<li><a href="<?php echo site_url("person_evaluation/depManagePersonIndicator"); ?>"><i class='fa fa-bar-chart-o fa-fw'></i> แสดงตัวชี้วัดรายบุคคล</a></li>
+                                	<li><a href="<?php echo site_url("person_evaluation/depManagePersonEvaluation"); ?>"><i class='fa fa-bar-chart-o fa-fw'></i> แสดงรายงานผลปฏิบัติการ</a></li>
                                 <?php   } ?>                            
                     </ul>
                 </div>

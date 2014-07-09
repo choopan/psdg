@@ -5,9 +5,11 @@
 </head>
 <body>
 <div id="wrapper">
-<?php $this->load->view('menu'); ?>
+<?php $this->load->view('menu_person'); ?>
 <div id="page-wrapper">
 	
+	<div class="pull-right"><h4><strong>สถานะ :</strong>&nbsp;&nbsp;<?php echo $status_msg; ?></h4></div><br><br>
+			
 	<div class="row">
 		<div class="col-lg-12">
 			<?php 	if($this->session->flashdata('success')) {
@@ -16,36 +18,65 @@
   							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
   			<?php			echo $this->session->flashdata('success'); ?>
 						</div>
-			<?php	}?>
+			<?php	}
+					$sumweight = 0;
+			?>
 				
-            <div class="panel panel-primary">
-				<div class="panel-heading"><strong>ตัวชี้วัดรายบุคคลที่กำหนด ประจำปีงบประมาณ <?php echo $year; ?></strong></div>
-				<div class="panel-body">
-					<form class="form-inline" role="form" >					
-					<table class="table table-hover" id="indicator_table">
-						<thead>
-							<tr>
-								<th style="width: 200px">ลำดับ</th>
-								<th>ชื่อตัวชี้วัด</th>
-								<th>ค่าน้ำหนัก</th>
-								
-							</tr>
-						</thead>
-						<tbody>	
-								<?php
-									foreach($indicators as $ind) {
-								?>
+						
+		    <div class="panel panel-default">
+		    		<div class="panel-heading">
+		    			<h4>ตัวชี้วัดรายบุคคลที่กำหนด ประจำปีงบประมาณ <?php echo $year; ?> รอบที่ <?php echo $round; ?></h4>
+		    		</div>	
+        
+								<div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped row-border table-hover" id="dataTables-example">
+                                <thead>
+                                	<tr>
+										<th rowspan="2">ลำดับที่</th>
+										<th rowspan="2">ชื่อตัวชี้วัด</th>
+										<th colspan="5" style="text-align: center;">เกณฑ์การให้คะแนน</th>
+										<th rowspan="2">น้ำหนัก</th>	
+										<th rowspan="2">รายละเอียด</th>								
+									</tr>
 									<tr>
-										<td><?php echo $ind['order']; ?></td>
-										<td><?php echo $ind['name']; ?> </td>
-										<td><?php echo $ind['weight']; ?></td>
-								
-                            		</tr>
-                            		
-								<?php       		
-									}								
+										<th>1</th>
+										<th>2</th>
+										<th>3</th>
+										<th>4</th>
+										<th>5</th>
+										
+									</tr>
+								</thead>
+                                <tbody>
+                                <?php
+									foreach($indicators as $ind) {
+								?>	
+										<tr>
+											<td><?php echo $ind['order']; ?></td>
+											<td><?php echo $ind['name']; ?></td>
+											<td><?php echo $ind['indicator1']; ?></td>
+											<td><?php echo $ind['indicator2']; ?></td>
+											<td><?php echo $ind['indicator3']; ?></td>
+											<td><?php echo $ind['indicator4']; ?></td>
+											<td><?php echo $ind['indicator5']; ?></td>
+											<td><?php echo $ind['weight']; $sumweight +=  $ind['weight'];?></td>
+											<td>
+												<a data-toggle="modal" data-target="#myModal<?php echo $ind['ID']; ?>" href='<?php echo site_url("person_evaluation/viewPersonIndicatorDetail/".$ind['ID']); ?>' class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
+														<div class="modal fade" id="myModal<?php echo $ind['ID']; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+											    			<div class="modal-dialog modal-lg">
+        														<div class="modal-content">
+        														</div> 
+    														</div>
+														</div>
+												
+											</td>
+										</tr>
+								<?php
+									}
 								?>
-						</tbody>
+								<tr><td colspan=7 style="text-align: right"><strong>รวมค่าน้ำหนัก ==> </strong></td><td><strong><?php echo number_format($sumweight, 2); ?></strong></td><td></td></tr>
+								</tbody>
 					</table>
 					</form>					
 				</div>
@@ -55,7 +86,7 @@
 
 	<div class="row">
 		<div class="col-lg-10">
-			<strong>สถานะ :</strong>&nbsp;&nbsp;<?php echo $status_msg; ?>
+			
 		</div>
 	</div>
 

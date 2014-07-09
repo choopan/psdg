@@ -131,16 +131,17 @@ class Core_competency extends CI_Controller {
 	}
 	
 	function assignCoreSetIndex() {
-		$data['title'] = "Testing";
-		$data['users'] = $this->user_manage->getUserandCoreSet();
+		$data['title'] = "MFA - Assign Core Competency Set";
+		
+		$data['position_type_levels'] = $this->user_manage->getAllPotionTypeandLevel();	
 		$data['coresets'] = $this->core_competency_model->listCoreSet();
 		$this->load->view('core_competency/showAssignCoreSet.php', $data);
 	}
 	
 	function saveAssignCoreSet() {
-		$userID = $this->input->post("userID");
+		$posLvlID = $this->input->post("posLvlID");
 		$coreSetID = $this->input->post("coreSetID");
-		$result = $this->core_competency_model->updateUserCoreSet($userID, $coreSetID);
+		$result = $this->core_competency_model->updatePositionLevelCoreSet($posLvlID, $coreSetID);
 		echo json_encode($result);
 	}
 	

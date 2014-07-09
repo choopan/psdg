@@ -81,10 +81,10 @@ Class Core_competency_model extends CI_Model
 		$this -> db -> delete('core_competency_expect', array('coresetID' => $id));
 	}
 	
-	function updateUserCoreSet($userID, $coreSetID) {
-		$this -> db -> set("coresetID", $coreSetID)
-					-> where("userID", $userID)
-					-> update('PWEMPLOYEE');
+	function updatePositionLevelCoreSet($posLvlID, $coreSetID) {
+		$this -> db -> set("coreset_id", $coreSetID)
+					-> where("id", $posLvlID)
+					-> update('position_level');
 		$result = $this -> getCoreSetName($coreSetID);
 		return $result;					
 	}

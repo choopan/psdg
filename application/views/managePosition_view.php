@@ -36,7 +36,7 @@ td.highlight {
 
 <body>
 	<div id="wrapper">
-	<?php $this->load->view('menu'); ?>
+	<?php $this->load->view('menu_admin'); ?>
 	
 	
 	

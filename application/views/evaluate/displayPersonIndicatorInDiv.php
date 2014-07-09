@@ -5,7 +5,7 @@
 </head>
 <body>
 <div id="wrapper">
-<?php $this->load->view('menu'); ?>
+<?php $this->load->view('menu_person'); ?>
 <div id="page-wrapper">
 	
 	<div class="row">
@@ -70,7 +70,11 @@
 <script src="<?php echo base_url(); ?>js/jquery-ui-1.10.4.min.js"></script>
 <script type="text/javascript" charset="utf-8">	
 	$(document).ready(function() {
-		$('#indicator_table').dataTable({"order": [[ 0, "asc" ]]});
+		$('#indicator_table').dataTable({
+			"order": [[ 0, "asc" ]],
+			"paging": false,
+			"info": false			
+			});		
 	});
 </script>
 </body>
