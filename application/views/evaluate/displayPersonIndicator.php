@@ -78,7 +78,7 @@
 								<tr><td colspan=7 style="text-align: right"><strong>รวมค่าน้ำหนัก ==> </strong></td><td><strong><?php echo number_format($sumweight, 2); ?></strong></td><td></td></tr>
 								</tbody>
 					</table>
-					</form>					
+										
 				</div>
 			</div>
 		</div>

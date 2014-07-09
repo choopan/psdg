@@ -5,9 +5,9 @@
 </head>
 <body>
 <div id="wrapper">
-<?php $this->load->view('menu'); ?>
+<?php $this->load->view('menu_person'); ?>
 <div id="page-wrapper">
-	
+	<h4>ตัวชี้วัดรายบุคคลที่กำหนด ประจำปีงบประมาณ <?php echo $year; ?> รอบที่ <? echo $round; ?></h4>
 	<div class="row">
 		<div class="col-lg-12">
 			<?php 	if($this->session->flashdata('success')) {
@@ -19,14 +19,15 @@
 			<?php	}?>
 				
             <div class="panel panel-default">
-				<div class="panel-heading"><strong>ตัวชี้วัดรายบุคคลที่กำหนด ประจำปีงบประมาณ <?php echo $year; ?> รอบที่ <? echo $round; ?></strong></div>
+				<div class="panel-heading">รายการรอการพิจารณาและแก้ไข</div>
 				<div class="panel-body">
 					<form class="form-inline" role="form" >					
-					<table class="table table-hover" id="indicator_table">
+					<table class="table table-hover" id="exec_table">
 						<thead>
 							<tr>
-								<th style="width: 200px">ชื่อ - นามสกุล</th>		
-								<th>กอง</th>					
+								<th style="width: 200px">ชื่อ - นามสกุล</th>	
+								<th>สังกัด</th>	
+								<th>หน่วยงาน</th>					
 								<th>ตำแหน่ง</th>
 								<th>สถานะ</th>
 								<th>จัดการ</th>
@@ -34,17 +35,19 @@
 						</thead>
 						<tbody>	
 								<?php
-									foreach($user_info as $ui) {
+									foreach($exec_info as $ui) {
 								?>
 									<tr>
 										<td><?php echo $ui['PWFNAME']." ".$ui['PWLNAME']; ?></td>
+										<td><?php echo $ui['depname'] ?></td>
 										<td><?php echo $ui['divname']; ?></td>
-										<td><?php echo $ui['position']." (ระดับ ".$ui['PWLEVEL'].")"; ?> </td>
+										<td><?php echo $ui['position']; ?> </td>
 										<?php 
 											switch($this->personindicator->getPIStatus($ui['userID'], $ui['depID'], $ui['divID'], $year, $round)) {
 												case 0 : echo "<td><span class='label label-danger'>ยังไม่ส่งตัวชี้วัด</span></td><td> - </td>"; break;
-												case 1 : echo "<td><span class='label label-success'>รอการพิจารณา</span></td><td> - </td>"; break;
-												default : echo "<td><span class='label label-primary'>อนุมัติแล้ว</span></td><td><a href='". site_url('person_evaluation/viewIndicatorFromDep') ."/". $ui['userID'] ."' class='btn btn-info' type='button'> ดูรายละเอียด</a></td>"; break;											
+												case 1 : echo "<td><span class='label label-warning'>รอการพิจารณา</span></td><td> - </td>"; break;
+												case 3 : echo "<td><span class='label label-success'>อนุมัติแล้ว</span></td><td> - </td>"; break;
+												default : echo "<td><span class='label label-primary'>ฦฦฦฦฦ</span></td><td><a href='". site_url('person_evaluation/viewIndicatorFromDep') ."/". $ui['userID'] ."' class='btn btn-info' type='button'> ดูรายละเอียด</a></td>"; break;											
 											}
 										?>								
                             		</tr>
@@ -57,6 +60,52 @@
 					</form>					
 				</div>
 			</div>
+			
+			
+			
+			    <div class="panel panel-warning">
+				<div class="panel-heading">รายการรอการตรวจสอบและอนุมัติ</div>
+				<div class="panel-body">
+					<form class="form-inline" role="form" >					
+					<table class="table table-hover" id="user_table">
+						<thead>
+							<tr>
+								<th style="width: 200px">ชื่อ - นามสกุล</th>	
+								<th>สังกัด</th>	
+								<th>หน่วยงาน</th>					
+								<th>ตำแหน่ง</th>
+								<th>สถานะ</th>
+								<th>จัดการ</th>
+							</tr>
+						</thead>
+						<tbody>	
+								<?php
+									foreach($user_info as $ui) {
+								?>
+									<tr>
+										<td><?php echo $ui['PWFNAME']." ".$ui['PWLNAME']; ?></td>
+										<td><?php echo $ui['depname'] ?></td>
+										<td><?php echo $ui['divname']; ?></td>
+										<td><?php echo $ui['position']; ?> </td>
+										<?php 
+											switch($this->personindicator->getPIStatus($ui['userID'], $ui['depID'], $ui['divID'], $year, $round)) {
+												case 0 : echo "<td><span class='label label-danger'>ยังไม่ส่งตัวชี้วัด</span></td><td> - </td>"; break;
+												case 1 : echo "<td><span class='label label-warning'>รอการพิจารณา</span></td><td> - </td>"; break;
+												case 3 : echo "<td><span class='label label-success'>อนุมัติแล้ว</span></td><td> - </td>"; break;
+												default : echo "<td><span class='label label-primary'>ฦฦฦฦฦ</span></td><td><a href='". site_url('person_evaluation/viewIndicatorFromDep') ."/". $ui['userID'] ."' class='btn btn-info' type='button'> ดูรายละเอียด</a></td>"; break;											
+											}
+										?>								
+                            		</tr>
+                            		
+								<?php       		
+									}								
+								?>
+						</tbody>
+					</table>
+					</form>					
+				</div>
+			</div>
+
 		</div>
 	</div>
 
@@ -71,7 +120,10 @@
 <script src="<?php echo base_url(); ?>js/jquery-ui-1.10.4.min.js"></script>
 <script type="text/javascript" charset="utf-8">	
 	$(document).ready(function() {
-		$('#indicator_table').dataTable({"order": [[ 0, "asc" ]]});
+		$('#user_table').dataTable({
+			"order": [[ 0, "asc" ]],
+			"info":     false,
+		});
 	});
 </script>
 </body>

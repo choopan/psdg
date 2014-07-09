@@ -44,14 +44,32 @@ Class PersonIndicator extends CI_Model
 					-> update('person_indicator');	
 	}	
 	
-	function deletePersonIndicator($id) {
+	
+	function getPID($person_indicator_detail_id) {
+		$result = $this->db->get_where('person_indicator_detail', array('ID' =>$person_indicator_detail_id))->result_array();
+		$PID = $result[0]['PID'];
+		return $PID;
+	}
+	
+	function deletePersonIndicator($id, $modified_by_executive=0) {
+		$PID = $this->getPID($id);
+		
+		$this->db	-> where('id', $PID)
+					-> set('modified', $modified_by_executive)
+					-> update('person_indicator');
+		
 		 $this->db -> where('ID', $id)
 		 			-> delete('person_indicator_detail');
 	}
 	
 	function updatePersonIndicator($id, $order, $indicatorName, $weight,
 								$ind1, $ind2, $ind3, $ind4, $ind5, 
-								$ind_detail1, $ind_detail2, $ind_detail3, $ind_detail4, $ind_detail5) {
+								$ind_detail1, $ind_detail2, $ind_detail3, $ind_detail4, $ind_detail5, $modified_by_executive=0) {
+
+		$PID = $this->getPID($id);
+		$this->db	-> where('id', $PID)
+					-> set('modified', $modified_by_executive)
+					-> update('person_indicator');
 		
 		$this->db -> where('ID', $id)
 				  -> set('order', $order)
@@ -67,14 +85,13 @@ Class PersonIndicator extends CI_Model
 				  -> set('detail_indicator3', $ind_detail3)
 				  -> set('detail_indicator4', $ind_detail4)
 				  -> set('detail_indicator5', $ind_detail5)
-				  -> update('person_indicator_detail');
-		
+				  -> update('person_indicator_detail');		
 	}
 								
 								
 	function addPersonIndicator($userID, $year, $round, $dep_id, $div_id, $order, $indicatorName, $weight,
 								$ind1, $ind2, $ind3, $ind4, $ind5, 
-								$ind_detail1, $ind_detail2, $ind_detail3, $ind_detail4, $ind_detail5) {
+								$ind_detail1, $ind_detail2, $ind_detail3, $ind_detail4, $ind_detail5, $modified_by_executive=0) {
 		
 		$r = $this -> db -> get_where('person_indicator', array('userID' => $userID, 'year' => $year, 'round' => $round))
 						 -> result_array();
@@ -92,14 +109,15 @@ Class PersonIndicator extends CI_Model
 					-> set('round', $round)
 					-> set('dep_id', $dep_id)
 					-> set('div_id', $div_id)
-					-> set('last_update', date('Y-m-d'))
+					//-> set('last_update', date('Y-m-d'))
 					-> set('order', $numberofevalinround+1)
 					-> set('status', 0)
+					-> set('modified', 0)
 					-> insert('person_indicator');
 			$pid = $this->db->insert_id();			
 		} else {
 			$pid = $r[0]['id'];
-			$this -> db -> set('last_update', date('Y-m-d')) -> update('person_indicator');
+			$this -> db -> where('id', $pid) -> set('modified', $modified_by_executive) -> update('person_indicator');
 		}
 			
 		$this->db -> set('PID', $pid)

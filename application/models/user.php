@@ -129,20 +129,82 @@ Class User extends CI_Model
  	$result = $this->db->select('pwemployee.USERID as userID, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, PWLEVEL, department as depID, division as divID')
  						->from('pwemployee')
  						->join('pwposition', 'pwposition.pwposition = pwemployee.pwposition', 'left')
- 						->where(array('pwemployee.division' => $divID, 'pwemployee.userID !=' => $userID))
+ 						->where(array('pwemployee.division' => $divID, 'pwemployee.userID !=' => $userID, 'pwemployee.enabled' => 1))
  						->get() -> result_array();
 	return $result;
  }
 
+ function getDepUnderControl($userID) {
+ 	$result = $this -> db -> select("dep_id")
+ 						  -> where(array('userID' => $userID, 'status' => 1))
+						  -> get('department_executive') -> result_array();
+	return $result;   						  	
+ }
 
- function getUserFromDep($userID, $depID) {
+ function getUserFromDep($userID, $depIDs) {
  	$result = $this->db->select('pwemployee.USERID as userID, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, PWLEVEL, division.name as divname, pwemployee.department as depID, pwemployee.division as divID')
  						->from('pwemployee')
  						->join('pwposition', 'pwposition.pwposition = pwemployee.pwposition', 'left')
 						->join('division', 'pwemployee.division = division.id', 'left')
- 						->where(array('pwemployee.department' => $depID, 'pwemployee.userID !=' => $userID, 'division.enabled' => 1))
+ 						->where(array('pwemployee.department' => $depID, 'pwemployee.userID !=' => $userID, 'division.enabled' => 1, 'pwemployee.enabled' => 1))
  						->get() -> result_array();
 	return $result;
  }
+
+ function getExecFromDep($userID, $depID) {
+ 	
+ }
+
+ function getDivExecUnderControl($depIDs) {
+ 	$r	 = $this -> db -> select('userID')
+						  -> where_in('dep_id', $depIDs)
+						  -> where(array('userID !=' => 0, 'enabled' => 1))
+						  -> get('division') -> result_array();
+	$result = array();
+	for($i = 0; $i < count($r); $i++) {
+		$result[$i] = $r[$i]['userID'];
+	}				
+			  
+	return $result;
+ }
+ 
+ function getDepExecUnderControl($depIDs) {
+ 	$r	 = $this -> db -> select('userID')
+						  -> where_in('dep_id', $depIDs)
+						  -> where(array('userID !=' => 0, 'status !=' => 1))
+						  -> get('department_executive') -> result_array();
+	$result = array();
+	for($i = 0; $i < count($r); $i++) {
+		$result[$i] = $r[$i]['userID'];
+	}				
+			  
+	return $result;
+ }
+ 
+ function getUserInfo($execUserID) {
+ 	$result = $this->db->select('pwemployee.USERID as userID, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, division.name as divname, pwemployee.department as depID, pwemployee.division as divID, department.name as depname')
+ 						->from('pwemployee')
+ 						->join('pwposition', 'pwposition.pwposition = pwemployee.position', 'left')
+						->join('department', 'pwemployee.department = department.id', 'left')
+						->join('division', 'pwemployee.division = division.id', 'left')
+						->where_in('pwemployee.USERID', $execUserID)
+ 						->where(array('department.enabled' => 1, 'division.enabled' => 1, 'pwemployee.enabled' => 1))
+ 						->get() -> result_array();
+	return $result;
+ }
+ 
+ function getUserInfoUnderControlExceptExec($execUserID, $depIDs) {
+ 	$result = $this->db->select('pwemployee.USERID as userID, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, division.name as divname, pwemployee.department as depID, pwemployee.division as divID, department.name as depname')
+ 						->from('pwemployee')
+ 						->join('pwposition', 'pwposition.pwposition = pwemployee.position', 'left')
+						->join('department', 'pwemployee.department = department.id', 'left')
+						->join('division', 'pwemployee.division = division.id', 'left')
+						->where_not_in('pwemployee.USERID', $execUserID)
+						->where_in('pwemployee.department', $depIDs)
+ 						->where(array('department.enabled' => 1, 'division.enabled' => 1, 'pwemployee.enabled' => 1))
+ 						->get() -> result_array();
+	return $result;
+ }
+ 
 }
 ?>

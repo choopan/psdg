@@ -167,7 +167,7 @@
 							</table>
 					</div>
 				</div>
-				<center><a href="<?php echo site_url('person_evaluation/submitIndicatorToProve/'.$sumweight); ?>" type="button" class="btn btn-primary">
+				<center><a href="<?php echo site_url('person_evaluation/submitIndicatorToProve/'.$sumweight); ?>" type="button" class="btn btn-primary" onClick='return confirm(" คุณต้องการส่งตัวชี้วัดจริงหรือไม่ ")'>
 					<span class="glyphicon glyphicon-envelope"></span> ส่งเพื่อพิจารณา</a>
 				</center><BR>
 			</div>

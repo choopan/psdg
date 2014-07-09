@@ -15,10 +15,15 @@ class person_evaluation extends CI_Controller {
 
 	}
 	
-	function execAgreeIndicator($id) {
-		$this->personindicator->setPIStatus($id, 2);
-		$this->session->set_flashdata('success', 'อนุมัติตัวชี้วัดรายบุคคลเรียบร้อยแล้ว');
-		redirect('person_evaluation/divManagePersonIndicator', 'location');
+	function execAgreeIndicator($id, $user_id, $sumweight) {
+		if((float)$sumweight == 1) {
+			$this->personindicator->setPIStatus($id, 2);
+			$this->session->set_flashdata('success', 'อนุมัติตัวชี้วัดรายบุคคลเรียบร้อยแล้ว');
+			redirect('person_evaluation/divManagePersonIndicator', 'location');
+		} else {
+			$this->session->set_flashdata('failed', 'ผลรวมของค่าน้ำหนักไม่เท่ากับ 1');
+			redirect('person_evaluation/confirmIndicator/'.$user_id, 'location');			
+		}
 	}
 	
 	function execCancelIndicator($id) {
@@ -28,6 +33,7 @@ class person_evaluation extends CI_Controller {
 	}
 
 	function viewIndicatorFromDep($id) {
+		$data['title'] = "MFA - Person Indicator Management";
 		$userID = $id;
 		$depID  = $this->session->userdata('sessdep');
 		$divID  = $this->session->userdata('sessdiv');
@@ -54,6 +60,7 @@ class person_evaluation extends CI_Controller {
 
 	
 	function viewIndicator($id) {
+		$data['title'] = "MFA - Person Indicator Management";
 		$userID = $id;
 		$depID  = $this->session->userdata('sessdep');
 		$divID  = $this->session->userdata('sessdiv');
@@ -65,20 +72,27 @@ class person_evaluation extends CI_Controller {
 			$round = $active_evalround[0]['round'];
 			$data['year'] = $year;
 			$data['round'] = $round;
-			$pi_set = $this->personindicator->getPINumber($userID, $year, $round, $depID, $divID);
-			$data['pi_set'] = $pi_set[0]['ID'];
 			$data['indicators'] = $this->personindicator->listIndicator($userID, $year, $round, $depID, $divID);	
 			$tmp = $this->user->getMinProfile($id);
 			$data['user'] =  $tmp[0];
+			$piStatus = $this->personindicator->getIndicatorStatus($userID, $year, $round, $depID, $divID);
+			
+			switch($piStatus) {
+					case 1  : $data['status_msg'] = '<span class="label label-danger">รอการพิจารณา</span>'; break;
+					case 2  : $data['status_msg'] = '<span class="label label-warning">ผ่านการอนุมัติขั้นตอน</span>'; break;
+					case 3  : $data['status_msg'] = '<span class="label label-green">ผ่านการอนุมัติแล้ว</span>'; break;
+					default : $data['status_msg'] = '<span class="label label-danger">รอการพิจารณา</span>'; break;
+			}
 			$this->load->view('evaluate/viewPersonIndicator.php', $data);
 		} else {
 			echo "No evaluate round selected";
 			die();
-		}		
+		}						
 	}
 
 
 	function confirmIndicator($id) {
+		$data['title'] = "MFA - Person Indicator Management";
 		$userID = $id;
 		$depID  = $this->session->userdata('sessdep');
 		$divID  = $this->session->userdata('sessdiv');
@@ -222,10 +236,7 @@ class person_evaluation extends CI_Controller {
 		if(!$this->session->userdata('sessexecdep')) {
 			show_error("คุณไม่มีสิทธิในการเข้าถึงหน้านี้", 500);
 		}
-		$data['userID'] = $this->session->userdata('sessid');
-		$data['depID']  = $this->session->userdata('sessdep');
-		$data['divID']  = $this->session->userdata('sessdiv');
-	
+		
 		$active_evalround = $this->personindicator->getActiveEvalRound();
 
 		if(count($active_evalround) == 1) {
@@ -233,7 +244,24 @@ class person_evaluation extends CI_Controller {
 			$round = $active_evalround[0]['round'];
 			$data['year']  = $year;
 			$data['round'] = $round;
-			$data['user_info'] = $this->user->getUserFromDep($data['userID'], $data['depID']); 
+
+			$userID = $this->session->userdata('sessid');
+			$data['userID'] = $userID;
+			
+			$tmp_depIDs = $this->user->getDepUnderControl($userID);
+			$depIDs = array();
+			for($i = 0; $i < count($tmp_depIDs); $i++) {
+				$depIDs[$i] = $tmp_depIDs[$i]['dep_id'];
+			}
+		
+			$divExecUserID = $this->user->getDivExecUnderControl($depIDs); // div exec
+			$depExecUserID = $this->user->getDepExecUnderControl($depIDs); // dep exec
+			$execUserID = array_unique(array_merge($divExecUserID, $depExecUserID));
+		
+			$exec_info = $this->user->getUserInfo($execUserID);
+			$user_info = $this->user->getUserInfoUnderControlExceptExec($execUserID, $depIDs);
+			$data['exec_info'] = $exec_info;
+			$data['user_info'] = $user_info;
 			$this->load->view('evaluate/displayPersonIndicatorInDep.php', $data);
 		} else {			
 			echo "No evaluate round selected";
@@ -309,12 +337,10 @@ class person_evaluation extends CI_Controller {
 				$this->load->view('evaluate/managePersonIndicator.php', $data);
 			} else {
 				switch($piStatus) {
-					case 1  : $data['status_msg'] = '<span class="label label-success">รอผู้บังคับบัญชาพิจารณา</span>'; break;
-					case 2  : $data['status_msg'] = '<span class="label label-primary">ผ่านการอนุมัติแล้ว</span>'; break;
-					case 3  : $data['status_msg'] = '<span class="label label-primary">ผ่านการอนุมัติแล้ว</span>'; break;
-					case 4  : $data['status_msg'] = '<span class="label label-primary">ผ่านการอนุมัติแล้ว</span>'; break;
-					case 5  : $data['status_msg'] = '<span class="label label-primary">ผ่านการอนุมัติแล้ว</span>'; break;
-					default : $data['status_msg'] = '<span class="label label-danger">undefined</span>'; break;
+					case 1  : $data['status_msg'] = '<span class="label label-danger">รอการพิจารณา</span>'; break;
+					case 2  : $data['status_msg'] = '<span class="label label-warning">ผ่านการอนุมัติขั้นตอน</span>'; break;
+					case 3  : $data['status_msg'] = '<span class="label label-green">ผ่านการอนุมัติแล้ว</span>'; break;
+					default : $data['status_msg'] = '<span class="label label-danger">รอการพิจารณา</span>'; break;	
 				}
 				$this->load->view('evaluate/displayPersonIndicator.php', $data);
 			}	
@@ -387,20 +413,48 @@ class person_evaluation extends CI_Controller {
 			$this->load->view('evaluate/errorPersonEvaluation.php', $data);			
 		}
 		
-		/*
-		
-		
-		$this->personindicator->deleteandAddIndicator($userID, $year, $round, $depID, $divID, $orders, $indicatorNames, $weights);		
-	
-		if($option == "record") {
-			$this->session->set_flashdata('success', 'บันทึกข้อมูลตัวชี้วัดรายบุคคลเรียบร้อยแล้ว');	
-		} else if($option == "prove") {
-			$this->personindicator->setIndicatorStatus($userID, $year, $round, $depID, $divID, 1);		
-			$this->session->set_flashdata('success', 'ส่งข้อมูลข้อมูลตัวชี้วัดรายบุคคลให้ผู้บังคับบัญชาพิจารณาเรียบร้อยแล้ว');				
-		}*/
 		redirect('person_evaluation/managePersonIndicator', 'location');
 	}
 	
+	function submitIndicatorFormFromExecDiv($id) {
+		//$year = $this->session->userdata('sessyear');
+		$active_evalround = $this->personindicator->getActiveEvalRound();
+
+		if(count($active_evalround) == 1) {
+
+			$data['title'] = "MFA - Personal Indicator Management";				
+
+			$userID = $id;
+			$depID = $this->session->userdata('sessdep');
+			$divID = $this->session->userdata('sessdiv');
+
+			$year  = $active_evalround[0]['year'];
+			$round = $active_evalround[0]['round'];
+			$order = $this->input->post("main_order");
+			$indicatorName = $this->input->post("main_indicatorname");
+			$weight = $this->input->post("main_weight");
+			$ind1 = $this->input->post('indicator1');
+			$ind2 = $this->input->post('indicator2');
+			$ind3 = $this->input->post('indicator3');
+			$ind4 = $this->input->post('indicator4');
+			$ind5 = $this->input->post('indicator5');
+			$ind_detail1 = $this->input->post('detail_indicator1');
+			$ind_detail2 = $this->input->post('detail_indicator2');
+			$ind_detail3 = $this->input->post('detail_indicator3');
+			$ind_detail4 = $this->input->post('detail_indicator4');
+			$ind_detail5 = $this->input->post('detail_indicator5');
+			
+			$this->personindicator->addPersonIndicator($userID, $year, $round, $depID, $divID, $order, $indicatorName, $weight,
+													   $ind1, $ind2, $ind3, $ind4, $ind5, $ind_detail1, $ind_detail2, $ind_detail3, $ind_detail4, $ind_detail5, 1);					
+			$this->session->set_flashdata('success', 'บันทึกข้อมูลตัวชี้วัดรายบุคคลเรียบร้อยแล้ว');
+		} else {
+			$data['error_msg'] = "ผู้ดูแลระบบยังไม่ได้ตั้งค่ารอบการประเมิน<BR>กรุณาติดต่อผู้ดูแลระบบ";
+			$this->load->view('evaluate/errorPersonEvaluation.php', $data);			
+		}
+		
+		redirect('person_evaluation/confirmIndicator/'.$userID, 'location');
+	}
+
 	
 	function viewEvaluation($id)
 	{
@@ -689,10 +743,23 @@ class person_evaluation extends CI_Controller {
 		$this->load->view('evaluate/editPersonIndicatorDetail.php', $data);
 	}
 	
+	function editPersonIndicatorDetailFromExecDiv($id, $user_id) {
+		$indicator = $this->personindicator->getIndicatorDetail($id);
+		$data['indicator'] = $indicator[0];
+		$data['user_id'] = $user_id;
+		$this->load->view('evaluate/editPersonIndicatorDetailFromExecDiv.php', $data);
+	}
+	
 	function deletePersonIndicatorDetail($id) {
 			$this->personindicator->deletePersonIndicator($id);							
 			$this->session->set_flashdata('success', 'ลบข้อมูลตัวชี้วัดรายบุคคลเรียบร้อยแล้ว');		
 			redirect('person_evaluation/managePersonIndicator', 'location');		
+	}
+	
+	function deletePersonIndicatorDetailFromExecDiv($id, $user_id) {
+			$this->personindicator->deletePersonIndicator($id, 1);							
+			$this->session->set_flashdata('success', 'ลบข้อมูลตัวชี้วัดรายบุคคลเรียบร้อยแล้ว');		
+			redirect('person_evaluation/confirmIndicator/'.$user_id, 'location');		
 	}
 	
 	function savePersonIndicatorDetail($id) {
@@ -718,6 +785,31 @@ class person_evaluation extends CI_Controller {
 			$this->session->set_flashdata('success', 'บันทึกข้อมูลตัวชี้วัดรายบุคคลเรียบร้อยแล้ว');
 			
 			redirect('person_evaluation/managePersonIndicator', 'location');
+	}
+
+	function savePersonIndicatorDetailFromExecDiv($id, $user_id) {
+
+			$data['title'] = "MFA - Personal Indicator Management";				
+
+			$order = $this->input->post("order");
+			$indicatorName = $this->input->post("indicatorName");
+			$weight = $this->input->post("weight");
+			$ind1 = $this->input->post('indicator1');
+			$ind2 = $this->input->post('indicator2');
+			$ind3 = $this->input->post('indicator3');
+			$ind4 = $this->input->post('indicator4');
+			$ind5 = $this->input->post('indicator5');
+			$ind_detail1 = $this->input->post('detail_indicator1');
+			$ind_detail2 = $this->input->post('detail_indicator2');
+			$ind_detail3 = $this->input->post('detail_indicator3');
+			$ind_detail4 = $this->input->post('detail_indicator4');
+			$ind_detail5 = $this->input->post('detail_indicator5');
+			
+			$this->personindicator->updatePersonIndicator($id, $order, $indicatorName, $weight,
+													   $ind1, $ind2, $ind3, $ind4, $ind5, $ind_detail1, $ind_detail2, $ind_detail3, $ind_detail4, $ind_detail5,1);					
+			$this->session->set_flashdata('success', 'บันทึกข้อมูลตัวชี้วัดรายบุคคลเรียบร้อยแล้ว');
+			
+			redirect('person_evaluation/confirmIndicator/'.$user_id, 'location');
 	}
 }
 ?>
