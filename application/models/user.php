@@ -113,8 +113,16 @@ Class User extends CI_Model
  }
 
  function getExecDep($userID) {
+<<<<<<< HEAD
  	$result = $this->db->get_where('department_executive', array('userID'=> $userID, 'status' => 1))->result_array();
 	if(count($result) == 0) {
+=======
+ 	$result = $this->db->from('department')
+					   ->join('department_executive', 'department.id = department_executive.dep_id', 'left')
+					   ->where(array('userID'=> $userID, 'status' => 1, 'enabled' => 1))
+					   ->get() -> result_array();
+ 	if(count($result) == 0) {
+>>>>>>> origin/master
 		return false;
 	} else {
 		return true;
