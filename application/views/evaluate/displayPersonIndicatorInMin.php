@@ -5,7 +5,7 @@
 </head>
 <body>
 <div id="wrapper">
-<?php $this->load->view('menu'); ?>
+<?php $this->load->view('menu_admin'); ?>
 <div id="page-wrapper">
 	
 	<div class="row">
@@ -16,7 +16,12 @@
   							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
   			<?php			echo $this->session->flashdata('success'); ?>
 						</div>
-			<?php	}?>
+			<?php	} elseif($this->session->flashdata('failed')) { ?>
+						<div class="alert alert-danger alert-dismissable">
+  							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  			<?php			echo $this->session->flashdata('failed'); ?>
+						</div>				
+			<?php   } ?>
 				
             <div class="panel panel-default">
 				<div class="panel-heading"><strong>ตัวชี้วัดรายบุคคลที่กำหนด ประจำปีงบประมาณ <?php echo $year; ?> รอบที่ <? echo $round; ?></strong></div>
@@ -45,8 +50,13 @@
 										<?php 
 											switch($this->personindicator->getPIStatus($ui['user_id'], $ui['dep_id'], $ui['div_id'], $year, $round)) {
 												case 0 : echo "<td><span class='label label-danger'>ยังไม่ส่งตัวชี้วัด</span></td><td> - </td>"; break;
-												case 1 : echo "<td><span class='label label-success'>รอการพิจารณา</span></td><td> - </td>"; break;
-												default : echo "<td><span class='label label-primary'>อนุมัติแล้ว</span></td><td><a href='". site_url('person_evaluation/viewIndicatorFromDep') ."/". $ui['user_id'] ."' class='btn btn-info' type='button'> ดูรายละเอียด</a></td>"; break;											
+												case 1 : echo "<td><span class='label label-warning'>อยู่ระหว่างรอการพิจารณา</span></td><td> - </td>"; break;
+												case 2 : echo "<td><span class='label label-warning'>อยู่ระหว่างรอการพิจารณา</span></td><td> - </td>"; break;
+												case 3 : echo "<td><span class='label label-primary'>อนุมัติแล้ว</span></td><td>" ?>
+																<a type="button" class="btn btn-danger" onclick="javascript:confirm('ต้องการยกเลิกการอนุมัติตัวชี้วัดจริงหรือไม่ ?')" 
+																href="<?php echo site_url('person_evaluation/minCancelIndicator/'.$ui['user_id']); ?>"> ยกเลิกการอนุมัติ</a></td>"; 
+												<?php	break;
+												default : echo "<td><span class='label label-primary'>????</span></td>"; break;											
 											}
 										?>								
                             		</tr>

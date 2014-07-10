@@ -92,6 +92,19 @@ Class User extends CI_Model
 	return $result;
  }
 
+  function getAllProfileExceptDepExec() {
+  	$depexec_ids = $this->getExecFromDep();
+  	
+ 	$result = $this->db->select("pwemployee.USERID as user_id, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, PWLEVEL, department.id as dep_id, division.id as div_id, department.name as depname, division.name as divname")
+			-> from('pwemployee')
+			-> join('pwposition', 'pwposition.pwposition = pwemployee.pwposition', 'left')
+			-> join('department', 'pwemployee.department = department.id', 'left')
+			-> join('division', 'pwemployee.division = division.id', 'left')
+			-> where_not_in('pwemployee.USERID', $depexec_ids)
+			-> where(array('division.enabled' => 1, 'department.enabled' => 1))
+			-> get() ->result_array();
+	return $result;
+ }
  function getAllProfile() {
  	$result = $this->db->select("pwemployee.USERID as user_id, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, PWLEVEL, department.id as dep_id, division.id as div_id, department.name as depname, division.name as divname")
 			-> from('pwemployee')
@@ -151,8 +164,18 @@ Class User extends CI_Model
 	return $result;
  }
 
- function getExecFromDep($userID, $depID) {
- 	
+ function getExecFromDep() {
+ 	$r	 = $this -> db -> select('userID')
+					   -> from('department')
+					   -> join('department_executive', 'department.id = department_executive.dep_id')
+					   -> where(array('enabled' => 1, 'status' => 1))
+					   -> get() -> result_array();
+	$result = array();
+	for($i = 0; $i < count($r); $i++) {
+		$result[$i] = $r[$i]['userID'];
+	}				
+			  
+	return $result; 	
  }
 
  function getDivExecUnderControl($depIDs) {

@@ -10,13 +10,18 @@
 	<h4>ตัวชี้วัดรายบุคคลที่กำหนด ประจำปีงบประมาณ <?php echo $year; ?> รอบที่ <? echo $round; ?></h4>
 	<div class="row">
 		<div class="col-lg-12">
-			<?php 	if($this->session->flashdata('success')) {
+		<?php 	if($this->session->flashdata('success')) {
 			?>
 						<div class="alert alert-success alert-dismissable">
   							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
   			<?php			echo $this->session->flashdata('success'); ?>
 						</div>
-			<?php	}?>
+			<?php	} elseif($this->session->flashdata('failed')) { ?>
+						<div class="alert alert-danger alert-dismissable">
+  							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  			<?php			echo $this->session->flashdata('failed'); ?>
+						</div>				
+			<?php   } ?>
 				
             <div class="panel panel-default">
 				<div class="panel-heading">รายการรอการพิจารณาและแก้ไข</div>
@@ -45,9 +50,9 @@
 										<?php 
 											switch($this->personindicator->getPIStatus($ui['userID'], $ui['depID'], $ui['divID'], $year, $round)) {
 												case 0 : echo "<td><span class='label label-danger'>ยังไม่ส่งตัวชี้วัด</span></td><td> - </td>"; break;
-												case 1 : echo "<td><span class='label label-warning'>รอการพิจารณา</span></td><td> - </td>"; break;
-												case 3 : echo "<td><span class='label label-success'>อนุมัติแล้ว</span></td><td> - </td>"; break;
-												default : echo "<td><span class='label label-primary'>ฦฦฦฦฦ</span></td><td><a href='". site_url('person_evaluation/viewIndicatorFromDep') ."/". $ui['userID'] ."' class='btn btn-info' type='button'> ดูรายละเอียด</a></td>"; break;											
+												case 1 : echo "<td><span class='label label-success'>รอการพิจารณา</span></td><td><a href='". site_url('person_evaluation/confirmExecIndicatorFromDep') ."/". $ui['userID'] ."' class='btn btn-primary' type='button'> ดูรายละเอียด</a></td>"; break;
+												case 3 : echo "<td><span class='label label-primary'>อนุมัติแล้ว</span></td><td><a href='". site_url('person_evaluation/viewIndicatorFromDep') ."/". $ui['userID'] ."' class='btn btn-primary' type='button'> ดูรายละเอียด</a></td>"; break;
+												default : echo "<td><span class='label label-primary'>????</span></td><td> - </td>"; break;											
 											}
 										?>								
                             		</tr>
@@ -90,9 +95,10 @@
 										<?php 
 											switch($this->personindicator->getPIStatus($ui['userID'], $ui['depID'], $ui['divID'], $year, $round)) {
 												case 0 : echo "<td><span class='label label-danger'>ยังไม่ส่งตัวชี้วัด</span></td><td> - </td>"; break;
-												case 1 : echo "<td><span class='label label-warning'>รอการพิจารณา</span></td><td> - </td>"; break;
-												case 3 : echo "<td><span class='label label-success'>อนุมัติแล้ว</span></td><td> - </td>"; break;
-												default : echo "<td><span class='label label-primary'>ฦฦฦฦฦ</span></td><td><a href='". site_url('person_evaluation/viewIndicatorFromDep') ."/". $ui['userID'] ."' class='btn btn-info' type='button'> ดูรายละเอียด</a></td>"; break;											
+												case 1 : echo "<td><span class='label label-warning'> รอการพิจารณา <BR>จากผู้บังคับบัญชาเบื้องต้น</span></td><td> - </td>"; break;
+												case 2 : echo "<td><span class='label label-success'> อนุมัติ <BR>จากผู้บังคับบัญชาเบื้องต้น</span></td><td><a href='". site_url('person_evaluation/confirmIndicatorFromDep') ."/". $ui['userID'] ."' class='btn btn-primary' type='button'> ดูรายละเอียด</a></td>"; break;
+												case 3 : echo "<td><span class='label label-primary'>อนุมัติแล้ว</span></td><td><a href='". site_url('person_evaluation/viewIndicatorFromDep') ."/". $ui['userID'] ."' class='btn btn-primary' type='button'> ดูรายละเอียด</a> </td>"; break;
+												default : echo "<td><span class='label label-default'>????</span></td><td> - </a></td>"; break;											
 											}
 										?>								
                             		</tr>
@@ -122,6 +128,7 @@
 	$(document).ready(function() {
 		$('#user_table').dataTable({
 			"order": [[ 0, "asc" ]],
+			"paging": false,
 			"info":     false,
 		});
 	});

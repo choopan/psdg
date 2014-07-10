@@ -5,7 +5,7 @@
 </head>
 <body>
 <div id="wrapper">
-<?php $this->load->view('menu'); ?>
+<?php $this->load->view('menu_admin'); ?>
 <div id="page-wrapper">
 	
 	<div class="row">

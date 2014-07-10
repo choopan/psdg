@@ -16,7 +16,12 @@
   							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
   			<?php			echo $this->session->flashdata('success'); ?>
 						</div>
-			<?php	}?>
+			<?php	} elseif($this->session->flashdata('failed')) { ?>
+						<div class="alert alert-danger alert-dismissable">
+  							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  			<?php			echo $this->session->flashdata('failed'); ?>
+						</div>				
+			<?php   } ?>
 				
             <div class="panel panel-default">
 				<div class="panel-heading"><strong>ตัวชี้วัดรายบุคคลที่กำหนด ประจำปีงบประมาณ <?php echo $year; ?> รอบที่ <? echo $round; ?></strong></div>
