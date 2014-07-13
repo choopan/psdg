@@ -223,7 +223,7 @@ function get_division(val){
 					'success' : function(data){
 						$("#division_db").empty();
 						var division_num=data.length;
-						var tr='<option>เลือกกอง</option>';
+						var tr='<option value="0">เลือกกอง</option>';
 						for(i=0;i<division_num;i++)
 						{
 							tr+='<option value="'+data[i]['id']+'">'+data[i]['name']+'</option>';

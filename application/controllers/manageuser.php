@@ -165,10 +165,10 @@ class Manageuser extends CI_Controller {
 		$mobile=$this->input->post('mobile');
 		$department=$this->input->post('department');
 		$division=$this->input->post('division');
-		$position1=$this->input->post('position1');
-		$level=$this->input->post('level');
+		$position_ty=$this->input->post('position_ty');
+		$position=$this->input->post('position');
+		$position_lv=$this->input->post('position_lv');
 		$admin_min_0=$this->input->post('admin');
-		$execode=$this->input->post('execode');
 		
 		if($admin_min_0=="admin_min"){
 			$admin_min=1;
@@ -188,7 +188,7 @@ class Manageuser extends CI_Controller {
 			$admin_div=0;
 		}
 		
-		$result=$this->user_manage->editUser_save($id,$fname,$lname,$efname,$elname,$email,$tel,$mobile,$department,$division,$position1,$level,$admin_min,$admin_dep,$admin_div,$execode);
+		$result=$this->user_manage->editUser_save($id,$fname,$lname,$efname,$elname,$email,$tel,$mobile,$department,$division,$position_ty,$position,$position_lv,$admin_min,$admin_dep,$admin_div);
 		
 		$data['department']=$this->user_manage->get_department();
 		$data['position']=$this->user_manage->get_position_type();

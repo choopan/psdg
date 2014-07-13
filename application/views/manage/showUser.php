@@ -37,7 +37,7 @@ td.highlight {
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>Username *</label>
-											<input type="text" class="form-control" value="<?php echo $data[0]['PWUSERNAME']?>" readonly>
+											<input type="text" class="form-control" value="<?php echo $data[0]['PWUSERNAME'];?>" readonly>
 										</div>
 										</div>
 									</div>
@@ -45,13 +45,13 @@ td.highlight {
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>ชื่อ(ภาษาไทย) *</label>
-											<input type="text" class="form-control" value="<?php echo $data[0]['PWFNAME']?>" readonly>
+											<input type="text" class="form-control" value="<?php echo $data[0]['PWFNAME'];?>" readonly>
 										</div>
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>นามสกุล(ภาษาไทย)  *</label>
-                                            <input type="text" class="form-control" value="<?php echo $data[0]['PWLNAME']?>" readonly>
+                                            <input type="text" class="form-control" value="<?php echo $data[0]['PWLNAME'];?>" readonly>
 										</div>
 										</div>
 									</div>
@@ -59,13 +59,13 @@ td.highlight {
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>Name(ภาษาอังกฤษ) *</label>
-											<input type="text" class="form-control" value="<?php echo $data[0]['PWEFNAME']?>" readonly>
+											<input type="text" class="form-control" value="<?php echo $data[0]['PWEFNAME'];?>" readonly>
 										</div>
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>Last name(ภาษาอังกฤษ)  *</label>
-                                            <input type="text" class="form-control" value="<?php echo $data[0]['PWELNAME']?>" readonly>
+                                            <input type="text" class="form-control" value="<?php echo $data[0]['PWELNAME'];?>" readonly>
 										</div>
 										</div>
 										<div class="col-lg-4">
@@ -83,19 +83,19 @@ td.highlight {
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>E-mail *</label>
-											<input type="email" class="form-control" value="<?php echo $data[0]['PWEMAIL']?>" readonly>
+											<input type="email" class="form-control" placeholder="-" value="<?php echo $data[0]['PWEMAIL'];?>" readonly>
 										</div>
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>เบอร์ภายใน *</label>
-                                            <input type="text" class="form-control" value="<?php echo $data[0]['PWTELOFFICE']?>" readonly>
+                                            <input type="text" class="form-control" placeholder="-" value="<?php echo $data[0]['PWTELOFFICE'];?>" readonly>
 										</div>
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>เบอร์มือถือ *</label>
-                                            <input type="text" class="form-control" value="<?php echo $data[0]['mobile']?>" readonly>
+                                            <input type="text" class="form-control" placeholder="-" value="<?php echo $data[0]['mobile'];?>" readonly>
 										</div>
 										</div>
 									</div>
@@ -103,27 +103,33 @@ td.highlight {
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>กรม *</label>
-											<input type="text" class="form-control" value="<?php echo $data[0]['dep_name']?>" readonly>
+											<input type="text" class="form-control" placeholder="-" value="<?php echo $data[0]['dep_name'];?>" readonly>
 										</div>
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>กอง *</label>
-                                            <input type="text" class="form-control" value="<?php echo $data[0]['div_name']?>" readonly>
+                                            <input type="text" class="form-control" placeholder="-" value="<?php echo $data[0]['div_name'];?>" readonly>
 										</div>
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-lg-8">
+										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>ตำแหน่ง *</label>
-											<input type="text" class="form-control" value="<?php echo $data[0]['position_name']?>" readonly>
+                                            <label>ชนิดตำแหน่ง *</label>
+											<input type="text" class="form-control" placeholder="-" value="<?php echo $data[0]['pos_t_name'];?>" readonly>
 										</div>
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>เลือกระดับ *</label>
-                                            <input type="text" class="form-control" value="<?php echo $data[0]['PWLEVEL']?>" readonly>
+                                            <label>ตำแหน่ง *</label>
+											<input type="text" class="form-control" placeholder="-" value="<?php echo $data[0]['pos_name'];?>" readonly>
+										</div>
+										</div>
+										<div class="col-lg-4">
+										<div class="form-group">
+                                            <label>ขั้นตำแหน่ง *</label>
+											<input type="text" class="form-control" placeholder="-" value="<?php echo $data[0]['pos_lv_name'];?>" readonly>
 										</div>
 										</div>
 									</div>

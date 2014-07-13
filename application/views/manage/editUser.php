@@ -87,13 +87,13 @@ td.highlight {
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-lg-6">
+										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>เลือกกรม *</label>
 											<select name="department" id="department" class="form-control" onChange="get_division(this.value)" required>
 												<?php if(is_array($department) && count($department) ) {
 													foreach($department as $loop){?>
-														<?php if($loop['id']==$data[0]['dep_id']){?>
+														<?php if($loop['id']==$data[0]['department']){?>
 															<option value="<?php echo $loop['id']; ?>" selected><?php echo $loop['name']; ?></option>
 														<?php }else{?>
 															<option value="<?php echo $loop['id']; ?>"><?php echo $loop['name']; ?></option>
@@ -104,7 +104,7 @@ td.highlight {
 										<div class="col-lg-4">
 										<div class="form-group">
                                             <label>เลือกกอง *</label>
-												<input type="hidden" value="<?php echo $data[0]['div_id'];?>" id="div_id">
+												<input type="hidden" value="<?php echo $data[0]['division'];?>" id="div_id">
 												<input type="hidden" value="<?php echo $data[0]['div_name'];?>" id="div_name">
                                             <select name="division" class="form-control" id="division_db" required>
 												<option value="<?php echo $data[0]['div_id'];?>"><?php echo $data[0]['div_name'];?></option>
@@ -113,31 +113,35 @@ td.highlight {
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-lg-6">
+										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>เลือกตำแหน่ง *</label>
-											<select name="position1" class="form-control"  required>
-													<?php foreach($position as $loop2){ ?>
-													<?php if($data[0]['position']==$loop2['PWPOSITION']){?>
-														<option value="<?php echo $loop2['PWPOSITION']; ?>" selected><?php echo $loop2['PWNAME']; ?></option>
+                                            <label>เลือกชนิดตำแหน่ง *</label>
+											<select name="position_ty" class="form-control" id="pos_ty" onChange="get_position(this.value)" required>
+													<option value="0">กรุณาเลือกตำแหน่ง</option>
+												<?php foreach($position as $loop2){ ?>
+													<?php if($loop2['id']==$data[0]['position_type']){?>
+														<option value="<?php echo $loop2['id']; ?>" selected><?php echo $loop2['name']; ?></option>
 													<?php }else{?>
-														<option value="<?php echo $loop2['PWPOSITION']; ?>"><?php echo $loop2['PWNAME']; ?></option>
-													<?php }?>
-												<?php } ?>
+														<option value="<?php echo $loop2['id']; ?>"><?php echo $loop2['name']; ?></option>
+												<?php }} ?>
 											</select>
 										</div>
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>เลือกระดับ *</label>
-                                            <select name="level" class="form-control" id="division_db" required>
-												<?php for($i=1;$i<12;$i++){?>
-													<?php if($data[0]['PWLEVEL']==$i){?>
-														<option value="<?php echo $i;?>" selected><?php echo $i;?></option>
-													<?php }else{?>
-														<option value="<?php echo $i;?>"><?php echo $i;?></option>
-													<?php }?>
-												<?php }?>
+                                            <label>เลือกตำแหน่ง *</label>
+											<input type="hidden" value="<?php echo $data[0]['position'];?>" id="pos_id">
+                                            <select name="position" class="form-control" id="position"  required>
+												<option value="0">--select--</option>
+											</select>
+										</div>
+										</div>
+										<div class="col-lg-4">
+										<div class="form-group">
+                                            <label>เลือกระดับตำแหน่ง *</label>
+											<input type="hidden" value="<?php echo $data[0]['position_level'];?>" id="pos_lv_id">
+                                            <select name="position_lv" class="form-control" id="position_lv" required>
+												<option value="0">--select--</option>
 											</select>
 										</div>
 										</div>
@@ -204,6 +208,13 @@ td.highlight {
 <script src="<?php echo base_url(); ?>js/bootstrap-datepicker.js"></script>
 
 <script type="text/javascript" charset="utf-8">
+$(document).ready(function () {
+	if($("#department").val()!= -1){
+		get_division($("#department").val());
+	}
+		get_position($("#pos_ty").val());
+});
+
 function get_division(val){
 	var div_id = $('#div_id').val();
 	var div_name = $('#div_name').val();
@@ -236,12 +247,53 @@ function get_division(val){
 				});
 }
 
-$(document).ready(function () {
-	if($("#department").val()!= -1){
-		get_division($("#department").val());
-	}
-
-});
+function get_position(val1){
+	var pos_id = $('#pos_id').val();
+	var pos_lv_id = $('#pos_lv_id').val();	
+	$.ajax({
+					'url' : '<?php echo site_url('manageuser/get_position_1'); ?>/'+val1,
+					'dataType': 'json',
+					'error' : function(data){ 
+						alert('error');
+                    },
+					'success' : function(data){
+						$("#position").empty();
+						var d1_num=data.length;
+						var tr='';
+						for(i=0;i<d1_num;i++)
+						{
+							if(pos_id==data[i]['PWPOSITION']){
+								tr+='<option value="'+data[i]['PWPOSITION']+'" selected>'+data[i]['PWNAME']+'</option>';
+							}else{
+								tr+='<option value="'+data[i]['PWPOSITION']+'">'+data[i]['PWNAME']+'</option>';
+							}
+						}
+						$(tr).appendTo('#position');
+                    }
+				});
+				
+	$.ajax({
+					'url' : '<?php echo site_url('manageuser/get_position_2'); ?>/'+val1,
+					'dataType': 'json',
+					'error' : function(data2){ 
+						alert('error');
+                    },
+					'success' : function(data2){
+						$("#position_lv").empty();
+						var d2_num=data2.length;
+						var tr='';
+						for(i=0;i<d2_num;i++)
+						{
+							if(pos_lv_id==data2[i]['id']){
+								tr+='<option value="'+data2[i]['id']+'" selected>'+data2[i]['name']+'</option>';
+							}else{
+								tr+='<option value="'+data2[i]['id']+'">'+data2[i]['name']+'</option>';
+							}
+						}
+						$(tr).appendTo('#position_lv');
+                    }
+				});
+}
 </script>
 
 </body>
