@@ -65,7 +65,6 @@ function checkAll(id) {
 function sendval(id) {
 	var indicator = [];
 	var goal =  [];
-	var result=20;
 	var in_temp;
 	var goal_temp;
 	for (var i=1; i<id+1; i++) {
@@ -75,23 +74,28 @@ function sendval(id) {
 		}else{
 			goal_temp = document.getElementsByName("goal_min_id"+i);
 			for (var j = 0; j < goal_temp.length; j++) {
-				
+				if (goal_temp[j].checked) {
+					goal.push(goal_temp[j].value);
+				}
 			}
 		}
 		
 	}
-	alert(indicator);
-	/*	
-	$(":checkbox:checked").each(function(index,data ) {
-            item[index] = $(this).val(); 
-    });
-	
+	//alert(indicator+" / "+goal);
+
+
 	$.ajax({
+		  url: "<?php echo site_url('manageindicator/saveIndicatorSession'); ?>",
 		  type: "POST",
-		  url: "<?php echo site_url('manageindicator/saveindicatorsession'); ?>",
-		  data: { value: item }
+		  data: { indicator:indicator, goal:goal },
+		  'error' : function(data){ 
+				alert('error');
+          },
+		  'success': function(data){
+				parent.$.fancybox.close();
+		  }
 	   })
-	 */
+
 	
 	//window.parent.document.getElementById("selectIndicator").value = sel;
 	//parent.$.fancybox.close();

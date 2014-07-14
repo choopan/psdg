@@ -136,14 +136,12 @@ class Manageindicator extends CI_Controller {
 		}else{
 			$data['dep_array'] = array();
 		}
+		
+		//$query = $this->ministerindicator->getIndicatorGroupDepartment();
+		$data['indicator_min'] = $this->session->userdata('indicator_select');
+		$data['goal_min'] = $this->session->userdata('goal_select');
 
-		$query = $this->ministerindicator->getIndicatorGroupDepartment();
-		if($query){
-			$data['view_array'] =  $query;
-		}else{
-			$data['view_array'] = array();
-		}
-
+		$data['name_indicator_min'] = $this->ministerindicator->getNameFromMinister("min_indicator","id",);
 
 		$query = $this->ministerindicator->getIndicatorDep(0);
 		if($query){
@@ -824,8 +822,9 @@ class Manageindicator extends CI_Controller {
 		$this->load->view('indicator/selectindicatorminlist_view',$data);
 	}
 	
-	function saveIndicatorSession($value) {
-		$this->session->set_userdata('in_selected',$value);
+	function saveIndicatorSession() {
+		$this->session->set_userdata('indicator_select',$this->input->post('indicator'));
+		$this->session->set_userdata('goal_select',$this->input->post('goal'));
 	}
 
 	function viewIndicatorLink() {

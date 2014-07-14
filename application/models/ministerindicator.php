@@ -9,6 +9,16 @@ Class Ministerindicator extends CI_Model
 	$query = $this->db->get();		
 	return $query->result();
  }
+ 
+ //    get only name from indicator or goal
+ function getNameFromMinister($table, $id, $value)
+ {
+	$result = $this->db->select(name)
+					   ->from($table)
+			           ->where($id, $value)
+					   ->get()->result();
+	return $result;
+ }
 
  function getIndicatorGroupDepartment($year)
  {

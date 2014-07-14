@@ -97,36 +97,35 @@ td.highlight {
 		<div class="row">
             <div class="col-lg-12">
                 <div class="panel panel-default">
-					<div class="panel-heading"><strong>รายการตัวชี้วัดของกระทรวงทั้งหมด</strong> </div>
+					<div class="panel-heading"><strong>รายการตัวชี้วัดและประเด็นความสำเร็จของกระทรวงที่เลือก</strong> </div>
                     <div class="panel-body">
-                        <div class="table-responsive">
+                        <div class="table-responsive" id="dtbody">
 						<!--<button id="buttonselect" type="button" class="btn btn-primary">แสดงเฉพาะตัวชี้วัดที่เลือก</button> -->
 						<!-- show all indicator minister -->
 						<a id="fancyboxall" href="<?php echo site_url("manageindicator/selectIndicatorMinisterList");  ?>"><button id="buttonselect" type="button" class="btn btn-primary">แสดงตัวชี้วัดของกระทรวงทั้งหมด</button></a>
-                            <table class="display" id="dataTables-example" cellspacing="0px" width="100%">
+                            <table class="table table-hover" id="dataTables-example">
                                 <thead>
                                     <tr>
-										<th width="80">เลือก</th>
-										<th width="500">ตัวชี้วัดและประเด็นความสำเร็จ</th>
-										<th width="200">ค่าเป้าหมาย</th>
-										<th width="80">น้ำหนัก</th>
+										<th>ชื่อตัวชี้วัด</th>
+										<th width="200">เลือกมาจาก</th>
+										<th width="100">จัดการ</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <?php if(is_array($view_array)) {
-                                        foreach($view_array as $loop){ ?>
+                                <?php for ($i=0; $i<count($indicator_min); $i++) {
+                                        ?>
                                     <tr>
-                                    <td><input type="hidden" name="indicatorid[]" id="indicatorid[]" value="<?php echo $loop->mid; ?>"><input type="text" class="form-control" name="number[]" id="number[]" value=""></td>
-                                    <td><a id="fancyboxview" href="<?php echo site_url("manageindicator/viewIndicatorLink/".$loop->mid);  ?>"><?php echo $loop->name; ?></a></td>
-                                    <td><div class="form-group"><label class="radio-inline"><input type="radio" name="goal-<?php echo $loop->mid; ?>" id="goal-<?php echo $loop->mid; ?>" value="1">1</label>
-                                            <label class="radio-inline"><input type="radio" name="goal-<?php echo $loop->mid; ?>" id="goal-<?php echo $loop->mid; ?>" value="2">2</label>
-											<label class="radio-inline"><input type="radio" name="goal-<?php echo $loop->mid; ?>" id="goal-<?php echo $loop->mid; ?>" value="3">3</label>
-											<label class="radio-inline"><input type="radio" name="goal-<?php echo $loop->mid; ?>" id="goal-<?php echo $loop->mid; ?>" value="4">4</label>
-											<label class="radio-inline"><input type="radio" name="goal-<?php echo $loop->mid; ?>" id="goal-<?php echo $loop->mid; ?>" value="5">5</label>
-                                        </div></td>
-                                    <td><div class="form-group"><input type="text" class="form-control" name="weight[]" id="weight[]" value=""></td>
+                                    <td>
+										<?php echo $indicator_min[$i]; ?>
+									</td>
+									<td>
+										ตัวชี้วัดของกระทรวง
+									</td>
+									<td>
+										<?php echo $indicator_min[$i]; ?>
+									</td>
                                     </tr>
-                                <?php } } ?>
+                                <?php  } ?>
                                 </tbody>
 								
 							</table>
@@ -252,7 +251,7 @@ function removeNewFormResponse(idd) {
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function()
     {
-
+		/*
         var table = $('#dataTables-example').DataTable		
         ({
             "bJQueryUI": false,
@@ -289,6 +288,7 @@ function removeNewFormResponse(idd) {
 			table.clear();
 				table.rows.add(selectrow).draw();
 		} );
+		*/
 
 		var table2 = $('#dataTables-example2').DataTable		
         ({
@@ -340,8 +340,8 @@ $('#fancyboxall').fancybox({
 'autoScale':false,
 'transitionIn':'none', 
 'transitionOut':'none', 
+'afterClose': function() {  parent.location.reload(true); },
 'type':'iframe',
-
 }); 
 });
  </script>
