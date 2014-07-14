@@ -139,7 +139,7 @@
                                 </li>
                                 <li><a href="<?php echo site_url("person_evaluation/divManagePersonIndicator"); ?>">แสดงข้อมูลระดับกอง</a></li>
                                 <li><a href="<?php echo site_url("person_evaluation/managePersonIndicator"); ?>">สร้างและแสดงตัวชี้วัดรายบุคคล</a></li>
-                                
+                                <li><a href="<?php echo site_url("person_evaluation/managePersonEvaluation"); ?>">Evaluation Puwarun</a></li>
 
                             </ul>
                         </li>
