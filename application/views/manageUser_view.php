@@ -31,8 +31,8 @@ td.highlight {
             <div class="panel panel-default">
 					<div class="panel-heading">
 						
-							<button type="button" class="btn btn-outline btn-success" onClick="window.location.href='<?php echo site_url("manageuser/adduser"); ?>'">เพิ่มผู้ใช้งาน</button>
-							<button class="btn btn-outline btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">กดเพื่อค้นหา</button>
+							<button type="button" class="btn btn-success" onClick="window.location.href='<?php echo site_url("manageuser/adduser"); ?>'">เพิ่มผู้ใช้งาน</button>
+							<button class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">กดเพื่อค้นหา</button>
 							<b id="cancle"></b>
 							
 							<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">

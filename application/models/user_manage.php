@@ -10,7 +10,8 @@ Class User_manage extends CI_Model
  function get_user_1()
  {
 	$query=$this->db->order_by('PWFNAME')
-					->select('USERID, PWFNAME, PWLNAME, department, division, PWPOSITION, PWLEVEL, PWPOSITION2, PWEMAIL')
+					->where('enabled',1)
+					->select('USERID, PWFNAME, PWLNAME, department, division, PWPOSITION,PWEMAIL')
 					->get('pwemployee')
 					->result_array();
 	return $query;
@@ -19,7 +20,7 @@ Class User_manage extends CI_Model
  function getUserandCoreSet()
  {
 	$query=$this->db
-			->select('pwemployee.userID AS userID, PWFNAME, PWLNAME, department.name AS dep_name, division.name AS div_name, PWPOSITION.PWNAME AS position_name, PWLEVEL, core_competency_set.id AS coresetID, core_competency_set.name AS coreset_name')
+			->select('pwemployee.userID AS userID, PWFNAME, PWLNAME, department.name AS dep_name, division.name AS div_name, PWPOSITION.PWNAME AS position_name, core_competency_set.id AS coresetID, core_competency_set.name AS coreset_name')
 			->from('PWEMPLOYEE')
 			->join('division', 'pwemployee.division = division.id', 'left')
 			->join('department', 'pwemployee.department = department.id', 'left')
@@ -158,6 +159,7 @@ Class User_manage extends CI_Model
  function get_position()
  {
 	$query=$this->db->distinct()
+					->where('enabled',1)
 					->select('PWPOSITION,PWNAME')
 					->order_by('PWNAME')
 					->get('pwposition')

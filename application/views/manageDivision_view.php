@@ -31,7 +31,7 @@ td.highlight {
             <div>
                 <div class="panel panel-default">
 					<div class="panel-heading">
-						<button type="button" class="btn btn-outline btn-success" onClick="window.location.href='<?php echo site_url("manageuser/addDivision"); ?>'">เพิ่มกอง</button>
+						<button type="button" class="btn btn-success" onClick="window.location.href='<?php echo site_url("manageuser/addDivision"); ?>'">เพิ่มกอง</button>
 					</div>
                     <div class="panel-body">
 						<?php if($result==1){?>

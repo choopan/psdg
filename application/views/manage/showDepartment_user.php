@@ -115,13 +115,16 @@ td.highlight {
 											}
 										?></td>
 										<td>
-											<a href='<?php echo base_url()."index.php/manageuser/dep_del_user/".$loop['dep_id']."/".$loop['id']; ?>' class="btnDelete btn btn-danger btn-xs" onClick='return confirm(" คุณต้องการลบหรือไม่ ")' title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></a>
+											<?php if($loop['dep_id']!=null){?>
+												<a href='<?php echo base_url()."index.php/manageuser/dep_del_user/".$loop['dep_id']."/".$loop['id']; ?>' class="btnDelete btn btn-danger btn-xs" onClick='return confirm(" คุณต้องการลบหรือไม่ ")' title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></a>
+											<?php }?>
 										</td>
                                     </tr>
 									<?php } } ?>
                                 </tbody>
 							</table>
 						</div>
+						<a href="<?php echo site_url("manageuser/department_view");?>" class="btn btn-primary">กลับ</a>
 					</div>
 				</div>
 			</div>
