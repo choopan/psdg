@@ -136,13 +136,31 @@ class Manageindicator extends CI_Controller {
 		}else{
 			$data['dep_array'] = array();
 		}
+
 		
-		//$query = $this->ministerindicator->getIndicatorGroupDepartment();
-		$data['indicator_min'] = $this->session->userdata('indicator_select');
-		$data['goal_min'] = $this->session->userdata('goal_select');
-
-		$data['name_indicator_min'] = $this->ministerindicator->getNameFromMinister("min_indicator","id",);
-
+		// get minister indicator id and goal id from selected 
+		$indicator_min_name_selected = null;
+		$goal_min_name_selected = null;
+		for ($i=0; $i<count($this->session->userdata('indicator_select')); $i++) {
+			if ($this->session->userdata('indicator_select')[$i] > 0) {
+				$indicator_min_name_selected[$i] = $this->ministerindicator->getNameFromMinister("min_indicator","id",$this->session->userdata('indicator_select')[$i])[0];
+				
+			}
+		}
+		
+		for ($i=0; $i<count($this->session->userdata('goal_select')); $i++) {
+			if ($this->session->userdata('goal_select')[$i] > 0) {
+				$goal_min_name_selected[$i] = $this->ministerindicator->getNameFromMinister("min_goal","id",$this->session->userdata('goal_select')[$i])[0];
+			}
+		}
+		
+		$data['indicator_min_id'] = $this->session->userdata('indicator_select');
+		$data['indicator_min_name'] = $indicator_min_name_selected;
+		
+		$data['goal_min_id'] = $this->session->userdata('goal_select');
+		$data['goal_min_name'] = $goal_min_name_selected;
+		
+		// show department indicator temp
 		$query = $this->ministerindicator->getIndicatorDep(0);
 		if($query){
 			$data['indicatordep_array'] =  $query;

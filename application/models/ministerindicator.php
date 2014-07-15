@@ -13,10 +13,10 @@ Class Ministerindicator extends CI_Model
  //    get only name from indicator or goal
  function getNameFromMinister($table, $id, $value)
  {
-	$result = $this->db->select(name)
+	$result = $this->db->select("name")
 					   ->from($table)
 			           ->where($id, $value)
-					   ->get()->result();
+					   ->get()->result_array();
 	return $result;
  }
 

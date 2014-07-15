@@ -63,8 +63,8 @@ Class User extends CI_Model
 	$this->db->_protect_identifiers=false;
 	$this->db->select("pwemployee.userid, CONCAT(pwfname,' ', pwlname) as pwname, pwposition.PWNAME as poname, PWTELOFFICE as pwtelephone, pwemployee.PWPOSITION as positionid, department.name as depname");
 	$this->db->from('pwemployee');	
-	$this->db->join('pwposition', 'pwposition.pwposition = pwemployee.pwposition');	
-	$this->db->join('department', 'pwemployee.department = department.id');
+	$this->db->join('pwposition', 'pwposition.pwposition = pwemployee.pwposition','left');	
+	$this->db->join('department', 'pwemployee.department = department.id','left');
 	$this->db->like('pwfname', $term,'after');
 	$query = $this->db->get();
 	return $query->result();
