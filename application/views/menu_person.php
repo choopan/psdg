@@ -63,7 +63,7 @@
                             	<?php if($this->session->userdata('sessexecdep') != 1) { ?>
                                 <li><a href="<?php echo site_url("person_evaluation/managePersonIndicator"); ?>"><i class='fa fa-bar-chart-o fa-fw'></i> กำหนดตัวชี้วัด</a></li>
                                 <li><a href="<?php echo site_url("person_evaluation/managePersonEvaluation"); ?>"><i class='fa fa-bar-chart-o fa-fw'></i> รายงานผลการปฏิบัติการ </a></li>
-                                <li><a href="<?php echo site_url("person_evaluation/managePersonEvaluation"); ?>"><i class='fa fa-bar-chart-o fa-fw'></i> ผลการปฏิบัติการย้อนหลัง </a></li>
+                                <li><a href="<?php echo site_url("person_evaluation/manageEvaluationHistory"); ?>"><i class='fa fa-bar-chart-o fa-fw'></i> ผลการปฏิบัติการย้อนหลัง </a></li>
                                 <?php } ?>
                                 
 								<?php   if ($this->session->userdata('sessadmin_min') == 1) { ?>

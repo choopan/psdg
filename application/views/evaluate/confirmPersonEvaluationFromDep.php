@@ -294,9 +294,12 @@
 					</div>
 				</div>
 				<center>
-				    <button type="button" onclick="javascript:history.go(-1)" class="btn btn-warning">
-					<span class="glyphicon glyphicon-chevron-left"></span> ย้อนกลับ</button>
-
+				    <a href="<?php echo site_url('person_evaluation/depManagePersonEvaluation'); ?>" type="button" class="btn btn-warning">
+					<span class="glyphicon glyphicon-chevron-left"></span> ย้อนกลับ</a>&nbsp;&nbsp;
+			
+					<a href="<?php echo site_url('person_evaluation/execAgreeEvaluationFromDep').  "/" . $pi_set ."/". $user['user_id']; ?>" type="button" class="btn btn-primary" onClick='return confirm(" คุณอนุมัติรายงานผลการปฏิบัติราชการนี้หรือไม่ ")'><span class="glyphicon glyphicon-ok"></span> อนุมัติตัวชี้วัด</a>&nbsp;&nbsp;
+					<a href="<?php echo site_url('person_evaluation/execCancelEvaluationFromDep'). "/" . $pi_set; ?>" type="button" class="btn btn-danger" onClick='return confirm(" คุณต้องการไม่อนุมัติรายงานผลการปฏิบัติงานจริงหรือไม่ ")'><span class="glyphicon glyphicon-remove"></span> ไม่อนุมัติ</a>
+		
 				</center>
 				<BR><BR><BR>
 			

@@ -43,14 +43,21 @@
 										<td><?php echo $ui['divname']; ?></td>
 										<td><?php echo $ui['position']." (ระดับ ".$ui['PWLEVEL'].")"; ?> </td>
 										<?php 
-											switch($this->personindicator->getPIStatus($ui['user_id'], $ui['dep_id'], $ui['div_id'], $year, $round)) {
-												case 0 : echo "<td><span class='label label-danger'>ยังไม่ส่งรายงาน</span></td><td> - </td>"; break;
-												case 1 : echo "<td><span class='label label-danger'>ยังไม่ส่งรายงาน</span></td><td> - </td>"; break;
-												case 2 : echo "<td><span class='label label-danger'>ยังไม่ส่งรายงาน</span></td><td> - </td>"; break;												
-												case 3 : echo "<td><span class='label label-success'>รอการพิจารณา</span></td><td> - </td>"; break;
-												case 4 : echo "<td><span class='label label-primary'>อนุมัติแล้ว</span></td><td><a href='". site_url('person_evaluation/viewEvaluation') ."/". $ui['user_id'] ."' class='btn btn-info' type='button'> ดูรายละเอียด</a></td>"; break;
-												case 5 : echo "<td><span class='label label-info'>อนุมัติขั้นสุกท้ายแล้ว</span></td><td><a href='". site_url('person_evaluation/viewEvaluation') ."/". $ui['user_id'] ."' class='btn btn-info' type='button'> ดูรายละเอียด</a></td>"; break;
-												default : echo "<td> uknown </td><td>-</td>";
+											if($this->personindicator->getPIStatus($ui['user_id'], $ui['dep_id'], $ui['div_id'], $year, $round) != 3) {
+												echo "<td><span class='label label-default'>ตัวชี้วัดยังไม่ผ่านการอนุมัติ</span></td><td> - </td>";
+											} else {
+										
+												switch($this->personindicator->getPIEvalStatus($ui['user_id'], $ui['dep_id'], $ui['div_id'], $year, $round)) {
+													case 0 : echo "<td><span class='label label-danger'>ยังไม่ส่งรายงาน</span></td><td> - </td>"; break;
+													case 1 : echo "<td><span class='label label-warning'> รอการพิจารณา <BR>จากผู้บังคับบัญชาเบื้องต้น</span></td><td> - </td>"; break;
+													case 2 : echo "<td><span class='label label-success'> อนุมัติ <BR>จากผู้บังคับบัญชาเบื้องต้น</span></td><td> - </td>"; break;
+													case 3 : echo "<td><span class='label label-primary'>อนุมัติแล้ว</span></td><td>"
+										 ?>
+													<a type="button" class="btn btn-danger" onclick="javascript:confirm('ต้องการยกเลิกการอนุมัติตัวชี้วัดจริงหรือไม่ ?')" 
+																href="<?php echo site_url('person_evaluation/minCancelEvaluation/'.$ui['user_id']); ?>"> ยกเลิกการอนุมัติ</a></td>
+										<?php 				break;
+													default : echo "<td><span class='label label-default'>????</span></td><td> - </a></td>"; break;											
+												}
 											}
 										?>								
                             		</tr>

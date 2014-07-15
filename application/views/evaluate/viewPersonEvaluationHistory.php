@@ -9,7 +9,6 @@
 
 <div id="page-wrapper">
 	<h2>รายงานผลการปฏิบัติงาน รอบปีงบประมาณ <?php echo $year; ?> รอบที่ <?php echo $round ?> </h2>
-	<div class="pull-right"><h4><strong>สถานะ :</strong>&nbsp;&nbsp;<?php echo $status_msg; ?></h4></div><br><br>
 	<div class="row">
 		<div class="col-lg-12">
 		<?php 	if($this->session->flashdata('success')) {
@@ -20,29 +19,6 @@
 						</div>
 			<?php	} ?>
 			
-			    <div class="panel panel-default">
-				<div class="panel-heading"><strong>ข้อมูลเบื้องต้น</strong></div>
-				<div class="panel-body">
-					<div class="row">
-						<div class="col-lg-5">
-							<strong>ชื่อ-นามสกุล :</strong> <?php echo $user['PWFNAME']." ".$user['PWLNAME']; ?>
-						</div>
-						<div class="col-lg-5">						
-							<strong>ตำแหน่ง : </strong> <?php echo $user['position'] ." (ระดับ ". $user['PWLEVEL'] . ")"; ?>
-						</div>	
-					</div>
-					<div class="row">
-						<div class="col-lg-5">
-							<strong>กอง :</strong> <?php echo $user['divname']; ?>
-						</div>
-						<div class="col-lg-5">
-							<strong>กรม :</strong> <?php echo $user['depname']; ?>
-						</div>
-					</div>
-					
-				</div>
-				</div>
-
 
 			<div class="panel panel-primary">
 				<div class="panel-heading">

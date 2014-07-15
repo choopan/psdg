@@ -54,7 +54,7 @@
 												case 2 : echo "<td><span class='label label-warning'>อยู่ระหว่างรอการพิจารณา</span></td><td> - </td>"; break;
 												case 3 : echo "<td><span class='label label-primary'>อนุมัติแล้ว</span></td><td>" ?>
 																<a type="button" class="btn btn-danger" onclick="javascript:confirm('ต้องการยกเลิกการอนุมัติตัวชี้วัดจริงหรือไม่ ?')" 
-																href="<?php echo site_url('person_evaluation/minCancelIndicator/'.$ui['user_id']); ?>"> ยกเลิกการอนุมัติ</a></td>"; 
+																href="<?php echo site_url('person_evaluation/minCancelIndicator/'.$ui['user_id']); ?>"> ยกเลิกการอนุมัติ</a></td> 
 												<?php	break;
 												default : echo "<td><span class='label label-primary'>????</span></td>"; break;											
 											}

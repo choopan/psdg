@@ -5,7 +5,7 @@
 </head>
 <body>
 <div id="wrapper">
-<?php $this->load->view('menu'); ?>
+<?php $this->load->view('menu_person'); ?>
 <div id="page-wrapper">
 	
 	<div class="row">
@@ -16,7 +16,14 @@
   							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
   			<?php			echo $this->session->flashdata('success'); ?>
 						</div>
-			<?php	}?>
+			<?php	} elseif($this->session->flashdata('failed')) { ?>
+						<div class="alert alert-danger alert-dismissable">
+  							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  			<?php			echo $this->session->flashdata('failed'); ?>
+						</div>
+			<?php	} 
+					
+			?>
 				
             <div class="panel panel-default">
 				<div class="panel-heading"><strong>รายงานผลการปฏิบัติราชการรายบุคคล ประจำปีงบประมาณ <?php echo $year; ?> รอบที่ <? echo $round; ?></strong></div>
@@ -33,20 +40,24 @@
 						</thead>
 						<tbody>	
 								<?php
+									
 									foreach($user_info as $ui) {
+										
 								?>
 									<tr>
 										<td><?php echo $ui['PWFNAME']." ".$ui['PWLNAME']; ?></td>
 										<td><?php echo $ui['position']." (ระดับ ".$ui['PWLEVEL'].")"; ?> </td>
 										<?php 
-											switch($this->personindicator->getPIStatus($ui['userID'], $ui['depID'], $ui['divID'], $year, $round)) {
-												case 0 : echo "<td><span class='label label-danger'>ยังไม่ส่งรายงาน</span></td><td> - </td>"; break;
-												case 1 : echo "<td><span class='label label-danger'>ยังไม่ส่งรายงาน</span></td><td> - </td>"; break;
-												case 2 : echo "<td><span class='label label-danger'>ยังไม่ส่งรายงาน</span></td><td> - </td>"; break;												
-												case 3 : echo "<td><span class='label label-success'>รอการพิจารณา</span></td><td><a href='". site_url('person_evaluation/confirmEvaluation') ."/". $ui['userID'] ."' class='btn btn-primary' type='button'> ดูรายละเอียด</a></td>"; break;
-												case 4 : echo "<td><span class='label label-primary'>อนุมัติแล้ว</span></td><td><a href='". site_url('person_evaluation/viewEvaluation') ."/". $ui['userID'] ."' class='btn btn-primary' type='button'> ดูรายละเอียด</a></td>"; break;
-												case 5 : echo "<td><span class='label label-info'>อนุมัติขั้นสุกท้ายแล้ว</span></td><td><a href='". site_url('person_evaluation/viewEvaluation') ."/". $ui['userID'] ."' class='btn btn-primary' type='button'> ดูรายละเอียด</a></td>"; break;
-												default : echo "<td> uknown </td><td>-</td>";
+											if($this->personindicator->getPIStatus($ui['userID'], $ui['depID'], $ui['divID'], $year, $round) != 3) {
+												echo "<td><span class='label label-default'>ตัวชี้วัดยังไม่ผ่านการอนุมัติ</span></td><td> - </td>";
+											} else {
+												switch($this->personindicator->getPIEvalStatus($ui['userID'], $ui['depID'], $ui['divID'], $year, $round)) {
+													case 0 : echo "<td><span class='label label-danger'>ยังไม่ส่งรายงาน</span></td><td> - </td>"; break;
+													case 1 : echo "<td><span class='label label-success'>รอการพิจารณา</span></td><td><a href='". site_url('person_evaluation/confirmEvaluation') ."/". $ui['userID'] ."' class='btn btn-primary' type='button'> ดูรายละเอียด</a></td>"; break;
+													case 2 : echo "<td><span class='label label-primary'>ผ่านการอนุมัติขั้นต้น</span></td><td><a href='". site_url('person_evaluation/viewEvaluation') ."/". $ui['userID'] ."' class='btn btn-primary' type='button'> ดูรายละเอียด</a></td>"; break;
+													case 3 : echo "<td><span class='label label-info'>ผ่านการอนุมัติแล้ว</span></td><td><a href='". site_url('person_evaluation/viewEvaluation') ."/". $ui['userID'] ."' class='btn btn-primary' type='button'> ดูรายละเอียด</a></td>"; break;
+													default : echo "<td> unknown </td><td>-</td>";
+												}
 											}
 										?>								
                             		</tr>

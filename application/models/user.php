@@ -81,6 +81,17 @@ Class User extends CI_Model
 	return $query->result();
  }
  
+ /////Choopan
+ function getUserFromDiv($userID, $divID) {
+ 	$result = $this->db->select('pwemployee.USERID as userID, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, PWLEVEL, department as depID, division as divID')
+ 						->from('pwemployee')
+ 						->join('pwposition', 'pwposition.pwposition = pwemployee.pwposition', 'left')
+ 						->where(array('pwemployee.division' => $divID, 'pwemployee.userID !=' => $userID, 'pwemployee.enabled' => 1))
+ 						->get() -> result_array();
+	return $result;
+ }
+ 
+ //// Old code
  function getMinProfile($id=null) {
  	$result = $this->db->select("pwemployee.USERID as user_id, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, PWLEVEL, department.name as depname, division.name as divname, department.id as depID, division.id as divID")
 			-> from('pwemployee')
@@ -138,15 +149,7 @@ Class User extends CI_Model
  }
 
 
- function getUserFromDiv($userID, $divID) {
- 	$result = $this->db->select('pwemployee.USERID as userID, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, PWLEVEL, department as depID, division as divID')
- 						->from('pwemployee')
- 						->join('pwposition', 'pwposition.pwposition = pwemployee.pwposition', 'left')
- 						->where(array('pwemployee.division' => $divID, 'pwemployee.userID !=' => $userID, 'pwemployee.enabled' => 1))
- 						->get() -> result_array();
-	return $result;
- }
-
+ 
  function getDepUnderControl($userID) {
  	$result = $this -> db -> select("dep_id")
  						  -> where(array('userID' => $userID, 'status' => 1))

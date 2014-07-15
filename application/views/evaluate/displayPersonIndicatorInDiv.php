@@ -44,10 +44,14 @@
 										<td><?php echo $ui['PWFNAME']." ".$ui['PWLNAME']; ?></td>
 										<td><?php echo $ui['position']." (ระดับ ".$ui['PWLEVEL'].")"; ?> </td>
 										<?php 
+											
 											switch($this->personindicator->getPIStatus($ui['userID'], $ui['depID'], $ui['divID'], $year, $round)) {
 												case 0 : echo "<td><span class='label label-danger'>ยังไม่ส่งตัวชี้วัด</span></td><td> - </td>"; break;
 												case 1 : echo "<td><span class='label label-success'>รอการพิจารณา</span></td><td><a href='". site_url('person_evaluation/confirmIndicator') ."/". $ui['userID'] ."' class='btn btn-primary' type='button'> ดูรายละเอียด</a></td>"; break;
-												default : echo "<td><span class='label label-primary'>อนุมัติแล้ว</span></td><td><a href='". site_url('person_evaluation/viewIndicator') ."/". $ui['userID'] ."' class='btn btn-info' type='button'> ดูรายละเอียด</a></td>"; break;
+												case 2 : echo "<td><span class='label label-primary'>ผ่านการอนุมัติขั้นต้น</span></td><td><a href='". site_url('person_evaluation/viewIndicator') ."/". $ui['userID'] ."' class='btn btn-primary' type='button'> ดูรายละเอียด</a></td>"; break;
+												case 3 : echo "<td><span class='label label-info'>ผ่านการอนุมัติแล้ว</span></td><td><a href='". site_url('person_evaluation/viewIndicator') ."/". $ui['userID'] ."' class='btn btn-primary' type='button'> ดูรายละเอียด</a></td>"; break;
+												
+												default : echo "<td>unknown</td><td>-</td>"; break;
 																						
 											}
 										?>								

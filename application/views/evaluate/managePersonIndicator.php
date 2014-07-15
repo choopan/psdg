@@ -39,7 +39,7 @@
             			</div>            <!-- /modal-header -->
             			<div class="modal-body">
 
-							<form class="form-inline" role="form" action="<?php echo site_url('person_evaluation/submitIndicatorForm'); ?>" method="POST">
+							<form class="form-inline" role="form" action="<?php echo site_url('person_evaluation/addPersonIndicator'); ?>" method="POST">
 					  		<div class="form-group">
 								<label  for="">ลำดับที่ : </label>
 								<input type="text" class="form-control" name="main_order" id="main_order" value="" style="width: 50px" required>
@@ -50,7 +50,7 @@
 					  		</div>
 					  		<div class="form-group">
 								<label  for=""> ค่าน้ำหนัก : </label>
-								<input type="text" class="form-control" name="main_weight" id="main_weight" value="" style="width: 50px" required>
+								<input type="text" class="form-control" name="main_weight" id="main_weight" value="" style="width: 80px" required>
 					  		</div>
 					  		<div><BR></div>	
 					  					  	
