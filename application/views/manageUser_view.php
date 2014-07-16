@@ -16,7 +16,7 @@ td.highlight {
 
 <body>
 	<div id="wrapper">
-	<?php $this->load->view('menu'); ?>
+	<?php $this->load->view('menu_admin'); ?>
 	
 	
 	
@@ -31,8 +31,8 @@ td.highlight {
             <div class="panel panel-default">
 					<div class="panel-heading">
 						
-							<button type="button" class="btn btn-success" onClick="window.location.href='<?php echo site_url("manageuser/adduser"); ?>'">เพิ่มผู้ใช้งาน</button>
-							<button class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">กดเพื่อค้นหา</button>
+							<button type="button" class="btn btn-success" onClick="window.location.href='<?php echo site_url("manageuser/adduser"); ?>'"><i class="glyphicon glyphicon-plus"></i> เพิ่มผู้ใช้งาน</button>
+							<button class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="glyphicon glyphicon-search"></i> กดเพื่อค้นหา</button>
 							<b id="cancle"></b>
 							
 							<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -48,7 +48,7 @@ td.highlight {
 											<div class="col-lg-4">
 											<div class="form-group">
 												<label>Username *</label>
-												<input type="text" id="username" class="form-control" value="username" required>
+												<input type="text" id="username" class="form-control">
 											</div>
 											</div>
 											<div class="col-lg-4">
@@ -86,17 +86,35 @@ td.highlight {
 											</div>
 										</div>
 										<div class="row">
-											<div class="col-lg-4">
-											<div class="form-group">
-												<label>ตำแหน่ง *</label>
-												<select id="position" class="form-control" >
-													<option value="-1">---</option>
-													<?php foreach($position as $value1){?>
-													<option value="<?php echo $value1['PWPOSITION'];?>"><?php echo $value1['PWNAME'];?></option>
-													<?php } ?>
-												</select>
-											</div>
-											</div>
+										<div class="col-lg-4">
+										<div class="form-group">
+                                            <label>เลือกชนิดตำแหน่ง *</label>
+											<select name="position_ty" class="form-control" id="position_ty" onChange="get_position(this.value)" required>
+													<option value="0">กรุณาเลือกตำแหน่ง</option>
+												<?php foreach($position as $loop2){ ?>
+													<option value="<?php echo $loop2['id']; ?>"><?php echo $loop2['name']; ?></option>
+												<?php } ?>
+											</select>
+										</div>
+										</div>
+										<div class="col-lg-4">
+										<div class="form-group">
+                                            <label>เลือกตำแหน่ง *</label>
+                                            <select name="position" class="form-control" id="position"  required>
+												<option value="0">--select--</option>
+											</select>
+										</div>
+										</div>
+										<div class="col-lg-4">
+										<div class="form-group">
+                                            <label>เลือกระดับตำแหน่ง *</label>
+                                            <select name="position_lv" class="form-control" id="position_lv" required>
+												<option value="0">--select--</option>
+											</select>
+										</div>
+										</div>
+									</div>
+										<div class="row">
 											<div class="col-lg-4">
 											<div class="form-group">
 												<label>สิทธิผู้ดูแล *</label>
@@ -265,13 +283,14 @@ td.highlight {
 			var lname = $('#lname').val();
 			var department = $('#department').val();
 			var division = $('#division_db').val();
-			var position = $('#position').val();
 			var admin_mdd = $('#admin_mdd').val();
-			var execode = $('#execode').val();
+			var position_ty = $('#position_ty').val();
+			var position = $('#position').val();
+			var position_lv = $('#position_lv').val();
 			$.ajax({
 					'url' : '<?php echo site_url('manageuser/get_search'); ?>/',
 					'type':'get',
-					'data':{username:username,fname:fname,lname:lname,department:department,division:division,position:position,admin_mdd:admin_mdd,execode:execode},
+					'data':{username:username,fname:fname,lname:lname,department:department,division:division,admin_mdd:admin_mdd,position_ty:position_ty,position:position,position_lv:position_lv},
 					'dayaType':'json',
 					'error' : function(data){ 
 						alert('error');
@@ -280,13 +299,53 @@ td.highlight {
 						$("#page_bott").empty();
 						$("#user_db").empty();
 						$("#cancle").empty();
-						var bt = '<a href="user_view" class="btn btn-outline btn-danger" >ยกเลิกการค้นหา</a>';
+						var bt = '<a href="user_view" class="btn btn-danger" >ยกเลิกการค้นหา</a>';
 						$('#cancle').append(bt);
 						$('#user_db').html(data);
                     }
 				});
 			
 	}
+	
+	function get_position(val1){
+	$.ajax({
+					'url' : '<?php echo site_url('manageuser/get_position_1'); ?>/'+val1,
+					'dataType': 'json',
+					'error' : function(data){ 
+						alert('error');
+                    },
+					'success' : function(data){
+						$("#position").empty();
+						var d1_num=data.length;
+						var tr='<option value="0">เลือก</option>';
+						for(i=0;i<d1_num;i++)
+						{
+							tr+='<option value="'+data[i]['PWPOSITION']+'">'+data[i]['PWNAME']+'</option>';
+							
+						}
+						$(tr).appendTo('#position');
+                    }
+				});
+				
+	$.ajax({
+					'url' : '<?php echo site_url('manageuser/get_position_2'); ?>/'+val1,
+					'dataType': 'json',
+					'error' : function(data2){ 
+						alert('error');
+                    },
+					'success' : function(data2){
+						$("#position_lv").empty();
+						var d2_num=data2.length;
+						var tr='<option value="0">เลือก</option>';
+						for(i=0;i<d2_num;i++)
+						{
+							tr+='<option value="'+data2[i]['id']+'">'+data2[i]['name']+'</option>';
+							
+						}
+						$(tr).appendTo('#position_lv');
+                    }
+				});
+}
 </script>
 </body>
 </html>

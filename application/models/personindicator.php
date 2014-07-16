@@ -668,5 +668,13 @@ Class PersonIndicator extends CI_Model
 								-> get() -> result_array();
 		return $result;
 	}
+	
+	function getUserScore($userID, $depID, $divID, $year, $round) {
+ 	$result = $this->db->select('exec_indicator_score, exec_core_score')
+ 						->from('person_indicator')	
+						->where(array('userID' => $userID, 'dep_id' => $depID, 'div_id' => $divID, 'year' => $year, 'round' => $round))
+						->get() -> result_array();
+	return $result;
+ }
 }
 ?>

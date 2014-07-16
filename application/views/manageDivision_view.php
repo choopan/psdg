@@ -16,7 +16,7 @@ td.highlight {
 
 <body>
 	<div id="wrapper">
-	<?php $this->load->view('menu'); ?>
+	<?php $this->load->view('menu_admin'); ?>
 	
 	
 	
@@ -31,7 +31,7 @@ td.highlight {
             <div>
                 <div class="panel panel-default">
 					<div class="panel-heading">
-						<button type="button" class="btn btn-success" onClick="window.location.href='<?php echo site_url("manageuser/addDivision"); ?>'">เพิ่มกอง</button>
+						<button type="button" class="btn btn-success" onClick="window.location.href='<?php echo site_url("manageuser/addDivision"); ?>'"><i class="glyphicon glyphicon-plus"></i> เพิ่มกอง</button>
 					</div>
                     <div class="panel-body">
 						<?php if($result==1){?>
@@ -95,7 +95,11 @@ td.highlight {
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function()
     {
-		var table = $('#dataTables-example').DataTable();
+		var table = $('#dataTables-example').DataTable({
+															"order": [[ 0, "asc" ]],
+															"paging": false,
+															"info":     false,
+													   });
 		$('#myModal').modal({
 							show:true,
 							backdrop:false

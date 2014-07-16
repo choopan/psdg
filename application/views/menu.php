@@ -47,6 +47,7 @@
                             <a href="<?php echo site_url("main/changeyear"); ?>"><i class="fa fa-calendar fa-fw"></i> ปีงบประมาณ <strong><u><?php echo $this->session->userdata('sessyear'); ?></u></strong></a>
                         </li>
                         
+<<<<<<< HEAD
                         <?php	if($this->session->userdata('sessadmin_min') == 1) { ?>
                         <li>
                             <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> ผู้ดูแลตัวชี้วัด <span class="fa arrow"></span></a>
@@ -67,6 +68,9 @@
                                                 
   
 				
+=======
+            
+>>>>>>> FETCH_HEAD
 						<li>
                             <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> กำหนดตัวชี้วัด<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">

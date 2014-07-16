@@ -19,7 +19,7 @@ td.highlight {
 
 <body>
 <div id="wrapper">
-	<?php $this->load->view('menu'); ?>
+	<?php $this->load->view('menu_admin'); ?>
 	
 	
 	
@@ -87,7 +87,7 @@ td.highlight {
 							</div>
 						<?php }?>
 						<h3><?php echo $data[0]['name'];?></h3><hr>
-							<button type="button" class="btn btn-outline btn-success" data-toggle="modal" data-target="#myModal">เพิ่มผู้ดูแล</button><br><br>
+							<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-plus"></i> เพิ่มผู้ดูแล</button><br><br>
 						<div class="table-responsive">
                             <table class="table table-striped table-bordered table-hover" id="indicator_table">
                                 <thead>

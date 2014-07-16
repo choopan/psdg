@@ -211,7 +211,7 @@ class person_evaluation extends CI_Controller {
 			$round = $active_evalround[0]['round'];
 			$data['year']  = $year;
 			$data['round'] = $round;
-			$data['user_info'] = $this->user->getUserFromDiv($data['userID'], $data['divID']); 
+			$data['user_info'] = $this->user->getUserFromDiv($data['userID'], $data['divID'],$year, $round); 
 			$this->load->view('evaluate/displayPersonIndicatorInDiv.php', $data);
 		} else {			
 			echo "No evaluate round selected";
@@ -507,6 +507,7 @@ class person_evaluation extends CI_Controller {
 		if(!$this->session->userdata('sessexecdiv')) {
 			show_error("คุณไม่มีสิทธิในการเข้าถึงหน้านี้", 500);
 		}
+		
 		$data['userID'] = $this->session->userdata('sessid');
 		$data['depID']  = $this->session->userdata('sessdep');	
 		$data['divID']  = $this->session->userdata('sessdiv');
@@ -518,7 +519,23 @@ class person_evaluation extends CI_Controller {
 			$round = $active_evalround[0]['round'];
 			$data['year']  = $year;
 			$data['round'] = $round;
-			$data['user_info'] = $this->user->getUserFromDiv($data['userID'], $data['divID']); 
+			$user_info = $this->user->getUserFromDiv($data['userID'], $data['divID'], $year, $round);
+			$data['user_info'] = $user_info;
+			$user_indicator_score = array();
+			$user_core_score = array(); 
+			foreach($user_info as $ui) {
+				$score = $this->personindicator->getUserScore($ui['userID'], $ui['depID'], $ui['divID'], $year, $round);
+				$tmpID = $ui['userID'];
+				if(count($score) != 0) {
+					$user_indicator_score["$tmpID"] = $score[0]['exec_indicator_score'];
+					$user_core_score["$tmpID"] = $score[0]['exec_core_score'];
+				} else {
+					$user_indicator_score["$tmpID"] = 0;
+					$user_core_score["$tmpID"] = 0;
+				}
+			}
+			$data['user_indicator_score'] = $user_indicator_score;
+			$data['user_core_score'] = $user_core_score;
 			$this->load->view('evaluate/displayPersonEvaluationInDiv.php', $data);
 		} else {			
 			echo "No evaluate round selected";
@@ -556,6 +573,37 @@ class person_evaluation extends CI_Controller {
 		
 			$exec_info = $this->user->getUserInfo($execUserID);
 			$user_info = $this->user->getUserInfoUnderControlExceptExec($execUserID, $depIDs);
+			
+			
+			$user_indicator_score = array();
+			$user_core_score = array(); 
+			foreach($user_info as $ui) {
+				$score = $this->personindicator->getUserScore($ui['userID'], $ui['depID'], $ui['divID'], $year, $round);
+				$tmpID = $ui['userID'];
+				if(count($score) != 0) {
+					$user_indicator_score["$tmpID"] = $score[0]['exec_indicator_score'];
+					$user_core_score["$tmpID"] = $score[0]['exec_core_score'];
+				} else {
+					$user_indicator_score["$tmpID"] = 0;
+					$user_core_score["$tmpID"] = 0;
+				}
+			}
+			
+			foreach($exec_info as $ui) {
+				$score = $this->personindicator->getUserScore($ui['userID'], $ui['depID'], $ui['divID'], $year, $round);
+				$tmpID = $ui['userID'];
+				if(count($score) != 0) {
+					$user_indicator_score["$tmpID"] = $score[0]['exec_indicator_score'];
+					$user_core_score["$tmpID"] = $score[0]['exec_core_score'];
+				} else {
+					$user_indicator_score["$tmpID"] = 0;
+					$user_core_score["$tmpID"] = 0;
+				}
+			}
+			
+			$data['user_indicator_score'] = $user_indicator_score;
+			$data['user_core_score'] = $user_core_score;
+			
 			$data['exec_info'] = $exec_info;
 			$data['user_info'] = $user_info;
 			$this->load->view('evaluate/displayPersonEvaluationInDep.php', $data);
