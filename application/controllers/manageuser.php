@@ -235,10 +235,12 @@ class Manageuser extends CI_Controller {
 		$lname = $this->input->get('lname');
 		$department = $this->input->get('department');
 		$division = $this->input->get('division');
+		$position_ty = $this->input->get('position_ty');
 		$position = $this->input->get('position');
-		//$admin_mdd = $this->input->get('admin_mdd');
+		$position_lv = $this->input->get('position_lv');
+		$admin_mdd = $this->input->get('admin_mdd');
 		
-		/* if($admin_mdd!=-1){
+		if($admin_mdd!=-1){
 			if($admin_mdd=="admin_min"){
 				$admin_min = 1;
 				$admin_dep = null;
@@ -256,29 +258,33 @@ class Manageuser extends CI_Controller {
 				$admin_min = null;
 				$admin_dep = null;
 				$admin_div = null;
-		} */
+		}
 		
-		if($username!=null){$username="WHERE PWUSERNAME='".$username."'";}
-		if($fname!=null){$fname="AND PWFNAME='".$fname."'";}
-		if($lname!=null){$lname="AND PWLNAME='".$lname."'";}
-		if($department==-1){$department=" ";}else{$department="AND department=".$department;}
-		if($division==-1){$division=" ";}else{$division="AND division=".$division;}
-		if($position==-1){$position=" ";}else{$position="AND PWPOSITION=".$position;}
-		/* if($admin_min==1){$admin_min1="AND admin_min=".$admin_min;}
-		if($admin_dep==1){$admin_dep1="AND admin_dep=".$admin_dep;}
-		if($admin_div==1){$admin_div1="AND admin_div=".$admin_div;} */
+		$where=array();
 		
-		$sql="SELECT pwemployee.USERID AS USERID, PWFNAME, PWLNAME, PWEFNAME, PWELNAME, department.name AS dep_name, division.name AS div_name, PWPOSITION.PWNAME AS position_name, PWLEVEL, PWEMAIL   
+		if($username !=null){$where['PWUSERNAME LIKE']='%'.$username.'%';}
+		if($fname !=null){$where['PWFNAME LIKE']='%'.$fname.'%';}
+		if($lname !=null){$where['PWLNAME LIKE']='%'.$lname.'%';}
+		if($department !=-1){$where['department']=$department;}
+		if($division !=-1){$where['division']=$division;}
+		if($position_ty !=0){$where['position_type']=$position_ty;}
+		if($position !=0){$where['position']=$position;}
+		if($position_lv !=0){$where['position_level']=$position_lv;}
+		if($admin_min ==1){$where['admin_min']=$admin_min;}
+		if($admin_dep ==1){$where['admin_dep']=$admin_dep;}
+		if($admin_div ==1){$where['admin_div']=$admin_div;}
+		
+		/* $sql="SELECT pwemployee.USERID AS USERID, PWFNAME, PWLNAME, PWEFNAME, PWELNAME, department.name AS dep_name, division.name AS div_name, PWPOSITION.PWNAME AS position_name, PWLEVEL, PWEMAIL   
 			  FROM pwemployee  INNER JOIN division INNER JOIN department INNER JOIN pwposition
 			  ON pwemployee.department = department.id
 			  AND pwemployee.division = division.id
 			  AND pwemployee.PWPOSITION = pwposition.PWPOSITION 
-			  ".$username.' '.$fname.' '.$lname.' '.$department.' '.$division.' '.$position;
-		$dta['sql']=$sql;
-		$data2['data2']=$this->user_manage->get_search($sql);
+			  ".$username.' '.$fname.' '.$lname.' '.$department.' '.$division.' '.$position; */
+		//$dta['sql']=$sql;
+		$data2['data2']=$this->user_manage->get_search($where);
 		/* echo "<pre>";
+		print_r($where);
 		print_r($data2);
-		print_r($dta);
 		echo "</pre>"; */
 		//echo json_encode($data);
 		$this->load->view('manage/showUser_search',$data2);

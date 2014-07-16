@@ -51,9 +51,9 @@ td.highlight {
             <div >
                 <div class="panel panel-default">
 					<div class="panel-heading">
-						<button type="button" class="btn btn-success" onClick="window.location.href='<?php echo site_url("manageuser/addPosition_type"); ?>'">เพิ่มชนิดตำแหน่ง</button>
-						<button type="button" class="btn btn-info" onClick="window.location.href='<?php echo site_url("manageuser/addPosition"); ?>'">เพิ่มตำแหน่ง</button>
-						<button type="button" class="btn btn-warning" onClick="window.location.href='<?php echo site_url("manageuser/addPosition_level"); ?>'">เพิ่มขั้นตำแหน่ง</button>
+						<button type="button" class="btn btn-success" onClick="window.location.href='<?php echo site_url("manageuser/addPosition_type"); ?>'"><i class="glyphicon glyphicon-plus"></i> เพิ่มชนิดตำแหน่ง</button>
+						<button type="button" class="btn btn-info" onClick="window.location.href='<?php echo site_url("manageuser/addPosition"); ?>'"><i class="glyphicon glyphicon-plus"></i> เพิ่มตำแหน่ง</button>
+						<button type="button" class="btn btn-warning" onClick="window.location.href='<?php echo site_url("manageuser/addPosition_level"); ?>'"><i class="glyphicon glyphicon-plus"></i> เพิ่มขั้นตำแหน่ง</button>
 					</div>
                     <div class="panel-body">
 						<?php if($result==1){?>
@@ -106,7 +106,11 @@ td.highlight {
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function()
     {
-		var table = $('#dataTables-example').DataTable();
+		var table = $('#dataTables-example').DataTable({
+			"order": [[ 0, "asc" ]],
+			"paging": false,
+			"info":     false,
+		});
 		$('#myModal').modal({
 							show:true,
 							backdrop:false

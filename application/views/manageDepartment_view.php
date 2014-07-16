@@ -16,7 +16,7 @@ td.highlight {
 
 <body>
 	<div id="wrapper">
-	<?php $this->load->view('menu'); ?>
+	<?php $this->load->view('menu_admin'); ?>
 	
 	
 	
@@ -31,7 +31,7 @@ td.highlight {
             <div >
                 <div class="panel panel-default">
 					<div class="panel-heading">
-						<button type="button" class="btn btn-success" onClick="window.location.href='<?php echo site_url("manageuser/addDepartment"); ?>'">เพิ่มกรม</button>
+						<button type="button" class="btn btn-success" onClick="window.location.href='<?php echo site_url("manageuser/addDepartment"); ?>'"><i class="glyphicon glyphicon-plus"></i> เพิ่มกรม</button>
 					</div>
                     <div class="panel-body">
 						<?php if($result==1){?>
@@ -91,6 +91,7 @@ td.highlight {
 			</div>	
 		</div>
 	</div>
+</div>
 
 
 <?php $this->load->view('js_footer'); ?>
@@ -104,7 +105,12 @@ td.highlight {
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function()
     {
-		$('#indicator_table').dataTable({"order": [[ 0, "asc" ]]});		
+		$('#indicator_table').dataTable({
+											"order": [[ 0, "asc" ]],
+											"paging": false,
+											"info":     false,
+		
+										});		
 		$('#myModal').modal({
 							show:true,
 							backdrop:false

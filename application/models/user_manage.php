@@ -167,9 +167,17 @@ Class User_manage extends CI_Model
 	return $query;
  }
  
- function get_search($sql)
+ function get_search($where)
  {
-	$query=$this->db->query($sql)
+	$query=$this->db->select('pwemployee.USERID as USERID, PWFNAME, PWLNAME, PWEFNAME, PWELNAME, department.name AS dep_name, division.name AS div_name,PWEMAIL')
+					->from('pwemployee')
+					->join('department','pwemployee.department = department.id','LEFT')
+					->join('division','pwemployee.division = division.id','LEFT')
+					->join('position_type','pwemployee.position_type = position_type.id','LEFT')
+					->join('pwposition','pwemployee.position = pwposition.PWPOSITION','LEFT')
+					->join('position_level','pwemployee.position_level = position_level.id','LEFT')
+					->where($where)
+					->get()
 					->result_array();
 	return $query;
  }
@@ -243,8 +251,8 @@ Class User_manage extends CI_Model
  
  function dep_edit_info($id)
  {
-	$query=$this->db->query('SELECT id,department.USERID AS USERID,name,PWFNAME,PWLNAME,department.status as status FROM department LEFT JOIN pwemployee
-							 ON department.USERID = pwemployee.USERID WHERE id = '.$id)
+	$query=$this->db->query('SELECT id,name,PWFNAME,PWLNAME FROM department LEFT JOIN pwemployee
+							 ON department.id = pwemployee.department WHERE id = '.$id)
 					->result_array();
 	return $query;
  }

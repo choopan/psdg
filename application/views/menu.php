@@ -47,53 +47,7 @@
                             <a href="<?php echo site_url("main/changeyear"); ?>"><i class="fa fa-calendar fa-fw"></i> ปีงบประมาณ <strong><u><?php echo $this->session->userdata('sessyear'); ?></u></strong></a>
                         </li>
                         
-                        <?php	if($this->session->userdata('sessadmin_min') == 1) { ?>
-                        <li>
-                            <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> จัดการข้อมูล <span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="<?php echo site_url("manageuser/user_view"); ?>">จัดการผู้ใช้งาน</a>
-                                </li>
-								<li>
-                                    <a href="<?php echo site_url("manageuser/department_view"); ?>">จัดการกรม</a>
-                                </li>
-								<li>
-                                    <a href="<?php echo site_url("manageuser/division_view"); ?>">จัดการกอง</a>
-                                </li>
-								<li>
-                                    <a href="<?php echo site_url("manageuser/position_view"); ?>">จัดการตำแหน่ง</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo site_url("person_evaluation/manageEvalRound"); ?>">จัดการรอบการประเมิน</a>
-                                </li>
-
-                            </ul>
-                           
-                        </li>
-                        <?php } ?>
-                        
-				       <?php	if($this->session->userdata('sessadmin_min') == 1) { ?>
-  						<li>
-                            <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> แบบประเมินสมรรณะ<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="<?php echo site_url("core_competency/manageSkill"); ?>">จัดการชื่อสมรรณะ</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo site_url("core_competency/manageCoreSet"); ?>">จัดการชุุดประเมินสมรรณะ</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo site_url("core_competency/assignCoreSetIndex"); ?>">กำหนดชุุดประเมินสมรรณะ</a>
-                                </li>
-								<li>
-                                    <a href="<?php echo site_url("core_competency/coreAbility"); ?>">แบบประเมินสมรรถนะ</a>
-                                </li>
-                            </ul>
-                        </li>
-						<?php	} ?>
-                                                
-  
-				
+            
 						<li>
                             <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> กำหนดตัวชี้วัด<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
