@@ -35,6 +35,9 @@
 								<th>สังกัด</th>	
 								<th>หน่วยงาน</th>					
 								<th>ตำแหน่ง</th>
+								<th>คะแนนผลสัมฤทธิ์</th>
+								<th>คะแนนสมรรณะ</th>
+								<th>คะแนนรวม</th>
 								<th>สถานะ</th>
 								<th>จัดการ</th>
 							</tr>
@@ -48,6 +51,10 @@
 										<td><?php echo $ui['depname'] ?></td>
 										<td><?php echo $ui['divname']; ?></td>
 										<td><?php echo $ui['position']; ?> </td>
+										<td><?php echo number_format($user_indicator_score[$ui['userID']],2); ?></td>
+										<td><?php echo number_format($user_core_score[$ui['userID']],2); ?></td>
+										<td><?php echo number_format((number_format($user_indicator_score[$ui['userID']],2) * 0.7) + (number_format($user_core_score[$ui['userID']],2)*0.3),2); ?></td>
+										
 										<?php 
 											if($this->personindicator->getPIStatus($ui['userID'], $ui['depID'], $ui['divID'], $year, $round) != 3) {
 												echo "<td><span class='label label-default'>ตัวชี้วัดยังไม่ผ่านการอนุมัติ</span></td><td> - </td>";
@@ -84,6 +91,9 @@
 								<th>สังกัด</th>	
 								<th>หน่วยงาน</th>					
 								<th>ตำแหน่ง</th>
+								<th>คะแนนผลสัมฤทธิ์</th>
+								<th>คะแนนสมรรณะ</th>
+								<th>คะแนนรวม</th>
 								<th>สถานะ</th>
 								<th>จัดการ</th>
 							</tr>
@@ -97,6 +107,10 @@
 										<td><?php echo $ui['depname'] ?></td>
 										<td><?php echo $ui['divname']; ?></td>
 										<td><?php echo $ui['position']; ?> </td>
+										<td><?php echo number_format($user_indicator_score[$ui['userID']],2); ?></td>
+										<td><?php echo number_format($user_core_score[$ui['userID']],2); ?></td>
+										<td><?php echo number_format((number_format($user_indicator_score[$ui['userID']],2) * 0.7) + (number_format($user_core_score[$ui['userID']],2)*0.3),2); ?></td>
+
 										<?php 
 											if($this->personindicator->getPIStatus($ui['userID'], $ui['depID'], $ui['divID'], $year, $round) != 3) {
 												echo "<td><span class='label label-default'>ตัวชี้วัดยังไม่ผ่านการอนุมัติ</span></td><td> - </td>";

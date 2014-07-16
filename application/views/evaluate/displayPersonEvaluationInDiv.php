@@ -33,20 +33,24 @@
 						<thead>
 							<tr>
 								<th style="width: 200px">ชื่อ - นามสกุล</th>							
-								<th>ตำแหน่ง</th>
-								<th>สถานะ</th>
+								<th>ตำแหน่ง</th>								
+								<th>คะแนนผลสัมฤทธิ์</th>
+								<th>คะแนนสมรรณะ</th>
+								<th>คะแนนรวม</th>
+								<th>สถานะ</th>	
 								<th>จัดการ</th>
 							</tr>
 						</thead>
 						<tbody>	
-								<?php
-									
-									foreach($user_info as $ui) {
-										
+								<?php							
+									foreach($user_info as $ui) {										
 								?>
 									<tr>
 										<td><?php echo $ui['PWFNAME']." ".$ui['PWLNAME']; ?></td>
-										<td><?php echo $ui['position']." (ระดับ ".$ui['PWLEVEL'].")"; ?> </td>
+										<td><?php echo $ui['position']; ?> </td>
+										<td><?php echo number_format($user_indicator_score[$ui['userID']],2); ?></td>
+										<td><?php echo number_format($user_core_score[$ui['userID']],2); ?></td>
+										<td><?php echo number_format((number_format($user_indicator_score[$ui['userID']],2) * 0.7) + (number_format($user_core_score[$ui['userID']],2)*0.3),2); ?></td>
 										<?php 
 											if($this->personindicator->getPIStatus($ui['userID'], $ui['depID'], $ui['divID'], $year, $round) != 3) {
 												echo "<td><span class='label label-default'>ตัวชี้วัดยังไม่ผ่านการอนุมัติ</span></td><td> - </td>";

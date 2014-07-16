@@ -81,13 +81,16 @@ Class User extends CI_Model
 	return $query->result();
  }
  
- /////Choopan
- function getUserFromDiv($userID, $divID) {
+ 
+ 
+ 
+ function getUserFromDiv($userID, $divID, $year, $round) {
  	$result = $this->db->select('pwemployee.USERID as userID, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, PWLEVEL, department as depID, division as divID')
  						->from('pwemployee')
  						->join('pwposition', 'pwposition.pwposition = pwemployee.pwposition', 'left')
- 						->where(array('pwemployee.division' => $divID, 'pwemployee.userID !=' => $userID, 'pwemployee.enabled' => 1))
- 						->get() -> result_array();
+ 						->where(array('pwemployee.division' => $divID, 'pwemployee.userID !=' => $userID, 
+ 									  'pwemployee.enabled' => 1))
+ 						->get() -> result_array();						
 	return $result;
  }
  
