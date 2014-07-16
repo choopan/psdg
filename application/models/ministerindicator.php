@@ -54,19 +54,22 @@ Class Ministerindicator extends CI_Model
 	$this->db->select("indicatorID as id, min_goal.number, min_goal.name, min_goal.id as goalid");
 	$this->db->order_by("number", "asc");
 	$this->db->from('min_goal');
-	$this->db->join('min_indicator','min_goal.indicatorID=min_indicator.id');	
+	$this->db->join('min_indicator','min_goal.indicatorID=min_indicator.id','left');	
 	$this->db->where('indicatorID', $id);
 	$this->db->where('year', $year);
 	$query = $this->db->get();
 	return $query;
  }
  
- function getIndicatorDep($dep=null)
+ function getIndicatorDep($dep=null,$ismin=null,$min=null,$isgoal=null,$goal=null,$userid=null)
  {
-	$this->db->select("number, name, id, depID, isMinister, weight,goal");
+	$this->db->select("number, name, id, depID, isMinister, isGoalmin, weight,goal");
 	$this->db->order_by("number", "asc");
 	$this->db->from('dep_indicator');	
-	$this->db->where('depID', $dep);	
+	$this->db->where('depID', $dep);
+    $this->db->where($ismin, $min);
+    $this->db->where($isgoal, $goal);	
+    $this->db->where('editorID', $userid);
 	$query = $this->db->get();		
 	return $query->result();
  }
@@ -286,9 +289,10 @@ Class Ministerindicator extends CI_Model
  
  function getOneIndicatorGoalDep($id=NULL)
  {
-	$this->db->select("number, name");
+	$this->db->select("number, name, pwfname, pwlname");
 	$this->db->order_by("number", "asc");
 	$this->db->from('dep_goal');
+    $this->db->join('pwemployee', 'pwemployee.userid=dep_goal.responseID', 'left');
 	$this->db->where('indicatorID', $id);
 	$query = $this->db->get();		
 	return $query->result();
@@ -476,6 +480,18 @@ Class Ministerindicator extends CI_Model
  {
 	$this->db->where('userID', $id);
 	$this->db->delete('person_goal'); 
+ }
+    
+ function delDepIndicatorTemp($id=NULL)
+ {
+    // delete dep_indicator depid=0 temp
+    $this->db->where('id', $id);
+	$this->db->delete('dep_indicator');
+    
+    // delete dep_goal temp
+    $this->db->where('indicatorID', $id);
+	$this->db->delete('dep_goal');
+     
  }
  
  function editNumber($in=NULL)

@@ -49,48 +49,21 @@
                         
                         <?php	if($this->session->userdata('sessadmin_min') == 1) { ?>
                         <li>
-                            <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> จัดการข้อมูล <span class="fa arrow"></span></a>
+                            <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> ผู้ดูแลตัวชี้วัด <span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="<?php echo site_url("manageuser/user_view"); ?>">จัดการผู้ใช้งาน</a>
+                                    <a href="<?php echo site_url("indicator_admin/minister_view"); ?>">แสดงระดับกระทรวง</a>
                                 </li>
 								<li>
-                                    <a href="<?php echo site_url("manageuser/department_view"); ?>">จัดการกรม</a>
+                                    <a href="<?php echo site_url("indicator_admin/department_view"); ?>">แสดงระดับกรม</a>
                                 </li>
 								<li>
-                                    <a href="<?php echo site_url("manageuser/division_view"); ?>">จัดการกอง</a>
+                                    <a href="<?php echo site_url("indicator_admin/division_view"); ?>">แสดงระดับกอง</a>
                                 </li>
-								<li>
-                                    <a href="<?php echo site_url("manageuser/position_view"); ?>">จัดการตำแหน่ง</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo site_url("person_evaluation/manageEvalRound"); ?>">จัดการรอบการประเมิน</a>
-                                </li>
-
                             </ul>
                            
                         </li>
                         <?php } ?>
-                        
-				       <?php	if($this->session->userdata('sessadmin_min') == 1) { ?>
-  						<li>
-                            <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> แบบประเมินสมรรณะ<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="<?php echo site_url("core_competency/manageSkill"); ?>">จัดการชื่อสมรรณะ</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo site_url("core_competency/manageCoreSet"); ?>">จัดการชุุดประเมินสมรรณะ</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo site_url("core_competency/assignCoreSetIndex"); ?>">กำหนดชุุดประเมินสมรรณะ</a>
-                                </li>
-								<li>
-                                    <a href="<?php echo site_url("core_competency/coreAbility"); ?>">แบบประเมินสมรรถนะ</a>
-                                </li>
-                            </ul>
-                        </li>
-						<?php	} ?>
                                                 
   
 				
@@ -104,10 +77,7 @@
                                     <a href="<?php echo site_url("manageindicator/addDepartment"); ?>">ระดับกรม</a>
                                 </li>
 								<li>
-                                    <a href="<?php echo site_url("manageindicator/addKong"); ?>">ระดับกอง</a>
-                                </li>
-								<li>
-                                    <a href="<?php echo site_url("manageindicator/addPerson"); ?>">ระดับบุคคล</a>
+                                    <a href="<?php echo site_url("manageindicator/addDivision"); ?>">ระดับกอง</a>
                                 </li>
                             </ul>
                         </li>

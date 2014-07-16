@@ -35,6 +35,9 @@ td.highlight {
 					?>
 
 						<?php echo form_open('manageindicator/saveDep'); ?>
+                        
+                        <?php foreach($min_array as $loop) { ?>
+						<input type="hidden" name="mingoalid" id="mingoalid" value="<?php echo $min_goal_id; ?>">
 						<div class="row">
 							<div class="col-md-2">
 									<div class="form-group">
@@ -46,7 +49,7 @@ td.highlight {
 							<div class="col-md-9">
 									<div class="form-group">
                                         <label>ชื่อตัวชี้วัด *</label>
-                                        <input type="text" class="form-control" name="indicatorName" id="indicatorName" value="<?php echo set_value('indicatorName'); ?>">
+                                        <input type="text" class="form-control" name="indicatorName" id="indicatorName" value="<?php echo $loop['name']; ?>">
 											<p class="help-block"><?php echo form_error('indicatorName'); ?></p>
                                     </div>
 							</div>
@@ -176,6 +179,7 @@ td.highlight {
                         </div>
                 	</div>
                 </div>
+                        <?php } ?>
 						<div class="row">
 							<div class="col-md-6">
 									<button type="submit" class="btn btn-primary">  เพิ่มตัวชี้วัดระดับกรม  </button>

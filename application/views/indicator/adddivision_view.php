@@ -27,7 +27,7 @@ td.highlight {
         <div class="col-md-11">
             <div class="panel panel-default">
 				<div class="panel-heading">
-					<strong>กำหนดตัวชี้วัดและประเด็นความสำเร็จ <u>ระดับกรม</u></strong>
+					<strong>กำหนดตัวชี้วัดและประเด็นความสำเร็จ <u>ระดับกอง</u></strong>
                 </div>
                 <div class="panel-body">
                             <!-- Nav tabs -->
@@ -45,13 +45,13 @@ td.highlight {
 						<div class="row">
 							<div class="col-md-4">
 									<div class="form-group">
-                                        <label>กรม *</label>
-										<select class="form-control" name="departmentid" id="departmentid" onchange="savedepid(this);">
+                                        <label>กอง *</label>
+										<select class="form-control" name="divid" id="divid" onchange="savedivid(this);">
 											<option value=""></option>
-										<?php 	if(is_array($dep_array)) {
-												foreach($dep_array as $loop){
-													echo "<option value='".$loop->id."'";
-                                                    if ($depid == $loop->id) echo " selected";
+										<?php 	if(is_array($div_array)) {
+												foreach($div_array as $loop){
+													echo "<option value='".$loop->id."x".$loop->dep_id."'";
+                                                    if ($divid == $loop->id) echo " selected";
                                                     echo ">".$loop->name."</option>";
 										 } } ?>
                                         </select>
@@ -62,12 +62,12 @@ td.highlight {
 		<div class="row">
             <div class="col-md-12">
                 <div class="panel panel-info">
-					<div class="panel-heading"><strong>รายการตัวชี้วัดและประเด็นความสำเร็จของกระทรวงที่เลือก</strong> </div>
+					<div class="panel-heading"><strong>รายการตัวชี้วัดและประเด็นความสำเร็จของกรมที่เลือก</strong> </div>
                     <div class="panel-body">
                         <div class="table-responsive" id="dtbody">
 						<!--<button id="buttonselect" type="button" class="btn btn-primary">แสดงเฉพาะตัวชี้วัดที่เลือก</button> -->
-						<!-- show all indicator minister -->
-						<a id="fancyboxall" href="<?php echo site_url("manageindicator/selectIndicatorMinisterList");  ?>"><button id="buttonselect" type="button" class="btn btn-primary">แสดงตัวชี้วัดกระทรวง</button></a>
+						<!-- show all indicator dep -->
+						<a id="fancyboxall" href="<?php echo site_url("manageindicator/selectIndicatorDepList/".$depid);  ?>"><button id="buttonselect" type="button" class="btn btn-primary">แสดงตัวชี้วัดกรม</button></a>
                         
 						<table class="table" id="dataTables-example">
                                 <thead>
@@ -158,7 +158,7 @@ td.highlight {
 					<div class="panel-heading"><strong>รายการตัวชี้วัดของกรม</strong> </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-						<a id="buttonadddep" href="<?php echo site_url("manageindicator/addNewIndicatorDep");  ?>"><button type="button" class="btn btn-success">เพิ่มตัวชี้วัดของกรม</button></a>
+						<a id="buttonadddep" href="<?php echo site_url("manageindicator/addNewIndicatorDep");  ?>"><button type="button" class="btn btn-success">เพิ่มตัวชี้วัดของกอง</button></a>
                             <table class="table" id="dataTables-example2" cellspacing="0px" width="100%">
                                 <thead>
                                     <tr>
@@ -259,12 +259,12 @@ function removeNewFormResponse(idd) {
 	}
 }
 
- function savedepid(obj) {
-     var depid = $(obj).val();
+ function savedivid(obj) {
+     var divid = $(obj).val();
      $.ajax({
-        url: "<?php echo site_url('manageindicator/savedepid'); ?>",
+        url: "<?php echo site_url('manageindicator/savedivid'); ?>",
         method: "POST",
-        data: {depid: depid},
+        data: {divid: divid},
         success: function(data) {
             //alert(depid);
         }
