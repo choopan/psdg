@@ -1913,7 +1913,7 @@ class Manageindicator extends CI_Controller {
 		$this->load->view('indicator/viewindicatordepartment_view',$data);
 	}
 	
-	function viewindicator_div()
+    function viewindicator_div()
 	{
 		$id = $this->uri->segment(3);
 		$isMin = $this->uri->segment(4);
@@ -1922,7 +1922,7 @@ class Manageindicator extends CI_Controller {
 			$data['dep_indicator_array'] =  $query;
 		}
 		$query = $this->ministerindicator->getOneIndicatorGoalDivision($id);
-		if($query){
+        if($query){
 			$data['goal_indicator_array'] =  $query;
 		}else{
 			$data['goal_indicator_array'] =  array();

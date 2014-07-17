@@ -303,8 +303,9 @@ Class Ministerindicator extends CI_Model
  
  function getOneIndicatorDivision($id=NULL)
  {
-	$this->db->select("id, divisionID, number, name, criteria1, criteria2, criteria3, criteria4, criteria5, goal, weight, technicalnote");
+	$this->db->select("id, divisionID, number, name, criteria1, criteria2, criteria3, criteria4, criteria5, goal, weight, technicalnote, pwfname, pwlname");
 	$this->db->from('division_indicator');
+    $this->db->join('pwemployee','pwemployee.userid = division_indicator.editorID','left');
 	$this->db->where('id', $id);
 	$query = $this->db->get();		
 	return $query->result();

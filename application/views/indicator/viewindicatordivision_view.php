@@ -121,6 +121,14 @@
                                     </div>
 							</div>
 						</div>
+                        <div class="row">
+							<div class="col-lg-4">
+									<div class="form-group has-success">
+                                        <label class="control-label" for="inputSuccess">แก้ไขล่าสุดโดย </label>
+                                        <input type="text" class="form-control" name="editor" id="editor" value="<?php echo $loop->pwfname." ".$loop->pwlname; ?>" readonly>
+                                    </div>
+							</div>
+                        </div>
 						
 						<div class="row">
 							<div class="col-lg-5">
