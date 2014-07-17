@@ -8,6 +8,34 @@ class Managewarranty extends CI_Controller {
 	   $this->load->model('user','',TRUE);
 	   $this->load->library("PHPWord/PHPWord");
 	   $this->load->helper('download');
+
+		$chk_time = date('Y-m-d H:i:s' , strtotime("-1 Hour"));  // เซตเวลา -1Hour = 60min เอาไว้เช็คในเงื่อนไข
+		$folder = $_SERVER['DOCUMENT_ROOT'].'/psdg/docs'; // กำหนด Folder
+		$objScan = scandir($folder); // Scan folder ว่ามีไฟล์อะไรบ้าง
+
+		foreach ($objScan as $value) {
+			/* echo 'ชื่อไฟล์ใน Folder : '.$value.'<br>';
+			echo 'วันที่แก้ไขไฟล์ล่าสุด : '.$filedate.'<br>';
+			echo 'ค่าของเวลาที่ต้องการเทียบ : '.$chk_time.'<br><br>'; */
+			if ($value != "." && $value != "..") // เช็คว่าผลลัพท์ต้องไม่ใช่ . และ ..
+			{
+				$filedate = date("Y-m-d H:i:s.",filemtime($folder."/".$value."")); // เอาไฟล์ที่ได้มา เช็ควันที่แก้ไขล่าสุด
+				 
+			// ไม่เกี่ยวข้อง แค่แสดงผลเฉยๆ ใช้จริงให้ลบออก
+			/* echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />'; // แสดงชื่อภาษาไทยจะได้ถูกต้องไม่เป็นภาษาต่างดาว
+			echo 'ชื่อไฟล์ใน Folder : '.$value.'<br>';
+			echo 'วันที่แก้ไขไฟล์ล่าสุด : '.$filedate.'<br>';
+			echo 'ค่าของเวลาที่ต้องการเทียบ : '.$chk_time.'<br><br>'; */
+			// จบการแสดงผลที่ไม่เกี่ยวข้อง ใช้จริงให้ลบออก
+			
+				if ($chk_time > $filedate) // เช็คว่าค่าของเวลาที่ต้องการเทียบมากกว่า วันที่แก้ไขล่าสุดของไฟล์หรือไม่
+				{
+					unlink($folder.'/'.$value); // ถ้ามากกว่าก็จัดการลบไฟล์ซะ
+				}
+			}
+		}
+
+	   
 	}
     
 	function index()
@@ -394,74 +422,135 @@ class Managewarranty extends CI_Controller {
 		$PHPWord->addParagraphStyle('TextShortStyle', array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
 		$PHPWord->addTableStyle('myOwnTableStyle',array('borderSize'=>6,'borderColor'=>'000000','valign'=>'center','cellMarginTop'=>80,'cellMarginLeft'=>80,'cellMarginRight'=>80,'cellMarginBottom'=>0));
 		
+		$listStyle = array('listType'=>PHPWord_Style_ListItem::TYPE_NUMBER_NESTED);
 		// New portrait section
 		$section = $PHPWord->createSection();
-		
+		$department=$recip_employee[0]['name'];
 		$section->addImage('images/garuda_logo.png',array('width'=>100, 'height'=>100, 'align'=>'center'));
 		$section->addText('คำรับรองการปฏิบัติราชการ', 'HeadStyle',array('align'=>'center','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
-		$section->addText('กรมยุโรป', 'HeadStyle', array('align'=>'center','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$section->addText($department, 'HeadStyle', array('align'=>'center','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
 		$section->addText('ประจำปีงบประมาณ พ.ศ. '.$warranty[0]['year'], 'HeadStyle', array('align'=>'center','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
 		$section->addTextBreak(1);
 		
-		$section->addText('1. คำรับรองระหว่าง ');
+		//$section->addText('1. คำรับรองระหว่าง ');
 		
-		$section->addText('');
+		$section->addListItem('คำรับรองระหว่าง ', 0,null,$listStyle);
+		
+		//$section->addText('');
 		
 		$table = $section->addTable();
-		foreach($recip_employee as $key=>$val){
-			
+		$name_pos_recip='';
+		$name_recip='';
+		$num=count($recip_employee);
+		for($i=0;$i<$num;$i++){
 			$table->addRow();
-			$table->addCell(4000)->addText('         '.$val['PWFNAME'].' '.$val['PWLNAME']);
-			$table->addCell(4000)->addText($val['position_name']);
+			$table->addCell(4000)->addText('         '.$recip_employee[$i]['PWFNAME'].' '.$recip_employee[$i]['PWLNAME']);
+			$table->addCell(4000)->addText($recip_employee[$i]['position_name']);
 			$table->addCell(3000)->addText('ผู้รับคำรับรอง');
+			$name_pos_recip.=$recip_employee[$i]['PWFNAME'].' '.$recip_employee[$i]['PWLNAME'].' ในฐานะ'.$recip_employee[$i]['position_name'];
+			if($i!=($num-1)) $name_pos_recip.=' และ';
+			$name_recip.=$recip_employee[$i]['PWFNAME'].' '.$recip_employee[$i]['PWLNAME'];
+			if($i!=($num-1)) $name_recip.=' และ';
+			$user_name[]=$recip_employee[$i]['PWFNAME'].' '.$recip_employee[$i]['PWLNAME'];
+			$user_position[]=$recip_employee[$i]['position_name'];
 		}
 		
 		$table->addRow();
 		$table->addCell(180000, array('gridSpan' => 3))->addText('และ',null,array('align'=>'center'));
 		
-		foreach($maker_employee as $key=>$val){
+		$name_pos_maker='';
+		$name_maker='';
+		$num=count($maker_employee);
+		for($i=0;$i<$num;$i++){
 			$table->addRow();
-			$table->addCell(4000)->addText('         '.$val['PWFNAME'].' '.$val['PWLNAME']);
-			$table->addCell(4000)->addText($val['position_name']);
-			$table->addCell(3000)->addText('ผู้รับคำรับรอง');
+			$table->addCell(4000)->addText('         '.$maker_employee[$i]['PWFNAME'].' '.$maker_employee[$i]['PWLNAME']);
+			$table->addCell(4000)->addText($maker_employee[$i]['position_name']);
+			$table->addCell(3000)->addText('ผู้ทำคำรับรอง');
+			$name_pos_maker.=$maker_employee[$i]['PWFNAME'].' '.$maker_employee[$i]['PWLNAME'].' '.$maker_employee[$i]['position_name'];
+			if($i!=($num-1)) $name_pos_maker.=' และ';
+			$name_maker.=$maker_employee[$i]['PWFNAME'].' '.$maker_employee[$i]['PWLNAME'];
+			if($i!=($num-1)) $name_maker.=' และ';
+			$user_name[]=$maker_employee[$i]['PWFNAME'].' '.$maker_employee[$i]['PWLNAME'];
+			$user_position[]=$maker_employee[$i]['position_name'];
 		}
 		
-		$section->addText('');
+		//$section->addText('');
 		
-		$section->addText('2. คำรับรองนี้เป็นคำรับรองฝ่ายเดียว มิใช่สัญญาและใช้สำหรับระยะเวลา 1 ปี เริ่มตั้งแต่วันที่',null,'TextShortStyle');
-		$section->addText('    1 ตุลาคม '.($warranty[0]['year']-1).' ถึงวันที่ 30 กันยายน '.$warranty[0]['year'],null,'TextShortStyle');
+		/* $section->addText('2. คำรับรองนี้เป็นคำรับรองฝ่ายเดียว มิใช่สัญญาและใช้สำหรับระยะเวลา 1 ปี เริ่มตั้งแต่วันที่',null,'TextShortStyle');
+		$section->addText('    1 ตุลาคม '.($warranty[0]['year']-1).' ถึงวันที่ 30 กันยายน '.$warranty[0]['year'],null,'TextShortStyle'); */
+		$text2='คำรับรองนี้เป็นคำรับรองฝ่ายเดียว มิใช่สัญญาและใช้สำหรับระยะเวลา 1 ปี เริ่มตั้งแต่วันที่ 1 ตุลาคม'.($warranty[0]['year']-1).' ถึงวันที่ 30 กันยายน '.$warranty[0]['year'];
+		$section->addListItem($text2, 0,null,$listStyle);
 		
-		$section->addText('');
-		
-		$section->addText('3. รายละเอียดของคำรับรอง ได้แก่ กรอบการประเมินผล ประเด็นการประเมินผลการปฏิบัติราชการ',null,'TextShortStyle');
+		//$section->addText('');
+
+		/* $section->addText('3. รายละเอียดของคำรับรอง ได้แก่ กรอบการประเมินผล ประเด็นการประเมินผลการปฏิบัติราชการ',null,'TextShortStyle');
 		$section->addText('    น้ำหนัก ตัวชี้วัดผลการปฏิบัติราชการ เป้าหมาย เกณฑ์การให้คะแนน และรายละเอียดอื่น ๆ',null,'TextShortStyle');
-		$section->addText('    ตามที่ปรากฏอยู่ในเอกสารประกอบท้ายคำรับรองนี้',null,'TextShortStyle');
+		$section->addText('    ตามที่ปรากฏอยู่ในเอกสารประกอบท้ายคำรับรองนี้',null,'TextShortStyle'); */
 		
-		$section->addText('');
+		$text3='รายละเอียดของคำรับรอง ได้แก่ กรอบการประเมินผล ประเด็นการประเมินผลการปฏิบัติราชการ น้ำหนัก ตัวชี้วัดผลการปฏิบัติราชการ เป้าหมาย เกณฑ์การให้คะแนน และรายละเอียดอื่น ๆ ตามที่ปรากฏอยู่ในเอกสารประกอบท้ายคำรับรองนี้';
+		$section->addListItem($text3, 0,null,$listStyle);
 		
-		$section->addText('4. ข้าพเจ้า นายสีหศักดิ์ พวงเกตุแก้ว ในฐานะปลัดกระทรวงการต่างประเทศและผู้บังคับบัญชาของ',null,'TextShortStyle');
-		$section->addText('    นายวิชาวัฒน์ อิศรภัคดี รองปลัดกระทรวงที่กำกับดูแลกรมยุโรป และนายศรัณย์ เจริญสุวรรณ',null,'TextShortStyle');
-		$section->addText('    อธิบดีกรมยุโรป ได้พิจารณาและเห็นชอบกับแผนปฏิบัติราชการและแนวทางการพัฒนาการปฏิบัติ',null,'TextShortStyle');
+		//$section->addText('');
+		
+		/* $section->addText('4. '.$name_pos_recip.'และผู้บังคับบัญชาของ',null,'TextShortStyle');
+		$section->addText('    '.$name_pos_maker,null,'TextShortStyle');
+		$section->addText('    ได้พิจารณาและเห็นชอบกับแผนปฏิบัติราชการและแนวทางการพัฒนาการปฏิบัติ',null,'TextShortStyle');
 		$section->addText('    ราชการของกรมยุโรป ประเด็นการประเมิลผลการปฏิบัติราชการ น้ำหนัก ตัวชี้วัดผลการปฏิบัติ',null,'TextShortStyle');
 		$section->addText('    ราชการ เป้าหมาย เกณฑ์การให้คะแนน และรายละเอียดอื่น ๆ ตามที่กำหนดในเอกสารประกอบ',null,'TextShortStyle');
 		$section->addText('    ท้ายคำรับรองนี้ และข้าพเจ้ายินดีจะให้คำแนะนำกำกับ และตรวจสอบผลการปฏิบัติราชการของ',null,'TextShortStyle');
-		$section->addText('    นายวิชาวัฒน์ อิศรภัคดี และนายศรัณย์ เจริญสุวรรณ ให้เป็นไปตามคำรับรองที่จัดทำขึ้นนี้',null,'TextShortStyle');
+		$section->addText('    '.$name_pos_maker.' ให้เป็นไปตามคำรับรองที่จัดทำขึ้นนี้',null,'TextShortStyle'); */
 		
-		$section->addText('');
+		$text4='ข้าพเจ้า '.$name_pos_recip.'และผู้บังคับบัญชาของ'.$name_pos_maker.'ได้พิจารณาและเห็นชอบกับแผนปฏิบัติราชการและแนวทางการพัฒนาการปฏิบัติราชการของ'.$department.' ประเด็นการประเมินผลการปฏิบัติราชการ น้ำหนัก ตัวชี้วัดผลการปฏิบัติ';
+		$text4.='ราชการ เป้าหมาย เกณฑ์การให้คะแนน และรายละเอียดอื่น ๆ ตามที่กำหนดในเอกสารประกอบท้ายคำรับรองนี้ และข้าพเจ้ายินดีจะให้คำแนะนำกำกับ และตรวจสอบผลการปฏิบัติราชการของ '.$name_maker.' ให้เป็นไปตามคำรับรองที่จัดทำขึ้นนี้';
+		$section->addListItem($text4, 0,null,$listStyle);
 		
-		$section->addText('5. ข้าพเจ้า นายวิชาวัฒน์ อิศรภัคดี รองปลัดกระทรวงการต่างประเทศที่กำกับดูแลกรมยุโรป และ',null,'TextShortStyle');
+		//$section->addText('');
+		
+		/* $section->addText('5. ข้าพเจ้า นายวิชาวัฒน์ อิศรภัคดี รองปลัดกระทรวงการต่างประเทศที่กำกับดูแลกรมยุโรป และ',null,'TextShortStyle');
 		$section->addText('    นายศรัณย์ เจริญสุวรรณ อธิบดีกรมยุโรป ได้ทำความเข้าใจคำรับรองตาม 3 แล้ว ขอให้คำรับรองกับ',null,'TextShortStyle');
 		$section->addText('    ปลัดกระทรวงการต่างประเทศ ว่าจะมุ่งมั่นปฏิบัติราชการให้เกิดผลงานที่ดีตามเป้าหมายของตัวชี้วัด',null,'TextShortStyle');
-		$section->addText('    แต่ละตัวในระดับสูงสุด เพื่อให้เกิดประโยชน์สุขแก่ประชาชน ตามที่ให้คำรับรองไว้',null,'TextShortStyle');
+		$section->addText('    แต่ละตัวในระดับสูงสุด เพื่อให้เกิดประโยชน์สุขแก่ประชาชน ตามที่ให้คำรับรองไว้',null,'TextShortStyle'); */
 		
-		$section->addText('');
+		$text5='ข้าพเจ้า '.$name_pos_maker.'ได้ทำความเข้าใจคำรับรองตาม 3 แล้ว ขอให้คำรับรองกับปลัดกระทรวงการต่างประเทศ ว่าจะมุ่งมั่นปฏิบัติราชการให้เกิดผลงานที่ดีตามเป้าหมายของตัวชี้วัด';
+		$text5.='แต่ละตัวในระดับสูงสุด เพื่อให้เกิดประโยชน์สุขแก่ประชาชน ตามที่ให้คำรับรองไว้';
+		$section->addListItem($text5, 0,null,$listStyle);
 		
-		$section->addText('6. ผู้รับคำรับรองและผู้ทำคำรับรองได้เข้าใจคำรับรองการปฏิบัติราชการและเห็นพ้องกันแล้ว',null,'TextShortStyle');
-		$section->addText('    จึงได้ลงลายมือชื่อไว้เป็นสำคัญ',null,'TextShortStyle');
+		//$section->addText('');
+		
+		/* $section->addText('6. ผู้รับคำรับรองและผู้ทำคำรับรองได้เข้าใจคำรับรองการปฏิบัติราชการและเห็นพ้องกันแล้ว',null,'TextShortStyle');
+		$section->addText('    จึงได้ลงลายมือชื่อไว้เป็นสำคัญ',null,'TextShortStyle'); */
+		$text6='ผู้รับคำรับรองและผู้ทำคำรับรองได้เข้าใจคำรับรองการปฏิบัติราชการและเห็นพ้องกันแล้ว จึงได้ลงลายมือชื่อไว้เป็นสำคัญ';
+		$section->addListItem($text6, 0,null,$listStyle);
 		
 		$section->addTextBreak(2);
 		$st=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center');
-		$table = $section->addTable();
+		
+		$num_table=count($user_name);
+		for($i=0;$i<$num_table;$i++){
+			$table = $section->addTable();
+			$table->addRow();
+			$table->addCell(4600)->addText('…………………………………………………',null,$st);
+			if(isset($user_name[($i+1)]))
+			$table->addCell(4600)->addText('…………………………………………………',null,$st);
+
+			$table->addRow();
+			$table->addCell(4600)->addText('( '.$user_name[$i].' )',null,$st);
+			if(isset($user_name[($i+1)]))
+			$table->addCell(4600)->addText('( '.$user_name[($i+1)].' )',null,$st);
+			
+			$table->addRow();
+			$table->addCell(4600)->addText($user_position[$i],null,$st);
+			if(isset($user_name[($i+1)]))
+			$table->addCell(4600)->addText($user_position[($i+1)],null,$st);
+			
+			
+			$table->addRow();
+			$table->addCell(4600)->addText('วันที่ .........................................',null,$st);
+			if(isset($user_name[++$i]))
+			$table->addCell(4600)->addText('วันที่ .........................................',null,$st);
+			$section->addTextBreak(1);
+		}
+		/* $table = $section->addTable();
 		$table->addRow();
 		$table->addCell(4600)->addText('…………………………………………………',null,$st);
 		$table->addCell(4600)->addText('…………………………………………………',null,$st);
@@ -477,9 +566,9 @@ class Managewarranty extends CI_Controller {
 		
 		$table->addRow();
 		$table->addCell(4600)->addText('วันที่ .........................................',null,$st);
-		$table->addCell(4600)->addText('วันที่ .........................................',null,$st);
+		$table->addCell(4600)->addText('วันที่ .........................................',null,$st); */
 		
-		$section->addTextBreak(1);
+		/* $section->addTextBreak(1);
 		$table = $section->addTable();
 		$table->addRow();
 		$table->addCell(4600)->addText('…………………………………………………',null,$st);
@@ -492,7 +581,56 @@ class Managewarranty extends CI_Controller {
 		
 		
 		$table->addRow();
-		$table->addCell(4600)->addText('วันที่ .........................................',null,$st);
+		$table->addCell(4600)->addText('วันที่ .........................................',null,$st); */
+		
+		
+		// ------------------------------new page -------------------------------------------------------
+		
+		
+		$listStyle = array('listType'=>PHPWord_Style_ListItem::TYPE_NUMBER);
+		$section = $PHPWord->createSection(array('orientation'=>'landscape'));
+		$PHPWord->setDefaultFontSize(16);
+		$PHPWord->addParagraphStyle('Textcenter', array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+		
+		$section->addText('เอกสารแนบ',array('underline'=>PHPWord_Style_Font::UNDERLINE_SINGLE),array('align'=>'right','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$section->addText('ตัวชี้วัดที่ 1 "ระดับความสำเร็จของการพัฒนาระบบราชการของกระทรวงฯ"',null,'TextShortStyle');
+		$section->addText('');
+		$section->addText('ประเด็นความสำเร็จ',array('bold'=>true,'underline'=>PHPWord_Style_Font::UNDERLINE_SINGLE),'TextShortStyle');
+		$section->addListItem('ความคืบหน้าของการจัดตั้งกรมความร่วมมือระหว่างประเทศ', 0,null,$listStyle);
+		$section->addListItem('ความสำเร็จในการจัดตั้งกองยุทธศาสตร์และความร่วมมืออาเซียน', 0,null,$listStyle);
+		$section->addListItem('ความสำเร็จในการจัดทำร่างแผนยุทธศาสตร์กระทรวงฯ(พ.ศ. 2556 - 2559)', 0,null,$listStyle);
+		$section->addListItem('ความสำเร็จของการให้คำปรึกษาและคำแนะนำในการพัฒนาประสิทธิภาพการปฏิบัติงานและคุณภาพการบริหารจัดการแก่หน่วยงานต่างๆ ของกระทรวงฯ', 0,null,$listStyle);
+		$section->addListItem('ระดับความสำเร็จของการจัดทำคู่มือการตรวจราชการและการบริหารราชการในต่างประเมศแบบบูรณาการ', 0,null,$listStyle);
+		
+		$table = $section->addTable('myOwnTableStyle');
+		
+		$table->addRow();
+		$table->addCell(7000)->addText('เกณฑ์การให้คะแนน',array('bold'=>true),'Textcenter');
+		$table->addCell(3000)->addText('คะแนน',array('bold'=>true),'Textcenter');
+		
+		$table->addRow();
+		$table->addCell(7000)->addText('สำเร็จ 1 ประเด็นจากประเด็นทั้งหมดที่กำหนดไว้',null,'Textcenter');
+		$table->addCell(3000)->addText('1',null,'Textcenter');
+		
+		$table->addRow();
+		$table->addCell(7000)->addText('สำเร็จ 2 ประเด็นจากประเด็นทั้งหมดที่กำหนดไว้',null,'Textcenter');
+		$table->addCell(3000)->addText('2',null,'Textcenter');
+		
+		$table->addRow();
+		$table->addCell(7000)->addText('สำเร็จ 3 ประเด็นจากประเด็นทั้งหมดที่กำหนดไว้',null,'Textcenter');
+		$table->addCell(3000)->addText('3',null,'Textcenter');
+		
+		$table->addRow();
+		$table->addCell(7000)->addText('สำเร็จ 4 ประเด็นจากประเด็นทั้งหมดที่กำหนดไว้',null,'Textcenter');
+		$table->addCell(3000)->addText('4',null,'Textcenter');
+		
+		$table->addRow();
+		$table->addCell(7000)->addText('สำเร็จ 5 ประเด็นจากประเด็นทั้งหมดที่กำหนดไว้',null,'Textcenter');
+		$table->addCell(3000)->addText('5',null,'Textcenter');
+		
+		
+		
+		
 		
 		// ------------------------------new page -------------------------------------------------------
 		
@@ -673,7 +811,7 @@ class Managewarranty extends CI_Controller {
 		$HeadTables=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center');
 		$ContentTables=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0);
 		$style=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0);
-		
+		$listStyle = array('listType'=>PHPWord_Style_ListItem::TYPE_NUMBER_NESTED);
 		$PHPWord->addParagraphStyle('TextLongStyle', array('align'=>'both','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
 		$PHPWord->addParagraphStyle('TextShortStyle', array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
 		$PHPWord->addTableStyle('myOwnTableStyle',array('borderSize'=>6,'borderColor'=>'000000','valign'=>'center','cellMarginTop'=>80,'cellMarginLeft'=>80,'cellMarginRight'=>80,'cellMarginBottom'=>0));
@@ -688,57 +826,163 @@ class Managewarranty extends CI_Controller {
 		$section->addText('ประจำปีงบประมาณ พ.ศ. '.$warranty[0]['year'], 'HeadStyle', array('align'=>'center','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
 		$section->addTextBreak(1);
 		
-		$section->addText('1. คำรับรองระหว่าง ');
+		$section->addListItem('คำรับรองระหว่าง ', 0,null,$listStyle);
 		
 		$table = $section->addTable();
-		foreach($recip_employee as $key=>$val){
-			
+		unset($user_name);
+		unset($user_position);
+		$name_pos_recip='';
+		$name_recip='';
+		$num=count($recip_employee);
+		for($i=0;$i<$num;$i++){
 			$table->addRow();
-			$table->addCell(4000)->addText('         '.$val['PWFNAME'].' '.$val['PWLNAME']);
-			$table->addCell(4000)->addText($val['position_name']);
+			$table->addCell(4000)->addText('         '.$recip_employee[$i]['PWFNAME'].' '.$recip_employee[$i]['PWLNAME']);
+			$table->addCell(4000)->addText($recip_employee[$i]['position_name']);
 			$table->addCell(3000)->addText('ผู้รับคำรับรอง');
+			$name_pos_recip.=$recip_employee[$i]['PWFNAME'].' '.$recip_employee[$i]['PWLNAME'].' ในฐานะ'.$recip_employee[$i]['position_name'];
+			if($i!=($num-1)) $name_pos_recip.=' และ';
+			$name_recip.=$recip_employee[$i]['PWFNAME'].' '.$recip_employee[$i]['PWLNAME'];
+			if($i!=($num-1)) $name_recip.=' และ';
+			$user_name[]=$recip_employee[$i]['PWFNAME'].' '.$recip_employee[$i]['PWLNAME'];
+			$user_position[]=$recip_employee[$i]['position_name'];
 		}
 		
 		$table->addRow();
 		$table->addCell(180000, array('gridSpan' => 3))->addText('และ',null,array('align'=>'center'));
 		
-		foreach($maker_employee as $key=>$val){
+		$name_pos_maker='';
+		$name_maker='';
+		$num=count($maker_employee);
+		for($i=0;$i<$num;$i++){
 			$table->addRow();
-			$table->addCell(4000)->addText('         '.$val['PWFNAME'].' '.$val['PWLNAME']);
-			$table->addCell(4000)->addText($val['position_name']);
-			$table->addCell(3000)->addText('ผู้รับคำรับรอง');
+			$table->addCell(4000)->addText('         '.$maker_employee[$i]['PWFNAME'].' '.$maker_employee[$i]['PWLNAME']);
+			$table->addCell(4000)->addText($maker_employee[$i]['position_name']);
+			$table->addCell(3000)->addText('ผู้ทำคำรับรอง');
+			$name_pos_maker.=$maker_employee[$i]['PWFNAME'].' '.$maker_employee[$i]['PWLNAME'].' '.$maker_employee[$i]['position_name'];
+			if($i!=($num-1)) $name_pos_maker.=' และ';
+			$name_maker.=$maker_employee[$i]['PWFNAME'].' '.$maker_employee[$i]['PWLNAME'];
+			if($i!=($num-1)) $name_maker.=' และ';
+			$user_name[]=$maker_employee[$i]['PWFNAME'].' '.$maker_employee[$i]['PWLNAME'];
+			$user_position[]=$maker_employee[$i]['position_name'];
 		}
 		
 		
-		$section->addText('2. คำรับรองนี้เป็นคำรับรองฝ่ายเดียว มิใช่สัญญาและใช้สำหรับระยะเวลา 1 ปี เริ่มตั้งแต่วันที่',null,'TextShortStyle');
-		$section->addText('    1 ตุลาคม '.($warranty[0]['year']-1).' ถึงวันที่ 30 กันยายน '.$warranty[0]['year'],null,'TextShortStyle');
 		
+		/* $section->addText('2. คำรับรองนี้เป็นคำรับรองฝ่ายเดียว มิใช่สัญญาและใช้สำหรับระยะเวลา 1 ปี เริ่มตั้งแต่วันที่',null,'TextShortStyle');
+		$section->addText('    1 ตุลาคม '.($warranty[0]['year']-1).' ถึงวันที่ 30 กันยายน '.$warranty[0]['year'],null,'TextShortStyle'); */
+		$text2='คำรับรองนี้เป็นคำรับรองฝ่ายเดียว มิใช่สัญญาและใช้สำหรับระยะเวลา 1 ปี เริ่มตั้งแต่วันที่ 1 ตุลาคม'.($warranty[0]['year']-1).' ถึงวันที่ 30 กันยายน '.$warranty[0]['year'];
+		$section->addListItem($text2, 0,null,$listStyle);
 		
-		$section->addText('3. รายละเอียดของคำรับรอง ได้แก่ กรอบการประเมินผล ประเด็นการประเมินผลการปฏิบัติราชการ',null,'TextShortStyle');
+		/* $section->addText('3. รายละเอียดของคำรับรอง ได้แก่ กรอบการประเมินผล ประเด็นการประเมินผลการปฏิบัติราชการ',null,'TextShortStyle');
 		$section->addText('    น้ำหนัก ตัวชี้วัดผลการปฏิบัติราชการ เป้าหมาย เกณฑ์การให้คะแนน และรายละเอียดอื่น ๆ',null,'TextShortStyle');
-		$section->addText('    ตามที่ปรากฏอยู่ในเอกสารประกอบท้ายคำรับรองนี้',null,'TextShortStyle');
+		$section->addText('    ตามที่ปรากฏอยู่ในเอกสารประกอบท้ายคำรับรองนี้',null,'TextShortStyle'); */
+		$text3='รายละเอียดของคำรับรอง ได้แก่ กรอบการประเมินผล ประเด็นการประเมินผลการปฏิบัติราชการ น้ำหนัก ตัวชี้วัดผลการปฏิบัติราชการ เป้าหมาย เกณฑ์การให้คะแนน และรายละเอียดอื่น ๆ ตามที่ปรากฏอยู่ในเอกสารประกอบท้ายคำรับรองนี้';
+		$section->addListItem($text3, 0,null,$listStyle);
 		
 		
-		$section->addText('4. ข้าพเจ้า นายสีหศักดิ์ พวงเกตุแก้ว ในฐานะปลัดกระทรวงการต่างประเทศและผู้บังคับบัญชาของ',null,'TextShortStyle');
+		/* $section->addText('4. ข้าพเจ้า นายสีหศักดิ์ พวงเกตุแก้ว ในฐานะปลัดกระทรวงการต่างประเทศและผู้บังคับบัญชาของ',null,'TextShortStyle');
 		$section->addText('    นายวิชาวัฒน์ อิศรภัคดี รองปลัดกระทรวงที่กำกับดูแลกรมยุโรป และนายศรัณย์ เจริญสุวรรณ',null,'TextShortStyle');
 		$section->addText('    อธิบดีกรมยุโรป ได้พิจารณาและเห็นชอบกับแผนปฏิบัติราชการและแนวทางการพัฒนาการปฏิบัติ',null,'TextShortStyle');
 		$section->addText('    ราชการของกรมยุโรป ประเด็นการประเมิลผลการปฏิบัติราชการ น้ำหนัก ตัวชี้วัดผลการปฏิบัติ',null,'TextShortStyle');
 		$section->addText('    ราชการ เป้าหมาย เกณฑ์การให้คะแนน และรายละเอียดอื่น ๆ ตามที่กำหนดในเอกสารประกอบ',null,'TextShortStyle');
 		$section->addText('    ท้ายคำรับรองนี้ และข้าพเจ้ายินดีจะให้คำแนะนำกำกับ และตรวจสอบผลการปฏิบัติราชการของ',null,'TextShortStyle');
-		$section->addText('    นายวิชาวัฒน์ อิศรภัคดี และนายศรัณย์ เจริญสุวรรณ ให้เป็นไปตามคำรับรองที่จัดทำขึ้นนี้',null,'TextShortStyle');
+		$section->addText('    นายวิชาวัฒน์ อิศรภัคดี และนายศรัณย์ เจริญสุวรรณ ให้เป็นไปตามคำรับรองที่จัดทำขึ้นนี้',null,'TextShortStyle'); */
+		$text4='ข้าพเจ้า '.$name_pos_recip.'และผู้บังคับบัญชาของ'.$name_pos_maker.'ได้พิจารณาและเห็นชอบกับแผนปฏิบัติราชการและแนวทางการพัฒนาการปฏิบัติราชการของ'.$department.' ประเด็นการประเมินผลการปฏิบัติราชการ น้ำหนัก ตัวชี้วัดผลการปฏิบัติ';
+		$text4.='ราชการ เป้าหมาย เกณฑ์การให้คะแนน และรายละเอียดอื่น ๆ ตามที่กำหนดในเอกสารประกอบท้ายคำรับรองนี้ และข้าพเจ้ายินดีจะให้คำแนะนำกำกับ และตรวจสอบผลการปฏิบัติราชการของ '.$name_maker.' ให้เป็นไปตามคำรับรองที่จัดทำขึ้นนี้';
+		$section->addListItem($text4, 0,null,$listStyle);
 		
-		$section->addText('5. ข้าพเจ้า นายวิชาวัฒน์ อิศรภัคดี รองปลัดกระทรวงการต่างประเทศที่กำกับดูแลกรมยุโรป และ',null,'TextShortStyle');
+		
+		/* $section->addText('5. ข้าพเจ้า นายวิชาวัฒน์ อิศรภัคดี รองปลัดกระทรวงการต่างประเทศที่กำกับดูแลกรมยุโรป และ',null,'TextShortStyle');
 		$section->addText('    นายศรัณย์ เจริญสุวรรณ อธิบดีกรมยุโรป ได้ทำความเข้าใจคำรับรองตาม 3 แล้ว ขอให้คำรับรองกับ',null,'TextShortStyle');
 		$section->addText('    ปลัดกระทรวงการต่างประเทศ ว่าจะมุ่งมั่นปฏิบัติราชการให้เกิดผลงานที่ดีตามเป้าหมายของตัวชี้วัด',null,'TextShortStyle');
-		$section->addText('    แต่ละตัวในระดับสูงสุด เพื่อให้เกิดประโยชน์สุขแก่ประชาชน ตามที่ให้คำรับรองไว้',null,'TextShortStyle');
+		$section->addText('    แต่ละตัวในระดับสูงสุด เพื่อให้เกิดประโยชน์สุขแก่ประชาชน ตามที่ให้คำรับรองไว้',null,'TextShortStyle'); */
+		$text5='ข้าพเจ้า '.$name_pos_maker.'ได้ทำความเข้าใจคำรับรองตาม 3 แล้ว ขอให้คำรับรองกับปลัดกระทรวงการต่างประเทศ ว่าจะมุ่งมั่นปฏิบัติราชการให้เกิดผลงานที่ดีตามเป้าหมายของตัวชี้วัด';
+		$text5.='แต่ละตัวในระดับสูงสุด เพื่อให้เกิดประโยชน์สุขแก่ประชาชน ตามที่ให้คำรับรองไว้';
+		$section->addListItem($text5, 0,null,$listStyle);
 		
-		
-		$section->addText('6. ผู้รับคำรับรองและผู้ทำคำรับรองได้เข้าใจคำรับรองการปฏิบัติราชการและเห็นพ้องกันแล้ว',null,'TextShortStyle');
-		$section->addText('    จึงได้ลงลายมือชื่อไว้เป็นสำคัญ',null,'TextShortStyle');
+		/* $section->addText('6. ผู้รับคำรับรองและผู้ทำคำรับรองได้เข้าใจคำรับรองการปฏิบัติราชการและเห็นพ้องกันแล้ว',null,'TextShortStyle');
+		$section->addText('    จึงได้ลงลายมือชื่อไว้เป็นสำคัญ',null,'TextShortStyle'); */
+		$text6='ผู้รับคำรับรองและผู้ทำคำรับรองได้เข้าใจคำรับรองการปฏิบัติราชการและเห็นพ้องกันแล้ว จึงได้ลงลายมือชื่อไว้เป็นสำคัญ';
+		$section->addListItem($text6, 0,null,$listStyle);
 		
 		$section->addTextBreak(2);
 		$st=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center');
-		$table = $section->addTable();
+		
+		$num_table=count($user_name);
+		for($i=0;$i<$num_table;$i++){
+			$table = $section->addTable();
+			$table->addRow();
+			$table->addCell(4600)->addText('…………………………………………………',null,$st);
+			if(isset($user_name[($i+1)]))
+			$table->addCell(4600)->addText('…………………………………………………',null,$st);
+
+			$table->addRow();
+			$table->addCell(4600)->addText('( '.$user_name[$i].' )',null,$st);
+			if(isset($user_name[($i+1)]))
+			$table->addCell(4600)->addText('( '.$user_name[($i+1)].' )',null,$st);
+			
+			$table->addRow();
+			$table->addCell(4600)->addText($user_position[$i],null,$st);
+			if(isset($user_name[($i+1)]))
+			$table->addCell(4600)->addText($user_position[($i+1)],null,$st);
+			
+			
+			$table->addRow();
+			$table->addCell(4600)->addText('วันที่ .........................................',null,$st);
+			if(isset($user_name[++$i]))
+			$table->addCell(4600)->addText('วันที่ .........................................',null,$st);
+			$section->addTextBreak(1);
+		}
+		
+		// ------------------------------new page -------------------------------------------------------
+		
+		
+		$listStyle = array('listType'=>PHPWord_Style_ListItem::TYPE_NUMBER);
+		$section = $PHPWord->createSection(array('orientation'=>'landscape'));
+		$PHPWord->setDefaultFontSize(16);
+		$PHPWord->addParagraphStyle('Textcenter', array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+		
+		$section->addText('เอกสารแนบ',array('underline'=>PHPWord_Style_Font::UNDERLINE_SINGLE),array('align'=>'right','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$section->addText('ตัวชี้วัดที่ 1 "ระดับความสำเร็จของการพัฒนาระบบราชการของกระทรวงฯ"',null,'TextShortStyle');
+		$section->addText('');
+		$section->addText('ประเด็นความสำเร็จ',array('bold'=>true,'underline'=>PHPWord_Style_Font::UNDERLINE_SINGLE),'TextShortStyle');
+		$section->addListItem('ความคืบหน้าของการจัดตั้งกรมความร่วมมือระหว่างประเทศ', 0,null,$listStyle);
+		$section->addListItem('ความสำเร็จในการจัดตั้งกองยุทธศาสตร์และความร่วมมืออาเซียน', 0,null,$listStyle);
+		$section->addListItem('ความสำเร็จในการจัดทำร่างแผนยุทธศาสตร์กระทรวงฯ(พ.ศ. 2556 - 2559)', 0,null,$listStyle);
+		$section->addListItem('ความสำเร็จของการให้คำปรึกษาและคำแนะนำในการพัฒนาประสิทธิภาพการปฏิบัติงานและคุณภาพการบริหารจัดการแก่หน่วยงานต่างๆ ของกระทรวงฯ', 0,null,$listStyle);
+		$section->addListItem('ระดับความสำเร็จของการจัดทำคู่มือการตรวจราชการและการบริหารราชการในต่างประเมศแบบบูรณาการ', 0,null,$listStyle);
+		
+		$table = $section->addTable('myOwnTableStyle');
+		
+		$table->addRow();
+		$table->addCell(7000)->addText('เกณฑ์การให้คะแนน',array('bold'=>true),'Textcenter');
+		$table->addCell(3000)->addText('คะแนน',array('bold'=>true),'Textcenter');
+		
+		$table->addRow();
+		$table->addCell(7000)->addText('สำเร็จ 1 ประเด็นจากประเด็นทั้งหมดที่กำหนดไว้',null,'Textcenter');
+		$table->addCell(3000)->addText('1',null,'Textcenter');
+		
+		$table->addRow();
+		$table->addCell(7000)->addText('สำเร็จ 2 ประเด็นจากประเด็นทั้งหมดที่กำหนดไว้',null,'Textcenter');
+		$table->addCell(3000)->addText('2',null,'Textcenter');
+		
+		$table->addRow();
+		$table->addCell(7000)->addText('สำเร็จ 3 ประเด็นจากประเด็นทั้งหมดที่กำหนดไว้',null,'Textcenter');
+		$table->addCell(3000)->addText('3',null,'Textcenter');
+		
+		$table->addRow();
+		$table->addCell(7000)->addText('สำเร็จ 4 ประเด็นจากประเด็นทั้งหมดที่กำหนดไว้',null,'Textcenter');
+		$table->addCell(3000)->addText('4',null,'Textcenter');
+		
+		$table->addRow();
+		$table->addCell(7000)->addText('สำเร็จ 5 ประเด็นจากประเด็นทั้งหมดที่กำหนดไว้',null,'Textcenter');
+		$table->addCell(3000)->addText('5',null,'Textcenter');
+		
+		
+		
+		
+		
+		/* $table = $section->addTable();
 		$table->addRow();
 		$table->addCell(4600)->addText('…………………………………………………',null,$st);
 		$table->addCell(4600)->addText('…………………………………………………',null,$st);
@@ -769,7 +1013,7 @@ class Managewarranty extends CI_Controller {
 		
 		
 		$table->addRow();
-		$table->addCell(4600)->addText('วันที่ .........................................',null,$st);
+		$table->addCell(4600)->addText('วันที่ .........................................',null,$st); */
 		
 		$file_name=uniqid('managewarranty',true).'.docx';
 		$path='docs/word'.$file_name;

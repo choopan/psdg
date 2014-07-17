@@ -59,9 +59,9 @@
 									<?php foreach($division as $key=>$val){ ?>
 										<tr>
 											<td>
-												<!--
+												
 												<a href="<?php echo site_url('managewarranty/gen_warranty_divis_docx/'.$val['war_id']); ?>"><img src="<?php echo base_url().'images/word_k005.png';?>" height="20" width="20" class="img-rounded"></a>
-												-->
+												
 												<?php echo $val['divname']; ?>
 											</td>
 											<td>											
