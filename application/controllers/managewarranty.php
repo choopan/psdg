@@ -9,28 +9,17 @@ class Managewarranty extends CI_Controller {
 	   $this->load->library("PHPWord/PHPWord");
 	   $this->load->helper('download');
 
-		$chk_time = date('Y-m-d H:i:s' , strtotime("-1 Hour"));  // เซตเวลา -1Hour = 60min เอาไว้เช็คในเงื่อนไข
-		$folder = $_SERVER['DOCUMENT_ROOT'].'/psdg/docs'; // กำหนด Folder
+		$chk_time = date('Y-m-d H:i:s' , strtotime("-1 Hour"));  // เซตเวลา -1Hour = 60minute เอาไว้เช็คในเงื่อนไข
+		$folder = $_SERVER['DOCUMENT_ROOT'].'/psdg/docs';
 		$objScan = scandir($folder); // Scan folder ว่ามีไฟล์อะไรบ้าง
 
 		foreach ($objScan as $value) {
-			/* echo 'ชื่อไฟล์ใน Folder : '.$value.'<br>';
-			echo 'วันที่แก้ไขไฟล์ล่าสุด : '.$filedate.'<br>';
-			echo 'ค่าของเวลาที่ต้องการเทียบ : '.$chk_time.'<br><br>'; */
 			if ($value != "." && $value != "..") // เช็คว่าผลลัพท์ต้องไม่ใช่ . และ ..
 			{
-				$filedate = date("Y-m-d H:i:s.",filemtime($folder."/".$value."")); // เอาไฟล์ที่ได้มา เช็ควันที่แก้ไขล่าสุด
-				 
-			// ไม่เกี่ยวข้อง แค่แสดงผลเฉยๆ ใช้จริงให้ลบออก
-			/* echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />'; // แสดงชื่อภาษาไทยจะได้ถูกต้องไม่เป็นภาษาต่างดาว
-			echo 'ชื่อไฟล์ใน Folder : '.$value.'<br>';
-			echo 'วันที่แก้ไขไฟล์ล่าสุด : '.$filedate.'<br>';
-			echo 'ค่าของเวลาที่ต้องการเทียบ : '.$chk_time.'<br><br>'; */
-			// จบการแสดงผลที่ไม่เกี่ยวข้อง ใช้จริงให้ลบออก
-			
-				if ($chk_time > $filedate) // เช็คว่าค่าของเวลาที่ต้องการเทียบมากกว่า วันที่แก้ไขล่าสุดของไฟล์หรือไม่
+				$filedate = date("Y-m-d H:i:s.",filemtime($folder."/".$value.""));
+				if ($chk_time > $filedate)
 				{
-					unlink($folder.'/'.$value); // ถ้ามากกว่าก็จัดการลบไฟล์ซะ
+					unlink($folder.'/'.$value);
 				}
 			}
 		}
