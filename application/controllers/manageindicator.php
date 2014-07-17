@@ -65,19 +65,23 @@ class Manageindicator extends CI_Controller {
 
 	}
 
-	function showKong()
+	function showDivision()
 	{
 		//$this->load->helper(array('form'));
-		
-		$query = $this->department->getKong();
+        
+        $query = $this->department->getGom();
 		if($query){
 			$data['dep_array'] =  $query;
 		}else{
 			$data['dep_array'] = array();
 		}
+		
+        $data['div_array'] = array();
+
 
 		$data['admin_array'] = array();		
 		$data['divid']=0;
+        $data['depid']=0;
 		$data['indicatordivision_array'] = array();
 
 		$data['title'] = "MFA - Show All Indicator ";
@@ -234,8 +238,22 @@ class Manageindicator extends CI_Controller {
 		
         $data['divid'] = $this->session->userdata('divid');
         $data['depid'] = $this->session->userdata('divdepid');
+        
+        // dep of user
+        $query = $this->department->getOneGom($this->session->userdata('sessdep'));
+        $data['sessdep'] = $this->session->userdata('sessdep');
+        foreach ($query as $result) {
+            $data['depname'] = $result->name;
+        }
+        
+        $query = $this->department->getGom();
+		if($query){
+			$data['dep_array'] =  $query;
+		}else{
+			$data['dep_array'] = array();
+		}
 
-		$query = $this->department->getKong();
+		$query = $this->department->getKongFromOneGom($this->session->userdata('sessdep'));
 		if($query){
 			$data['div_array'] =  $query;
 		}else{
@@ -245,38 +263,38 @@ class Manageindicator extends CI_Controller {
         
 
 		
-		// get minister indicator id and goal id from selected 
-		$indicator_min_name_selected = null;
-		$goal_min_name_selected = null;
-		for ($i=0; $i<count($this->session->userdata('indicator_select')); $i++) {
-			if ($this->session->userdata('indicator_select')[$i] > 0) {
-				$indicator_min_name_selected[$i] = $this->ministerindicator->getNameFromMinister("min_indicator","id",$this->session->userdata('indicator_select')[$i])[0];
+		// get dep indicator id and goal id from selected 
+		$indicator_dep_name_selected = null;
+		$goal_dep_name_selected = null;
+		for ($i=0; $i<count($this->session->userdata('indicator_dep_select')); $i++) {
+			if ($this->session->userdata('indicator_dep_select')[$i] > 0) {
+				$indicator_dep_name_selected[$i] = $this->ministerindicator->getNameFromMinister("dep_indicator","id",$this->session->userdata('indicator_dep_select')[$i])[0];
 				
 			}
 		}
 		
-		for ($i=0; $i<count($this->session->userdata('goal_select')); $i++) {
-			if ($this->session->userdata('goal_select')[$i] > 0) {
-				$goal_min_name_selected[$i] = $this->ministerindicator->getNameFromMinister("min_goal","id",$this->session->userdata('goal_select')[$i])[0];
+		for ($i=0; $i<count($this->session->userdata('goal_dep_select')); $i++) {
+			if ($this->session->userdata('goal_dep_select')[$i] > 0) {
+				$goal_dep_name_selected[$i] = $this->ministerindicator->getNameFromMinister("dep_goal","id",$this->session->userdata('goal_dep_select')[$i])[0];
 			}
 		}
 		
-		$data['indicator_min_id'] = $this->session->userdata('indicator_select');
-		$data['indicator_min_name'] = $indicator_min_name_selected;
+		$data['indicator_dep_id'] = $this->session->userdata('indicator_dep_select');
+		$data['indicator_dep_name'] = $indicator_dep_name_selected;
 		
-		$data['goal_min_id'] = $this->session->userdata('goal_select');
-		$data['goal_min_name'] = $goal_min_name_selected;
+		$data['goal_dep_id'] = $this->session->userdata('goal_dep_select');
+		$data['goal_dep_name'] = $goal_dep_name_selected;
         
-        // show saved minister indicator temp no depid
-        $query = $this->ministerindicator->getIndicatorDep(0,"isMinister >",0,"isGoalmin",0,$this->session->userdata('sessid'));
+        // show saved dep indicator temp no depid
+        $query = $this->ministerindicator->getIndicatorDiv(0,"isDep >",0,"isGoalDep",0,$this->session->userdata('sessid'));
         if($query){
-			$data['newmin_array'] =  $query;
+			$data['newdep_array'] =  $query;
 		}else{
-			$data['newmin_array'] = array();
+			$data['newdep_array'] = array();
 		}
         
         // show saved minister goal temp no depid
-        $query = $this->ministerindicator->getIndicatorDep(0,"isMinister",0,"isGoalmin >",0,$this->session->userdata('sessid'));
+        $query = $this->ministerindicator->getIndicatorDiv(0,"isDep",0,"isGoalDep >",0,$this->session->userdata('sessid'));
         if($query){
 			$data['newgoal_array'] =  $query;
 		}else{
@@ -284,11 +302,11 @@ class Manageindicator extends CI_Controller {
 		}
 		
 		// show department indicator temp no depid
-		$query = $this->ministerindicator->getIndicatorDep(0,"isMinister",0,"isGoalmin",0,$this->session->userdata('sessid'));
+		$query = $this->ministerindicator->getIndicatorDiv(0,"isDep",0,"isGoalDep",0,$this->session->userdata('sessid'));
 		if($query){
-			$data['indicatordep_array'] =  $query;
+			$data['indicatordiv_array'] =  $query;
 		}else{
-			$data['indicatordep_array'] = array();
+			$data['indicatordiv_array'] = array();
 		}
 
 		
@@ -309,27 +327,27 @@ class Manageindicator extends CI_Controller {
     {
         $id = $this->uri->segment(3);
         
-        $data['min_array'] = $this->ministerindicator->getOneIndicator($id);
-        $data['goal_array'] = $this->ministerindicator->getIndicatorMinGoal($id,$this->session->userdata('sessyear'))->result();
+        $data['dep_array'] = $this->ministerindicator->getOneIndicatorDep($id);
+        $data['goal_array'] = $this->ministerindicator->getOneIndicatorGoalDep($id,$this->session->userdata('sessyear'));
         
         $data['showresult'] = null;
         
         
         $data['title'] = "MFA - Add Indicator ";
-		$this->load->view('indicator/addnewindicatordepfromindep_view',$data);
+		$this->load->view('indicator/addnewindicatordivfromindep_view',$data);
     }
     
     function addNewIndicatorDivFromGoalDep() 
     {
         $id = $this->uri->segment(3);
         
-        $data['min_array'] = $this->ministerindicator->getNameFromMinister("min_goal","id",$id);
-        $data['min_goal_id'] = $id;
+        $data['dep_array'] = $this->ministerindicator->getNameFromMinister("dep_goal","id",$id);
+        $data['dep_goal_id'] = $id;
         
         $data['showresult'] = null;
         
         $data['title'] = "MFA - Add Indicator ";
-		$this->load->view('indicator/addnewindicatordepfromgoaldep_view',$data);
+		$this->load->view('indicator/addnewindicatordivfromgoaldep_view',$data);
     }
 
 	function addPerson()
@@ -392,24 +410,9 @@ class Manageindicator extends CI_Controller {
 	function addNewIndicatorDivision()
 	{
 		$this->load->helper(array('form'));
-		
-		
 
-		$query = $this->position->getPosition();
-		if($query){
-			$data['position_array'] =  $query;
-		}else{
-			$data['position_array'] = array();
-		}
-
-		$query = $this->department->getDepName();
-		if($query){
-			$data['dep_array'] =  $query;
-		}else{
-			$data['dep_array'] = array();
-		}
-		
-			
+		$data['showresult'] = null;
+	
 		$data['title'] = "MFA - Add Indicator ";
 		$this->load->view('indicator/addnewindicatordivision_view',$data);
 
@@ -536,14 +539,14 @@ class Manageindicator extends CI_Controller {
 			$data['dep_array'] = array();
 		}
 			
-		$query = $this->ministerindicator->getIndicatorDep($id);
+		$query = $this->ministerindicator->getAllIndicatorDep($id);
 		if($query){
 			$data['indicatordep_array'] =  $query;
 		}else{
 			$data['indicatordep_array'] = array();
 		}
 
-		$query = $this->ministerindicator->getIndicatorOneDepAdmin($id);
+		$query = $this->user->getAllAdminDep("admin_dep",$id);
 		if($query){
 			$data['admin_array'] =  $query;
 		}else{
@@ -559,15 +562,20 @@ class Manageindicator extends CI_Controller {
 	function viewDiv()
 	{
 		$this->load->helper(array('form'));
-		$id = $this->uri->segment(3);
-		
-			
-		$query = $this->department->getKong();
+        $id = $this->uri->segment(3);
+        
+        
+		$query = $this->department->getGom();
 		if($query){
 			$data['dep_array'] =  $query;
 		}else{
 			$data['dep_array'] = array();
 		}
+        
+		$query = $this->department->getOneKong($id);
+		foreach($query as $loop) {
+            $depid = $loop->dep_id;   
+        }
 			
 		$query = $this->ministerindicator->getIndicatorDivision($id);
 		if($query){
@@ -576,7 +584,7 @@ class Manageindicator extends CI_Controller {
 			$data['indicatordivision_array'] = array();
 		}
 
-		$query = $this->ministerindicator->getIndicatorOneDivisionAdmin($id);
+		$query = $this->user->getAllAdminDiv("admin_div",$id);
 		if($query){
 			$data['admin_array'] =  $query;
 		}else{
@@ -584,6 +592,7 @@ class Manageindicator extends CI_Controller {
 		}
 
 		$data['divid']=$id;
+        $data['depid']=$depid;
 		$data['title'] = "MFA - Show All Indicator ";
 		$this->load->view('indicator/allindicatordivision_view',$data);
 
@@ -946,13 +955,23 @@ class Manageindicator extends CI_Controller {
     
     function selectIndicatorDepList() {
 
-		$query = $this->ministerindicator->getIndicatorMin($this->session->userdata('sessyear'));
+		
+        // dep of user
+        $query = $this->department->getOneGom($this->session->userdata('sessdep'));
+        if($query){
+			$data['dep_array'] =  $query;
+		}else{
+			$data['dep_array'] = array();
+		}
+        
+        $query = $this->ministerindicator->getIndicatorOneDep($this->session->userdata('sessdep'),$this->session->userdata('sessyear'));
+        
 		$result = array();
 		foreach($query->result_array() as $row)
 		{
 			$row['goalid'] = 0;
 			$result[] = $row;
-			$query2 = $this->ministerindicator->getIndicatorMinGoal($row['id'],$this->session->userdata('sessyear'));
+			$query2 = $this->ministerindicator->getIndicatorOneDepGoal($row['id'],$this->session->userdata('sessyear'));
 			foreach($query2->result_array() as $row2)
 			{
 				$result[] = $row2;
@@ -968,6 +987,11 @@ class Manageindicator extends CI_Controller {
 	function saveIndicatorSession() {
 		$this->session->set_userdata('indicator_select',$this->input->post('indicator'));
 		$this->session->set_userdata('goal_select',$this->input->post('goal'));
+	}
+        
+    function saveIndicatorDepSession() {
+		$this->session->set_userdata('indicator_dep_select',$this->input->post('indicator'));
+		$this->session->set_userdata('goal_dep_select',$this->input->post('goal'));
 	}
     
     function clearIndicatorSession() {
@@ -1226,189 +1250,114 @@ class Manageindicator extends CI_Controller {
         if ($nextpage == 1) {
             $this->load->view('indicator/addnewindicatordepfrominmin_view',$data);
         }elseif ($nextpage == 2) {
-            $this->load->view('indicator/addnewindicatordepfrominmin_view',$data);
+            $this->load->view('indicator/addnewindicatordepfromgoalmin_view',$data);
         }else{
-            $this->load->view('indicator/addnewindicatordepfrominmin_view',$data);
+            $this->load->view('indicator/addnewindicatordep_view',$data);
         }
 	}	
 
 	function saveDivision()
 	{
-		$this->form_validation->set_rules('residdep', 'residdep', 'trim|xss_clean|required');
-		$this->form_validation->set_rules('positiondep', 'positiondep', 'trim|xss_clean|required');
-		$this->form_validation->set_rules('telephonedep', 'telephonedep', 'trim|xss_clean|required');
-		//$this->form_validation->set_rules('number', 'number', 'trim|xss_clean|required|numeric');
-		//$this->form_validation->set_rules('numberdep', 'numberdep', 'trim|xss_clean|required|numeric');
-		//$this->form_validation->set_rules('goalNO[]', 'goalNO', 'trim|xss_clean|required|numeric');
-		//$this->form_validation->set_rules('goalName[]', 'goalName', 'trim|xss_clean|required');
-		//$this->form_validation->set_rules('indicatorName', 'indicatorName', 'trim|xss_clean|required');
-		$this->form_validation->set_message('required', 'กรุณาใส่ข้อมูล');
-		$this->form_validation->set_message('numeric', 'กรุณาใส่เฉพาะตัวเลขเท่านั้น');
-		$this->form_validation->set_error_delimiters('<code>', '</code>');
 		
-		if($this->form_validation->run() == TRUE) {
-			$uiddep= ($this->input->post('uiddep'));
-			$depid= ($this->input->post('depid'));
-			$residdep= ($this->input->post('residdep'));
-			$positiondep= ($this->input->post('positiondep'));
-			$telephonedep= ($this->input->post('telephonedep'));
-			$year = $this->session->userdata('sessyear');
-			$indicatorid= ($this->input->post('indicatorid'));
-			$indicatordepid= ($this->input->post('indicatordepid'));
-			$number = $this->input->post('number');
-			$numberdep = $this->input->post('numberdep');
-			//$goal = $this->input->post('goal');
-			//$goaldep = $this->input->post('goaldep');
-			$weight = $this->input->post('weight');
-			$weightdep = $this->input->post('weightdep');
-			//$count = count($goalNO);
-			
-
-			$indicator = array(
-				'divisionID' => $depid,
-				'year' => $year
-			);
+        $divid= ($this->input->post('divid'));
+        
+        
+        // array new indicator temp
+        $newminid = ($this->input->post('newminid'));
+        $newgoalid = ($this->input->post('newgoalid'));
+        $newdepid = ($this->input->post('newdepid'));
+        
+        if ($divid > 0) {
 			
 			$indicatordep = array(
-				'divisionID' => $depid,
-				'isMinister' => 0
+				'divisionID' => $divid
 			);
-
-			$indicatoradmin = array(
-				'divisionID' => $depid,
-				'userID' => $uiddep,
-				'adminName' => $residdep,
-				'adminPosition' => $positiondep,
-				'adminTelephone' => $telephonedep
-			);
-
-			$this->ministerindicator->addIndicatorAdminDivision($indicatoradmin);
-
-			// insert new indicator from minister
-			for ($i=0; $i<count($indicatorid); $i++) {
-				if ($indicatorid[$i]>0) {
-					$query = $this->ministerindicator->getOneIndicator($indicatorid[$i]);
-					if(is_array($query)) {
-						foreach($query as $loop){
-							$name = $loop->name;
-							$cri1 = $loop->criteria1;
-							$cri2 = $loop->criteria2;
-							$cri3 = $loop->criteria3;
-							$cri4 = $loop->criteria4;
-							$cri5 = $loop->criteria5;
-							$tech = $loop->technicalnote;
-						}
-					
-						$indicator['name'] = $name;
-						$indicator['technicalNote'] = $tech;
-						$indicator['criteria1'] = $cri1;
-						$indicator['criteria2'] = $cri2;
-						$indicator['criteria3'] = $cri3;
-						$indicator['criteria4'] = $cri4;
-						$indicator['criteria5'] = $cri5;
-						$indicator['isMinister'] = $indicatorid[$i];
-						$indicator['number'] = $number[$i];
-						$indicator['goal'] = $this->input->post('goal-'.$indicatorid[$i]);
-						$indicator['weight'] = $weight[$i];
-						$this->ministerindicator->addIndicatorDivision($indicator);
-					}
-				}
-			}
 			
 			// edit new indicator into dep
-			for ($i=0; $i<count($indicatordepid); $i++) {
-				$indicatordep['id'] = $indicatordepid[$i];
+			for ($i=0; $i<count($newminid); $i++) {
+				$indicatordep['id'] = $newminid[$i];
+				$this->ministerindicator->editIndicatorDivision($indicatordep);
+			}
+            
+            for ($i=0; $i<count($newgoalid); $i++) {
+				$indicatordep['id'] = $newgoalid[$i];
+				$this->ministerindicator->editIndicatorDivision($indicatordep);
+			}
+            
+            for ($i=0; $i<count($newdepid); $i++) {
+				$indicatordep['id'] = $newdepid[$i];
 				$this->ministerindicator->editIndicatorDivision($indicatordep);
 			}
 			
-			$this->session->set_flashdata('showresult2', 'success');
-			redirect(current_url());
-		}
-			//$this->session->set_flashdata('showresult2', 'fail');
-			$query = $this->position->getPosition();
-			if($query){
-				$data['position_array'] =  $query;
-			}else{
-				$data['position_array'] = array();
-			}
+			$this->session->set_flashdata('success', 'yes');
 
-			$query = $this->department->getKong();
-			if($query){
-				$data['dep_array'] =  $query;
-			}else{
-				$data['dep_array'] = array();
-			}
+        }else{
+            $this->session->set_flashdata('fail', 'yes');
+        }
 
-			$query = $this->ministerindicator->getIndicatorGroupDepartment();
-			if($query){
-				$data['view_array'] =  $query;
-			}else{
-				$data['view_array'] = array();
-			}
-
-
-			$query = $this->ministerindicator->getIndicatorDivision(0);
-			if($query){
-				$data['indicatordep_array'] =  $query;
-			}else{
-				$data['indicatordep_array'] = array();
-			}
-
-			
-			$data['title'] = "MFA - Add Indicator ";
-			$this->load->view('indicator/addkong_view',$data);
+        redirect('manageindicator/addDivision', 'location');
 
 	}	
 	
 	function saveDiv()
 	{
-		$this->form_validation->set_rules('indicatorNO', 'indicatorNO', 'trim|xss_clean|required|numeric');
-		$this->form_validation->set_rules('indicatorName', 'indicatorName', 'trim|xss_clean|required');
+		$year = $this->session->userdata('sessyear');
+        $nextpage = 0;
+        
+        // link minister indicator id 
+        if ($this->input->post('depid') > 0) {
+            $indicator_dep_id = $this->input->post('depid');
+            $nextpage = 1;
+            
+            // remove minister indicator in session
+            $filter = $this->session->userdata('indicator_dep_select');
+            $index = array_search($indicator_dep_id,$filter);
+            unset($filter[$index]);
+            $filter = array_values($filter);
+            $this->session->set_userdata('indicator_dep_select', $filter);
+        }else{
+            $indicator_dep_id = 0;
+        }
+        
+        // link minister goal id 
+        if ($this->input->post('depgoalid') > 0) {
+            $goal_dep_id = $this->input->post('depgoalid');
+            $nextpage = 2;
+            
+            // remove minister goal in session
+            $filter = $this->session->userdata('goal_dep_select');
+            $index = array_search($goal_dep_id,$filter);
+            unset($filter[$index]);
+            $filter = array_values($filter);
+            $this->session->set_userdata('goal_dep_select', $filter);
+        }else{
+            $goal_dep_id = 0;
+        }
 
-		$this->form_validation->set_rules('goalmin', 'goalmin', 'trim|required|maxlength[1]|xss_clean');
-		$this->form_validation->set_rules('weightmin', 'weightmin', 'trim|xss_clean|required');
+        $indicatorNO= ($this->input->post('indicatorNO'));
+		$indicatorName= ($this->input->post('indicatorName'));
+
+		$goalmin= ($this->input->post('goalmin'));
+		$weightmin= ($this->input->post('weightmin'));
 		
-		// validate only first response name
-		$this->form_validation->set_rules('resid0', 'resid0', 'trim|xss_clean|callback_required_resid0');
-		//$this->form_validation->set_rules('position0', 'position0', 'trim|xss_clean|required');
-		//$this->form_validation->set_rules('telephone0', 'telephone0', 'trim|xss_clean|required');
+        // dep goal response name array
+		$userid= ($this->input->post('userid'));
+            
+		//array
+		$goalNO = $this->input->post('goalNO');
+		$goalName = $this->input->post('goalName');
 
-		$test1= ($this->input->post('resid'));
-
-		$this->form_validation->set_message('required', 'กรุณาใส่ข้อมูล');
-		$this->form_validation->set_message('numeric', 'กรุณาใส่เฉพาะตัวเลขเท่านั้น');
-		$this->form_validation->set_error_delimiters('<code>', '</code>');
-		
-		if($this->form_validation->run() == TRUE) {
-			$year = $this->session->userdata('sessyear');
-
-			$indicatorNO= ($this->input->post('indicatorNO'));
-			$indicatorName= ($this->input->post('indicatorName'));
-
-			$goalmin= ($this->input->post('goalmin'));
-			$weightmin= ($this->input->post('weightmin'));
+		$criterion1 = $this->input->post('criterion1');
+		$criterion2 = $this->input->post('criterion2');
+		$criterion3 = $this->input->post('criterion3');
+		$criterion4 = $this->input->post('criterion4');
+		$criterion5 = $this->input->post('criterion5');
+		$technote = $this->input->post('technote');
+        
+        $editid = $this->session->userdata('sessid');
 			
-			// array
-			$uid= ($this->input->post('uid'));
-			$resid= ($this->input->post('resid'));
-			$position= ($this->input->post('position'));
-			$depid= ($this->input->post('depid'));
-			$telephone= ($this->input->post('telephone'));
-
-			//array
-			$goalNO = $this->input->post('goalNO');
-			$goalName = $this->input->post('goalName');
-
-			$criterion1 = $this->input->post('criterion1');
-			$criterion2 = $this->input->post('criterion2');
-			$criterion3 = $this->input->post('criterion3');
-			$criterion4 = $this->input->post('criterion4');
-			$criterion5 = $this->input->post('criterion5');
-
-			$technote = $this->input->post('technote');
-			
-
-			$indicator = array(
+        
+		$indicator = array(
 				'year' => $year,
 				'number' => $indicatorNO,
 				'name' => $indicatorName,
@@ -1419,45 +1368,26 @@ class Manageindicator extends CI_Controller {
 				'criteria3' => $criterion3,
 				'criteria4' => $criterion4,
 				'criteria5' => $criterion5,
-				'technicalNote' => $technote
+				'technicalNote' => $technote,
+                'isDep' => $indicator_dep_id,
+                'isGoalDep' => $goal_dep_id,
+                'editorID' => $editid
 				
-			);
+        );
 
 
-			$resultMin = $this->ministerindicator->addIndicatorDivision($indicator);
-			if ($resultMin) {
+        $resultMin = $this->ministerindicator->addIndicatorDivision($indicator);
+		if ($resultMin) {
 
-				$indicatorid = $this->db->insert_id();
-				$response = array();
-				for ($i=0; $i<count($uid); $i++) {
-					if ($uid[$i]>0) {
-						$response['divisionIndicatorID'] = $indicatorid;
-						$response['userID'] = $uid[$i];
-						$response['resName'] = $resid[$i];
-						$response['resPosition'] = $position[$i];
-						$response['resTelephone'] = $telephone[$i];
-						$response['resDepartmentID'] = $depid[$i];
-
-
-						$resultRes = $this->ministerindicator->addIndicatorResponseDivision($response);
-						/*
-						if ($result) $this->session->set_flashdata('showresult', 'success');
-						else { 
-							$this->session->set_flashdata('showresult', 'fail');
-							$this->ministerindicator->delIndicator($indicatorid);
-							$this->ministerindicator->delGoalbyIndicator($indicatorid);
-						}
-						*/
-					}
-				}
-
-				$goal = array();
-				for ($i=0; $i<count($goalNO); $i++) {
-					if ($goalName[$i]!=null) {
-						$goal['indicatorID']= $indicatorid;
-						$goal['number']= $goalNO[$i];
-						$goal['name']= $goalName[$i];
-						$result = $this->ministerindicator->addIndicatorGoalDivision($goal);
+		  $indicatorid = $this->db->insert_id();
+		  $goal = array();
+		  for ($i=0; $i<count($goalNO); $i++) {
+			if ($goalName[$i]!=null) {
+				$goal['indicatorID']= $indicatorid;
+				$goal['number']= $goalNO[$i];
+				$goal['name']= $goalName[$i];
+                $goal['responseID'] = $userid[$i];
+				$result = $this->ministerindicator->addIndicatorGoalDivision($goal);
 						/*
 						if ($result) $this->session->set_flashdata('showresult', 'success');
 						else { 
@@ -1468,35 +1398,23 @@ class Manageindicator extends CI_Controller {
 					}
 				}
 				
-				$this->session->set_flashdata('showresult', 'success');
-
+                
+                $data['showresult'] = "success";
 				// if success , go to indicator table
 
 
-			}
-			else {
-				$this->session->set_flashdata('showresult', 'fail');
-			}
-				redirect(current_url());
-			
+        }
+		else {
+		  $data['showresult'] = "fail";
 		}
-		
-			$query = $this->position->getPosition();
-			if($query){
-				$data['position_array'] =  $query;
-			}else{
-				$data['position_array'] = array();
-			}
-
-			$query = $this->department->getDepName();
-			if($query){
-				$data['dep_array'] =  $query;
-			}else{
-				$data['dep_array'] = array();
-			}
-			
-			$data['title'] = "MFA - Add Indicator ";
-			$this->load->view('indicator/addnewindicatordivision_view',$data);
+        
+        if ($nextpage == 1) {
+            $this->load->view('indicator/addnewindicatordivfromindep_view',$data);
+        }elseif ($nextpage == 2) {
+            $this->load->view('indicator/addnewindicatordivfromgoaldep_view',$data);
+        }else{
+            $this->load->view('indicator/addnewindicatordivision_view',$data);
+        }
 	}	
 	
 	function saveIndicatorPerson(){
@@ -1834,6 +1752,38 @@ class Manageindicator extends CI_Controller {
 		$this->load->view('indicator/allindicatorminister_view',$data);
 				
 	}
+    
+    function editNumberDep() {
+		$indicatorid = $this->uri->segment(3);
+		$newnum = $this->uri->segment(4);
+        $depid = $this->uri->segment(5);
+
+		$indicator = array(
+			"id" => $indicatorid,
+			"number" => $newnum
+			);
+
+		$result = $this->ministerindicator->editNumberDep($indicator);
+
+		redirect('manageindicator/viewDep/'.$depid, 'location');
+				
+	}
+    
+    function editNumberDiv() {
+		$indicatorid = $this->uri->segment(3);
+		$newnum = $this->uri->segment(4);
+        $divid = $this->uri->segment(5);
+
+		$indicator = array(
+			"id" => $indicatorid,
+			"number" => $newnum
+			);
+
+		$result = $this->ministerindicator->editNumberDiv($indicator);
+
+		redirect('manageindicator/viewDiv/'.$divid, 'location');
+				
+	}
 	
 	function delete()
 	{
@@ -1872,6 +1822,14 @@ class Manageindicator extends CI_Controller {
         $this->ministerindicator->delDepIndicatorTemp($id);
         
         $this->addDepartment();
+    }
+    
+    function deleteDivTemp()
+    {
+        $id = $this->uri->segment(3);
+        $this->ministerindicator->delDivIndicatorTemp($id);
+        
+        $this->addDivision();
     }
 	
 	function deleteDivision()
@@ -1938,22 +1896,15 @@ class Manageindicator extends CI_Controller {
 		if($query){
 			$data['dep_indicator_array'] =  $query;
 		}
-		if ($isMin==0) {
-			$query = $this->ministerindicator->getOneIndicatorGoalDep($id);
-			$query2 = $this->ministerindicator->getOneIndicatorResponseDep($id);
-		}
-		else{
-			$query = $this->ministerindicator->getOneIndicatorGoal($isMin);
-			$query2 = $this->ministerindicator->getOneIndicatorResponse($isMin);
-		}	
+		$query = $this->ministerindicator->getOneIndicatorGoalDep($id);
 		if($query){
 			$data['goal_indicator_array'] =  $query;
 		}else{
 			$data['goal_indicator_array'] =  array();
 		}
-
-		if($query2){
-			$data['res_indicator_array'] =  $query2;
+		$query = $this->ministerindicator->getOneIndicatorResponseDep($id);
+		if($query){
+			$data['res_indicator_array'] =  $query;
 		}else{
 			$data['res_indicator_array'] =  array();
 		}
@@ -1970,22 +1921,15 @@ class Manageindicator extends CI_Controller {
 		if($query){
 			$data['dep_indicator_array'] =  $query;
 		}
-		if ($isMin==0) {
-			$query = $this->ministerindicator->getOneIndicatorGoalDivision($id);
-			$query2 = $this->ministerindicator->getOneIndicatorResponseDivision($id);
-		}
-		else{
-			$query = $this->ministerindicator->getOneIndicatorGoal($isMin);
-			$query2 = $this->ministerindicator->getOneIndicatorResponse($isMin);
-		}	
+		$query = $this->ministerindicator->getOneIndicatorGoalDivision($id);
 		if($query){
 			$data['goal_indicator_array'] =  $query;
 		}else{
 			$data['goal_indicator_array'] =  array();
 		}
-
-		if($query2){
-			$data['res_indicator_array'] =  $query2;
+		$query = $this->ministerindicator->getOneIndicatorResponseDivision($id);
+		if($query){
+			$data['res_indicator_array'] =  $query;
 		}else{
 			$data['res_indicator_array'] =  array();
 		}
@@ -2045,6 +1989,11 @@ class Manageindicator extends CI_Controller {
 		$pwemployee = $this->user->searchName($term);
 		echo json_encode($pwemployee);
 	}
-	
+    
+    function getKongFromGom(){
+        $depid = $this->input->post('depid');
+        $result = $this->department->getKongFromOneGom($depid);
+        echo json_encode($result);
+    }
 
 }

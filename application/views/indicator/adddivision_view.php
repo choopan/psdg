@@ -39,7 +39,7 @@ td.highlight {
 						  else if ($this->session->flashdata('fail')) echo '<div class="alert-message alert alert-danger"> ระบบไม่สามารถเพิ่มข้อมูลได้</div>';
 					
 					?>
-						<?php echo form_open('manageindicator/saveDepartment'); ?>
+						<?php echo form_open('manageindicator/saveDivision'); ?>
 
 						
 						<div class="row">
@@ -47,7 +47,7 @@ td.highlight {
 									<div class="form-group">
                                         <label>กอง *</label>
 										<select class="form-control" name="divid" id="divid" onchange="savedivid(this);">
-											<option value=""></option>
+											<option value="">---เลือกกอง---</option>
 										<?php 	if(is_array($div_array)) {
 												foreach($div_array as $loop){
 													echo "<option value='".$loop->id."x".$loop->dep_id."'";
@@ -62,7 +62,7 @@ td.highlight {
 		<div class="row">
             <div class="col-md-12">
                 <div class="panel panel-info">
-					<div class="panel-heading"><strong>รายการตัวชี้วัดและประเด็นความสำเร็จของกรมที่เลือก</strong> </div>
+					<div class="panel-heading"><strong>รายการตัวชี้วัดและประเด็นความสำเร็จของ <u><?php echo $depname; ?></u> ที่เลือก</strong> </div>
                     <div class="panel-body">
                         <div class="table-responsive" id="dtbody">
 						<!--<button id="buttonselect" type="button" class="btn btn-primary">แสดงเฉพาะตัวชี้วัดที่เลือก</button> -->
@@ -81,16 +81,16 @@ td.highlight {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <?php for ($i=0; $i<count($indicator_min_id); $i++) {
-										if ($indicator_min_id[$i] >0) {
+                                <?php for ($i=0; $i<count($indicator_dep_id); $i++) {
+										if ($indicator_dep_id[$i] >0) {
                                         ?>
                                     <tr style="background-color: #E0FFFF;">
 									<td style="text-align: center">
 										<?php //echo $indicator_min_id[$i]; ?>
 									</td>
                                     <td>
-                                    <a id="buttonadddep" href="<?php echo site_url("manageindicator/addNewIndicatorDepFromInMin/".$indicator_min_id[$i]);  ?>">
-										<?php echo $indicator_min_name[$i]['name'];
+                                    <a id="buttonadddep" href="<?php echo site_url("manageindicator/addNewIndicatorDivFromInDep/".$indicator_dep_id[$i]);  ?>">
+										<?php echo $indicator_dep_name[$i]['name'];
 											
 										?></a>&nbsp;&nbsp;
                                     <span class="label label-danger">รอการแก้ไขข้อมูล</span>
@@ -102,16 +102,16 @@ td.highlight {
                                     </tr>
                                 <?php  } } ?>
 								
-								<?php for ($i=0; $i<count($goal_min_id); $i++) {
-										if ($goal_min_id[$i] >0) {
+								<?php for ($i=0; $i<count($goal_dep_id); $i++) {
+										if ($goal_dep_id[$i] >0) {
                                         ?>
                                     <tr>
 									<td style="text-align: center">
 										<?php //echo $goal_min_id[$i]; ?>
 									</td>
                                     <td>
-                                        <a id="buttonadddep" href="<?php echo site_url("manageindicator/addNewIndicatorDepFromGoalMin/".$goal_min_id[$i]);  ?>">
-										<?php echo $goal_min_name[$i]['name']; ?>
+                                        <a id="buttonadddep" href="<?php echo site_url("manageindicator/addNewIndicatorDivFromGoalDep/".$goal_dep_id[$i]);  ?>">
+										<?php echo $goal_dep_name[$i]['name']; ?>
                                         </a>&nbsp;&nbsp;
                                         <span class="label label-danger">รอการแก้ไขข้อมูล</span>
 									</td>
@@ -122,11 +122,11 @@ td.highlight {
                                     </tr>
                                 <?php  } } ?>
                                     
-                                <?php foreach($newmin_array as $newmin) { ?>
+                                <?php foreach($newdep_array as $newmin) { ?>
                                     <tr>
                             <input type="hidden" name="newminid[]" id="newminid" value="<?php echo $newmin->id; ?>">
                                     <td style="text-align: center"><?php echo $newmin->number; ?></td>
-                                    <td><a id="fancyboxview" href="<?php echo site_url("manageindicator/viewIndicatorLinkDep/".$newmin->id);  ?>"><?php echo $newmin->name; ?></a></td>
+                                    <td><a id="fancyboxview" href="<?php echo site_url("manageindicator/viewIndicatorLinkDivision/".$newmin->id);  ?>"><?php echo $newmin->name; ?></a></td>
                                     <td style="text-align: center"><?php echo $newmin->goal; ?></td>
                                     <td style="text-align: center"><?php echo $newmin->weight; ?></td>
                                     <td><button type="button" class="btnDelete btn btn-danger btn-xs" onclick="del_confirm(<?php echo $newmin->id; ?>)" data-title="Delete" data-toggle="modal" data-target="#delete" data-placement="top" rel="tooltip" title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></button></td>
@@ -137,7 +137,7 @@ td.highlight {
                                     <tr>
                             <input type="hidden" name="newgoalid[]" id="newgoalid" value="<?php echo $newmin->id; ?>">
                                     <td style="text-align: center"><?php echo $newmin->number; ?></td>
-                                    <td><a id="fancyboxview" href="<?php echo site_url("manageindicator/viewIndicatorLinkDep/".$newmin->id);  ?>"><?php echo $newmin->name; ?></a></td>
+                                    <td><a id="fancyboxview" href="<?php echo site_url("manageindicator/viewIndicatorLinkDivision/".$newmin->id);  ?>"><?php echo $newmin->name; ?></a></td>
                                     <td style="text-align: center"><?php echo $newmin->goal; ?></td>
                                     <td style="text-align: center"><?php echo $newmin->weight; ?></td>
                                     <td><button type="button" class="btnDelete btn btn-danger btn-xs" onclick="del_confirm(<?php echo $newmin->id; ?>)" data-title="Delete" data-toggle="modal" data-target="#delete" data-placement="top" rel="tooltip" title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></button></td>
@@ -155,10 +155,10 @@ td.highlight {
 		<div class="row">
             <div class="col-md-12">
                 <div class="panel panel-success">
-					<div class="panel-heading"><strong>รายการตัวชี้วัดของกรม</strong> </div>
+					<div class="panel-heading"><strong>รายการตัวชี้วัดของกอง</strong> </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-						<a id="buttonadddep" href="<?php echo site_url("manageindicator/addNewIndicatorDep");  ?>"><button type="button" class="btn btn-success">เพิ่มตัวชี้วัดของกอง</button></a>
+						<a id="buttonadddep" href="<?php echo site_url("manageindicator/addNewIndicatorDivision");  ?>"><button type="button" class="btn btn-success">เพิ่มตัวชี้วัดของกอง</button></a>
                             <table class="table" id="dataTables-example2" cellspacing="0px" width="100%">
                                 <thead>
                                     <tr>
@@ -170,11 +170,11 @@ td.highlight {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <?php if(is_array($indicatordep_array)) {
-                                        foreach($indicatordep_array as $loop){ ?>
+                                <?php if(is_array($indicatordiv_array)) {
+                                        foreach($indicatordiv_array as $loop){ ?>
                                     <tr>
                                     <td style="text-align: center"><input type="hidden" name="newdepid[]" id="newdepid" value="<?php echo $loop->id; ?>"><?php echo $loop->number; ?></td>
-                                    <td><a id="fancyboxview" href="<?php echo site_url("manageindicator/viewIndicatorLinkDep/".$loop->id);  ?>"><?php echo $loop->name; ?></a></td>
+                                    <td><a id="fancyboxview" href="<?php echo site_url("manageindicator/viewIndicatorLinkDivision/".$loop->id);  ?>"><?php echo $loop->name; ?></a></td>
                                     <td style="text-align: center"><?php echo $loop->goal; ?></td>
                                     <td style="text-align: center"><?php echo $loop->weight; ?></td>
                                     <td><button type="button" class="btnDelete btn btn-danger btn-xs" onclick="del_confirm(<?php echo $loop->id; ?>)" data-title="Delete" data-toggle="modal" data-target="#delete" data-placement="top" rel="tooltip" title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></button></td>
@@ -275,7 +275,7 @@ function removeNewFormResponse(idd) {
 function del_confirm(val1) {
 	bootbox.confirm("ต้องการลบข้อมูลที่เลือกไว้ใช่หรือไม่ ?", function(result) {
 				var currentForm = this;
-				var myurl = "<?php echo site_url('manageindicator/deleteDepTemp'); ?>";
+				var myurl = "<?php echo site_url('manageindicator/deleteDivTemp'); ?>";
             	if (result) {
 				
 					window.location.replace(myurl+"/"+val1);

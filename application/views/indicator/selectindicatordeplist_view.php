@@ -5,9 +5,9 @@
 </head>
 
 <body>
+<?php foreach($dep_array as $dep) { $depname = $dep->name; $depid = $dep->id; }?>
 
-
-                    <h4>กรุณาเลือกตัวชี้วัดระดับกระทรวง ปีงบประมาณ <?php echo $this->session->userdata('sessyear'); ?></h4>
+                    <h4>กรุณาเลือกตัวชี้วัดจากกรม <strong><u><?php echo $depname; ?></u></strong> ปีงบประมาณ <?php echo $this->session->userdata('sessyear'); ?></h4>
 
                             <table class="table" id="dataTables-example">
                                 <thead><tr><th width="50">ตัวชี้วัดที่</th><th width="500">ชื่อ</th></tr></thead>
@@ -85,7 +85,7 @@ function sendval(id) {
 
 
 	$.ajax({
-		  url: "<?php echo site_url('manageindicator/saveIndicatorSession'); ?>",
+		  url: "<?php echo site_url('manageindicator/saveIndicatorDepSession'); ?>",
 		  type: "POST",
 		  data: { indicator:indicator, goal:goal },
 		  'error' : function(data){ 

@@ -90,13 +90,7 @@
                                     <a href="<?php echo site_url("manageindicator/showDepartment"); ?>">ระดับกรม</a>
                                 </li>
 								<li>
-                                    <a href="<?php echo site_url("manageindicator/showKong"); ?>">ระดับกอง</a>
-                                </li>
-								<li>
-                                    <a href="<?php echo site_url("manageindicator/showPerson"); ?>">ระดับบุคคล</a>
-                                </li>
-								<li>
-                                    <a href="<?php echo site_url("manageindicator/viewindicator_person/".$this->session->userdata('sessid')); ?>">ผู้ใช้งาน</a>
+                                    <a href="<?php echo site_url("manageindicator/showDivision"); ?>">ระดับกอง</a>
                                 </li>
                             </ul>
                         </li>
@@ -125,26 +119,6 @@
 								<li>
                                     <a href="<?php echo site_url("reportplan/division"); ?>">ระดับกอง</a>
                                 </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> รายงานปฏิบัติราชการระดับบุคคล<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li><a href="<?php echo site_url("person_evaluation/managePersonIndicator"); ?>">กำหนดตัวชี้วัด</a></li>
-                                <li><a href="<?php echo site_url("person_evaluation/managePersonEvaluation"); ?>">รายงานผลการปฏิบัติการ </a></li>
-                                
-								<?php   if ($this->session->userdata('sessadmin_min') == 1) { ?>
-                                	<li><a href="<?php echo site_url("person_evaluation/minManagePersonIndicator"); ?>">แสดงตัวชี้วัดรายบุคคล</a></li>
-                                	<li><a href="<?php echo site_url("person_evaluation/minManagePersonEvaluation"); ?>">แสดงรายงานผลปฏิบัติการ</a></li>									
-								<?php   } elseif($this->session->userdata('sessexecdiv') == 1) { ?>
-                                	<li><a href="<?php echo site_url("person_evaluation/divManagePersonIndicator"); ?>">แสดงตัวชี้วัดรายบุคคล</a></li>
-                                	<li><a href="<?php echo site_url("person_evaluation/divManagePersonEvaluation"); ?>">แสดงรายงานผลปฏิบัติการ</a></li>
-                                <?php   } elseif($this->session->userdata('sessexecdep') == 1) { ?>
-                                	<li><a href="<?php echo site_url("person_evaluation/depManagePersonIndicator"); ?>">แสดงตัวชี้วัดรายบุคคล</a></li>
-                                	<li><a href="<?php echo site_url("person_evaluation/depManagePersonEvaluation"); ?>">แสดงรายงานผลปฏิบัติการ</a></li>
-                                <?php   } ?>
-                                
-
                             </ul>
                         </li>
                         

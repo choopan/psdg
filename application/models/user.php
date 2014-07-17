@@ -245,6 +245,31 @@ Class User extends CI_Model
                         ->get()->result();
      return $result;
  }
+    
+ function getAllAdminDep($admin=NULL,$depIDs=NULL) {
+     $result = $this->db->select('pwemployee.USERID as userID, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, division.name as divname, pwemployee.department as depID, pwemployee.division as divID, department.name as depname')
+                        ->from('pwemployee')
+                        ->join('pwposition', 'pwposition.pwposition = pwemployee.position', 'left')
+						->join('department', 'pwemployee.department = department.id', 'left')
+						->join('division', 'pwemployee.division = division.id', 'left')
+                        ->where_in('pwemployee.department', $depIDs)
+                        ->where($admin, 1)
+                        ->get()->result();
+     return $result;
+ }
+    
+ function getAllAdminDiv($admin=NULL,$divIDs=NULL) {
+     $result = $this->db->select('pwemployee.USERID as userID, PWFNAME, PWLNAME, PWPOSITION.PWNAME as position, division.name as divname, pwemployee.department as depID, pwemployee.division as divID, department.name as depname')
+                        ->from('pwemployee')
+                        ->join('pwposition', 'pwposition.pwposition = pwemployee.position', 'left')
+						->join('department', 'pwemployee.department = department.id', 'left')
+						->join('division', 'pwemployee.division = division.id', 'left')
+                        ->where_in('pwemployee.division', $divIDs)
+                        ->where($admin, 1)
+                        ->get()->result();
+     return $result;
+ }
+ 
  
 }
 ?>

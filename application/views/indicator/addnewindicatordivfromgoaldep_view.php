@@ -21,7 +21,7 @@ td.highlight {
         <div class="col-md-12">
             <div class="panel panel-default">
 				<div class="panel-heading">
-					<strong>กำหนดตัวชี้วัดและประเด็นความสำเร็จ <u>ระดับกรม</u> (กรุณาใส่ข้อมูลให้ครบทุกช่อง)</strong>
+					<strong>กำหนดตัวชี้วัดและประเด็นความสำเร็จ <u>ระดับกอง</u> (กรุณาใส่ข้อมูลให้ครบทุกช่อง)</strong>
                 </div>
                 <div class="panel-body">
                             <!-- Nav tabs -->
@@ -34,10 +34,10 @@ td.highlight {
 					
 					?>
 
-						<?php echo form_open('manageindicator/saveDep'); ?>
+						<?php echo form_open('manageindicator/saveDiv'); ?>
                         
-                        <?php foreach($min_array as $loop) { ?>
-						<input type="hidden" name="minid" id="minid" value="<?php echo $loop->id; ?>">
+                        <?php foreach($dep_array as $loop) { ?>
+						<input type="hidden" name="depgoalid" id="depgoalid" value="<?php echo $dep_goal_id; ?>">
 						<div class="row">
 							<div class="col-md-2">
 									<div class="form-group">
@@ -49,7 +49,7 @@ td.highlight {
 							<div class="col-md-9">
 									<div class="form-group">
                                         <label>ชื่อตัวชี้วัด *</label>
-                                        <input type="text" class="form-control" name="indicatorName" id="indicatorName" value="<?php echo $loop->name; ?>">
+                                        <input type="text" class="form-control" name="indicatorName" id="indicatorName" value="<?php echo $loop['name']; ?>">
 											<p class="help-block"><?php echo form_error('indicatorName'); ?></p>
                                     </div>
 							</div>
@@ -81,43 +81,43 @@ td.highlight {
 
                                     </div>
 							</div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
 									<div class="form-group">
                                         <label>ผู้รับผิดชอบ *</label>
 
                                     </div>
 							</div>
 						</div>
-                    <?php
-                        $numIndex = 0;
-                        foreach($goal_array as $loop2) {  
-                            $numIndex++;
-                    ?>
+                    <div class="addinput">
+                        <input type="hidden" name="userid[]" id="userid0" value="">
 						<div class="row">
 							<div class="col-md-2">
 									<div class="form-group">
-                                        <input type="hidden" name="userid[]" id="userid<?php echo $numIndex; ?>" value="">
-                                        
-                                            <input type="text" class="form-control" name="goalNO[]" id="goalNO" value="<?php echo $loop2->number; ?>">
+                                            <input type="text" class="form-control" name="goalNO[]" id="goalNO0" value="">
 											<p class="help-block"><?php echo form_error('goalNO[0]'); ?></p>
                                     </div>
 							</div>
 							<div class="col-md-7">
 									<div class="form-group">
-                                        <input type="text" class="form-control" name="goalName[]" id="goalName" value="<?php echo $loop2->name; ?>">
+                                        <input type="text" class="form-control" name="goalName[]" id="goalName0" value="">
 										<p class="help-block"><?php echo form_error('goalName'); ?></p>
 
                                     </div>
 							</div>
-							<div class="col-md-2">
+                            <div class="col-md-2">
 									<div class="form-group">
-                                        <input type="text" class="form-control" name="responseName[]" id="responseName<?php echo $numIndex; ?>" value="">
+                                        <input type="text" class="form-control" name="responseName[]" id="responseName0" value="">
 										<p class="help-block"><?php echo form_error('responseName'); ?></p>
 
                                     </div>
 							</div>
+							<div class="col-md-1">
+									<div class="form-group">
+										<button id="addNew" type="button" onClick="addNewForm(this.form);" class="btn btn-success">เพิ่ม</button>	
+									</div>
+							</div>
 						</div>
-                    <?php } ?>
+					</div>
 				</div></div>
 				<div class="row"><div class="col-md-5">
 					<div class="table-responsive table-bordered">
@@ -131,24 +131,24 @@ td.highlight {
                                     <tbody>
                                     	<tr>
                                             <td style="text-align: center;">1</td>
-                                            <td><input type="text" class="form-control" name="criterion1" id="criterion1" value="<?php echo $loop->criteria1; ?>">
+                                            <td><input type="text" class="form-control" name="criterion1" id="criterion1" value="">
 										</td>
                                         </tr>
                                         <tr>
                                             <td style="text-align: center;">2</td>
-                                            <td><input type="text" class="form-control" name="criterion2" id="criterion2" value="<?php echo $loop->criteria2; ?>">
+                                            <td><input type="text" class="form-control" name="criterion2" id="criterion2" value="">
 										</td></tr>
                                         <tr>
                                             <td style="text-align: center;">3</td>
-                                            <td><input type="text" class="form-control" name="criterion3" id="criterion3" value="<?php echo $loop->criteria3; ?>">
+                                            <td><input type="text" class="form-control" name="criterion3" id="criterion3" value="">
 										</td></tr>
                                         <tr>
                                             <td style="text-align: center;">4</td>
-                                            <td><input type="text" class="form-control" name="criterion4" id="criterion4" value="<?php echo $loop->criteria4; ?>">
+                                            <td><input type="text" class="form-control" name="criterion4" id="criterion4" value="">
 										</td></tr>
                                         <tr>
                                             <td style="text-align: center;">5</td>
-                                            <td><input type="text" class="form-control" name="criterion5" id="criterion5" value="<?php echo $loop->criteria5; ?>">
+                                            <td><input type="text" class="form-control" name="criterion5" id="criterion5" value="">
 										</td>
                                         </tr>
                                     </tbody>
@@ -174,7 +174,7 @@ td.highlight {
                 	<div class="col-md-10">
                 		<div class="form-group">
                             <label>Technical Note *</label>
-							<textarea class="form-control" name="technote" id="technote" rows="3"><?php echo $loop->technicalnote; ?></textarea>
+							<textarea class="form-control" name="technote" id="technote" rows="3"></textarea>
 							<p class="help-block"><?php echo form_error('technote'); ?></p>
                         </div>
                 	</div>
@@ -209,8 +209,9 @@ var rowNum = 0;
 var rowNumRes = 0;
 function addNewForm(frm) {
 	rowNum ++;
-	var row = '<div class="row" id="rowNum'+rowNum+'"><div class="col-md-3"><div class="form-group"><input type="text" class="form-control" name="goalNO[]" id="goalNO" value="<?php echo set_value('goalNO'); ?>"><p class="help-block"><?php echo form_error('goalNO'); ?></p></div></div><div class="col-md-7"><div class="form-group"><input type="text" class="form-control" name="goalName[]" id="goalName" value="<?php echo set_value('goalName'); ?>"><p class="help-block"><?php echo form_error('goalName'); ?></p></div></div><div class="col-md-1"><div class="form-group"><button id="addNew" type="button" onClick="removeNewForm('+rowNum+');" class="btn btn-danger">ลบ</button></div></div></div>';
+	var row = '<div class="row" id="rowNum'+rowNum+'"><input type="hidden" name="userid[]" id="userid'+rowNum+'" value=""><div class="col-md-2"><div class="form-group"><input type="text" class="form-control" name="goalNO[]" id="goalNO" value=""></div></div><div class="col-md-7"><div class="form-group"><input type="text" class="form-control" name="goalName[]" id="goalName" value=""></div></div><div class="col-md-2"><div class="form-group"><input type="text" class="form-control" name="responseName[]" id="responseName'+rowNum+'" value=""></div></div><div class="col-md-1"><div class="form-group"><button id="addNew" type="button" onClick="removeNewForm('+rowNum+');" class="btn btn-danger">ลบ</button></div></div></div>';
 	$( ".addinput" ).append(row);
+    auto_tag("#responseName",rowNum);
 	frm.add_qty.value = '';
 	frm.add_name.value = '';
 
@@ -291,10 +292,9 @@ $(document).ready(function() {
     'transitionOut':'none', 
     'type':'iframe'}); 
     
-    var numIndex = JSON.parse('<?php echo json_encode($numIndex); ?>');
-    for (var i=1; i<=numIndex; i++) {
-        auto_tag("#responseName",i);
-    }
+
+    auto_tag("#responseName",0);
+
 });
  </script>
 <script>
