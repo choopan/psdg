@@ -66,4 +66,3 @@ Class Department extends CI_Model
     
 }
 ?>
-

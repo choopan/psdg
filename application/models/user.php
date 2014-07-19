@@ -269,6 +269,15 @@ Class User extends CI_Model
                         ->get()->result();
      return $result;
  }
+    
+ function getThaiName($userid)
+ {
+    $result = $this->db->select("pwfname, pwlname")
+                       ->from("pwemployee")
+                       ->where("userid", $userid)
+                       ->get()->result();
+    return $result;
+ }
  
  
 }

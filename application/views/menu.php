@@ -121,7 +121,9 @@
                                 </li>
                             </ul>
                         </li>
-                        
+                        <li>
+                            <a href="<?php echo site_url("reportgoal/goal_response"); ?>"><i class="fa fa-bar-chart-o fa-fw"></i> รายงานผลการดำเนินการ</a>
+                        </li>
                  
                     </ul>
                 </div>
