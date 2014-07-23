@@ -69,6 +69,20 @@ Class User extends CI_Model
 	$query = $this->db->get();
 	return $query->result();
  }
+    
+ function searchReportName($term)
+ {
+	$this->db->_protect_identifiers=false;
+	$this->db->select("user_indicator.userid, CONCAT(pwfname,' ', pwlname) as pwname, pwposition.PWNAME as poname, PWTELOFFICE as pwtelephone, pwemployee.PWPOSITION as positionid, department.name as depname");
+	$this->db->from('user_indicator');	
+    $this->db->join('pwemployee', 'pwemployee.userid = user_indicator.userid','left');	
+	$this->db->join('pwposition', 'pwposition.pwposition = pwemployee.pwposition','left');	
+	$this->db->join('department', 'pwemployee.department = department.id','left');
+	$this->db->like('pwfname', $term,'after');
+    $this->db->where('report_div',1);
+	$query = $this->db->get();
+	return $query->result();
+ }
  
  function getProfile($id=null)
  {

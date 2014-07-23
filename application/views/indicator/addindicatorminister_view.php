@@ -18,27 +18,19 @@ td.highlight {
 
 <body>
 	<div id="wrapper">
-	<?php $this->load->view('menu'); ?>
+	<?php $this->load->view('menu'); 
+        $urlgoaltemp = site_url("manageindicator/deleteGoalTemp/1");
+        ?>
 	
 	
 	
 <div id="page-wrapper">
-	<div class="row">
-        <div class="col-lg-12">
-            <div class="panel panel-default">
-				<div class="panel-heading">
-					<strong>กำหนดตัวชี้วัดและประเด็นความสำเร็จ <u>ระดับกระทรวง</u></strong>
-                </div>
-                <div class="panel-body">
-                            <!-- Nav tabs -->
 
-
-                            <!-- Tab panes -->
        <a id="fancyboxall" href="<?php echo site_url("manageindicator/viewIndicatorFromAdd");  ?>"><button type="button" class="btn btn-primary">แสดงตัวชี้วัดระดับกระทรวงทั้งหมด</button></a>
-									<div class="row">
+<div class="row">
             <div class="col-lg-12">
                 <div class="panel panel-default">
-					<div class="panel-heading"><strong>กรุณาใส่ข้อมูลให้ครบทุกช่อง</strong></div>
+					<div class="panel-heading"><strong><h4>กำหนดตัวชี้วัดและประเด็นความสำเร็จ <u>ระดับกระทรวง</u></h4>(กรุณาใส่ข้อมูลให้ครบทุกช่อง)</strong></div>
 					<?php if ($this->session->flashdata('showresult') == 'success') echo '<div class="alert-message alert alert-success"> ระบบทำการเพิ่มข้อมูลเรียบร้อยแล้ว'.$this->session->flashdata('insertid').'</div>'; 
 						  else if ($this->session->flashdata('showresult') == 'fail') echo '<div class="alert-message alert alert-danger"> ระบบไม่สามารถเพิ่มข้อมูลได้</div>';
 					
@@ -49,17 +41,17 @@ td.highlight {
 							  echo form_open('manageindicator/saveMinister', $data); ?>
 						
 						<div class="row">
-							<div class="col-md-3">
+							<div class="col-md-2">
 									<div class="form-group">
                                         <label>ตัวชี้วัดที่ *</label>
-                                        <input type="text" class="form-control" name="indicatorNO" id="indicatorNO" value="<?php echo set_value('indicatorNO'); ?>">
+                                        <input type="text" class="form-control" name="indicatorNO" id="indicatorNO" value="<?php echo $indicatorNO; ?>">
 											<p class="help-block"><?php echo form_error('indicatorNO'); ?></p>
                                     </div>
 							</div>
 							<div class="col-md-9">
 									<div class="form-group">
                                         <label>ชื่อตัวชี้วัด *</label>
-                                        <input type="text" class="form-control" name="indicatorName" id="indicatorName" value="<?php echo set_value('indicatorName'); ?>">
+                                        <input type="text" class="form-control" name="indicatorName" id="indicatorName" value="<?php echo $indicatorName; ?>">
 											<p class="help-block"><?php echo form_error('indicatorName'); ?></p>
                                     </div>
 							</div>
@@ -69,12 +61,184 @@ td.highlight {
 							<div class="col-md-3">
 									<div class="form-group">
                                         <label>น้ำหนัก *</label>
-                                        <input type="text" class="form-control" name="weightmin" id="weightmin" value="<?php echo set_value('weightmin'); ?>">
+                                        <input type="text" class="form-control" name="weightmin" id="weightmin" value="<?php echo $weightmin; ?>">
 											<p class="help-block"><?php echo form_error('weightmin'); ?></p>
                                     </div>
 							</div>
 						</div>
-						<hr>
+						
+<!-- save goal temp -->
+<div class="row">
+    <div class="col-md-10">
+        <div class="panel panel-default">
+            <div class="panel-heading">ประเด็นความสำเร็จ</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="newgoaltemp">
+            <div class="row">
+                <div class="form-group">
+                <a data-toggle="modal" data-target="#addGoalForm" class="btn btn-success" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="เพิ่มประเด็นความสำเร็จ" data-backdrop="static" data-keyboard="false">
+				<span class="glyphicon glyphicon-plus"></span> เพิ่ม<br>ประเด็นความสำเร็จ</a>
+                
+        <!-- add new goal temp modal -->
+			<div class="modal fade" id="addGoalForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg">
+        			<div class="modal-content">
+        				<div class="modal-header">
+                			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  			<h4 class="modal-title">	                 	
+                 				<strong>เพิ่มประเด็นความสำเร็จ</strong> 
+                 			</h4>
+            			</div>            <!-- /modal-header -->
+            			<div class="modal-body">
+					  		<div class="form-group">
+								<label for="">ลำดับที่ : </label>
+								<input type="text" class="form-control" name="goalnumber" id="goalnumber" value="" style="width: 80px" required>
+					  		</div>
+					  		<div class="form-group">
+								<label for=""> คำอธิบายประเด็นความสำเร็จ :</label>
+								<input type="text" class="form-control" name="goalname" id="goalname" value=""  required>
+					  		</div>
+                                
+				        </div>            <!-- /modal-body -->
+        			
+            				<div class="modal-footer">
+            					<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addNewGoalTemp();"><span class="glyphicon glyphicon-floppy-save"></span> บันทึกประเด็นความสำเร็จ</button>			
+                				<button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> ปิด</button>
+            				</div>  
+    					</div>
+					</div>
+				</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- show all goal temp indicatorID=0 -->
+<div class="row">
+    <div class="col-md-12">
+        
+    <table class="table" name="showtempgoal">
+        <thead>
+            <tr>
+                <th style="width: 80px;">ลำดับ</th>
+                <th>คำอธิบาย</th>
+                <th style="width: 210px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($goaltemp_array as $loop) { ?>
+            <tr>
+                <td><?php echo $loop->number; ?></td>
+                <td><?php echo $loop->name; ?></td>
+                <td><button type="button" class="btn btn-primary btn-xs">แผนงาน/โครงการ</button> <button type="button" class="btn btn-info btn-xs">เป้าหมาย</button> <button class="btnDelete btn btn-danger btn-xs" onclick="delgoal_confirm(<?php echo $loop->goalid; ?>)" data-title="Delete" data-toggle="modal" data-target="#delete" data-placement="top" rel="tooltip" title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></button></td>
+            </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+    </div>
+</div>
+                        
+                        
+                        
+                        
+        <div class="row">
+                <div class="col-md-10">
+                            <div class="panel-group" id="accordion">
+                                <div class="addinput">
+                                <div class="panel panel-success">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#goal0">ประเด็นความสำเร็จ</a>
+                                        </h4>
+                                    </div>
+                                <div id="goal0" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                        <label>ลำดับที่ *</label>
+                                                </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                                <div class="form-group">
+                                                    <label>คำอธิบายประเด็นความสำเร็จ *</label>
+
+                                                </div>
+                                        </div>
+                                        </div>
+                                        <div class="row">
+                                        <div class="col-md-2">
+                                                <div class="form-group">
+                                                        <input type="text" class="form-control" name="goalNO[]" id="goalNO" value="">
+                                                </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="goalName[]" id="goalName0" value="">
+                                                </div>
+                                        </div>
+							
+						</div>
+                                            
+                        <!--- add min_plan -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">แผนงาน/โครงการ</div>
+                        <div class="panel-body">
+                        <div id="keepplan0">
+				            <input type="hidden" id="num_plan0" value="1">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                   <label>ลำดับที่</label>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label>คำอธิบายแผนงาน/โครงการ *</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="addNewPlan0">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="planNO0-0[]" id="planNO0-0" value="">
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="planName0-0[]" id="planName0-0" value="">
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+								<div class="form-group">
+								<button id="addNewPlan" type="button" class="btn btn-success" onClick="addNewPlanFrom(0);"><span class="glyphicon glyphicon-plus"></span> เพิ่ม</button>	
+				                </div>
+							</div>
+				        </div>
+						</div>
+                        </div>
+                        </div>
+                    </div>
+                                        </div>
+                            </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="newdelbutton">
+                        <div class="row">
+				            <div class="form-group">
+								<button id="addNew" type="button" onClick="addNewForm(this.form);" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> เพิ่ม</button>	
+				            </div>
+				        </div>
+                    </div>
+                </div>
+            </div>
+<hr>
 						<div class="row">
 							<div class="col-md-3">
                                             <label>ผู้กำกับดูแล *</label>
@@ -168,48 +332,6 @@ td.highlight {
 							</div>
 						</div></div>
 						<hr/>
-		<div class="panel panel-success">
-				<div class="panel-heading">
-					<strong>ประเด็นความสำเร็จ</strong>
-                </div>
-                <div class="panel-body">
-                	
-						<div class="row">
-							<div class="col-md-3">
-									<div class="form-group">
-                                            <label>ลำดับที่ *</label>
-                                    </div>
-							</div>
-							<div class="col-md-7">
-									<div class="form-group">
-                                        <label>คำอธิบาย *</label>
-
-                                    </div>
-							</div>
-						</div>
-					<div class="addinput">
-						<div class="row">
-							<div class="col-md-3">
-									<div class="form-group">
-                                            <input type="text" class="form-control" name="goalNO[]" id="goalNO" value="<?php echo set_value('goalNO[0]'); ?>">
-											<p class="help-block"><?php echo form_error('goalNO[0]'); ?></p>
-                                    </div>
-							</div>
-							<div class="col-md-7">
-									<div class="form-group">
-                                        <input type="text" class="form-control" name="goalName[]" id="goalName0" value="<?php echo set_value('goalName'); ?>">
-										<p class="help-block"><?php echo form_error('goalName'); ?></p>
-
-                                    </div>
-							</div>
-							<div class="col-md-1">
-									<div class="form-group">
-										<button id="addNew" type="button" onClick="addNewForm(this.form);" class="btn btn-success">เพิ่ม</button>	
-									</div>
-							</div>
-						</div>
-					</div>
-				</div></div>
 				<div class="row"><div class="col-md-4">
 					<div class="table-responsive table-bordered">
                                 <table class="table">
@@ -269,15 +391,8 @@ td.highlight {
 				</div>
 			</div>	
 		</div>
-                                </div>
-
-                        <!-- /.panel-body -->
-            </div>
-                    <!-- /.panel -->
-        </div>
-	</div>
 </div>
-</div>
+    </div>
 
 <?php $this->load->view('js_footer'); ?>
 <script src="<?php echo base_url(); ?>js/plugins/dataTables/jquery.dataTables.js"></script>
@@ -292,8 +407,11 @@ td.highlight {
 var rowNum = 0;
 var rowNumRes = 0;
 function addNewForm(frm) {
-	rowNum ++;
-	var row = '<div class="row" id="rowNum'+rowNum+'"><div class="col-md-3"><div class="form-group"><input type="text" class="form-control" name="goalNO[]" id="goalNO" value="<?php echo set_value('goalNO'); ?>"><p class="help-block"><?php echo form_error('goalNO'); ?></p></div></div><div class="col-md-7"><div class="form-group"><input type="text" class="form-control" name="goalName[]" id="goalName" value="<?php echo set_value('goalName'); ?>"><p class="help-block"><?php echo form_error('goalName'); ?></p></div></div><div class="col-md-1"><div class="form-group"><button id="addNew" type="button" onClick="removeNewForm('+rowNum+');" class="btn btn-danger">ลบ</button></div></div></div>';
+	rowNum++;
+    var row = '<div class="panel panel-success" id="rowNum'+rowNum+'"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#goal'+rowNum+'">ประเด็นความสำเร็จ</a><span style="float:right;"><button class="btnDelete btn btn-danger btn-xs" onclick="removeNewForm('+rowNum+')" data-title="Delete" data-toggle="modal" data-target="#delete" data-placement="top" rel="tooltip" title="ลบข้อมูล"><span class="glyphicon glyphicon-remove"></span></button></span></div></h4><div id="goal'+rowNum+'" class="panel-collapse collapse"><div class="panel-body"><div class="row"><div class="col-md-3"><div class="form-group"><label>ลำดับที่ *</label></div></div><div class="col-md-7"><div class="form-group"><label>คำอธิบาย *</label></div></div></div><div class="row"><div class="col-md-3"><div class="form-group"><input type="text" class="form-control" name="goalNO[]" id="goalNO" value=""></div></div><div class="col-md-7"><div class="form-group"><input type="text" class="form-control" name="goalName[]" id="goalName'+rowNum+'" value=""></div></div></div>';
+    
+    // add plan
+    row += '<div class="panel panel-default"><div class="panel-heading">แผนงาน/โครงการ</div><div class="panel-body"><div id="keepplan'+rowNum+'"><input type="hidden" id="num_plan'+rowNum+'" value="1"><div class="row"><div class="col-md-2"><div class="form-group"><label>ลำดับที่</label></div></div><div class="col-md-8"><div class="form-group"><label>คำอธิบายแผนงาน/โครงการ *</label></div></div></div><div class="addNewPlan'+rowNum+'"><div class="row"><div class="col-md-2"><div class="form-group"><input type="text" class="form-control" name="planNO'+rowNum+'-0[]" id="planNO'+rowNum+'-0" value=""></div></div><div class="col-md-8"><div class="form-group"><input type="text" class="form-control" name="planName'+rowNum+'-0[]" id="planName'+rowNum+'-0" value=""></div></div><div class="col-md-1"><div class="form-group"><button id="addNewPlan" type="button" class="btn btn-success" onClick="addNewPlanFrom('+rowNum+');"><span class="glyphicon glyphicon-plus"></span> เพิ่ม</button></div></div></div></div></div></div></div></div></div></div>';
 	$( ".addinput" ).append(row);
 	frm.add_qty.value = '';
 	frm.add_name.value = '';
@@ -304,7 +422,72 @@ function removeNewForm(rnum) {
 jQuery('#rowNum'+rnum).remove();
 }
 
+function addNewPlanFrom(row) {
+    var num_plan=$('#num_plan'+row).val();
+    var newkeepdata='<div class="row">'+
+			'<div class="col-md-2">'+
+            '<div class="form-group">'+
+            '<input type="text" class="form-control" name="planNO'+row+'-'+num_plan+'[]" id="planNO'+row+'-'+num_plan+'" value="" onChange="check_null(this)">'+
+            '</div></div>'+
+			'<div class="col-md-8">'+
+            '<div class="form-group">'+
+            '<input type="text" class="form-control" name="planName'+row+'-'+num_plan+'[]" id="planName'+row+'-'+num_plan+'" value="" onChange="check_null(this)">'+
+			'</div></div>'+
+			'<div class="col-lg-1">'+
+			'<div class="form-group">'+
+			'<button class="btn btn-danger" onclick="remove_tag(this)"><span class="glyphicon glyphicon-minus"></span> ลบ</button>'+
+			'</div></div>'+
+			'</div>';
+    $(newkeepdata).appendTo('#keepplan'+row);
+    $('#num_plan'+row).val(++num_plan);
+}
 
+function addNewGoalTemp()
+{
+    var goalnumber=$('#goalnumber').val();
+    if(goalname==''){
+        alert('กรุณาป้อนข้อมูลให้ครบ');
+		$('#goalnumber').focus();
+		return false;
+    }
+    
+    var goalname=$('#goalname').val();
+    if(goalname==''){
+        alert('กรุณาป้อนข้อมูลให้ครบ');
+		$('#goalname').focus();
+		return false;
+    }
+    
+    var number=$('#indicatorNO').val();
+    var name=$('#indicatorName').val();
+    var weight=$('#weightmin').val();
+    
+    $.ajax({
+		  url: "<?php echo site_url('manageindicator/addMinGoalTemp'); ?>",
+		  type: "POST",
+		  data: { goalnumber:goalnumber, goalname:goalname, number:number, name:name, weight:weight },
+		  'error' : function(data){ 
+				alert('error');
+          },
+		  'success': function(data){
+                alert('เพิ่มประเด็นความสำเร็จเรียบร้อยแล้ว');
+                window.location.reload(true);
+		  }
+    })
+}
+    
+function delgoal_confirm(val1) 
+{
+	bootbox.confirm("ต้องการลบข้อมูลที่เลือกไว้ใช่หรือไม่ ?", function(result) {
+				var currentForm = this;
+				var myurl = <?php echo json_encode($urlgoaltemp); ?>;
+            	if (result) {
+				
+					window.location.replace(myurl+"/"+val1);
+				}
+
+		});
+}
 
 </script>
 <script type="text/javascript" charset="utf-8">
@@ -348,6 +531,26 @@ $(document).ready(function() {
 		auto_tag("#resid",num_response,'keepdata');
 		$('#num_response').val(++num_response);
 	});
+    /*
+    $('#addNewPlan').click(function(){
+		var num_plan=$('#num_plan').val();
+		var newkeepdata='<div class="row">'+
+			'<div class="col-md-2">'+
+            '<div class="form-group">'+
+            '<input type="text" class="form-control" name="planNO0-'+num_plan+'[]" id="planNO0-'+num_plan+'" value="" onChange="check_null(this)">'+
+            '</div></div>'+
+			'<div class="col-md-8">'+
+            '<div class="form-group">'+
+            '<input type="text" class="form-control" name="planName0-'+num_plan+'[]" id="planName0-'+num_plan+'" value="" onChange="check_null(this)">'+
+			'</div></div>'+
+			'<div class="col-lg-1">'+
+			'<div class="form-group">'+
+			'<button class="btn btn-danger" onclick="remove_tag(this)"><span class="glyphicon glyphicon-minus"></span> ลบ</button>'+
+			'</div></div>'+
+			'</div>';
+		$(newkeepdata).appendTo('#keepplan');
+		$('#num_plan').val(++num_plan);
+	});*/
 			
 
 });

@@ -1,5 +1,4 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-session_start(); 
 
 class Manageindicator extends CI_Controller {
 
@@ -103,6 +102,10 @@ class Manageindicator extends CI_Controller {
 	function addIndicatorMinister()
 	{
 		$this->load->helper(array('form'));
+        
+        $data['indicatorNO'] = $this->session->userdata('number');
+        $data['indicatorName'] = $this->session->userdata('name');
+        $data['weightmin'] = $this->session->userdata('weightmin');
 		
 		$query = $this->position->getPosition();
 		if($query){
@@ -118,6 +121,14 @@ class Manageindicator extends CI_Controller {
 			$data['dep_array'] = array();
 		}
 		
+        $userid = $this->session->userdata('sessid');
+        $query = $this->ministerindicator->getMinGoalTemp($userid);
+        if($query){
+			$data['goaltemp_array'] =  $query;
+		}else{
+			$data['goaltemp_array'] = array();
+		}
+        
 		$data['title'] = "MFA - Add Indicator ";
 		$this->load->view('indicator/addindicatorminister_view',$data);
 
@@ -1795,6 +1806,18 @@ class Manageindicator extends CI_Controller {
 		
 		redirect('manageindicator/showMinister', 'refresh');
 	}
+    
+    function deleteGoalTemp($table=null)
+	{
+		$goalid = $this->uri->segment(4);
+        switch($table) {
+            case 1: $this->ministerindicator->delGoalTemp($goalid,"min_goal");
+                    break;
+            default: break;
+        }
+		
+		redirect('manageindicator/addIndicatorMinister', 'location');
+	}
 	
 	function deleteDep()
 	{
@@ -1990,10 +2013,28 @@ class Manageindicator extends CI_Controller {
 		echo json_encode($pwemployee);
 	}
     
-    function getKongFromGom(){
+    function getKongFromGom()
+    {
         $depid = $this->input->post('depid');
         $result = $this->department->getKongFromOneGom($depid);
         echo json_encode($result);
+    }
+    
+    function addMinGoalTemp() 
+    {
+        $number = $this->input->post('goalnumber');
+        $name = $this->input->post('goalname');
+        
+        $this->session->set_userdata('number', $this->input->post('number'));
+        $this->session->set_userdata('name', $this->input->post('name'));
+        $this->session->set_userdata('weightmin', $this->input->post('weight'));
+        
+        $userid = $this->session->userdata('sessid');
+        
+        $goal = array('number' => $number, 'name' => $name, 'indicatorID' => 0, 'editorID' => $userid);
+        
+        $this->ministerindicator->addIndicatorGoal($goal);
+        redirect('manageindicator/addIndicatorMinister', 'location');
     }
 
 }

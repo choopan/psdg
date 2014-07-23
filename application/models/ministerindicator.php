@@ -60,6 +60,17 @@ Class Ministerindicator extends CI_Model
 	$query = $this->db->get();
 	return $query;
  }
+    
+ function getMinGoalTemp($userid=null)
+ {
+	$this->db->select("indicatorID as id, min_goal.number, min_goal.name, min_goal.id as goalid");
+	$this->db->order_by("number", "asc");
+	$this->db->from('min_goal');	
+	$this->db->where('indicatorID', 0);
+    $this->db->where('editorID', $userid);
+	$query = $this->db->get()->result();
+	return $query;
+ }
  
  function getIndicatorDep($dep=null,$ismin=null,$min=null,$isgoal=null,$goal=null,$userid=null)
  {
@@ -517,6 +528,12 @@ Class Ministerindicator extends CI_Model
  {
 	$this->db->where('indicatorID', $id);
 	$this->db->delete('min_goal'); 
+ }
+    
+ function delGoalTemp($id=NULL, $table=null)
+ {
+	$this->db->where('id', $id);
+	$this->db->delete($table); 
  }
  
  function delIndicatorDep($id=NULL)
