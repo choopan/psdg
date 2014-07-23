@@ -70,7 +70,7 @@ class person_evaluation extends CI_Controller {
 				switch($piStatus) {
 					case 1  : $data['status_msg'] = '<span class="label label-danger">รอการพิจารณา</span>'; break;
 					case 2  : $data['status_msg'] = '<span class="label label-warning">ผ่านการอนุมัติขั้นต้น</span>'; break;
-					case 3  : $data['status_msg'] = '<span class="label label-success">ผ่านการอนุมัติแล้ว</span> <a href="'.base_url().'index.php/Managewarranty/gen_indic_cm"><img src="'.base_url().'images/word_k005.png" title="ส่งออกรายงาน"></a>'; break;
+					case 3  : $data['status_msg'] = '<span class="label label-success">ผ่านการอนุมัติแล้ว</span> <a href="'.base_url().'index.php/managewarranty/gen_indic_cm"><img src="'.base_url().'images/word_k005.png" title="ส่งออกรายงาน"></a>'; break;
 					default : $data['status_msg'] = '<span class="label label-danger">รอการพิจารณา</span>'; break;	
 				}
 				$this->load->view('evaluate/displayPersonIndicator.php', $data);
