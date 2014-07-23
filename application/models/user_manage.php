@@ -46,7 +46,7 @@ Class User_manage extends CI_Model
 	return $query;
  }
  
- function addUser_save($username,$password,$fname,$lname,$efname,$elname,$gender,$email,$tel,$mobile,$department,$division,$level,$admin_min,$admin_dep,$admin_div,$position_ty,$position,$position_lv)
+ function addUser_save($username,$password,$fname,$lname,$efname,$elname,$gender,$email,$tel,$mobile,$department,$division,$level,$admin_min,$position_ty,$position,$position_lv)
  {
 	$query=$this->db->set('PWUSERNAME',$username)
 			 ->set('PWPASSWORD',$password)
@@ -62,8 +62,6 @@ Class User_manage extends CI_Model
 			 ->set('division',$division)
 			 ->set('PWLEVEL',$level)
 			 ->set('admin_min',$admin_min)
-			 ->set('admin_dep',$admin_dep)
-			 ->set('admin_div',$admin_div)
 			 ->set('position_type',$position_ty)
 			 ->set('PWPOSITION',$position)
 			 ->set('position',$position)
@@ -75,7 +73,7 @@ Class User_manage extends CI_Model
 		return 0;}
  }
  
- function editUser_save($id,$fname,$lname,$efname,$elname,$email,$tel,$mobile,$department,$division,$position_ty,$position,$position_lv,$admin_min,$admin_dep,$admin_div)
+ function editUser_save($id,$fname,$lname,$efname,$elname,$email,$tel,$mobile,$department,$division,$position_ty,$position,$position_lv,$admin_min)
  {
 	$query=$this->db->where('USERID',$id)
 			 ->set('PWFNAME',$fname)
@@ -92,8 +90,6 @@ Class User_manage extends CI_Model
 			 ->set('position',$position)
 			 ->set('position_level',$position_lv)
 			 ->set('admin_min',$admin_min)
-			 ->set('admin_dep',$admin_dep)
-			 ->set('admin_div',$admin_div)
 			 ->update('pwemployee');
 	if($query){
 		return 1;
@@ -101,9 +97,17 @@ Class User_manage extends CI_Model
 		return 0;}
  }
  
+ function check_user($id)
+ {
+	$query=$this->db->where('USERID',$id)
+					->get('user_indicator')
+					->result_array();
+	return $query;
+ }
+ 
  function user_view_info($id)
  {
-	$query=$this->db->query('SELECT pwemployee.USERID as USERID,PWUSERNAME,PWFNAME,PWLNAME,PWEFNAME,PWELNAME,PWSEX,PWEMAIL,PWTELOFFICE,mobile,department,department.name as dep_name,division,division.name as div_name,position_type,position_type.name as pos_t_name ,position,pwposition.PWNAME as pos_name,position_level,position_level.name as pos_lv_name,admin_min,admin_dep,admin_div
+	$query=$this->db->query('SELECT pwemployee.USERID as USERID,PWUSERNAME, PWPASSWORD, PWFNAME,PWLNAME,PWEFNAME,PWELNAME,PWSEX,PWEMAIL,PWTELOFFICE,mobile,department,department.name as dep_name,division,division.name as div_name,position_type,position_type.name as pos_t_name ,position,pwposition.PWNAME as pos_name,position_level,position_level.name as pos_lv_name,admin_min
 
 								from pwemployee left join division
 								on pwemployee.division = division.id

@@ -172,16 +172,7 @@ td.highlight {
 											<label>ผู้ดูแลระบบ * |</label>
 												<label class="checkbox-inline">
 													<input type="radio" value="admin_min" name="admin">ระดับกระทรวง
-												</label>
-												
-												<label class="checkbox-inline">
-													<input type="radio" value="admin_dep" name="admin">ระดับกรม
-												</label>
-												
-												<label class="checkbox-inline">
-													<input type="radio" value="admin_div"  name="admin">ระดับกอง
-												</label>
-												
+												</label>												
 												<label class="checkbox-inline">
 													<input type="radio" value="admin_no"  name="admin" checked>ไม่มีสิทธิ
 												</label>
