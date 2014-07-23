@@ -86,6 +86,17 @@
 					</div>
 				</div>	
 			</div>
+			
+			<!--
+			<a href="<?php echo site_url('managewarranty/gen_indic_docx/'); ?>"><img src="<?php echo base_url().'images/word_k005.png';?>" height="20" width="20" class="img-rounded">test_gen_indic</a><br/>
+			<a href="<?php echo site_url('managewarranty/gen_indic_cm/'); ?>"><img src="<?php echo base_url().'images/word_k005.png';?>" height="20" width="20" class="img-rounded">gen_indic_cm</a><br/>
+			<a href="<?php echo site_url('managewarranty/gen_icit_docx_2/'); ?>"><img src="<?php echo base_url().'images/word_k005.png';?>" height="20" width="20" class="img-rounded">test_gen_icit_2</a><br/>
+			<a href="<?php echo site_url('managewarranty/gen_icit_docx_3/'); ?>"><img src="<?php echo base_url().'images/word_k005.png';?>" height="20" width="20" class="img-rounded">test_gen_icit_3</a><br/>
+			<a href="<?php echo site_url('managewarranty/gen_icit_docx_4/'); ?>"><img src="<?php echo base_url().'images/word_k005.png';?>" height="20" width="20" class="img-rounded">test_gen_icit_4</a><br/>
+			<a href="<?php echo site_url('managewarranty/gen_icit_docx_5/'); ?>"><img src="<?php echo base_url().'images/word_k005.png';?>" height="20" width="20" class="img-rounded">test_gen_icit_5</a><br/>
+			<a href="<?php echo site_url('managewarranty/gen_icit_docx_6/'); ?>"><img src="<?php echo base_url().'images/word_k005.png';?>" height="20" width="20" class="img-rounded">test_gen_icit_6</a><br/>
+			-->
+			
 		</div>
 	</div>
 

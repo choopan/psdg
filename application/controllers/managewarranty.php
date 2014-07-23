@@ -576,7 +576,7 @@ class Managewarranty extends CI_Controller {
 		// ------------------------------new page -------------------------------------------------------
 		
 		
-		$listStyle = array('listType'=>PHPWord_Style_ListItem::TYPE_NUMBER);
+		/* $listStyle = array('listType'=>PHPWord_Style_ListItem::TYPE_NUMBER);
 		$section = $PHPWord->createSection(array('orientation'=>'landscape'));
 		$PHPWord->setDefaultFontSize(16);
 		$PHPWord->addParagraphStyle('Textcenter', array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
@@ -615,7 +615,7 @@ class Managewarranty extends CI_Controller {
 		
 		$table->addRow();
 		$table->addCell(7000)->addText('สำเร็จ 5 ประเด็นจากประเด็นทั้งหมดที่กำหนดไว้',null,'Textcenter');
-		$table->addCell(3000)->addText('5',null,'Textcenter');
+		$table->addCell(3000)->addText('5',null,'Textcenter'); */
 		
 		
 		
@@ -926,7 +926,7 @@ class Managewarranty extends CI_Controller {
 		// ------------------------------new page -------------------------------------------------------
 		
 		
-		$listStyle = array('listType'=>PHPWord_Style_ListItem::TYPE_NUMBER);
+		/* $listStyle = array('listType'=>PHPWord_Style_ListItem::TYPE_NUMBER);
 		$section = $PHPWord->createSection(array('orientation'=>'landscape'));
 		$PHPWord->setDefaultFontSize(16);
 		$PHPWord->addParagraphStyle('Textcenter', array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
@@ -965,7 +965,7 @@ class Managewarranty extends CI_Controller {
 		
 		$table->addRow();
 		$table->addCell(7000)->addText('สำเร็จ 5 ประเด็นจากประเด็นทั้งหมดที่กำหนดไว้',null,'Textcenter');
-		$table->addCell(3000)->addText('5',null,'Textcenter');
+		$table->addCell(3000)->addText('5',null,'Textcenter'); */
 		
 		
 		
@@ -1023,8 +1023,623 @@ class Managewarranty extends CI_Controller {
 		force_download($name,$data);
 	}
 	
+	function gen_indic_docx()
+	{
+		$PHPWord = new PHPWord();
+		$PHPWord->setDefaultFontName('Cordia New');
+		$PHPWord->setDefaultFontSize(16);
+		$PHPWord->addFontStyle('HeadStyle', array('bold'=>true,'size'=>18));
+		
+		$HeadTables=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center');
+		$ContentTables=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0);
+		$style=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0);
+		$listStyle = array('listType'=>PHPWord_Style_ListItem::TYPE_NUMBER_NESTED);
+		$PHPWord->addParagraphStyle('TextLongStyle', array('align'=>'both','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$PHPWord->addParagraphStyle('TextShortStyle', array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$PHPWord->addTableStyle('myOwnTableStyle',array('borderSize'=>6,'borderColor'=>'000000','valign'=>'center','cellMarginTop'=>80,'cellMarginLeft'=>80,'cellMarginRight'=>80,'cellMarginBottom'=>0));
+		$PHPWord->addParagraphStyle('Textcenter', array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+		// New portrait section
+		$section = $PHPWord->createSection(array('orientation'=>'landscape'));
+		
+		$textrun = $section->createTextRun($style);
+		$textrun->addText('รอบการรายงาน : ','HeadStyle');
+		$textrun->addText('		');
+		$textrun->addImage('images/check.png',array('width'=>35, 'height'=>30));
+		$textrun->addText(' ราย 6 เดือน',null,'TextShortStyle');
+		$textrun->addText('		');
+		$textrun->addImage('images/unchecked.png',array('width'=>35, 'height'=>30));
+		$textrun->addText(' ราย 9 เดือน',null,'TextShortStyle');
+		$textrun->addText('		');
+		$textrun->addImage('images/unchecked.png',array('width'=>35, 'height'=>30));
+		$textrun->addText(' ราย 12 เดือน',null,'TextShortStyle');
+		
+		$textrun = $section->createTextRun($style);
+		$textrun->addText('หน่วยงานที่รับผิดชอบ :','HeadStyle');
+		$textrun->addText('	กรมเอเชียตะวันออก กองเอเชียตะวันออก 2');
+		
+		$textrun = $section->createTextRun($style);
+		$textrun->addText('ผู้ที่รับผิดชอบ :','HeadStyle');
+		$textrun->addText(' นายพัชรพล เผดิมปราชญ์');
+		$textrun->addText('		โทร : ','HeadStyle');
+		$textrun->addText('0 2203 5000 ต่อ ( 14448 )');
+		
+		$textrun = $section->createTextRun($style);
+		$textrun->addText('เป้าหมาย :','HeadStyle');
+		
+		$textrun = $section->createTextRun($style);
+		$textrun->addText('ผลการดำเนินงาน :','HeadStyle');
+		
+		$table = $section->addTable('myOwnTableStyle');
+		
+		$table->addRow();
+		$table->addCell(3000)->addText('แผนงาน',array('bold'=>true),'Textcenter');
+		$table->addCell(15000)->addText('ผลการดำเนินการ',array('bold'=>true),'Textcenter');
+		$table->addCell(3000)->addText('เอกสารแนบ',array('bold'=>true),'Textcenter');
+		
+		$table->addRow();
+		$table->addCell(null)->addText('แผนงานที่ 1 การผลักดันการดำเนินโครงการยุทธศาสตร์ประเทศ (Country Strategy) เพื่อพัฒนาฝีมือแรงงานลาว ได้แก่ โครงการสร้างทักษะรแงงาน/วิชาชีพ',array('bold'=>true),$st);
+		$table->addCell(null)->addText('1.1 จัดการประชุมระหว่างหน่วยงานที่เกี่ยวข้องฝ่ายไทยเพื่อพิจารณากำหนดแนวทางการดำเนินโครงการยุทธศาสตร์ประเทศ (Country Strategy)',array('bold'=>true),$st);
+		$table->addCell(null)->addText('เอกสารแนบ 1',null,$st);
+		
+		$file_name=uniqid('indic',true).'.docx';
+		$path='docs/word'.$file_name;
+		
+		$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
+		$objWriter->save($path);
+
+		$file['full_path']=$_SERVER['DOCUMENT_ROOT'].'/psdg/'.$path;
+		$file['file_name']=$file_name;
+		
+		$this->download_file($file);
+	}
+	
+	
+	function gen_indic_cm()
+	{
+		$this->load->model('personindicator', '',TRUE);
+		$active_evalround = $this->personindicator->getActiveEvalRound();
+		$year  = $active_evalround[0]['year'];
+		$round = $active_evalround[0]['round'];
+		$userID = $this->session->userdata('sessid');
+		$divID  = $this->session->userdata('sessdiv');
+		$depID  = $this->session->userdata('sessdep');
+		
+		$person_indicator_id = $this->personindicator->getPersonIndicatorID($userID, $depID, $divID, $year, $round);
+		
+		$indicators= $this->personindicator->listIndicatorByPID($person_indicator_id);	
+		
+		$PHPWord = new PHPWord();
+		$PHPWord->setDefaultFontName('Cordia New');
+		$PHPWord->setDefaultFontSize(16);
+		$PHPWord->addFontStyle('HeadStyle', array('bold'=>true,'size'=>18));
+		
+		$HeadTables=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center');
+		$ContentTables=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0);
+		$style=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0);
+		
+		$PHPWord->addParagraphStyle('TextLongStyle', array('align'=>'both','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$PHPWord->addParagraphStyle('TextShortStyle', array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$PHPWord->addTableStyle('myOwnTableStyle',array('borderSize'=>6,'borderColor'=>'000000','valign'=>'center','cellMarginTop'=>80,'cellMarginLeft'=>80,'cellMarginRight'=>80,'cellMarginBottom'=>0));
+		
+		$listStyle = array('listType'=>PHPWord_Style_ListItem::TYPE_NUMBER_NESTED);
+		
+		
+		$section = $PHPWord->createSection(array('orientation'=>'landscape','marginLeft'=>1000,'marginRight'=>1000));
+		$PHPWord->setDefaultFontSize(16);
+		$PHPWord->addParagraphStyle('Textcenter', array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+		
+		$section->addText('     เอกสารแนบ',array('bold'=>true),array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		
+		$textrun = $section->createTextRun($style);
+		$textrun->addText('     แบบประเมินผลสัมฤทธิ์ของงาน',array('bold'=>true),array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$textrun->addText('								รอบการประเมิน  	',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		if($round==1){
+			$textrun->addText('รอบที่ 1 ( ',null,array('align'=>'right','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+			$textrun->addImage('images/check_report.png',array('width'=>15, 'height'=>15));
+			$textrun->addText(' ) 		',null,'TextShortStyle');
+			$textrun->addText('รอบที่ 2 (      ) ',null,'TextShortStyle');
+		}else{
+			$textrun->addText('รอบที่ 1 (      )  		',null,'TextShortStyle');
+			$textrun->addText('รอบที่ 2 ( ',null,array('align'=>'right','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+			$textrun->addImage('images/check_report.png',array('width'=>15, 'height'=>15));
+			$textrun->addText(' )',null,array('align'=>'right','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		}
+		
+		$section->addTextBreak(1);
+		
+		$table = $section->addTable();
+		$table->addRow();
+		$table->addCell(8000)->addText('      ชื่อผู้รับการประเมิน  นางสาวประเทืองทิพย์ ศิริวิเทศ',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$table->addCell(8000)->addText('ลงนาม ………………………………………………………………………',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'right'));
+		$table->addRow();
+		$table->addCell(8000)->addText('      ชื่อผู้บังคับบัญชา/ผู้ประเมิน  นางสาววนิดา คุตตวัส',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$table->addCell(8000)->addText('ลงนาม ………………………………………………………………………',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'right'));
+		
+		$section->addTextBreak(0);
+		
+		$table = $section->addTable('myOwnTableStyle');
+		$table->addRow();
+		$table->addCell(500,array('vMerge' => 'restart','valign'=>'center'))->addText('');
+		$table->addCell(10000,array('vMerge' => 'restart','valign'=>'center'))->addText('ตัวชี้วัดผลงาน',array('bold'=>true),$HeadTables);
+		$table->addCell(4000, array('gridSpan' => 5))->addText('คะแนนตามระดับค่าเป้าหมาย',array('bold'=>true),$HeadTables);
+		$table->addCell(1500,array('vMerge' => 'restart','valign'=>'center'))->addText('น้ำหนัก',array('bold'=>true),$HeadTables);
+		$table->addRow();
+		$table->addCell(null,array('vMerge' => 'fusion'));
+		$table->addCell(null,array('vMerge' => 'fusion'));
+		$table->addCell(800)->addText('1',array('bold'=>true),$HeadTables);
+		$table->addCell(800)->addText('2',array('bold'=>true),$HeadTables);
+		$table->addCell(800)->addText('3',array('bold'=>true),$HeadTables);
+		$table->addCell(800)->addText('4',array('bold'=>true),$HeadTables);
+		$table->addCell(800)->addText('5',array('bold'=>true),$HeadTables);
+		$table->addCell(null,array('vMerge' => 'fusion'));
+		
+		foreach($indicators as $ind) {
+			$table->addRow();
+			$table->addCell(null)->addText($ind['order'],null,'Textcenter');
+			$table->addCell(null)->addText($ind['name'],null,'TextShortStyle');
+			$table->addCell(null)->addText($ind['indicator1'],null,'Textcenter');
+			$table->addCell(null)->addText($ind['indicator2'],null,'Textcenter');
+			$table->addCell(null)->addText($ind['indicator3'],null,'Textcenter');
+			$table->addCell(null)->addText($ind['indicator4'],null,'Textcenter');
+			$table->addCell(null)->addText($ind['indicator5'],null,'Textcenter');
+			$table->addCell(null)->addText($ind['weight'],null,'Textcenter');
+			$sumweight +=  $ind['weight'];
+		}
+		
+		$table->addRow();
+		$table->addCell(null)->addText('',null,$HeadTables);
+		$table->addCell(null,array('gridSpan' => 6))->addText('รวม',array('bold'=>true,'underline'=>PHPWord_Style_Font::UNDERLINE_SINGLE),$HeadTables);
+		$table->addCell(null)->addText(number_format($sumweight, 2),null,$HeadTables);
+		
+		$file_name=uniqid('indic',true).'.docx';
+		$path='docs/word'.$file_name;
+		
+		$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
+		$objWriter->save($path);
+
+		$file['full_path']=$_SERVER['DOCUMENT_ROOT'].'/psdg/'.$path;
+		$file['file_name']=$file_name;
+		
+		$this->download_file($file);
+	}
+	
+	
+	function gen_icit_docx_2()
+	{
+		$PHPWord = new PHPWord();
+		$PHPWord->setDefaultFontName('Cordia New');
+		$PHPWord->setDefaultFontSize(16);
+		$PHPWord->addFontStyle('HeadStyle', array('bold'=>true,'size'=>18));
+		
+		$HeadTables=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center');
+		$ContentTables=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0);
+		$style=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0);
+		
+		$PHPWord->addParagraphStyle('TextLongStyle', array('align'=>'both','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$PHPWord->addParagraphStyle('TextShortStyle', array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$PHPWord->addTableStyle('myOwnTableStyle',array('borderSize'=>6,'borderColor'=>'000000','valign'=>'center','cellMarginTop'=>80,'cellMarginLeft'=>80,'cellMarginRight'=>80,'cellMarginBottom'=>0));
+		$PHPWord->addParagraphStyle('Textcenter', array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+		$listStyle = array('listType'=>PHPWord_Style_ListItem::TYPE_NUMBER_NESTED);
+		// New portrait section
+		$section = $PHPWord->createSection();
+		
+		$textrun = $section->createTextRun($style);
+		$textrun->addImage('images/garuda_logo.png',array('width'=>60, 'height'=>60, 'align'=>'left'));
+		$textrun->addText('				บันทึกข้อความ',array('bold'=>true,'size'=>28));
+		
+		$section->addText('ส่วนราชการ  สำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศ โทร. 2006',null,'TextShortStyle');
+		$section->addText('ที่ สค ภายใน/2557				วันที่ 8 กรกฎาคม 2557',null,'TextShortStyle');
+		$section->addText('เรื่อง ขออนุมัติใช้เงินค่าเบี้ยประชุม พร้อมค่าอาหารว่างและเครื่องดื่ม',null,'TextShortStyle');
+		$section->addText('เรียน	ผู้อำนวยการสำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศ',null,'TextShortStyle');
+		$section->addText('	ด้วย คณะกรรมการบริหารความเสี่ยงและการควบคุมภายใน สำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศ จะดำเนินการจัดประชุมใน วันพฤหัสบดีที่ 17 กรกฎาคม 2557 เวลา 13.30 น. เป็นต้นไป ดังนั้นฝ่ายเลขานุการจึงมีความประสงค์ขอใช้เงินเพื่อเป็นค่าเบี้ยประชุม จำนวนเงิน 800.00 บาท และค่าอาหารว่างและเครื่องดื่ม จำนวนเงิน 400.00 บาท รวมเป็นเงินทั้งสิ้น 1,200.00 บาท (-หนึ่งพันสองร้อยบาทถ้วน-)',null,'TextLongStyle');
+		
+		$section->addTextBreak(1);
+		
+		$section->addText('	จึงเรียนมาเพื่อโปรดพิจารณาอนุมัติ',null,'TextShortStyle');
+		
+		$st=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center');
+		$table = $section->addTable();
+		$table->addRow();
+		$table->addCell(4600)->addText('',null,$st);
+		$table->addCell(4600)->addText('…………………………………………',null,$st);
+		$table->addRow();
+		$table->addCell(4600)->addText('',null,$st);
+		$table->addCell(4600)->addText('(นางสาวพิรานันท์ ลางดี)',null,$st);
+		$table->addRow();
+		$table->addCell(4600)->addText('',null,$st);
+		$table->addCell(4600)->addText('กรรมการและผู้ช่วยเลขานุการ',null,$st);
+		
+		$section->addTextBreak(1);
+		
+		$section->addText('เรียน	ผู้อำนวยการสำนักคอมพิวเตอร์ฯ',null,'TextShortStyle');
+		$section->addText('	เห็นสมควรใช้เงิน    รายได้',null,'TextShortStyle');
+		$section->addText('	กองทุน    ทั่วไป',null,'TextShortStyle');
+		$section->addText('หมวด   ค่าตอบแทน',null,'TextShortStyle');
+		$section->addText('งบประมาณคงเหลือจากครั้งก่อน	................................... บาท',null,'TextShortStyle');
+		$section->addText('ขอใช้ครั้งนี้			................................... บาท',null,'TextShortStyle');
+		$section->addText('ยอดคงเหลือ ณ วันที่ 8 ก.ค. 57	.................................... บาท',null,'TextShortStyle');
+		$section->addText('	เห็นสมควรใช้เงิน  รายได้',null,'TextShortStyle');
+		$section->addText('	กองทุน  ทั่วไป',null,'TextShortStyle');
+		$section->addText('หมวด   ค่าใช้สอย',null,'TextShortStyle');
+		$section->addText('งบประมาณคงเหลือจากครั้งก่อน	................................... บาท',null,'TextShortStyle');
+		$section->addText('ขอใช้ครั้งนี้			................................... บาท',null,'TextShortStyle');
+		$section->addText('ยอดคงเหลือ ณ วันที่ 8 ก.ค. 57	.................................... บาท',null,'TextShortStyle');
+		
+		
+		$file_name=uniqid('icit',true).'.docx';
+		$path='docs/word'.$file_name;
+		
+		$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
+		$objWriter->save($path);
+
+		$file['full_path']=$_SERVER['DOCUMENT_ROOT'].'/psdg/'.$path;
+		$file['file_name']=$file_name;
+		
+		$this->download_file($file);
+	}
+	
+	function gen_icit_docx_3()
+	{
+		$PHPWord = new PHPWord();
+		$PHPWord->setDefaultFontName('Cordia New');
+		$PHPWord->setDefaultFontSize(14);
+		$PHPWord->addFontStyle('HeadStyle', array('bold'=>true,'size'=>18));
+		
+		$HeadTables=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center');
+		$ContentTables=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0);
+		$style=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0);
+		
+		$PHPWord->addParagraphStyle('TextLongStyle', array('align'=>'both','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$PHPWord->addParagraphStyle('TextShortStyle', array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$PHPWord->addTableStyle('myOwnTableStyle',array('borderSize'=>6,'borderColor'=>'000000','valign'=>'center','cellMarginTop'=>80,'cellMarginLeft'=>80,'cellMarginRight'=>80,'cellMarginBottom'=>0));
+		$PHPWord->addTableStyle('myOwnTableStyle2',array('borderTopColor'=>'000000','valign'=>'center','cellMarginTop'=>80,'cellMarginLeft'=>80,'cellMarginRight'=>80,'cellMarginBottom'=>0));
+		
+		$listStyle = array('listType'=>PHPWord_Style_ListItem::TYPE_NUMBER_NESTED);
+		// New portrait section
+		$section = $PHPWord->createSection(array('marginLeft'=>1000,'marginRight'=>1000));
+		
+		$section->addText('สัญญาการยืมเงินทดรองจ่าย/เงินทุนหมุนเวียน',array('bold'=>true,'size'=>16),array('align'=>'center','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		//$textrun = $section->createTextRun($style);
+		//$textrun->addText('	ข้าพเจ้า ',null,'TextShortStyle');
+		//$textrun->addText('		นางสาวพิรานันท์  ลางดี		',array('underline'=>PHPWord_Style_Font::UNDERLINE_DOTTED),'TextShortStyle');
+		//$textrun->addText('ตำแหน่ง',null,'TextShortStyle');
+		//$textrun->addText('					',array('underline'=>PHPWord_Style_Font::UNDERLINE_DOTTED),'TextShortStyle');
+		$section->addText('	ข้าพเจ้า  นางสาวพิรานันท์  ลางดี		ตำแหน่ง  นักวิชาการเงินและบัญชี',null,'TextShortStyle');
+		
+		$textrun = $section->createTextRun($style);
+		$textrun->addText('	สถานะ  ',null,'TextShortStyle');
+		$textrun->addText('	( ',null,'TextShortStyle');
+		$textrun->addImage('images/check_report.png',array('width'=>15, 'height'=>15));
+		$textrun->addText(' ) ข้าราชการ	',null,'TextShortStyle');
+		$textrun->addText('	(      ) พนักงานมหาวิทยาลัย',null,'TextShortStyle');
+		
+		$section->addText('สังกัด   สำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศ	มีความประสงค์จะขอยืมเงินทดรองจ่าย/เงินหมุนเวียนจาก',null,'TextShortStyle');
+		$textrun = $section->createTextRun($style);
+		$textrun->addText('	( ',null,'TextShortStyle');
+		$textrun->addImage('images/check_report.png',array('width'=>15, 'height'=>15));
+		$textrun->addText(' ) เงินรายได้ของมหาวิทยาลัย',null,'TextShortStyle');
+		$textrun->addText('			',null,'TextShortStyle');
+		$textrun->addText('	(      ) เงินทุนคณะ',null,'TextShortStyle');
+		$textrun = $section->createTextRun($style);
+		$textrun->addText('	( ',null,'TextShortStyle');
+		$textrun->addImage('images/check_report.png',array('width'=>15, 'height'=>15));
+		$textrun->addText(' ) เงินรายได้ที่ได้รับจัดสรรของส่วนงาน',null,'TextShortStyle');
+		$textrun->addText('			',null,'TextShortStyle');
+		$textrun->addText('(      ) อื่นๆ (ระบุ)  เงินทุนหมุนเวียนหน่วยงาน',null,'TextShortStyle');
+		
+		$section->addText('ในนามของ (หน่วยงาน,ภาควิชา)   สำนักคอมพิวเตอร์ฯ		เพื่อเป็นการทดรองจ่าย/เงินหมุนเวียน',null,'TextShortStyle');
+		$textrun = $section->createTextRun($style);
+		$textrun->addText('	( ',null,'TextShortStyle');
+		$textrun->addImage('images/check_report.png',array('width'=>15, 'height'=>15));
+		$textrun->addText(' ) เงินเดือนและค่าจ้าง',null,'TextShortStyle');
+		$textrun->addText('			',null,'TextShortStyle');
+		$textrun->addText('		(      ) ค่าใช้จ่ายในการเดินทางไปปฏิบัติงาน',null,'TextShortStyle');
+		$textrun = $section->createTextRun($style);
+		$textrun->addText('	( ',null,'TextShortStyle');
+		$textrun->addImage('images/check_report.png',array('width'=>15, 'height'=>15));
+		$textrun->addText(' ) เบี้ยค่าประชุม',null,'TextShortStyle');
+		$textrun->addText('			',null,'TextShortStyle');
+		$textrun->addText('		(      ) เงินบริการวิชาการ',null,'TextShortStyle');
+		$textrun = $section->createTextRun($style);
+		$textrun->addText('	( ',null,'TextShortStyle');
+		$textrun->addImage('images/check_report.png',array('width'=>15, 'height'=>15));
+		$textrun->addText(' ) ค่าใช้จ่ายการฝึกอบรมหรือสัมมนา',null,'TextShortStyle');
+		$textrun->addText('			',null,'TextShortStyle');
+		$textrun->addText('(      ) อื่นๆ (ระบุ)',null,'TextShortStyle');
+		$textrun = $section->createTextRun($style);
+		$textrun->addText('	(      ) เงินทุนหมุนเวียนส่วนงาน/หน่วยงาน',null,'TextShortStyle');
+		
+		$section->addText('จำนวนเงิน  1,200.00   บาท  (-หนึ่งพันสองร้อยบาทถ้วน-)',null,'TextShortStyle');
+		
+		$section->addText('	ข้าพเจ้าสัญญาว่าจะปฏิบัติตามระเบียบของมหาวิทยาลัยทุกประการ โดยจะนำใบเสร็จรับเงินที่ถูกต้องและหรือใบสำคัญจ่ายเงินพร้อมทั้งเงินเหลือจ่าย (ถ้ามี) ส่งคืนภายในระยะเวลาที่กำหนด ถ้าข้าพเจ้าไม่ส่งคืนตามกำหนด ข้าพเจ้ายินยอมให้หักเงินเดือน ค่าจ้าง เบี้ยหวัด บำเหน็จ บำนาญ หรือเงินอื่นใดที่ข้าพเจ้าจะพึงได้ พร้อมดอกเบี้ย อัตราดอกเบี้ยร้อยละ 7 ตามระเบียบว่าด้วยเงินยืมทดรองจ่ายและเงินยืมทุนหมุนเวียนของมหาวิทยาลัย เพื่อชดใช้เงินที่ยืมไปจนครบถ้วนได้ทันที',null,'TextLongStyle');
+		
+		$st=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0);
+		$table = $section->addTable();
+		$table->addRow();
+		$table->addCell(5000)->addText('',null,$st);
+		$table->addCell(5000)->addText('ลงชื่อ ………………………………………… ผู้ยืม',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+		$table->addRow();
+		$table->addCell(5000)->addText('',null,$st);
+		$table->addCell(5000)->addText('(นางสาวพิรานันท์ ลางดี)',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+		
+		$section->addTextBreak(0);
+		
+		$table = $section->addTable('myOwnTableStyle');
+		$table->addRow();
+		$table->addCell(5000,array('borderTopColor'=>'0000FF'))->addText('เสนอ อธิการบดี',null,$st);
+		$table->addCell(5000)->addText('คำอนุมัติ',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+		$table->addRow();
+		$table->addCell(null)->addText('	เห็นสมควรอนุมัติให้   นางสาวพิรานันท์ ลางดี  ยืมเงินทดรองจ่าย/เงินทุนหมุนเวียน จำนวน 1,200.00 บาท เพื่อ ค่าเบี้ยประชุมคณะกรรมการบริหารความเสี่ยงและการควบคุมภายใน',null,$st);
+		$table->addCell(null)->addText('	อนุมัติให้ยืมเงินทดรองจ่าย/เงินทุนหมุนเวียน ตามรายการและเงือนไขข้างต้น จำนวน 1,200.00 บาท (-หนึ่งพันสองร้อยบาทถ้วน-)',null,$st);
+		$table->addRow();
+		$table->addCell(null)->addText('ลงชื่อ............................................',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+		$table->addCell(null)->addText('ลงชื่อ............................................',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+		$table->addRow();
+		$table->addCell(null)->addText('(....................................................)',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+		$table->addCell(null)->addText('(....................................................)',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+		$table->addRow();
+		$table->addCell(null)->addText('ตำแหน่ง........................................',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+		$table->addCell(null)->addText('ตำแหน่ง........................................',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+		$table->addRow();
+		$table->addCell(null)->addText('วันที่.............................................',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+		$table->addCell(null)->addText('วันที่.............................................',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+		
+		$section->addText('ใบรับเงิน',array('bold'=>true),array('align'=>'center','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		
+		$section->addText('	ข้าพเจ้าได้รับเงินยืมทดรองจ่าย/เงินทุนหมุนเวียน จำนวน  1,200.00  บาท ',null,'TextLongStyle');
+		$section->addText('(-หนึ่งพันสองร้อยบาทถ้วน-)',null,'TextLongStyle');
+		
+		$st=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center');
+		$table = $section->addTable();
+		$table->addRow();
+		$table->addCell(5000)->addText('',null,$st);
+		$table->addCell(5000)->addText('…………………………………………',null,$st);
+		$table->addRow();
+		$table->addCell(5000)->addText('',null,$st);
+		$table->addCell(5000)->addText('(นางสาวพิรานันท์ ลางดี)',null,$st);
+		$table->addRow();
+		$table->addCell(5000)->addText('',null,$st);
+		$table->addCell(5000)->addText('วันที่.............................................',null,$st);
+		
+		$file_name=uniqid('icit',true).'.docx';
+		$path='docs/word'.$file_name;
+		
+		$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
+		$objWriter->save($path);
+
+		$file['full_path']=$_SERVER['DOCUMENT_ROOT'].'/psdg/'.$path;
+		$file['file_name']=$file_name;
+		
+		$this->download_file($file);
+	}
+	
+	function gen_icit_docx_4()
+	{
+		$PHPWord = new PHPWord();
+		$PHPWord->setDefaultFontName('Cordia New');
+		$PHPWord->setDefaultFontSize(16);
+		$PHPWord->addFontStyle('HeadStyle', array('bold'=>true,'size'=>18));
+		
+		$HeadTables=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center');
+		$ContentTables=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0);
+		$style=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0);
+		
+		$PHPWord->addParagraphStyle('TextLongStyle', array('align'=>'both','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$PHPWord->addParagraphStyle('TextShortStyle', array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$PHPWord->addTableStyle('myOwnTableStyle',array('borderSize'=>6,'borderColor'=>'000000','valign'=>'center','cellMarginTop'=>80,'cellMarginLeft'=>80,'cellMarginRight'=>80,'cellMarginBottom'=>0));
+		
+		$listStyle = array('listType'=>PHPWord_Style_ListItem::TYPE_NUMBER_NESTED);
+		// New portrait section
+		$section = $PHPWord->createSection();
+		
+		$section->addText('ที่ ..................................................', array('bold'=>true),array('align'=>'right','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$section->addText('วันที่ ..................................................', array('bold'=>true),array('align'=>'right','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$section->addText('ใบสำคัญรับเงิน',array('bold'=>true),array('align'=>'center','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		
+		$section->addText('	ข้าพเจ้า  ผศ.ชาญชัย กุศลจิตกรณ์  ที่อยู่  25  ซอยประชานิเวศน์ 3 ซอย 8/3 แยก 8 ต.ท่าทราย อ.เมือง จ.นนทบุรี  ได้รับเงินจากมหาลัยเทดโนโลยีพระจอมเกล้าพระนครเหนือ ดังรายการต่อไปนี้',null,'TextLongStyle');
+		
+		$section->addTextBreak(1);
+		
+		$table = $section->addTable('myOwnTableStyle');
+		$table->addRow();
+		$table->addCell(10000)->addText('รายการ',array('bold'=>true),$HeadTables);
+		$table->addCell(2000)->addText('จำนวนเงิน',array('bold'=>true),$HeadTables);
+		
+		$table->addRow(3000);
+		$table->addCell(null)->addText('	ค่าตอบแทนเบี้ยประชุมสำหรับการประชุมคณะกรรมการบริหารความเสี่ยงและการควบคุมภายใน วันที่ 17 กรกฎาคม 2557',null,$ContentTables);
+		$table->addCell(null)->addText('100.00',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'right'));
+		$table->addRow();
+		$table->addCell(null)->addText('รวมเป็นเงิน (บาท)',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+		$table->addCell(null)->addText('100.00',null,array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'right'));
+		
+		$section->addTextBreak(1);
+		
+		$section->addText('จำนวนเงิน  หนึ่งร้อยบาทถ้วน (ตัวหนังสือ)',null,array('align'=>'right','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		
+		$section->addTextBreak(2);
+		
+		$section->addText('...................................... ผู้รับเงิน',null,array('align'=>'right','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$section->addText('.................................... ผู้จ่ายเงิน',null,array('align'=>'right','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		
+		
+		$file_name=uniqid('icit',true).'.docx';
+		$path='docs/word'.$file_name;
+		
+		$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
+		$objWriter->save($path);
+
+		$file['full_path']=$_SERVER['DOCUMENT_ROOT'].'/psdg/'.$path;
+		$file['file_name']=$file_name;
+		
+		$this->download_file($file);
+	}
+	function gen_icit_docx_5()
+	{
+		$PHPWord = new PHPWord();
+		$PHPWord->setDefaultFontName('Cordia New');
+		$PHPWord->setDefaultFontSize(16);
+		$PHPWord->addFontStyle('HeadStyle', array('bold'=>true,'size'=>18));
+		
+		$HeadTables=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center');
+		$ContentTables=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center');
+		$style=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0);
+		
+		$PHPWord->addParagraphStyle('TextLongStyle', array('align'=>'both','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$PHPWord->addParagraphStyle('TextShortStyle', array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$PHPWord->addTableStyle('myOwnTableStyle',array('borderSize'=>6,'borderColor'=>'000000','valign'=>'center','cellMarginTop'=>80,'cellMarginLeft'=>80,'cellMarginRight'=>80,'cellMarginBottom'=>0));
+		
+		$listStyle = array('listType'=>PHPWord_Style_ListItem::TYPE_NUMBER_NESTED);
+		// New portrait section
+		$section = $PHPWord->createSection(array('marginLeft'=>1000,'marginRight'=>1000));
+		$section->addText('รายชื่อผู้เข้าร่วมประชุม', array('bold'=>true),array('align'=>'center','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$section->addText('คณะกรรมการบริหารความเสี่ยงและการควบคุมภายใน', array('bold'=>true),array('align'=>'center','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$section->addText('สำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ', array('bold'=>true),array('align'=>'center','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$section->addText('วันพฤหัสบดีที่ 17 กรกฎาคม 2557', array('bold'=>true),array('align'=>'center','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$section->addText('ณ ห้องประชุม 512 ชั้น 5 อาคารเอนกประสงค์', array('bold'=>true),array('align'=>'center','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		
+		$section->addTextBreak(1);
+		
+		$table = $section->addTable('myOwnTableStyle');
+		$table->addRow();
+		$table->addCell(500)->addText('ที่',array('bold'=>true),$HeadTables);
+		$table->addCell(4000)->addText('ชื่อ - สกุล',array('bold'=>true),$HeadTables);
+		$table->addCell(2800)->addText('ตำแหน่ง',array('bold'=>true),$HeadTables);
+		$table->addCell(1500)->addText('ลายมือชื่อ',array('bold'=>true),$HeadTables);
+		$table->addCell(1200)->addText('หมายเหตุ',array('bold'=>true),$HeadTables);
+		$table->addRow();
+		$table->addCell(null)->addText('1',null,$ContentTables);
+		$table->addCell(null)->addText('ผู้ช่วยศาสตราจารย์ชาญชัย กุศลจิตกรณ์',null);
+		$table->addCell(null)->addText('ประธานกรรมการ',null,$ContentTables);
+		$table->addCell(null)->addText('',null);
+		$table->addCell(null)->addText('',null);
+		$table->addRow();
+		$table->addCell(null)->addText('2',null,$ContentTables);
+		$table->addCell(null)->addText('ผู้ช่วยศาสตราจารย์ ดร.สุพจน์ จันทร์วิวัฒน์',null);
+		$table->addCell(null)->addText('กรรมการ',null,$ContentTables);
+		$table->addCell(null)->addText('',null);
+		$table->addCell(null)->addText('',null);
+		$table->addRow();
+		$table->addCell(null)->addText('3',null,$ContentTables);
+		$table->addCell(null)->addText('ผู้ช่วยศาสตราจารย์ ดร.ชูพันธุ์ รัตนโภคา',null);
+		$table->addCell(null)->addText('กรรมการ',null,$ContentTables);
+		$table->addCell(null)->addText('',null);
+		$table->addCell(null)->addText('',null);
+		$table->addRow();
+		$table->addCell(null)->addText('4',null,$ContentTables);
+		$table->addCell(null)->addText('อาจารย์ณัฐวุฒิ สร้อยดอกสน',null);
+		$table->addCell(null)->addText('กรรมการ',null,$ContentTables);
+		$table->addCell(null)->addText('',null);
+		$table->addCell(null)->addText('',null);
+		$table->addRow();
+		$table->addCell(null)->addText('5',null,$ContentTables);
+		$table->addCell(null)->addText('นายวัชร พิชยนันท์',null);
+		$table->addCell(null)->addText('กรรมการ',null,$ContentTables);
+		$table->addCell(null)->addText('',null);
+		$table->addCell(null)->addText('',null);
+		$table->addRow();
+		$table->addCell(null)->addText('6',null,$ContentTables);
+		$table->addCell(null)->addText('อิศเรศ สมณะ',null);
+		$table->addCell(null)->addText('กรรมการ',null,$ContentTables);
+		$table->addCell(null)->addText('',null);
+		$table->addCell(null)->addText('',null);
+		$table->addRow();
+		$table->addCell(null)->addText('7',null,$ContentTables);
+		$table->addCell(null)->addText('นางสาวชาลินทร์ เกรียงสินยศ',null);
+		$table->addCell(null)->addText('กรรมการและเลขานุการ',null,$ContentTables);
+		$table->addCell(null)->addText('',null);
+		$table->addCell(null)->addText('',null);
+		$table->addRow();
+		$table->addCell(null)->addText('8',null,$ContentTables);
+		$table->addCell(null)->addText('นางสาวพิรานันท์ ลางดี',null);
+		$table->addCell(null)->addText('กรรมการและผู้ช่วยเลขานุการ',null,$ContentTables);
+		$table->addCell(null)->addText('',null);
+		$table->addCell(null)->addText('',null);
+		
+		$section->addTextBreak(1);
+		
+		$section->addText('เริ่มประชุมเวลา ............................. น.',null,'TextShortStyle');
+		$section->addText('เลิกประชุมเวลา ............................. น.',null,'TextShortStyle');
+		
+		$section->addTextBreak(1);
+		
+		$section->addText('ลงชื่อ ……………………………… ผู้จดรายงานการประชุม',null,'TextShortStyle');
+		$section->addText('	(นางสาวพิรานันท์ ลางดี)',null,'TextShortStyle');
+		
+		
+		$file_name=uniqid('icit',true).'.docx';
+		$path='docs/word'.$file_name;
+		
+		$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
+		$objWriter->save($path);
+
+		$file['full_path']=$_SERVER['DOCUMENT_ROOT'].'/psdg/'.$path;
+		$file['file_name']=$file_name;
+		
+		$this->download_file($file);
+	}
 	
 	
 	
-	
+	function gen_icit_docx_6()
+	{
+		$PHPWord = new PHPWord();
+		$PHPWord->setDefaultFontName('Cordia New');
+		$PHPWord->setDefaultFontSize(16);
+		$PHPWord->addFontStyle('HeadStyle', array('bold'=>true,'size'=>18));
+		
+		$HeadTables=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center');
+		$ContentTables=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0);
+		$style=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0);
+		
+		$PHPWord->addParagraphStyle('TextLongStyle', array('align'=>'both','spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$PHPWord->addParagraphStyle('TextShortStyle', array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0));
+		$PHPWord->addTableStyle('myOwnTableStyle',array('borderSize'=>6,'borderColor'=>'000000','valign'=>'center','cellMarginTop'=>80,'cellMarginLeft'=>80,'cellMarginRight'=>80,'cellMarginBottom'=>0));
+		$PHPWord->addParagraphStyle('Textcenter', array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center'));
+		$listStyle = array('listType'=>PHPWord_Style_ListItem::TYPE_NUMBER_NESTED);
+		// New portrait section
+		$section = $PHPWord->createSection();
+		
+		$textrun = $section->createTextRun($style);
+		$textrun->addImage('images/garuda_logo.png',array('width'=>60, 'height'=>60, 'align'=>'left'));
+		$textrun->addText('				บันทึกข้อความ',array('bold'=>true,'size'=>28));
+		
+		$section->addText('ส่วนราชการ  สำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศ โทร. 2006',null,'TextShortStyle');
+		$section->addText('ที่ สค ภายใน/2557				วันที่ 21 กรกฎาคม 2557',null,'TextShortStyle');
+		$section->addText('เรื่อง ขออนุมัติใช้เงินค่าเบี้ยประชุม พร้อมค่าอาหารว่างและเครื่องดื่ม',null,'TextShortStyle');
+		$section->addText('เรียน	ผู้อำนวยการสำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศ',null,'TextShortStyle');
+		$section->addText('	ตามที่ คณะกรรมการบริหารความเสี่ยงและการควบคุมภายใน สำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศ ได้ขออนุมัติใช้เงินสำหรับการประชุมในวันที่ 17 กรกฎาคม 2557 บัดนี้ คณะกรรมการฯ ได้ดำเนินการจัดการประชุมเสร็จสิ้นเป็นที่เรียบร้อยแล้ว และขออนุมัติเบิกค่าเบี้ยประชุมจำนวนเงิน 700.00 บาท และค่าอาหารว่างและเครื่องดื่ม จำนวนเงิน 320.00 บาท รวมเป็นเงิน 1,020.00 บาท (-หนึ่งพันยี่สิบบาทถ้วน-)',null,'TextLongStyle');
+		
+		$section->addTextBreak(1);
+		
+		$section->addText('	จึงเรียนมาเพื่อโปรดพิจารณาอนุมัติ',null,'TextShortStyle');
+		
+		$st=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center');
+		$table = $section->addTable();
+		$table->addRow();
+		$table->addCell(4600)->addText('',null,$st);
+		$table->addCell(4600)->addText('…………………………………………',null,$st);
+		$table->addRow();
+		$table->addCell(4600)->addText('',null,$st);
+		$table->addCell(4600)->addText('(นางสาวพิรานันท์ ลางดี)',null,$st);
+		$table->addRow();
+		$table->addCell(4600)->addText('',null,$st);
+		$table->addCell(4600)->addText('กรรมการและผู้ช่วยเลขานุการ',null,$st);
+		
+		$section->addTextBreak(1);
+		
+		$section->addText('ยืม	1,200.00 บาท',null,'TextShortStyle');
+		$section->addText('ใช้	1,020.00 บาท',null,'TextShortStyle');
+		$section->addText('คืน	180.00 บาท',null,'TextShortStyle');
+		
+		$file_name=uniqid('icit',true).'.docx';
+		$path='docs/word'.$file_name;
+		
+		$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
+		$objWriter->save($path);
+
+		$file['full_path']=$_SERVER['DOCUMENT_ROOT'].'/psdg/'.$path;
+		$file['file_name']=$file_name;
+		
+		$this->download_file($file);
+	}
 }
