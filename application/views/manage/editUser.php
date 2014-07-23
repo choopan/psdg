@@ -38,6 +38,8 @@ td.highlight {
 						<?php }?>	
 								<form action="<?php echo site_url("manageuser/editUser_save"); ?>" method="post" name="editUser">
 									<input type="hidden" name="id" value="<?php echo $data[0]['USERID'];?>" class="form-control" required>
+									<input type="hidden" name="un" value="<?php echo $data[0]['PWUSERNAME'];?>" class="form-control" required>
+									<input type="hidden" name="pw" value="<?php echo $data[0]['PWPASSWORD'];?>" class="form-control" required>
 									<div class="row">
 										<div class="col-lg-4">
 										<div class="form-group">
@@ -159,23 +161,7 @@ td.highlight {
 												</label>
 												
 												<label class="checkbox-inline">
-													<?php if($data[0]['admin_dep']==1): ?>
-													<input type="radio" value="admin_dep" name="admin" checked >ระดับกรม
-													<?php else:?>
-													<input type="radio" value="admin_dep" name="admin" >ระดับกรม
-													<?php endif?>
-												</label>
-												
-												<label class="checkbox-inline">
-													<?php if($data[0]['admin_div']==1): ?>
-													<input type="radio" value="admin_div" name="admin" checked >ระดับกอง
-													<?php else:?>
-													<input type="radio" value="admin_div" name="admin" >ระดับกอง
-													<?php endif?>
-												</label>
-												
-												<label class="checkbox-inline">
-													<?php if($data[0]['admin_div']==0&&$data[0]['admin_min']==0&&$data[0]['admin_dep']==0): ?>
+													<?php if($data[0]['admin_min']==0): ?>
 													<input type="radio" value="admin_no" name="admin" checked >ไม่มีสิทธิ์
 													<?php else:?>
 													<input type="radio" value="admin_no" name="admin" >ไม่มีสิทธิ์

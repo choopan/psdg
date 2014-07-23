@@ -6,6 +6,7 @@ class Main extends CI_Controller {
 	{
 	   parent::__construct();
 	   $this->load->model('user','',TRUE);
+	   $this->load->model('user_manage','',TRUE);
 	   $this->load->model('personindicator', '', TRUE);
 	   $this->load->helper('url');
 	}

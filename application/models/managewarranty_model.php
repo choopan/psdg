@@ -91,7 +91,7 @@ class Managewarranty_model extends CI_Model
 		$this->db->_protect_identifiers=false;
 		$this->db->select("pwemployee.userid, CONCAT(pwfname,' ', pwlname) as pwname, pwposition.PWNAME as poname, pwemployee.PWPOSITION as positionid, department.name as depname, department.id as depid");
 		$this->db->from('pwemployee');	
-		$this->db->join('pwposition', 'pwposition.pwposition = pwemployee.pwposition');	
+		$this->db->join('pwposition', 'pwposition.pwposition = pwemployee.position');	
 		$this->db->join('department', 'pwemployee.department = department.id');
 		$this->db->like('pwfname', $term,'after');
 		$query = $this->db->get();

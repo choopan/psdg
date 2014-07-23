@@ -3,10 +3,31 @@ Class User extends CI_Model
 {
  function login($username, $password)
  {
-   $this -> db -> select('USERID, PWUSERNAME, PWPASSWORD, PWEFNAME, PWELNAME, admin_min, admin_dep, admin_div, division, department');
+   $this -> db -> select('USERID, PWUSERNAME, PWPASSWORD, PWEFNAME, PWELNAME, admin_min, division, department');
    $this -> db -> from('pwemployee');
    $this -> db -> where('PWUSERNAME', $username);
    $this -> db -> where('PWPASSWORD', MD5($password));
+   $this -> db -> limit(1);
+
+   $query = $this -> db -> get();
+
+   if($query -> num_rows() == 1)
+   {
+     return $query->result();
+   }
+   else
+   {
+     return false;
+   }
+ }
+ 
+ function login2($username, $password)
+ {
+   $this -> db -> select('pwemployee.USERID as USERID, PWUSERNAME, PWPASSWORD, PWEFNAME, PWELNAME, user_indicator.division as division, user_indicator.department as department, user_indicator.admin_dep as admin_dep,approve_dep, approve_div, set_div, report_div');
+   $this -> db -> from('user_indicator');
+   $this -> db -> join('pwemployee','user_indicator.userid = pwemployee.USERID','left');
+   $this -> db -> where('username', $username);
+   $this -> db -> where('password', MD5($password));
    $this -> db -> limit(1);
 
    $query = $this -> db -> get();
@@ -293,6 +314,109 @@ Class User extends CI_Model
     return $result;
  }
  
+ //==================== indicator user manage =========================
+ function user_indicator_view()
+ {
+	$result = $this->db->select('pwemployee.USERID as USERID, PWFNAME, PWLNAME, department.name as dep_name, division.name as div_name, pwemployee.PWEMAIL as email,user_indicator.admin_dep as admin_dep,user_indicator.approve_dep as approve_dep,user_indicator.approve_div as approve_div,user_indicator.set_div as set_div,user_indicator.report_div as report_div')
+					   ->from('user_indicator')
+					   ->join('pwemployee','user_indicator.userid = pwemployee.USERID','left')
+					   ->join('department','pwemployee.department = department.id','left')
+					   ->join('division','pwemployee.division = division.id','left')
+					   ->where('pwemployee.enabled',1)
+					   ->get()
+					   ->result_array();
+    return $result;
+ }
  
+ function user_indicator_view2()
+ {
+	$result = $this->db->select('pwemployee.USERID as USERID, PWFNAME, PWLNAME, department.name as dep_name, division.name as div_name, pwemployee.PWEMAIL as email')
+					   ->from('user_indicator')
+					   ->join('pwemployee','user_indicator.userid = pwemployee.USERID','left')
+					   ->join('department','pwemployee.department = department.id','left')
+					   ->join('division','pwemployee.division = division.id','left')
+					   ->where('user_indicator.report_div',1)
+					   ->where('pwemployee.enabled',1)
+					   ->get()
+					   ->result_array();
+    return $result;
+ }
+ 
+ function get_user_name()
+ {
+	$result = $this->db->select('pwemployee.USERID as USERID, PWFNAME, PWLNAME, department, division')
+					   ->from('pwemployee')
+					   ->order_by('PWFNAME','ASC')
+					   ->get()
+					   ->result_array();
+	return $result;
+ }
+ 
+ function get_user_name2()
+ {
+	$result = $this->db->select('pwemployee.USERID as USERID, PWFNAME, PWLNAME, department, division')
+					   ->from('pwemployee')
+					   ->order_by('PWFNAME','ASC')
+					   ->get()
+					   ->result_array();
+	return $result;
+ }
+ 
+ function deleteAll_user()
+ {
+	$query=$this->db->query('DELETE from user_indicator');
+			 
+	return $query;
+ }
+ 
+ function user_del_info($id)
+ {
+	$query=$this->db->where('userid',$id)
+					->delete('user_indicator');
+			 
+	return $query;
+ }
+ 
+ function autocompleteResponse($term)
+ {
+		$this->db->_protect_identifiers=false;
+		$this->db->select("pwemployee.userid, CONCAT(pwfname,' ', pwlname) as pwname, department, division");
+		$this->db->from('pwemployee');
+		$this->db->like('pwfname', $term,'after');
+		$query = $this->db->get();
+		return $query->result_array();
+ }
+	
+ function indicatorUser_save($user_id,$username,$password,$department,$division,$damin_dep,$approve_dep,$approve_div,$set_div)
+ {
+		$query=$this->db->set('userid',$user_id)
+				 ->set('username',$username)
+				 ->set('password',md5($password))
+				 ->set('department',$department)
+				 ->set('division',$division)
+				 ->set('admin_dep',$damin_dep)
+				 ->set('approve_dep',$approve_dep)
+				 ->set('approve_div',$approve_div)
+				 ->set('set_div',$set_div)
+				 ->set('report_div',0)
+				 ->insert('user_indicator');
+		return $query;		 
+ }
+ 
+ function indicatorUser_save2($user_id,$username,$password,$department,$division,$damin_dep,$approve_dep,$approve_div,$set_div,$report_div)
+ {
+		$query=$this->db->set('userid',$user_id)
+				 ->set('username',$username)
+				 ->set('password',md5($password))
+				 ->set('department',$department)
+				 ->set('division',$division)
+				 ->set('admin_dep',$damin_dep)
+				 ->set('approve_dep',$approve_dep)
+				 ->set('approve_div',$approve_div)
+				 ->set('set_div',$set_div)
+				 ->set('report_div',$report_div)
+				 ->insert('user_indicator');
+		return $query;		 
+ }
 }
 ?>

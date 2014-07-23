@@ -101,22 +101,10 @@ class Manageuser extends CI_Controller {
 		}else{
 			$admin_min=0;
 		}
-		
-		if($admin_min_0=="admin_dep"){
-			$admin_dep=1;
-		}else{
-			$admin_dep=0;
-		}
-		
-		if($admin_min_0=="admin_div"){
-			$admin_div=1;
-		}else{
-			$admin_div=0;
-		}
 
 		if($password==$retry_password)
 		{
-			$result=$this->user_manage->addUser_save($username,md5($password),$fname,$lname,$efname,$elname,$gender,$email,$tel,$mobile,$department,$division,$level,$admin_min,$admin_dep,$admin_div,$position_ty,$position,$position_lv);
+			$result=$this->user_manage->addUser_save($username,md5($password),$fname,$lname,$efname,$elname,$gender,$email,$tel,$mobile,$department,$division,$level,$admin_min,$position_ty,$position,$position_lv);
 			
 			$data['data']=$this->user_manage->get_department_1();
 			$data['position']=$this->user_manage->get_position_type();
@@ -156,6 +144,8 @@ class Manageuser extends CI_Controller {
 	function editUser_save()
 	{
 		$id=$this->input->post('id');
+		$username=$this->input->post('un');
+		$password=$this->input->post('pw');
 		$fname=$this->input->post('fname');
 		$lname=$this->input->post('lname');
 		$efname=$this->input->post('efname');
@@ -176,19 +166,7 @@ class Manageuser extends CI_Controller {
 			$admin_min=0;
 		}
 		
-		if($admin_min_0=="admin_dep"){
-			$admin_dep=1;
-		}else{
-			$admin_dep=0;
-		}
-		
-		if($admin_min_0=="admin_div"){
-			$admin_div=1;
-		}else{
-			$admin_div=0;
-		}
-		
-		$result=$this->user_manage->editUser_save($id,$fname,$lname,$efname,$elname,$email,$tel,$mobile,$department,$division,$position_ty,$position,$position_lv,$admin_min,$admin_dep,$admin_div);
+		$result=$this->user_manage->editUser_save($id,$fname,$lname,$efname,$elname,$email,$tel,$mobile,$department,$division,$position_ty,$position,$position_lv,$admin_min);
 		
 		$data['department']=$this->user_manage->get_department();
 		$data['position']=$this->user_manage->get_position_type();

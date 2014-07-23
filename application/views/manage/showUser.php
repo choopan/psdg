@@ -138,14 +138,7 @@ td.highlight {
 											<div class="form-group">
 											<label>ผู้ดูแลระบบ * </label>
 													<?php if($data[0]['admin_min']==1): ?>
-													<input type="text" class="form-control" value="ระดับกระทรวง" readonly>
-													
-													<?php elseif($data[0]['admin_dep']==1) :?>
-													<input type="text" class="form-control" value="ระดับกรม" readonly>
-													
-													<?php elseif($data[0]['admin_div']==1) :?>
-													<input type="text" class="form-control" value="ระดับกอง" readonly>
-													
+													<input type="text" class="form-control" value="ระดับกระทรวง" readonly>													
 													<?php else :?>
 													<input type="text" class="form-control" value="ไม่มีสิทธิ์" readonly>
 													<?php endif?>
