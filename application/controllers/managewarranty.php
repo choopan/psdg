@@ -1028,7 +1028,7 @@ class Managewarranty extends CI_Controller {
 		$PHPWord = new PHPWord();
 		$PHPWord->setDefaultFontName('Cordia New');
 		$PHPWord->setDefaultFontSize(16);
-		$PHPWord->addFontStyle('HeadStyle', array('bold'=>true,'size'=>18));
+		$PHPWord->addFontStyle('HeadStyle', array('bold'=>true));
 		
 		$HeadTables=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0,'align'=>'center');
 		$ContentTables=array('spacing'=>0,'spaceBefore'=>0,'spaceAfter'=>0);
@@ -1041,17 +1041,46 @@ class Managewarranty extends CI_Controller {
 		// New portrait section
 		$section = $PHPWord->createSection(array('orientation'=>'landscape'));
 		
+		$table = $section->addTable();
+		$table->addRow();
+		$table->addCell(3000)->addText('ชื่อตัวชี้วัด :',array('bold'=>true),'TextShortStyle');
+		$table->addCell(12000)->addText('1.1 ร้อยละเฉลี่ยความสำเร็จในการดำเนินความสัมพันธ์กับประเทสเพื่อนบ้าน (ลาว)',array('bold'=>true),'TextShortStyle');
+		$table->addRow();
+		$table->addCell(null)->addText('ประเด็นความสำเร็จ :',array('bold'=>true),'TextShortStyle');
+		$table->addCell(null)->addText('การส่งเสริมความสัมพันธ์ระดับสูงระหว่างไทย - ลาว ด้านการพัฒนาความเชื่อมโยง (Connecttivity) และด้านการทูตประชาชน (Public diplomacy)',array('bold'=>true),'TextShortStyle');
+		$table->addRow();
+		$table->addCell(null)->addText('');
+		$cell=$table->addCell(null);
+		$textrun = $cell->createTextRun($style);
+		$textrun->addText('แผนงาน / โครงการ',array('underline'=>PHPWord_Style_Font::UNDERLINE_SINGLE),'TextShortStyle');
+		$textrun = $cell->createTextRun($style);
+		$textrun->addText('	1. การผลักดันการดำเนินโครงการยุทธศาสตร์ประเทศ (Country Strategy) เพื่อพัฒนาฝีมือแรงงานลาว ได้แก่ โครงการสร้างทักษะแรงงาน/วิชาชีพ',null,'TextShortStyle');
+		$textrun = $cell->createTextRun($style);
+		$textrun->addText('	2. ผลักดันการจัดโครงการหรือกิจกรรมที่ส่งเสริมการกระชับความสัมพันธ์กับผู้นำรุ่นใหม่ในทางการเมืองหรือเศรษฐกิจสังคมของ สปปลาว. "โครงการ Young Leaders" ในปี 2557',null,'TextShortStyle');
+		$textrun = $cell->createTextRun($style);
+		$textrun->addText('	3. ผลักดันความร่วมมือต้านการพัฒนาความเชื่อมโยงในภูมิภาคให้คืบหน้า',null,'TextShortStyle');
+
+		
 		$textrun = $section->createTextRun($style);
 		$textrun->addText('รอบการรายงาน : ','HeadStyle');
 		$textrun->addText('		');
-		$textrun->addImage('images/check.png',array('width'=>35, 'height'=>30));
+		
+		$textrun->addText('( ',null,'TextShortStyle');
+		$textrun->addImage('images/check_report.png',array('width'=>15, 'height'=>15));
+		$textrun->addText(' ) ราย 6 เดือน ',null,'TextShortStyle');
+		$textrun->addText('		');
+		$textrun->addText('(      ) ราย 6 เดือน',null,'TextShortStyle');
+		$textrun->addText('		');
+		$textrun->addText('(      ) ราย 12 เดือน',null,'TextShortStyle');
+		
+		/* $textrun->addImage('images/check.png',array('width'=>35, 'height'=>30));
 		$textrun->addText(' ราย 6 เดือน',null,'TextShortStyle');
 		$textrun->addText('		');
 		$textrun->addImage('images/unchecked.png',array('width'=>35, 'height'=>30));
 		$textrun->addText(' ราย 9 เดือน',null,'TextShortStyle');
 		$textrun->addText('		');
 		$textrun->addImage('images/unchecked.png',array('width'=>35, 'height'=>30));
-		$textrun->addText(' ราย 12 เดือน',null,'TextShortStyle');
+		$textrun->addText(' ราย 12 เดือน',null,'TextShortStyle'); */
 		
 		$textrun = $section->createTextRun($style);
 		$textrun->addText('หน่วยงานที่รับผิดชอบ :','HeadStyle');
@@ -1063,8 +1092,22 @@ class Managewarranty extends CI_Controller {
 		$textrun->addText('		โทร : ','HeadStyle');
 		$textrun->addText('0 2203 5000 ต่อ ( 14448 )');
 		
-		$textrun = $section->createTextRun($style);
-		$textrun->addText('เป้าหมาย :','HeadStyle');
+		$listStyle = array('listType'=>PHPWord_Style_ListItem::TYPE_NUMBER_NESTED);
+		
+		$table = $section->addTable();
+		$table->addRow();
+		$table->addCell(1500)->addText('เป้าหมาย :',array('bold'=>true),'TextShortStyle');
+		$cell=$table->addCell(14000);
+		$textrun = $cell->createTextRun($style);
+		$textrun->addText('แผนงานที่ 1 ',array('bold'=>true,'underline'=>PHPWord_Style_Font::UNDERLINE_SINGLE),'TextShortStyle');
+		$textrun->addText(' การผลักดันการดำเนินโครงการยุทธศาสตร์ประเทศ (Country Strategy) เพื่อพัมนาฝีมือแรงงานลาว ได้แก่ โครงการสร้างทักษะแรงงาน/วิชาชีพ',array('bold'=>true),'TextShortStyle');
+		$textrun = $cell->createTextRun($style);
+		$textrun->addText('3.1 จัดการประชุมระหว่างหน่วยงานที่เกี่ยวข้องฝ่ายไทยเพื่อพิจารณากำหนดแนวทางการดำเนินโครงการยุทธศาสตร์ประเทศ (Country Strategy)',null,'TextShortStyle');
+		$textrun = $cell->createTextRun($style);
+		$textrun->addText('3.2 กระทรวงฯ พิจารณาจัดสรรงบประมาณเพื่อให้ดำเนินโครงการสร้างทักษะแรงงาน/วิชาชีพได้ตามเป้าหมายที่กำหนด',null,'TextShortStyle');
+		$textrun = $cell->createTextRun($style);
+		$textrun->addText('3.3 สามารถดำเนินโครงการดังกล่าวได้ในบริเวณพื้นที่ไม่ต่ำกว่า 4 จังหวัดตามแนวชายแดนไทย-ลาว',null,'TextShortStyle');
+		//$cell->addListItem('dd', 0,null,$listStyle);
 		
 		$textrun = $section->createTextRun($style);
 		$textrun->addText('ผลการดำเนินงาน :','HeadStyle');
@@ -1077,9 +1120,9 @@ class Managewarranty extends CI_Controller {
 		$table->addCell(3000)->addText('เอกสารแนบ',array('bold'=>true),'Textcenter');
 		
 		$table->addRow();
-		$table->addCell(null)->addText('แผนงานที่ 1 การผลักดันการดำเนินโครงการยุทธศาสตร์ประเทศ (Country Strategy) เพื่อพัฒนาฝีมือแรงงานลาว ได้แก่ โครงการสร้างทักษะรแงงาน/วิชาชีพ',array('bold'=>true),$st);
-		$table->addCell(null)->addText('1.1 จัดการประชุมระหว่างหน่วยงานที่เกี่ยวข้องฝ่ายไทยเพื่อพิจารณากำหนดแนวทางการดำเนินโครงการยุทธศาสตร์ประเทศ (Country Strategy)',array('bold'=>true),$st);
-		$table->addCell(null)->addText('เอกสารแนบ 1',null,$st);
+		$table->addCell(null)->addText('แผนงานที่ 1 การผลักดันการดำเนินโครงการยุทธศาสตร์ประเทศ (Country Strategy) เพื่อพัฒนาฝีมือแรงงานลาว ได้แก่ โครงการสร้างทักษะแรงงาน/วิชาชีพ',array('bold'=>true),'TextShortStyle');
+		$table->addCell(null)->addText('	1.1 จัดการประชุมระหว่างหน่วยงานที่เกี่ยวข้องฝ่ายไทยเพื่อพิจารณากำหนดแนวทางการดำเนินโครงการยุทธศาสตร์ประเทศ (Country Strategy)',array('bold'=>true),'TextShortStyle');
+		$table->addCell(null)->addText('เอกสารแนบ 1',null,'TextShortStyle');
 		
 		$file_name=uniqid('indic',true).'.docx';
 		$path='docs/word'.$file_name;
@@ -1308,30 +1351,27 @@ class Managewarranty extends CI_Controller {
 		
 		$textrun = $section->createTextRun($style);
 		$textrun->addText('	สถานะ  ',null,'TextShortStyle');
+		$textrun->addText('	(      ) ข้าราชการ	',null,'TextShortStyle');
 		$textrun->addText('	( ',null,'TextShortStyle');
 		$textrun->addImage('images/check_report.png',array('width'=>15, 'height'=>15));
-		$textrun->addText(' ) ข้าราชการ	',null,'TextShortStyle');
-		$textrun->addText('	(      ) พนักงานมหาวิทยาลัย',null,'TextShortStyle');
+		$textrun->addText(' ) พนักงานมหาวิทยาลัย	',null,'TextShortStyle');
+		
 		
 		$section->addText('สังกัด   สำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศ	มีความประสงค์จะขอยืมเงินทดรองจ่าย/เงินหมุนเวียนจาก',null,'TextShortStyle');
 		$textrun = $section->createTextRun($style);
-		$textrun->addText('	( ',null,'TextShortStyle');
-		$textrun->addImage('images/check_report.png',array('width'=>15, 'height'=>15));
-		$textrun->addText(' ) เงินรายได้ของมหาวิทยาลัย',null,'TextShortStyle');
+		$textrun->addText('	(      ) เงินรายได้ของมหาวิทยาลัย',null,'TextShortStyle');
 		$textrun->addText('			',null,'TextShortStyle');
 		$textrun->addText('	(      ) เงินทุนคณะ',null,'TextShortStyle');
 		$textrun = $section->createTextRun($style);
-		$textrun->addText('	( ',null,'TextShortStyle');
-		$textrun->addImage('images/check_report.png',array('width'=>15, 'height'=>15));
-		$textrun->addText(' ) เงินรายได้ที่ได้รับจัดสรรของส่วนงาน',null,'TextShortStyle');
+		$textrun->addText('	(      ) เงินรายได้ที่ได้รับจัดสรรของส่วนงาน',null,'TextShortStyle');
 		$textrun->addText('			',null,'TextShortStyle');
-		$textrun->addText('(      ) อื่นๆ (ระบุ)  เงินทุนหมุนเวียนหน่วยงาน',null,'TextShortStyle');
+		$textrun->addText('( ',null,'TextShortStyle');
+		$textrun->addImage('images/check_report.png',array('width'=>15, 'height'=>15));
+		$textrun->addText(' ) อื่นๆ (ระบุ)  เงินทุนหมุนเวียนหน่วยงาน',null,'TextShortStyle');
 		
 		$section->addText('ในนามของ (หน่วยงาน,ภาควิชา)   สำนักคอมพิวเตอร์ฯ		เพื่อเป็นการทดรองจ่าย/เงินหมุนเวียน',null,'TextShortStyle');
 		$textrun = $section->createTextRun($style);
-		$textrun->addText('	( ',null,'TextShortStyle');
-		$textrun->addImage('images/check_report.png',array('width'=>15, 'height'=>15));
-		$textrun->addText(' ) เงินเดือนและค่าจ้าง',null,'TextShortStyle');
+		$textrun->addText('	(      ) เงินเดือนและค่าจ้าง',null,'TextShortStyle');
 		$textrun->addText('			',null,'TextShortStyle');
 		$textrun->addText('		(      ) ค่าใช้จ่ายในการเดินทางไปปฏิบัติงาน',null,'TextShortStyle');
 		$textrun = $section->createTextRun($style);
@@ -1341,9 +1381,7 @@ class Managewarranty extends CI_Controller {
 		$textrun->addText('			',null,'TextShortStyle');
 		$textrun->addText('		(      ) เงินบริการวิชาการ',null,'TextShortStyle');
 		$textrun = $section->createTextRun($style);
-		$textrun->addText('	( ',null,'TextShortStyle');
-		$textrun->addImage('images/check_report.png',array('width'=>15, 'height'=>15));
-		$textrun->addText(' ) ค่าใช้จ่ายการฝึกอบรมหรือสัมมนา',null,'TextShortStyle');
+		$textrun->addText('	(      ) ค่าใช้จ่ายการฝึกอบรมหรือสัมมนา',null,'TextShortStyle');
 		$textrun->addText('			',null,'TextShortStyle');
 		$textrun->addText('(      ) อื่นๆ (ระบุ)',null,'TextShortStyle');
 		$textrun = $section->createTextRun($style);
@@ -1642,4 +1680,16 @@ class Managewarranty extends CI_Controller {
 		
 		$this->download_file($file);
 	}
+	
+	function test_gen_temp()
+	{
+		$PHPWord = new PHPWord();
+		$PHPWord->setDefaultFontName('Cordia New');
+		$document = $PHPWord->loadTemplate('Template.docx');
+		$document->setValue('Value1', 'Sun');
+		
+
+		$document->save('Solarsystem.docx');
+	}
+	
 }
