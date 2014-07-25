@@ -28,7 +28,7 @@ td.highlight {
 			<div class="col-lg-11">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<strong>เพิ่มกรม</strong>
+						<strong>เพิ่มกรม/สำนักปลัด</strong>
 					</div>
 					<div class="panel-body">
 						<?php if($result==1){?>
@@ -40,7 +40,7 @@ td.highlight {
 									<div class="row">
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>ชื่อกรม *</label>
+                                            <label>ชื่อกรม/สำนักปลัด *</label>
                                             <input type="text" class="form-control" name="department" id="residperson" required>
 										</div>
 										</div>

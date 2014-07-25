@@ -28,7 +28,7 @@ td.highlight {
 			<div class="col-lg-11">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<strong>แก้ไขรายละเอียดกอง</strong>
+						<strong>แก้ไขรายละเอียดกอง/หน่วยงาน</strong>
 					</div>
 					<div class="panel-body">
 						<?php if($result==1){?>
@@ -41,7 +41,7 @@ td.highlight {
 										<div class="col-lg-4">
 										<div class="form-group">
 											<input type="hidden" class="form-control" name="id" value="<?php echo $div[0]['div_id'];?>">
-                                            <label>เลือกกรม *</label>
+                                            <label>เลือกกรม/สำนักปลัด *</label>
 											<select name="department" class="form-control">
 												
 												<?php if(is_array($data) && count($data) ) {?>
@@ -56,13 +56,13 @@ td.highlight {
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>ชื่อกอง *</label>
+                                            <label>ชื่อกอง/หน่วยงาน *</label>
                                             <input type="text" class="form-control" name="division" value="<?php echo $div[0]['div_name'];?>">
 										</div>
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>ผู้อำนวยการกอง *</label>
+                                            <label>ผู้อำนวยการกอง/หน่วยงาน *</label>
 											<select name="userid" class="form-control">
 												
 												<?php if(is_array($data) && count($data) ) {?>

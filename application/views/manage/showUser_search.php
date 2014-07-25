@@ -8,8 +8,8 @@ td.highlight {
                                 <thead>
                                     <tr>
                                         <th>ชื่อ-นามสกุล</th>
-                                        <th>กรม</th>
-										<th>กอง</th>
+                                        <th>กรม/สำนักปลัด</th>
+										<th>กอง/หน่วยงาน</th>
                                         <th>E-mail</th>
 										<th>เครื่องมือ</th>
                                     </tr>

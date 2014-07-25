@@ -102,13 +102,13 @@ td.highlight {
 									<div class="row">
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>กรม *</label>
+                                            <label>กรม/สำนักปลัด *</label>
 											<input type="text" class="form-control" placeholder="-" value="<?php echo $data[0]['dep_name'];?>" readonly>
 										</div>
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>กอง *</label>
+                                            <label>กอง/หน่วยงาน *</label>
                                             <input type="text" class="form-control" placeholder="-" value="<?php echo $data[0]['div_name'];?>" readonly>
 										</div>
 										</div>
@@ -116,7 +116,7 @@ td.highlight {
 									<div class="row">
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>ชนิดตำแหน่ง *</label>
+                                            <label>ประเภทตำแหน่ง *</label>
 											<input type="text" class="form-control" placeholder="-" value="<?php echo $data[0]['pos_t_name'];?>" readonly>
 										</div>
 										</div>
@@ -128,7 +128,7 @@ td.highlight {
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>ขั้นตำแหน่ง *</label>
+                                            <label>ระดับ *</label>
 											<input type="text" class="form-control" placeholder="-" value="<?php echo $data[0]['pos_lv_name'];?>" readonly>
 										</div>
 										</div>

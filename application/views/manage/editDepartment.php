@@ -28,7 +28,7 @@ td.highlight {
 			<div class="col-lg-11">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<strong>แก้ไขรายละเอียดกรม</strong>
+						<strong>แก้ไขรายละเอียดกรม/สำนักปลัด</strong>
 					</div>
 					<div class="panel-body">
 						<?php if($result==1){?>
@@ -41,7 +41,7 @@ td.highlight {
 										<div class="col-lg-4">
 										<div class="form-group">
 											<input type="hidden" name="id" value="<?php echo $data[0]['id'];?>">
-                                            <label>ชื่อกรม *</label>
+                                            <label>ชื่อกรม/สำนักปลัด *</label>
                                             <input type="text" class="form-control" name="department" value="<?php echo $data[0]['name'];?>">
 										</div>
 										</div>

@@ -28,7 +28,7 @@ td.highlight {
 			<div class="col-lg-11">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<strong>แก้ไขชนิดตำแหน่ง</strong>
+						<strong>แก้ไขประเภทตำแหน่ง</strong>
 					</div>
 					<div class="panel-body">
 						<?php if($result==1){?>
@@ -40,7 +40,7 @@ td.highlight {
 									<div class="row">
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>ชื่อชนิดตำแหน่ง *</label>
+                                            <label>ชื่อประเภทตำแหน่ง *</label>
 											<input type="hidden" value="<?php echo $data[0]['id'];?>" name="id">
                                             <input type="text" class="form-control" name="name" value="<?php echo $data[0]['name'];?>" id="residperson" required>
 										</div>

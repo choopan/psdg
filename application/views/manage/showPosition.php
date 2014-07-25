@@ -2,7 +2,7 @@
 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 <thead>
                                     <tr>
-                                        <th>ชนิดตำแหน่ง</th>
+                                        <th>ประเภทตำแหน่ง</th>
 										<th>ตำแหน่ง</th>
 										<th>เครื่องมือ</th>
                                     </tr>

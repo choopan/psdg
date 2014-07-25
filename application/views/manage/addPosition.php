@@ -40,7 +40,7 @@ td.highlight {
 									<div class="row">
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>ชนิดตำแหน่ง *</label>
+                                            <label>ประเภทตำแหน่ง *</label>
 											<select type="text" class="form-control" name="tposition" id="residperson" required>
 											<?php foreach($data as $value){?>
 												<option value="<?php echo $value['id'];?>"><?php echo $value['name'];?></option>

@@ -28,7 +28,7 @@ td.highlight {
 			<div class="col-lg-11">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<strong>แก้ไขขั้นตำแหน่ง</strong>
+						<strong>แก้ไขระดับ</strong>
 					</div>
 					<div class="panel-body">
 						<?php if($result==1){?>
@@ -41,7 +41,7 @@ td.highlight {
 										<div class="col-lg-4">
 										<div class="form-group">
 										<input type="hidden" name="id" value="<?php echo $data[0]['lv_id'];?>">
-                                            <label>ชนิดตำแหน่ง *</label>
+                                            <label>ประเภทตำแหน่ง *</label>
 											<select type="text" class="form-control" name="tposition" id="residperson" required>
 											<?php foreach($type as $value){?>
 												<?php if($value['id']==$data[0]['id']){?>
@@ -56,7 +56,7 @@ td.highlight {
 
 										<div class="col-lg-4">
 										<div class="form-group">
-											<label>ขั้นตำแหน่ง *</label>
+											<label>ระดับ *</label>
                                             <input type="text" class="form-control" value="<?php echo $data[0]['lv_name']?>" name="name" id="residperson" required>
 										</div>
 										</div>

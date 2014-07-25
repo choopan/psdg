@@ -91,7 +91,7 @@ td.highlight {
 									<div class="row">
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>เลือกกรม *</label>
+                                            <label>เลือกกรม/สำนักปลัด *</label>
 											<select name="department" id="department" class="form-control" onChange="get_division(this.value)" required>
 												<?php if(is_array($department) && count($department) ) {
 													foreach($department as $loop){?>
@@ -105,7 +105,7 @@ td.highlight {
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>เลือกกอง *</label>
+                                            <label>เลือกกอง/หน่วยงาน *</label>
 												<input type="hidden" value="<?php echo $data[0]['division'];?>" id="div_id">
 												<input type="hidden" value="<?php echo $data[0]['div_name'];?>" id="div_name">
                                             <select name="division" class="form-control" id="division_db" required>
@@ -117,9 +117,9 @@ td.highlight {
 									<div class="row">
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>เลือกชนิดตำแหน่ง *</label>
+                                            <label>เลือกประเภทตำแหน่ง *</label>
 											<select name="position_ty" class="form-control" id="pos_ty" onChange="get_position(this.value)" required>
-													<option value="0">กรุณาเลือกตำแหน่ง</option>
+													<option value="0">กรุณาเลือกประเภทตำแหน่ง</option>
 												<?php foreach($position as $loop2){ ?>
 													<?php if($loop2['id']==$data[0]['position_type']){?>
 														<option value="<?php echo $loop2['id']; ?>" selected><?php echo $loop2['name']; ?></option>
@@ -140,7 +140,7 @@ td.highlight {
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>เลือกระดับตำแหน่ง *</label>
+                                            <label>เลือกระดับ *</label>
 											<input type="hidden" value="<?php echo $data[0]['position_level'];?>" id="pos_lv_id">
                                             <select name="position_lv" class="form-control" id="position_lv" required>
 												<option value="0">--select--</option>

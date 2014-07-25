@@ -41,7 +41,7 @@ td.highlight {
 										<div class="col-lg-4">
 										<div class="form-group">
 										<input type="hidden" name="id" value="<?php echo $data[0]['pos_id'];?>">
-                                            <label>ชนิดตำแหน่ง *</label>
+                                            <label>ประเภทตำแหน่ง *</label>
 											<select type="text" class="form-control" name="tposition" id="residperson" required>
 											<?php foreach($type as $value){?>
 												<?php if($value['id']==$data[0]['id']){?>

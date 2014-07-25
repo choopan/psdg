@@ -67,7 +67,7 @@ td.highlight {
 										<div class="row">
 											<div class="col-lg-4">
 											<div class="form-group">
-												<label>กรม *</label>
+												<label>กรม/สำนักปลัด *</label>
 												<select id="department" class="form-control" onChange="get_division(this.value)">
 													<option value="-1">---</option>
 													<?php foreach($department as $value0){?>
@@ -78,7 +78,7 @@ td.highlight {
 											</div>
 											<div class="col-lg-4">
 											<div class="form-group">
-												<label>กอง *</label>
+												<label>กอง/หน่วยงาน *</label>
 												<select class="form-control" id="division_db">
 													<option value="-1">---</option>
 												</select>
@@ -88,9 +88,9 @@ td.highlight {
 										<div class="row">
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>เลือกชนิดตำแหน่ง *</label>
+                                            <label>เลือกประเภทตำแหน่ง *</label>
 											<select name="position_ty" class="form-control" id="position_ty" onChange="get_position(this.value)" required>
-													<option value="0">กรุณาเลือกตำแหน่ง</option>
+													<option value="0">กรุณาเลือกประเภทตำแหน่ง</option>
 												<?php foreach($position as $loop2){ ?>
 													<option value="<?php echo $loop2['id']; ?>"><?php echo $loop2['name']; ?></option>
 												<?php } ?>
@@ -107,7 +107,7 @@ td.highlight {
 										</div>
 										<div class="col-lg-4">
 										<div class="form-group">
-                                            <label>เลือกระดับตำแหน่ง *</label>
+                                            <label>เลือกระดับ *</label>
                                             <select name="position_lv" class="form-control" id="position_lv" required>
 												<option value="0">--select--</option>
 											</select>
