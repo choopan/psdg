@@ -44,35 +44,29 @@ class VerifyLogin extends CI_Controller {
    $result=array();
    $result = $this->user->login($username, $password);
    $result2=array();
-	
-   if($result[0]->admin_min != 1 || !$result){
+   
+   if($result){
+		if($result[0]->admin_min != 1){
+		$result2 = $this->user->login2($username, $password);
+		}
+	}else if(!$result){
 		$result2 = $this->user->login2($username, $password);
 	}
-	//=================================== 
-	
-   if(!$result && !$result2){
-	 $this->form_validation->set_message('check_database', '<div class="alert alert-danger">Username หรือ Password ไม่สามารถเข้าสู่ระบบได้</div>');
-     				return false;
-   }
-   
-   if(!$result){
-	 $this->form_validation->set_message('check_database', '<div class="alert alert-danger">Username หรือ Password ไม่สามารถเข้าสู่ระบบได้</div>');
-     				return false;
-   }
-   //====================================
-   
-   
+	//===================================   
 
 	/* echo '<pre>';
+	echo "==========> 1";
 	print_r($result);
+	echo "==========> 2";
 	print_r($result2);
-	echo '</pre>';	 */
+	echo '</pre>'; */
 	
    if($result AND  $username)
-   {
+   {	
 		switch($system) {
    			case 1:		//minister indicator system
      			$sess_array = array();
+				
 				if($result[0]->admin_min == 1){
 					foreach($result as $row) {
 			
@@ -102,7 +96,12 @@ class VerifyLogin extends CI_Controller {
 						);
 						$this->session->set_userdata($sess_array);
 					}
-				}else if($result2[0]->set_div == 1 && $result[0]->admin_min == 0){
+				}
+				else if($result[0]->admin_min != 1 AND !$result2){
+						$this->form_validation->set_message('check_database', '<div class="alert alert-danger">ไม่มีสิทธิ์ใช้งานในหน้านี้</div>');
+						return false;
+				}
+				else if($result2[0]->set_div == 1 && $result[0]->admin_min == 0){
 					foreach($result2 as $row) {
 			
 						//Check executive Priviledge	
@@ -131,7 +130,7 @@ class VerifyLogin extends CI_Controller {
 						);
 						$this->session->set_userdata($sess_array);
 					}
-				}else if($result2 || $result[0]->admin_min == 0 && $result2[0]->set_div == 0){
+				}else if($result[0]->admin_min == 0 && $result2[0]->set_div == 0){
 					foreach($result2 as $row) {
 			
 						//Check executive Priviledge	
@@ -167,27 +166,27 @@ class VerifyLogin extends CI_Controller {
    				break;
 			case 2:		//person evaluation system
 				$sess_array = array();
-     			//Check executive Priviledge	
-				$userID = $result[0]->USERID;
-				$execDep = $this->user->getExecDep($userID);
-				$execDiv = $this->user->getExecDiv($userID);
-		
-		
-       			$sess_array = array(
-         				'sessid' => $result[0]->USERID,
-         				'sessusername' => $result[0]->PWUSERNAME,
-		 				'sessfirstname' => $result[0]->PWEFNAME,
-		 				'sesslastname' => $result[0]->PWELNAME,
-		 				'sessadmin_min' => $result[0]->admin_min,
-		 				'sessdep' => $result[0]->department,
-		 				'sessdiv' => $result[0]->division,		 
-		 				'sessexecdep' => $execDep,
-		 				'sessexecdiv' => $execDiv,
-		 				'sess_system' => 2
-         				//'sessyear' => date("Y")+543       				
-					);
-       				$this->session->set_userdata($sess_array);   			
-					break;
+     			//Check executive Priviledge
+					$userID = $result[0]->USERID;
+					$execDep = $this->user->getExecDep($userID);
+					$execDiv = $this->user->getExecDiv($userID);
+			
+			
+					$sess_array = array(
+							'sessid' => $result[0]->USERID,
+							'sessusername' => $result[0]->PWUSERNAME,
+							'sessfirstname' => $result[0]->PWEFNAME,
+							'sesslastname' => $result[0]->PWELNAME,
+							'sessadmin_min' => $result[0]->admin_min,
+							'sessdep' => $result[0]->department,
+							'sessdiv' => $result[0]->division,		 
+							'sessexecdep' => $execDep,
+							'sessexecdiv' => $execDiv,
+							'sess_system' => 2
+							//'sessyear' => date("Y")+543       				
+						);
+						$this->session->set_userdata($sess_array);   			
+						break;
 					
 			case 3:		//admin system
 			$sess_array = array();
@@ -225,6 +224,45 @@ class VerifyLogin extends CI_Controller {
    		}
      	return TRUE;
    }
+   else if($result2 AND $username AND !$result AND $system==1)
+   {
+		$sess_array = array();
+		foreach($result2 as $row) {
+			
+						//Check executive Priviledge	
+						$userID = $row->USERID;
+						$execDep = $this->user->getExecDep($userID);
+						$execDiv = $this->user->getExecDiv($userID);
+			
+			
+						$sess_array = array(
+							'sessid' => $row->USERID,
+							'sessusername' => $row->PWUSERNAME,
+							'sessfirstname' => $row->PWEFNAME,
+							'sesslastname' => $row->PWELNAME,
+							'sessadmin_min' => 0,
+							'sessadmin_dep' => $row->admin_dep,
+							'sessapprove_dep' => $row->approve_dep,
+							'sessapprove_div' => $row->approve_div,
+							'sessset_div' => $row->set_div,
+							'sessreport_div' => $row->report_div,
+							'sessdep' => $row->department,
+							'sessdiv' => $row->division,		 
+							'sessexecdep' => $execDep,
+							'sessexecdiv' => $execDiv,
+							'sessyear' => date("Y")+543,
+							'sess_system' => 1       				
+						);
+						$this->session->set_userdata($sess_array);
+		}
+		
+		return TRUE;
+   }
+   else if(!$result AND !$result2)
+   {
+		$this->form_validation->set_message('check_database', '<div class="alert alert-danger">Username หรือ Password ไม่สามารถเข้าสู่ระบบได้</div>');
+     				return false;
+   }
    else if (!$username)
    {
 			$this->form_validation->set_message('check_database', '');
@@ -234,6 +272,11 @@ class VerifyLogin extends CI_Controller {
    {
      $this->form_validation->set_message('check_database', '<div class="alert alert-danger">Username หรือ Password ไม่สามารถเข้าสู่ระบบได้</div>');
      return false;
+   }
+   
+   if(!$result){
+	 $this->form_validation->set_message('check_database', '<div class="alert alert-danger">Username หรือ Password ไม่สามารถเข้าสู่ระบบได้</div>');
+     				return false;
    }
  }
  
