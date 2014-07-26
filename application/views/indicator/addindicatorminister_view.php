@@ -31,15 +31,16 @@ td.highlight {
             <div class="col-lg-12">
                 <div class="panel panel-default">
 					<div class="panel-heading"><strong><h4>กำหนดตัวชี้วัดและประเด็นความสำเร็จ <u>ระดับกระทรวง</u></h4>(กรุณาใส่ข้อมูลให้ครบทุกช่อง)</strong></div>
-					<?php if ($this->session->flashdata('showresult') == 'success') echo '<div class="alert-message alert alert-success"> ระบบทำการเพิ่มข้อมูลเรียบร้อยแล้ว'.$this->session->flashdata('insertid').'</div>'; 
-						  else if ($this->session->flashdata('showresult') == 'fail') echo '<div class="alert-message alert alert-danger"> ระบบไม่สามารถเพิ่มข้อมูลได้</div>';
-					
-					?>
 
                     <div class="panel-body">
 						<?php $data = array('onsubmit' => "return check_adddata()"); 
 							  echo form_open('manageindicator/saveMinister', $data); ?>
-						
+
+<?php if ($this->session->flashdata('success')) echo '<div class="alert-message alert alert-success"> ระบบทำการเพิ่มข้อมูลเรียบร้อยแล้ว</div>'; 
+						  elseif ($this->session->flashdata('fail')) echo '<div class="alert-message alert alert-danger"> ระบบไม่สามารถเพิ่มข้อมูลได้</div>';
+
+					
+?>
 						<div class="row">
 							<div class="col-md-2">
 									<div class="form-group">
@@ -94,11 +95,11 @@ td.highlight {
             			<div class="modal-body">
 					  		<div class="form-group">
 								<label for="">ลำดับที่ : </label>
-								<input type="text" class="form-control" name="goalnumber" id="goalnumber" value="" style="width: 80px" required>
+								<input type="text" class="form-control" name="goalnumber" id="goalnumber" value="" style="width: 80px">
 					  		</div>
 					  		<div class="form-group">
 								<label for=""> คำอธิบายประเด็นความสำเร็จ :</label>
-								<input type="text" class="form-control" name="goalname" id="goalname" value=""  required>
+								<input type="text" class="form-control" name="goalname" id="goalname" value="">
 					  		</div>
                                 
 				        </div>            <!-- /modal-body -->
@@ -124,121 +125,26 @@ td.highlight {
             <tr>
                 <th style="width: 80px;">ลำดับ</th>
                 <th>คำอธิบาย</th>
-                <th style="width: 210px"></th>
+                <th style="width: 250px"></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach($goaltemp_array as $loop) { ?>
             <tr>
+                <input type="hidden" name="goalid[]" value="<?php echo $loop->goalid; ?>">
                 <td><?php echo $loop->number; ?></td>
-                <td><?php echo $loop->name; ?></td>
-                <td><button type="button" class="btn btn-primary btn-xs">แผนงาน/โครงการ</button> <button type="button" class="btn btn-info btn-xs">เป้าหมาย</button> <button class="btnDelete btn btn-danger btn-xs" onclick="delgoal_confirm(<?php echo $loop->goalid; ?>)" data-title="Delete" data-toggle="modal" data-target="#delete" data-placement="top" rel="tooltip" title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></button></td>
+                <td><a id="fancyboxall" href="<?php echo site_url("manageindicator/view_minplan/".$loop->goalid."/1");  ?>"><?php echo $loop->name; ?></a></td>
+                <td><a id="fancyboxall" href="<?php echo site_url("manageindicator/view_minplan/".$loop->goalid."/0");  ?>"><button type="button" class="btn btn-primary btn-xs">เพิ่มแผนงาน/โครงการและเป้าหมาย</button></a> <button type="button" class="btnDelete btn btn-danger btn-xs" onclick="delgoal_confirm(<?php echo $loop->goalid; ?>)" data-title="Delete" data-toggle="modal" data-target="#delete" data-placement="top" rel="tooltip" title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></button></td>
             </tr>
             <?php } ?>
         </tbody>
     </table>
     </div>
 </div>
+<hr>                    
                         
                         
-                        
-                        
-        <div class="row">
-                <div class="col-md-10">
-                            <div class="panel-group" id="accordion">
-                                <div class="addinput">
-                                <div class="panel panel-success">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#goal0">ประเด็นความสำเร็จ</a>
-                                        </h4>
-                                    </div>
-                                <div id="goal0" class="panel-collapse collapse">
-                                        <div class="panel-body">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <div class="form-group">
-                                                        <label>ลำดับที่ *</label>
-                                                </div>
-                                        </div>
-                                        <div class="col-md-8">
-                                                <div class="form-group">
-                                                    <label>คำอธิบายประเด็นความสำเร็จ *</label>
-
-                                                </div>
-                                        </div>
-                                        </div>
-                                        <div class="row">
-                                        <div class="col-md-2">
-                                                <div class="form-group">
-                                                        <input type="text" class="form-control" name="goalNO[]" id="goalNO" value="">
-                                                </div>
-                                        </div>
-                                        <div class="col-md-8">
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" name="goalName[]" id="goalName0" value="">
-                                                </div>
-                                        </div>
-							
-						</div>
-                                            
-                        <!--- add min_plan -->
-                    <div class="panel panel-default">
-                        <div class="panel-heading">แผนงาน/โครงการ</div>
-                        <div class="panel-body">
-                        <div id="keepplan0">
-				            <input type="hidden" id="num_plan0" value="1">
-                        <div class="row">
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                   <label>ลำดับที่</label>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="form-group">
-                                    <label>คำอธิบายแผนงาน/โครงการ *</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="addNewPlan0">
-                        <div class="row">
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="planNO0-0[]" id="planNO0-0" value="">
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="planName0-0[]" id="planName0-0" value="">
-                                </div>
-                            </div>
-                            <div class="col-md-1">
-								<div class="form-group">
-								<button id="addNewPlan" type="button" class="btn btn-success" onClick="addNewPlanFrom(0);"><span class="glyphicon glyphicon-plus"></span> เพิ่ม</button>	
-				                </div>
-							</div>
-				        </div>
-						</div>
-                        </div>
-                        </div>
-                    </div>
-                                        </div>
-                            </div>
-                                </div>
-                            </div>
-                        </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="newdelbutton">
-                        <div class="row">
-				            <div class="form-group">
-								<button id="addNew" type="button" onClick="addNewForm(this.form);" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> เพิ่ม</button>	
-				            </div>
-				        </div>
-                    </div>
-                </div>
-            </div>
-<hr>
+ 
 						<div class="row">
 							<div class="col-md-3">
                                             <label>ผู้กำกับดูแล *</label>
@@ -493,7 +399,7 @@ function delgoal_confirm(val1)
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
 	$('#fancyboxall').fancybox({ 
-	'width': '85%',
+	'width': '80%',
 	'height': '100%', 
 	'autoScale':false,
 	'transitionIn':'none', 
@@ -655,14 +561,14 @@ $(document).ready(function() {
 			ok = false;
 			return false;
 		}
-		
+		/*
 		var goalName0=$('#goalName0').val();
 		if(goalName0==''){
 			alert('กรุณาป้อนข้อมูลให้ครบ');
 			$('#goalName0').focus();
 			ok = false;
 			return false;
-		}
+		}*/
 		
 		var criterion1=$('#criterion1').val();
 		if(criterion1==''){

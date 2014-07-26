@@ -61,16 +61,37 @@ Class Ministerindicator extends CI_Model
 	return $query;
  }
     
- function getMinGoalTemp($userid=null)
+ function getGoalTemp($userid=null,$table=null)
  {
-	$this->db->select("indicatorID as id, min_goal.number, min_goal.name, min_goal.id as goalid");
+	$this->db->select("indicatorID as id, number, name, id as goalid");
 	$this->db->order_by("number", "asc");
-	$this->db->from('min_goal');	
+	$this->db->from($table);	
 	$this->db->where('indicatorID', 0);
     $this->db->where('editorID', $userid);
 	$query = $this->db->get()->result();
 	return $query;
  }
+    
+ function getOneGoal($id=null, $table)
+ {
+     $result = $this->db->select("number,name")
+                        ->from($table."_goal")
+                        ->where("id", $id)
+                        ->get()->result();
+     return $result;
+ }
+    
+ function getPlanTarget($goalid=null,$table)
+ {
+     $result = $this->db->select($table."_plan.number as pnumber,".$table."_plan.name as pname,".$table."_target.number as tnumber,".$table."_target.name as tname")
+                        ->order_by($table."_plan.number", "asc")
+                        ->from($table."_target")
+                        ->join($table."_plan",$table."_plan.id=".$table."_target.".$table."_plan_id","left")
+                        ->where($table."_goal_id", $goalid)
+                        ->get()->result();
+     return $result;
+ }
+
  
  function getIndicatorDep($dep=null,$ismin=null,$min=null,$isgoal=null,$goal=null,$userid=null)
  {
@@ -183,121 +204,13 @@ Class Ministerindicator extends CI_Model
 	$query = $this->db->get();		
 	return $query->result();
  }
- 
- function getIndicatorPerson($person=null)
- {
-	$this->db->select("number, name, id, divIndicatorID, goal, weight");
-	$this->db->order_by("number", "asc");
-	$this->db->from('person_indicator');	
-	$this->db->where('userID', $person);	
-	$query = $this->db->get();		
-	return $query->result();
- }
- 
- function getIndicatorPersonNoRound($person=null)
- {
-	$this->db->select("number, name, id, divIndicatorID, goal, weight");
-	$this->db->order_by("number", "asc");
-	$this->db->from('person_indicator');	
-	$this->db->where('userID', $person);	
-	$this->db->where('evaluateRound', 0);
-	$query = $this->db->get();		
-	return $query->result();
- }
- 
+
  function getOneIndicator($id=NULL)
  {
 	$this->db->select("id, number, name, criteria1, criteria2, criteria3, criteria4, criteria5, goal, weight, technicalnote");
 	$this->db->order_by("id", "asc");
 	$this->db->from('min_indicator');
 	$this->db->where('id', $id);
-	$query = $this->db->get();		
-	return $query->result();
- }
- 
- function getOneIndicatorPerson($id=NULL)
- {
-	$this->db->select("userID, evaluateRound, person_indicator.year as pyear, person_indicator.number as pnumber, person_indicator.name as pname, division_indicator.number as indivnumber, division_indicator.name as indivname, thdepname, person_indicator.weight as pweight,person_indicator.goal as pgoal, person_indicator.criteria1 as pcriteria1, person_indicator.criteria2 as pcriteria2, person_indicator.criteria3 as pcriteria3, person_indicator.criteria4 as pcriteria4, person_indicator.criteria5 as pcriteria5, person_indicator.technicalnote as ptechnicalnote");
-	$this->db->order_by("person_indicator.id", "asc");
-	$this->db->from('person_indicator');
-	$this->db->join('division_indicator','division_indicator.id=person_indicator.divIndicatorID');
-	$this->db->join('pwdepartment','pwdepartment.DepID=division_indicator.divisionID');
-	$this->db->where('person_indicator.id', $id);
-	$query = $this->db->get();		
-	return $query->result();
- }
- 
- function getOneIndicatorPersonByUserid($userid=NULL, $year=NULL, $round=NULL)
- {
-	$this->db->select("userID, evaluateRound, person_indicator.year as pyear, person_indicator.number as pnumber, person_indicator.name as pname, division_indicator.number as indivnumber, division_indicator.name as indivname, thdepname, person_indicator.weight as pweight,person_indicator.goal as pgoal, person_indicator.criteria1 as pcriteria1, person_indicator.criteria2 as pcriteria2, person_indicator.criteria3 as pcriteria3, person_indicator.criteria4 as pcriteria4, person_indicator.criteria5 as pcriteria5, person_indicator.technicalnote as ptechnicalnote, isEditor");
-	$this->db->order_by("person_indicator.number", "asc");
-	$this->db->from('person_indicator');
-	$this->db->join('division_indicator','division_indicator.id=person_indicator.divIndicatorID');
-	$this->db->join('pwdepartment','pwdepartment.DepID=division_indicator.divisionID');
-	$this->db->where('person_indicator.userID', $userid);
-	$this->db->where('person_indicator.year', $year);
-	$this->db->where('person_indicator.evaluateRound', $round);
-	$query = $this->db->get();		
-	return $query->result();
- }
- 
- function getWorkatIndicatorPerson($userid=NULL, $year=NULL, $round=NULL)
- {
-	$this->db->select("person_evaluate_workat.startdate as pstartdate, person_evaluate_workat.enddate as penddate, thdepname , evaluateRound, person_evaluate_workat.year as pyear");
-	$this->db->order_by("startdate", "asc");
-	$this->db->from('person_evaluate_workat');
-	$this->db->join('pwdepartment','pwdepartment.DepID=person_evaluate_workat.depID');
-	$this->db->where('userID', $userid);
-	$this->db->where('year', $year);
-	$this->db->where('evaluateRound', $round);
-	$query = $this->db->get();		
-	return $query->result();
- }
- 
-  function getOneIndicatorPersonLast($userid=NULL)
- {
-	$this->db->select_max("year", 'maxyear');
-	$this->db->from("person_indicator");
-	$this->db->where('userID', $userid);
-	$query = $this->db->get();
-	foreach ($query->result() as $row) { $maxyear = $row->maxyear; }
-	
-	$this->db->select_max("evaluateRound", 'maxround');
-	$this->db->from("person_indicator");
-	$this->db->where('userID', $userid);
-	$this->db->where('year', $maxyear);
-	$this->db->where('evaluateRound > 0');
-	$query = $this->db->get();
-	foreach ($query->result() as $row) { $maxround = $row->maxround; }
- 
-	//$this->db->select("id, userID, evaluateRound, year, number, name, weight, goal, criteria1, criteria2, criteria3, criteria4, criteria5, technicalnote, divIndicatorID");
-	$this->db->select("id, userID, name");
-	$this->db->order_by("number", "asc");
-	$this->db->from('person_indicator');
-	$this->db->where('userID', $userid);
-	$this->db->where('year', $maxyear);
-	$this->db->where('evaluateRound', $maxround);
-	$query = $this->db->get();		
-	return $query->result();
- }
- 
- function getOneIndicatorPersonOnlyOneTable($id=NULL)
- {	
-	$this->db->select("id, userID, evaluateRound, year, number, name, weight, goal, criteria1, criteria2, criteria3, criteria4, criteria5, technicalnote, divIndicatorID");
-	$this->db->from('person_indicator');
-	$this->db->where('id', $id);
-	$query = $this->db->get();		
-	return $query->result();
- }
- 
- function getOneIndicatorPerson2($id=NULL)
- {
-	$this->db->select("person_indicator.resID as rID, person_indicator.number as pnumber, person_indicator.name as pname,dep_indicator.name as indepname, pwsection.pwname as depname, person_indicator.resName as presName, person_indicator.resPosition as presPosition,person_indicator.resTelephone as presTelephone, person_indicator.weight as pweight,person_indicator.goal as pgoal");
-	$this->db->order_by("person_indicator.id", "asc");
-	$this->db->from('person_indicator');
-	$this->db->join('dep_indicator','dep_indicator.id=person_indicator.depIndicatorID');
-	$this->db->join('pwsection','pwsection.pwsection=dep_indicator.depID');
-	$this->db->where('person_indicator.resID', $id);
 	$query = $this->db->get();		
 	return $query->result();
  }
@@ -373,11 +286,14 @@ Class Ministerindicator extends CI_Model
  
  function getOneIndicatorGoalDep($id=NULL)
  {
-	$this->db->select("number, name, pwfname, pwlname");
-	$this->db->order_by("number", "asc");
-	$this->db->from('dep_goal');
-    $this->db->join('pwemployee', 'pwemployee.userid=dep_goal.responseID', 'left');
-	$this->db->where('indicatorID', $id);
+	$this->db->select("dep_goal.number as gnumber,dep_goal.name as gname,dep_plan.number as pnumber,dep_plan.name as pname, dep_target.number as tnumber, dep_target.name as tname")
+	         ->order_by("dep_goal.number", "asc")
+             ->order_by("dep_plan.number", "asc")
+             ->order_by("dep_target.number", "asc")
+	         ->from('dep_goal')
+             ->join('dep_plan','dep_plan.dep_goal_id=dep_goal.id','left')
+             ->join('dep_target','dep_target.dep_plan_id=dep_plan.id','left')
+	         ->where('dep_goal.indicatorID', $id);
 	$query = $this->db->get();		
 	return $query->result();
  }
@@ -388,16 +304,6 @@ Class Ministerindicator extends CI_Model
 	$this->db->order_by("number", "asc");
 	$this->db->from('division_goal');
      $this->db->join('pwemployee', 'pwemployee.userid=division_goal.responseID', 'left');
-	$this->db->where('indicatorID', $id);
-	$query = $this->db->get();		
-	return $query->result();
- }
-
- function getOneIndicatorGoalPerson($id=NULL)
- {
-	$this->db->select("number, name");
-	$this->db->order_by("number", "asc");
-	$this->db->from('person_goal');
 	$this->db->where('indicatorID', $id);
 	$query = $this->db->get();		
 	return $query->result();
@@ -414,11 +320,22 @@ Class Ministerindicator extends CI_Model
 	$this->db->insert('minIndicatorResponse', $in);
 	return $this->db->insert_id();			
  }
- 
- 
+
  function addIndicatorGoal($in=NULL)
  {		
 	$this->db->insert('min_goal', $in);
+	return $this->db->insert_id();			
+ }
+    
+ function addPlan($in=NULL,$table)
+ {		
+	$this->db->insert($table.'_plan', $in);
+	return $this->db->insert_id();			
+ }
+    
+ function addTarget($in=NULL,$table)
+ {		
+	$this->db->insert($table.'_target', $in);
 	return $this->db->insert_id();			
  }
  
@@ -431,18 +348,6 @@ Class Ministerindicator extends CI_Model
  function addIndicatorDivision($in=NULL)
  {		
 	$this->db->insert('division_indicator', $in);
-	return $this->db->insert_id();			
- }
- 
- function addIndicatorPerson($in=NULL)
- {		
-	$this->db->insert('person_indicator', $in);
-	return $this->db->insert_id();			
- }
- 
- function addEvaluatePersonWorkat($workat=NULL)
- {		
-	$this->db->insert('person_evaluate_workat', $workat);
 	return $this->db->insert_id();			
  }
  
@@ -462,14 +367,6 @@ Class Ministerindicator extends CI_Model
 	return $query;
  }
  
- function editIndicatorPerson($in=NULL)
- {		
-	$this->db->where('id', $in['id']);
-	unset($in['id']);
-	$query = $this->db->update('person_indicator', $in); 	
-	return $query;
- }
- 
  function addIndicatorGoalDep($in=NULL)
  {		
 	$this->db->insert('dep_goal', $in);
@@ -479,12 +376,6 @@ Class Ministerindicator extends CI_Model
   function addIndicatorGoalDivision($in=NULL)
  {		
 	$this->db->insert('division_goal', $in);
-	return $this->db->insert_id();			
- }
- 
- function addIndicatorGoalPerson($in=NULL)
- {		
-	$this->db->insert('person_goal', $in);
 	return $this->db->insert_id();			
  }
 
@@ -533,7 +424,17 @@ Class Ministerindicator extends CI_Model
  function delGoalTemp($id=NULL, $table=null)
  {
 	$this->db->where('id', $id);
-	$this->db->delete($table); 
+	$this->db->delete($table."_goal"); 
+     
+    $planid_array = $this->db->select("id")->from($table."_plan")->where($table."_goal_id",$id)->get()->result_array();
+    for($i=0; $i<count($planid_array); $i++) {
+        $this->db->where($table.'_plan_id', $planid_array[$i]['id']);
+        $this->db->delete($table."_target"); 
+    }
+     
+    $this->db->where($table.'_goal_id', $id);
+	$this->db->delete($table."_plan"); 
+     
  }
  
  function delIndicatorDep($id=NULL)
@@ -558,19 +459,6 @@ Class Ministerindicator extends CI_Model
  {
 	$this->db->where('indicatorID', $id);
 	$this->db->delete('divison_goal'); 
- }
- 
- function delIndicatorPerson($id=NULL, $year=NULL)
- {
-	$this->db->where('userID', $id);
-	$this->db->where('year', $year);
-	$this->db->delete('person_indicator'); 
- }
- 
- function delIndicatorPersonGoal($id=NULL)
- {
-	$this->db->where('userID', $id);
-	$this->db->delete('person_goal'); 
  }
     
  function delDepIndicatorTemp($id=NULL)
@@ -618,6 +506,14 @@ Class Ministerindicator extends CI_Model
 	$this->db->where('id', $in['id']);
 	unset($in['id']);
 	$query = $this->db->update('division_indicator', $in); 	
+	return $query;
+ }
+    
+ function editNumberGoal($in=NULL,$table=null)
+ {
+	$this->db->where('id', $in['id']);
+	unset($in['id']);
+	$query = $this->db->update($table, $in); 	
 	return $query;
  }
 

@@ -5,9 +5,7 @@
 </head>
 
 <body>
-
-
-                    <h4>กรุณาเลือกตัวชี้วัดระดับกระทรวง ปีงบประมาณ <?php echo $this->session->userdata('sessyear'); ?></h4>
+<h4>กรุณาเลือกตัวชี้วัดระดับกระทรวง ปีงบประมาณ <?php echo $this->session->userdata('sessyear'); ?></h4>
 
                             <table class="table" id="dataTables-example">
                                 <thead><tr><th width="50">ตัวชี้วัดที่</th><th width="500">ชื่อ</th></tr></thead>

@@ -52,19 +52,35 @@
                             <table class="table" id="dataTables-example">
                                 <thead>
                                     <tr>
-										<th style="text-align: center;width: 15%">ประเด็นความสำเร็จที่</th>
-										<th>คำอธิบาย</th>
-                                        <th style="width: 20%">ผู้รับผิดชอบ</th>
+										<th style="width: 30%">ประเด็นความสำเร็จ</th>
+										<th style="width: 35%">แผนงาน/โครงการ</th>
+                                        <th style="width: 35%">เป้าหมาย</th>
                                     </tr>
                                 </thead>
 								<tbody>
-								<?php if(is_array($goal_indicator_array) && count($goal_indicator_array) ) {
+								<?php 
+                                    $lastgoal=0;
+                                    $lastplan=0;
+                                
+                                if(is_array($goal_indicator_array) && count($goal_indicator_array) ) {
 									foreach($goal_indicator_array as $loop2){
 								?>
 									<tr>
-                                        <td style="text-align: center"><?php if ($loop2->number!= "") echo $loop2->number; ?></td>
-                                        <td><?php echo $loop2->name; ?></td>
-                                        <td><?php echo $loop2->pwfname." ".$loop2->pwlname?></td>
+                                        <td><?php if ($lastgoal!=$loop2->gnumber) { 
+                                                    if ($loop2->gnumber!= "") echo $loop2->gnumber.". "; 
+                                                    echo $loop2->gname;
+                                                    $lastgoal = $loop2->gnumber;
+                                                  }
+                                                
+                                            ?>
+                                        </td>
+                                        <td><?php if ($lastplan!=$loop2->pnumber) { 
+                                                echo $loop2->pnumber.". ".$loop2->pname; 
+                                                $lastplan = $loop2->pnumber;
+                                            }
+                                            ?>
+                                        </td>
+                                        <td><?php echo $loop2->tnumber.". ".$loop2->tname; ?></td>
                                     </tr>
 									<?php  } } ?>
                                 </tbody>
