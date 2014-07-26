@@ -342,6 +342,19 @@ Class User extends CI_Model
     return $result;
  }
  
+function user_indicator_view3()
+ {
+	$result = $this->db->select('pwemployee.USERID as USERID, PWFNAME, PWLNAME, department.name as dep_name, division.name as div_name, pwemployee.PWEMAIL as email,user_indicator.admin_dep as admin_dep,user_indicator.approve_dep as approve_dep,user_indicator.approve_div as approve_div,user_indicator.set_div as set_div,user_indicator.report_div as report_div')
+					   ->from('user_indicator')
+					   ->join('pwemployee','user_indicator.userid = pwemployee.USERID','left')
+					   ->join('department','pwemployee.department = department.id','left')
+					   ->join('division','pwemployee.division = division.id','left')
+					   ->where('pwemployee.enabled',1)
+					   ->get()
+					   ->result_array();
+    return $result;
+ }
+ 
  function get_user_name()
  {
 	$result = $this->db->select('pwemployee.USERID as USERID, PWFNAME, PWLNAME, department, division')
@@ -415,6 +428,22 @@ Class User extends CI_Model
 				 ->set('approve_div',$approve_div)
 				 ->set('set_div',$set_div)
 				 ->set('report_div',$report_div)
+				 ->insert('user_indicator');
+		return $query;		 
+ }
+ 
+ function indicatorUser_save3($user_id,$username,$password,$department,$division,$approve_dep,$approve_div,$set_div)
+ {
+		$query=$this->db->set('userid',$user_id)
+				 ->set('username',$username)
+				 ->set('password',md5($password))
+				 ->set('department',$department)
+				 ->set('division',$division)
+				 ->set('admin_dep',0)
+				 ->set('approve_dep',$approve_dep)
+				 ->set('approve_div',$approve_div)
+				 ->set('set_div',$set_div)
+				 ->set('report_div',0)
 				 ->insert('user_indicator');
 		return $query;		 
  }

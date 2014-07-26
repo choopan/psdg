@@ -49,6 +49,18 @@ class Indicator_admin extends CI_Controller {
 		$this->load->view('indicator/viewUser_view2',$data);
 	}
 	
+	function user_indicator_view3()
+	{
+		$data['title'] = "MFA - Minister Admin Management";
+		$data['result']=0;
+		$data['data'] = $this->user->user_indicator_view3();
+		
+		/* echo '<pre>';
+		print_r($data);
+		echo '</pre>'; */
+		$this->load->view('indicator/viewUser_view3',$data);
+	}
+	
 	function addUser_indicator()
 	{
 		$data['title']="MFA - Minister Admin Management";
@@ -69,6 +81,17 @@ class Indicator_admin extends CI_Controller {
 		print_r($data);
 		echo '</pre>'; */
 		$this->load->view('indicator/addUser_indicator2',$data);
+	}
+	
+	function addUser_indicator3()
+	{
+		$data['title']="MFA - Minister Admin Management";
+		$data['result']=0;
+		
+		/* echo '<pre>';
+		print_r($data);
+		echo '</pre>'; */
+		$this->load->view('indicator/addUser_indicator3',$data);
 	}
 	
 	function autocompleteResponse()
@@ -135,6 +158,43 @@ class Indicator_admin extends CI_Controller {
 		$data['title'] = "MFA - Minister Admin Management";
 		$data['result']=$result;
 		$this->load->view('indicator/addUser_indicator2',$data);
+	}
+	
+	function indicatorUser_save3()
+	{
+		$user_id = $this->input->post('userid');
+		$username =  $this->input->post('username');
+		$password =  $this->input->post('password');
+		$department = $this->input->post('dep_id');
+		$division = $this->input->post('div_id');
+		$admin = $this->input->post('admin');
+		
+		$approve_dep = 0;
+		$approve_div = 0;
+		$set_div = 0;
+		
+		if($admin=='approve_dep'){
+			$admin_dep = 0;
+			$approve_dep = 1;
+			$approve_div = 0;
+			$set_div = 0;
+		}else if($admin=='approve_div'){
+			$admin_dep = 0;
+			$approve_dep = 0;
+			$approve_div = 1;
+			$set_div = 0;
+		}else if($admin=='set_div'){
+			$admin_dep = 0;
+			$approve_dep = 0;
+			$approve_div = 0;
+			$set_div = 1;
+		}
+		
+		$result=$this->user->indicatorUser_save3($user_id,$username,$password,$department,$division,$approve_dep,$approve_div,$set_div);
+		
+		$data['title'] = "MFA - Minister Admin Management";
+		$data['result']=$result;
+		$this->load->view('indicator/addUser_indicator3',$data);
 	}
 	
 	function deleteAll_user()

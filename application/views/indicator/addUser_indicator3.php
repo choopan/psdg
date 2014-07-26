@@ -74,9 +74,6 @@ td.highlight {
 											<div class="form-group">
 											<label>ผู้ดูแลระบบ * |</label>
 												<label class="checkbox-inline">
-													<input type="radio" value="admin_dep" name="admin">ผู้ดูแลกรม
-												</label>
-												<label class="checkbox-inline">
 													<input type="radio" value="approve_dep" name="admin">อธิบดีกรม
 												</label>	
 												<label class="checkbox-inline">

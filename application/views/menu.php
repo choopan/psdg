@@ -67,6 +67,16 @@
 									</ul>
 								   
 								</li>
+							<?php }else if($this->session->userdata('sessadmin_dep') == 1){?>
+								<li>
+									<a href=""><i class="fa fa-bar-chart-o fa-fw"></i> จัดการข้อมูล <span class="fa arrow"></span></a>
+									<ul class="nav nav-second-level">
+										<li>
+											<a href="<?php echo site_url("indicator_admin/user_indicator_view3"); ?>">จัดการผู้ใช้งาน</a>
+										</li>
+									</ul>
+								   
+								</li>
 							<?php }?>
 							
 						<?php	if($this->session->userdata('sessadmin_min') == 1) { ?>
