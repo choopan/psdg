@@ -216,87 +216,6 @@ td.highlight {
 <script src="<?php echo base_url(); ?>js/bootbox.min.js"></script>
 <script src="<?php echo base_url(); ?>js/jquery-ui-1.10.4.min.js"></script>
 <script src="<?php echo base_url(); ?>js/jquery.fancybox.js"></script>
-
-
-
-<script type="text/javascript">
-var rowNum = 0;
-var rowNumRes = 0;
-function addNewForm(frm) {
-	rowNum ++;
-	var row = '<div class="row" id="rowNum'+rowNum+'"><input type="hidden" name="userid[]" id="userid'+rowNum+'" value=""><div class="col-md-2"><div class="form-group"><input type="text" class="form-control" name="goalNO[]" id="goalNO" value=""></div></div><div class="col-md-7"><div class="form-group"><input type="text" class="form-control" name="goalName[]" id="goalName" value=""></div></div><div class="col-md-2"><div class="form-group"><input type="text" class="form-control" name="responseName[]" id="responseName'+rowNum+'" value=""></div></div><div class="col-md-1"><div class="form-group"><button id="addNew" type="button" onClick="removeNewForm('+rowNum+');" class="btn btn-danger">ลบ</button></div></div></div>';
-	$( ".addinput" ).append(row);
-    auto_tag("#responseName",rowNum);
-	frm.add_qty.value = '';
-	frm.add_name.value = '';
-
-
-}
-function removeNewForm(rnum) {
-jQuery('#rowNum'+rnum).remove();
-}
-function addNewFormResponse(idd) {
-
-	while (idd<6) {
-		var post1 = document.getElementById('addinputResponse'+idd);
-		if (post1.style.display == 'block')  idd++;
-		else { 
-			post1.style.display = 'block';
-			break;
-		}
-		
-	}
-		
-
-
-
-}
-function removeNewFormResponse(idd) {
-	var post1 = document.getElementById('addinputResponse'+idd);
-	if (post1.style.display == 'block') {
-		post1.style.display = 'none';
-		$("#resid"+idd).val("");
-		$("#position"+idd).val("");
-		$("#telephone"+idd).val("");
-		$("#uid"+idd).val("");
-	}
-}
-
-function auto_tag(tag,num)
-{
-    $(tag+num).autocomplete({
-		source: function(request, response){
-			$.ajax({
-                url: "<?php echo site_url('manageindicator/autocompleteResponse'); ?>",
-                dataType: "json",
-                data: {term: request.term},
-				error: function(data){
-					alert('error');
-				},
-                success: function(data) {
-	
-				    response($.map(data,function(pwemployee){
-                        return {
-							id: pwemployee.userid,
-							value: pwemployee.pwname
-                        };
-                    }));
-                }
-            });
-		},
-		minLength: 2,
-		autofocus: true,
-		mustMatch: true,
-		select: function(event,ui){
-				$("#userid"+num).val(ui.item.id);
-				$("#responseName"+num).val(ui.item.value);
-
-        }
-    });
-			
-}
-
-</script>
 <script type='text/javascript'> 
 $(document).ready(function() {
     $('#fancyboxall').fancybox({ 
@@ -307,8 +226,6 @@ $(document).ready(function() {
     'transitionOut':'none', 
     'type':'iframe'}); 
     
-
-    auto_tag("#responseName",0);
 
 });
 

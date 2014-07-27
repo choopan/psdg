@@ -27,62 +27,189 @@ td.highlight {
         <div class="col-lg-12">
             <div class="panel panel-primary">
 				<div class="panel-heading">
-					<strong>รายงานผลการดำเนินการ ปีงบประมาณ <?php echo $this->session->userdata('sessyear'); ?> รอบ 6 เดือน</strong>
+					<strong>รายงานผลการดำเนินการ ปีงบประมาณ <?php echo $this->session->userdata('sessyear'); ?></strong>
                 </div>
 
                     <div class="panel-body">
-						<?php $data = array('onsubmit' => "return check_adddata()"); 
-							  echo form_open('', $data); ?>
-						<div class="row">
+						<?php //$data = array('onsubmit' => "return check_adddata()"); 
+							  echo form_open('reportgoal/savereport'); 
+                        
+                        foreach ($indicator_array as $loop) {
+                        ?>
+                        <div class="row">
 							<div class="col-md-2">
 									<div class="form-group">
-                                        <label>ประเด็นความสำเร็จที่ *</label>
-                                        <input type="text" class="form-control" name="indicatorNO" id="indicatorNO" value="<?php echo $number; ?>">
-											<p class="help-block"><?php echo form_error('indicatorNO'); ?></p>
+                                        <label>ชื่อตัวชี้วัด :</label>
                                     </div>
 							</div>
 							<div class="col-md-9">
 									<div class="form-group">
-                                        <label>ชื่อประเด็นความสำเร็จ *</label>
-                                        <input type="text" class="form-control" name="indicatorName" id="indicatorName" value="<?php echo $name; ?>">
-											<p class="help-block"><?php echo form_error('indicatorName'); ?></p>
+                                        <label><?php echo $loop->inumber." ".$loop->iname; ?></label>
                                     </div>
 							</div>
 						</div>
+                        
 						<div class="row">
 							<div class="col-md-2">
 									<div class="form-group">
-                                        <label>ตัวชี้วัดที่ *</label>
-                                        <input type="text" class="form-control" name="indicatorNO" id="indicatorNO" value="<?php echo $innumber; ?>">
-											<p class="help-block"><?php echo form_error('indicatorNO'); ?></p>
+                                        <input type="hidden" name="goalid" value="<?php echo $loop->goalid; ?>">
+                                        <input type="hidden" name="dep" value="<?php echo $dep; ?>">
+                                        <label>ประเด็นความสำเร็จ :</label>
                                     </div>
 							</div>
 							<div class="col-md-9">
 									<div class="form-group">
-                                        <label>ชื่อตัวชี้วัด *</label>
-                                        <input type="text" class="form-control" name="indicatorName" id="indicatorName" value="<?php echo $inname; ?>">
-											<p class="help-block"><?php echo form_error('indicatorName'); ?></p>
+                                        <label><?php echo $loop->gname; $gname = $loop->gname;?></label>
                                     </div>
 							</div>
 						</div>
+                        <?php }  ?>
+						
 						<div class="row">
 							
 							<div class="col-md-2">
 									<div class="form-group">
-                                        <label>ประเภทตัวชี้วัด *</label>
-                                        <input type="text" class="form-control" name="weightmin" id="weightmin" value="ตัวชี้วัดของกรม">
-											<p class="help-block"><?php echo form_error('weightmin'); ?></p>
+                                        <label>รอบการรายงาน :</label>
                                     </div>
 							</div>
                             <div class="col-md-9">
 									<div class="form-group">
-                                        <label>ผู้รายงานผล *</label>
-                                        <input type="text" class="form-control" name="userid" id="userid" value="<?php echo $user; ?>">
-											<p class="help-block"><?php echo form_error('userid'); ?></p>
+                                        <input type="hidden" name="month" value="<?php echo $month; ?>">
+                                        <label>ราย <?php echo $month; ?> เดือน</label>
                                     </div>
 							</div>
 						</div>
-						
+                        <div class="row">
+							
+							<div class="col-md-2">
+									<div class="form-group">
+                                        <label>หน่วยงานที่รับผิดชอบ :</label>
+                                    </div>
+							</div>
+                            <div class="col-md-9">
+									<div class="form-group">
+                                        <label><?php echo $depname." ".$divname; ?></label>
+                                    </div>
+							</div>
+						</div>
+                        
+                        <div class="row">
+							
+							<div class="col-md-2">
+									<div class="form-group">
+                                        <label>ผู้รับผิดชอบ :</label>
+                                    </div>
+							</div>
+                            <div class="col-md-4">
+									<div class="form-group">
+                                        <label><?php echo $user; ?></label>
+                                    </div>
+							</div>
+                            <div class="col-md-2">
+									<div class="form-group">
+                                        <label>โทร :</label>
+                                    </div>
+							</div>
+                            <div class="col-md-4">
+									<div class="form-group">
+                                        <label><?php echo $tel; ?></label>
+                                    </div>
+							</div>
+						</div>
+<!-- report table-->
+<div class="row">
+    <div class="col-md-12">
+        <label>ผลการดำเนินงาน :</label>
+    <table class="table table-bordered" name="showtempgoal">
+        <thead>
+            <tr>
+                <th style="text-align: center;width: 15%;">แผนงาน</th>
+                <th style="text-align: center;">ผลการดำเนินการ</th>
+                <th style="text-align: center;width: 15%;">เอกสารแนบ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php 
+                $lastnumber =0;  
+                foreach($goal_array as $loop) { 
+                    if ($lastnumber!=$loop->pnumber) {
+                        foreach ($rowspan_array as $loop2) { if ($loop2->pnumber==$loop->pnumber) $rowspan=$loop2->planrow; }
+            ?>
+            <tr>
+                <td rowspan="<?php echo $rowspan; ?>"><label><?php echo "<u>แผนงานที่ ".$loop->pnumber."</u> ". $loop->pname; ?></label></td>
+                <td><label><?php echo $loop->tnumber." ". $loop->tname; ?></label>
+                <input type="hidden" name="targetid[]" value="<?php echo $loop->targetid; ?>">
+                <textarea class="form-control" name="reporttarget[]" id="reporttarget<?php echo $loop->targetid; ?>"></textarea>
+                </td>
+                <td><input type="hidden" name="fileid[]" id="fileid" value="">
+                    <input type="text" class="form-control" name="filetext[]" id="filetext" value="">
+                </td>
+            </tr>
+            <?php $lastnumber = $loop->pnumber; }else{ ?>
+                <tr><td><label><?php echo $loop->tnumber." ". $loop->tname; ?></label>
+                <input type="hidden" name="targetid[]" value="<?php echo $loop->targetid; ?>">
+                <textarea class="form-control" name="reporttarget[]" id="reporttarget<?php echo $loop->targetid; ?>"></textarea>    
+                    </td>
+                    <td><input type="hidden" name="fileid[]" id="fileid" value="">
+                    <input type="text" class="form-control" name="filetext[]" id="filetext<?php echo $loop->targetid; ?>" value="">
+                </td></tr>     
+            <?php  }    } ?>
+        </tbody>
+    </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-10">
+        <label>ผลสำเร็จตามประเด็นความสำเร็จ "<?php echo $gname; ?>" (สำหรับการรายงานรอบ 12 เดือน)</label>
+    </div>                        
+</div>
+<div class="row">
+    <div class="col-md-10">
+        <textarea class="form-control" name="report12" id="report12"></textarea>
+    </div>                        
+</div>
+<div class="row">
+    <div class="col-md-10">
+        <label>ปัจจัยสนับสนุนต่อการดำเนินงาน (สำหรับการรายงานรอบ 12 เดือน)</label>
+    </div>                        
+</div>
+<div class="row">
+    <div class="col-md-10">
+        <textarea class="form-control" name="support12" id="support12"></textarea>
+    </div>                        
+</div>
+<div class="row">
+    <div class="col-md-10">
+        <label>อุปสรรคต่อการดำเนินงาน (สำหรับการรายงานรอบ 12 เดือน)</label>
+    </div>                        
+</div>
+<div class="row">
+    <div class="col-md-10">
+        <textarea class="form-control" name="problem12" id="problem12"></textarea>
+    </div>                        
+</div>
+<div class="row">
+    <div class="col-md-10">
+        <label>ข้อเสนอแนะสำหรับการดำเนินงานในปีต่อไป (สำหรับการรายงานรอบ 12 เดือน)</label>
+    </div>                        
+</div>
+<div class="row">
+    <div class="col-md-10">
+        <textarea class="form-control" name="suggest12" id="suggest12"></textarea>
+    </div>                        
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <label>คะแนนประเมินตนเอง</label>
+    </div>                        
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <input type="text" class="form-control" name="selfscore" id="selfscore">
+    </div>                        
+</div>
+<br>				
 		<div class="panel panel-success">
 				<div class="panel-heading">
 					<strong>เอกสารแนบ</strong>
@@ -137,79 +264,13 @@ td.highlight {
 						</div>
 					</div>
 				</div></div>
-        <div class="panel panel-success">
-				<div class="panel-heading">
-					<strong>แนวทางการประเมินผล</strong>
-                </div>
-                <div class="panel-body">
-                	
-						<div class="row">
-							<div class="col-md-2">
-									<div class="form-group">
-                                            <label>ระดับ/ขั้นตอน *</label>
-                                    </div>
-							</div>
-							<div class="col-md-3">
-									<div class="form-group">
-                                        <label>แผนงาน/โครงการ *</label>
-
-                                    </div>
-							</div>
-                            <div class="col-md-3">
-									<div class="form-group">
-                                        <label>เป้าหมาย *</label>
-
-                                    </div>
-							</div>
-                            <div class="col-md-3">
-									<div class="form-group">
-                                        <label>น้ำหนักคะแนน *</label>
-
-                                    </div>
-							</div>
-						</div>
-					<div class="addinput2">
-						<div class="row">
-							<div class="col-md-2">
-									<div class="form-group">
-                                            <input type="text" class="form-control" name="goalNO[]" id="goalNO" value="<?php echo set_value('goalNO[0]'); ?>">
-											<p class="help-block"><?php echo form_error('goalNO[0]'); ?></p>
-                                    </div>
-							</div>
-							<div class="col-md-3">
-									<div class="form-group">
-                                        <textarea class="form-control" name="technote" id="technote" rows="3"></textarea>
-
-                                    </div>
-							</div>
-                            <div class="col-md-3">
-									<div class="form-group">
-                                        <textarea class="form-control" name="technote" id="technote" rows="3"></textarea>
-
-                                    </div>
-							</div>
-                            <div class="col-md-2">
-									<div class="form-group">
-                                            <input type="text" class="form-control" name="goalNO[]" id="goalNO" value="<?php echo set_value('goalNO[0]'); ?>">
-											<p class="help-block"><?php echo form_error('goalNO[0]'); ?></p>
-                                    </div>
-							</div>
-							<div class="col-md-1">
-									<div class="form-group">
-										<button id="addNew" type="button" onClick="addNewForm2(this.form);" class="btn btn-success">เพิ่ม</button>	
-									</div>
-							</div>
-						</div>
-					</div>
-				</div></div>
 						<div class="row">
 							<div class="col-md-6">
 									<button type="submit" class="btn btn-primary">  ส่งรายงาน  </button>
 									<button type="button" class="btn btn-warning" onClick="window.location.href='<?php echo site_url("reportgoal/goal_response"); ?>'"> ยกเลิก </button>
 							</div>
 						</div>
-								
-								
+									
 						</form>
 
 					</div>

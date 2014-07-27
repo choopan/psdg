@@ -46,11 +46,11 @@ td.highlight {
 							<div class="col-md-4">
 									<div class="form-group">
                                         <label>กอง *</label>
-										<select class="form-control" name="divid" id="divid" onchange="savedivid(this);">
+										<select class="form-control" name="divid" id="divid" disabled>
 											<option value="">---เลือกกอง---</option>
 										<?php 	if(is_array($div_array)) {
 												foreach($div_array as $loop){
-													echo "<option value='".$loop->id."x".$loop->dep_id."'";
+													echo "<option value='".$loop->id."'";
                                                     if ($divid == $loop->id) echo " selected";
                                                     echo ">".$loop->name."</option>";
 										 } } ?>
@@ -89,7 +89,7 @@ td.highlight {
 										<?php //echo $indicator_min_id[$i]; ?>
 									</td>
                                     <td>
-                                    <a id="buttonadddep" href="<?php echo site_url("manageindicator/addNewIndicatorDivFromInDep/".$indicator_dep_id[$i]);  ?>">
+                                    <a id="buttonadddep" href="<?php echo site_url("manageindicator/addNewIndicatorDivFromInDep/".$indicator_dep_id[$i]."/".$divid);  ?>">
 										<?php echo $indicator_dep_name[$i]['name'];
 											
 										?></a>&nbsp;&nbsp;
@@ -110,7 +110,7 @@ td.highlight {
 										<?php //echo $goal_min_id[$i]; ?>
 									</td>
                                     <td>
-                                        <a id="buttonadddep" href="<?php echo site_url("manageindicator/addNewIndicatorDivFromGoalDep/".$goal_dep_id[$i]);  ?>">
+                                        <a id="buttonadddep" href="<?php echo site_url("manageindicator/addNewIndicatorDivFromGoalDep/".$goal_dep_id[$i]."/".$divid);  ?>">
 										<?php echo $goal_dep_name[$i]['name']; ?>
                                         </a>&nbsp;&nbsp;
                                         <span class="label label-danger">รอการแก้ไขข้อมูล</span>
@@ -158,7 +158,7 @@ td.highlight {
 					<div class="panel-heading"><strong>รายการตัวชี้วัดของกอง</strong> </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-						<a id="buttonadddep" href="<?php echo site_url("manageindicator/addNewIndicatorDivision");  ?>"><button type="button" class="btn btn-success">เพิ่มตัวชี้วัดของกอง</button></a>
+						<a id="buttonadddep" href="<?php echo site_url("manageindicator/addNewIndicatorDivision/".$divid);  ?>"><button type="button" class="btn btn-success">เพิ่มตัวชี้วัดของกอง</button></a>
                             <table class="table" id="dataTables-example2" cellspacing="0px" width="100%">
                                 <thead>
                                     <tr>

@@ -66,7 +66,6 @@
 									<th rowspan="2">ชื่อ</th>
 									<th colspan="5">เกณฑ์การให้คะแนน</th>
 									<th rowspan="2">น้ำหนัก</th>
-									<th rowspan="2">ผู้ดูแล</th>
 									<th rowspan="2" width="125">จัดการ</th>
 								</tr>
 								<tr>
@@ -90,7 +89,6 @@
 									<td><?php echo $loop->criteria4; ?></td>
 									<td><?php echo $loop->criteria5; ?></td>
 									<td><?php echo $loop->weight; ?></td>
-									<td><?php echo $admin; ?></td>
 									<td>
 									<div class="tooltip-demo">
 	<a href="<?php echo site_url("manageindicator/viewindicator_div/".$loop->id."/".$loop->isDep); ?>" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>

@@ -47,25 +47,77 @@
 						
 		<div class="row">
             <div class="col-md-12">
-                <div class="panel panel-default">
+                <div class="panel panel-success">
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table-striped row-border table-hover" id="dataTables-example">
+                            <table class="table" id="dataTables-example">
                                 <thead>
                                     <tr>
-										<th style="text-align: center;width: 15%">ประเด็นความสำเร็จที่</th>
-										<th>คำอธิบาย</th>
-                                        <th style="width: 20%">ผู้รับผิดชอบ</th>
+										<th style="width: 30%">ประเด็นความสำเร็จ</th>
+										<th style="width: 30%">แผนงาน/โครงการ</th>
+                                        <th style="width: 30%">เป้าหมาย</th>
+                                        <th style="width: 10%">ผู้รับผิดชอบ</th>
                                     </tr>
                                 </thead>
 								<tbody>
-								<?php if(is_array($goal_indicator_array) && count($goal_indicator_array) ) {
+								<?php 
+                                    $lastgoal=0;
+                                    $lastplan=0;
+                                
+                                if(is_array($goal_dep_array) && count($goal_dep_array) ) {
+									foreach($goal_dep_array as $loop1){
+								?>
+									<tr>
+                                        <td><?php if ($lastgoal!=$loop1->gnumber) { 
+                                                    if ($loop1->gnumber!= "") echo $loop1->gnumber.". "; 
+                                                    echo $loop1->gname;
+                                                    //$lastgoal = $loop1->gnumber;
+                                                  }
+                                                
+                                            ?>
+                                        </td>
+                                        <td><?php if ($lastplan!=$loop1->pnumber) { 
+                                                echo $loop1->pnumber.". ".$loop1->pname; 
+                                                $lastplan = $loop1->pnumber;
+                                            }
+                                            ?>
+                                        </td>
+                                        <td><?php echo $loop1->tnumber.". ".$loop1->tname; ?></td>
+                                        <td><?php if ($lastgoal!=$loop1->gnumber) { 
+                                                echo $loop1->pwfname." ".$loop1->pwlname;
+                                                $lastgoal = $loop1->gnumber;
+                                            } ?>
+                                        </td>
+                                    </tr>
+									<?php  } } 
+                                    
+                                    $lastgoal=0;
+                                    $lastplan=0;
+                                if(is_array($goal_indicator_array) && count($goal_indicator_array) ) {
 									foreach($goal_indicator_array as $loop2){
 								?>
 									<tr>
-                                        <td style="text-align: center"><?php if ($loop2->number!= "") echo $loop2->number; ?></td>
-                                        <td><?php echo $loop2->name; ?></td>
-                                        <td><?php echo $loop2->pwfname." ".$loop2->pwlname?></td>
+                                        <td><?php if ($lastgoal!=$loop2->gnumber) { 
+                                                    if ($loop2->gnumber!= "") echo $loop2->gnumber.". "; 
+                                                    echo $loop2->gname;
+                                                    //$lastgoal = $loop2->gnumber;
+                                                    
+                                                  }
+                                                
+                                            ?>
+                                        </td>
+                                        <td><?php if ($lastplan!=$loop2->pnumber) { 
+                                                echo $loop2->pnumber.". ".$loop2->pname; 
+                                                $lastplan = $loop2->pnumber;
+                                            }
+                                            ?>
+                                        </td>
+                                        <td><?php echo $loop2->tnumber.". ".$loop2->tname; ?></td>
+                                        <td><?php if ($lastgoal!=$loop2->gnumber) { 
+                                                echo $loop2->pwfname." ".$loop2->pwlname;
+                                                $lastgoal = $loop2->gnumber;
+                                            } ?>
+                                        </td>
                                     </tr>
 									<?php  } } ?>
                                 </tbody>

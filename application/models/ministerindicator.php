@@ -63,9 +63,14 @@ Class Ministerindicator extends CI_Model
     
  function getGoalTemp($userid=null,$table=null)
  {
-	$this->db->select("indicatorID as id, number, name, id as goalid");
+    if ($table == "division_goal") $this->db->select("indicatorID as id, number, name, id as goalid, pwfname,pwlname");
+	else $this->db->select("indicatorID as id, number, name, id as goalid");
+        
 	$this->db->order_by("number", "asc");
 	$this->db->from($table);	
+     
+    if ($table == "division_goal") $this->db->join('pwemployee','pwemployee.userid = '.$table.'.responseid','left');
+     
 	$this->db->where('indicatorID', 0);
     $this->db->where('editorID', $userid);
 	$query = $this->db->get()->result();
@@ -217,7 +222,7 @@ Class Ministerindicator extends CI_Model
  
  function getOneIndicatorDep($id=NULL)
  {
-	$this->db->select("id, depID, number, name, criteria1, criteria2, criteria3, criteria4, criteria5, goal, weight, technicalnote, pwfname, pwlname");
+	$this->db->select("id, depID, number, name, criteria1, criteria2, criteria3, criteria4, criteria5, goal, weight, technicalnote, pwfname, pwlname, isMinister, isGoalmin");
 	$this->db->from('dep_indicator');
     $this->db->join('pwemployee','pwemployee.userid = dep_indicator.editorID','left');
 	$this->db->where('id', $id);
@@ -227,7 +232,7 @@ Class Ministerindicator extends CI_Model
  
  function getOneIndicatorDivision($id=NULL)
  {
-	$this->db->select("id, divisionID, number, name, criteria1, criteria2, criteria3, criteria4, criteria5, goal, weight, technicalnote, pwfname, pwlname");
+	$this->db->select("id, divisionID, number, name, criteria1, criteria2, criteria3, criteria4, criteria5, goal, weight, technicalnote, pwfname, pwlname, isDep, isGoalDep");
 	$this->db->from('division_indicator');
     $this->db->join('pwemployee','pwemployee.userid = division_indicator.editorID','left');
 	$this->db->where('id', $id);
@@ -286,7 +291,7 @@ Class Ministerindicator extends CI_Model
  
  function getOneIndicatorGoalDep($id=NULL)
  {
-	$this->db->select("dep_goal.number as gnumber,dep_goal.name as gname,dep_plan.number as pnumber,dep_plan.name as pname, dep_target.number as tnumber, dep_target.name as tname")
+	$this->db->select("dep_goal.number as gnumber,dep_goal.name as gname,dep_plan.number as pnumber,dep_plan.name as pname, dep_target.number as tnumber, dep_target.name as tname, dep_goal.id as goalid")
 	         ->order_by("dep_goal.number", "asc")
              ->order_by("dep_plan.number", "asc")
              ->order_by("dep_target.number", "asc")
@@ -297,14 +302,49 @@ Class Ministerindicator extends CI_Model
 	$query = $this->db->get();		
 	return $query->result();
  }
+    
+ function getOneIndicatorGoalDepFromMinIndicator($id=NULL)
+ {
+	$this->db->select("min_goal.number as gnumber,min_goal.name as gname,min_plan.number as pnumber,min_plan.name as pname, min_target.number as tnumber, min_target.name as tname")
+	         ->order_by("min_goal.number", "asc")
+             ->order_by("min_plan.number", "asc")
+             ->order_by("min_target.number", "asc")
+	         ->from('min_goal')
+             ->join('min_plan','min_plan.min_goal_id=min_goal.id','left')
+             ->join('min_target','min_target.min_plan_id=min_plan.id','left')
+	         ->where('min_goal.indicatorID', $id);
+	$query = $this->db->get();		
+	return $query->result();
+ }
+
+ function getGoalDivFromDep($id=null)
+ {
+     $this->db->select("division_goal.number as gnumber,division_goal.name as gname,dep_plan.number as pnumber,dep_plan.name as pname, dep_target.number as tnumber, dep_target.name as tname, pwfname, pwlname")
+	         ->order_by("division_goal.number", "asc")
+             ->order_by("dep_plan.number", "asc")
+             ->order_by("dep_target.number", "asc")
+	         ->from('division_goal')
+             ->join('pwemployee', 'pwemployee.userid=division_goal.responseID', 'left')
+             ->join('dep_goal', 'dep_goal.id = division_goal.isGoalDep','left')
+             ->join('dep_plan','dep_plan.dep_goal_id=dep_goal.id','left')
+             ->join('dep_target','dep_target.dep_plan_id=dep_plan.id','left')
+	         ->where('dep_goal.indicatorID', $id);
+	$query = $this->db->get();		
+	return $query->result();
+ }
  
  function getOneIndicatorGoalDivision($id=NULL)
  {
-	$this->db->select("number, name, pwfname, pwlname");
-	$this->db->order_by("number", "asc");
-	$this->db->from('division_goal');
-     $this->db->join('pwemployee', 'pwemployee.userid=division_goal.responseID', 'left');
-	$this->db->where('indicatorID', $id);
+	$this->db->select("division_goal.number as gnumber,division_goal.name as gname,division_plan.number as pnumber,division_plan.name as pname, division_target.number as tnumber, division_target.name as tname, pwfname, pwlname")
+	         ->order_by("division_goal.number", "asc")
+             ->order_by("division_plan.number", "asc")
+             ->order_by("division_target.number", "asc")
+	         ->from('division_goal')
+             ->join('pwemployee', 'pwemployee.userid=division_goal.responseID', 'left')
+             ->join('division_plan','division_plan.division_goal_id=division_goal.id','left')
+             ->join('division_target','division_target.division_plan_id=division_plan.id','left')
+             ->where('isGoalDep',0)
+	         ->where('division_goal.indicatorID', $id);
 	$query = $this->db->get();		
 	return $query->result();
  }
@@ -468,8 +508,22 @@ Class Ministerindicator extends CI_Model
 	$this->db->delete('dep_indicator');
     
     // delete dep_goal temp
+    $goalid_array = $this->db->select("id")->from("dep_goal")->where("indicatorID",$id)->get()->result_array();
     $this->db->where('indicatorID', $id);
 	$this->db->delete('dep_goal');
+    
+    // delete dep_plan + dep_target temp
+    for ($n=0; $n<count($goalid_array); $n++) {
+        $planid_array = $this->db->select("id")->from("dep_plan")->where("dep_goal_id",$goalid_array[$n]['id'])->get()->result_array();
+        for($i=0; $i<count($planid_array); $i++) {
+            $this->db->where('dep_plan_id', $planid_array[$i]['id']);
+            $this->db->delete("dep_target"); 
+        }
+        $this->db->where('dep_goal_id', $goalid_array[$n]['id']);
+	    $this->db->delete("dep_plan"); 
+    }
+     
+    
      
  }
     

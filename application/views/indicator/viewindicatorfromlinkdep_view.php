@@ -62,6 +62,30 @@
                                     $lastgoal=0;
                                     $lastplan=0;
                                 
+                                if(is_array($goal_min_array) && count($goal_min_array) ) {
+									foreach($goal_min_array as $loop1){
+								?>
+									<tr>
+                                        <td><?php if ($lastgoal!=$loop1->gnumber) { 
+                                                    if ($loop1->gnumber!= "") echo $loop1->gnumber.". "; 
+                                                    echo $loop1->gname;
+                                                    $lastgoal = $loop1->gnumber;
+                                                  }
+                                                
+                                            ?>
+                                        </td>
+                                        <td><?php if ($lastplan!=$loop1->pnumber) { 
+                                                echo $loop1->pnumber.". ".$loop1->pname; 
+                                                $lastplan = $loop1->pnumber;
+                                            }
+                                            ?>
+                                        </td>
+                                        <td><?php echo $loop1->tnumber.". ".$loop1->tname; ?></td>
+                                    </tr>
+									<?php  } } 
+                                    
+                                    $lastgoal=0;
+                                    $lastplan=0;
                                 if(is_array($goal_indicator_array) && count($goal_indicator_array) ) {
 									foreach($goal_indicator_array as $loop2){
 								?>

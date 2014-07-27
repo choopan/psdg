@@ -46,7 +46,7 @@ td.highlight {
 							<div class="col-md-4">
 									<div class="form-group">
                                         <label>กรม *</label>
-										<select class="form-control" name="departmentid" id="departmentid" onchange="savedepid(this);">
+										<select class="form-control" name="departmentid" id="departmentid" onchange="savedepid(this);" disabled>
 											<option value="">---เลือกกรม---</option>
 										<?php 	if(is_array($dep_array)) {
 												foreach($dep_array as $loop){

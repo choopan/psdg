@@ -23,6 +23,11 @@
         </div>
 		
 		<div class="row">
+            
+<?php if ($this->session->flashdata('result')=="success") { echo '<div class="alert-message alert alert-success"> ระบบทำการเพิ่มข้อมูลเรียบร้อยแล้ว</div>'; }
+						  else if ($this->session->flashdata('result')=="fail") echo '<div class="alert-message alert alert-danger"> ระบบไม่สามารถเพิ่มข้อมูลได้</div>';
+					
+					?>
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-body">
@@ -30,7 +35,6 @@
                             <table class="table" id="dataTables-example">
                                 <thead><tr>
 									<th rowspan="2" style="width: 30%">ประเด็นความสำเร็จ</th>
-									<th rowspan="2" style="width: 10%">ประเภทตัวชี้วัด</th>
 									<th rowspan="2" style="width: 10%">สถานะ</th>
                                     <th colspan="3" style="text-align: center">รายงานผลการดำเนินการ</th>
                                     
@@ -42,28 +46,12 @@
                                 </tr>
 								</thead>
                                 <tbody>
-                                <?php if(is_array($dep_array)) {
-                                        foreach($dep_array as $loop){ ?>
-                                    <tr>
-                                    <td><?php echo $loop->number." ".$loop->goalname; ?></td>
-                                    <td><?php echo "ตัวชี้วัดของกรม"; ?></td>
-                                    <td><span class="label label-danger">รอรายงานรอบ 6 เดือน</span></td>
-                                    <td style="text-align: center"><a href="<?php echo site_url("reportgoal/addreport/".$loop->goalid); ?>"><button id="buttonselect" type="button" class="btn btn-primary">รายงาน</button></a>
-                                    </td>
-                                    <td style="text-align: center"><button id="buttonselect" type="button" class="btn btn-primary disabled ">รายงาน</button>
-                                    </td>
-                                    <td style="text-align: center"><button id="buttonselect" type="button" class="btn btn-primary disabled ">รายงาน</button>
-                                    </td>
-                                    </tr>
-                                <?php } } ?>
-                                    
                                 <?php if(is_array($div_array)) {
                                         foreach($div_array as $loop){ ?>
                                     <tr>
-                                    <td><?php echo $loop->number." ".$loop->goalname; ?></td>
-                                    <td><?php echo "ตัวชี้วัดของกอง"; ?></td>
+                                    <td><?php echo $loop->gnumber." ".$loop->gname; ?></td>
                                     <td><span class="label label-danger">รอรายงานรอบ 6 เดือน</span></td>
-                                    <td style="text-align: center"><button id="buttonselect" type="button" class="btn btn-primary">รายงาน</button>
+                                    <td style="text-align: center"><a href="<?php echo site_url('reportgoal/addreport/6/'.$loop->goalid); ?>"><button id="buttonselect" type="button" class="btn btn-primary">รายงาน</button></a>
                                     </td>
                                     <td style="text-align: center"><button id="buttonselect" type="button" class="btn btn-primary disabled ">รายงาน</button>
                                     </td>
@@ -122,6 +110,10 @@ function editNumber(val1) {
 }
 
 
+</script>
+<script>
+$(".alert-message").alert();
+//window.setTimeout(function() { $(".alert-message").alert('close'); }, 2000);
 </script>
 </body>
 </html>

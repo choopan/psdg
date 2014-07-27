@@ -128,8 +128,8 @@ class Manageindicator extends CI_Controller {
 	{
 		$this->load->helper(array('form'));
         
-        // save dep id
-        $data['depid'] = $this->session->userdata('depid');
+        // set dep id for admin_dep
+        $data['depid'] = $this->session->userdata('sessdep');
 		
 		$query = $this->position->getPosition();
 		if($query){
@@ -209,12 +209,23 @@ class Manageindicator extends CI_Controller {
     function addNewIndicatorDepFromInMin() 
     {
         $id = $this->uri->segment(3);
+        $data['indicatorNO'] = $this->session->userdata('number');
+        $data['indicatorName'] = $this->session->userdata('name');
+        $data['weightmin'] = $this->session->userdata('weightmin');
         
         $data['min_array'] = $this->ministerindicator->getOneIndicator($id);
         $data['goal_array'] = $this->ministerindicator->getIndicatorMinGoal($id,$this->session->userdata('sessyear'))->result();
         
-        $data['showresult'] = null;
+        $userid = $this->session->userdata('sessid');
+        $query = $this->ministerindicator->getGoalTemp($userid,'dep_goal');
+        if($query){
+			$data['goaltemp_array'] =  $query;
+		}else{
+			$data['goaltemp_array'] = array();
+		}
         
+        $data['showresult'] = null;
+        $data['id'] = $id;
         
         $data['title'] = "MFA - Add Indicator ";
 		$this->load->view('indicator/addnewindicatordepfrominmin_view',$data);
@@ -223,10 +234,22 @@ class Manageindicator extends CI_Controller {
     function addNewIndicatorDepFromGoalMin() 
     {
         $id = $this->uri->segment(3);
+        $data['indicatorNO'] = $this->session->userdata('number');
+        $data['indicatorName'] = $this->session->userdata('name');
+        $data['weightmin'] = $this->session->userdata('weightmin');
         
         $data['min_array'] = $this->ministerindicator->getNameFromMinister("min_goal","id",$id);
         $data['min_goal_id'] = $id;
         
+        $userid = $this->session->userdata('sessid');
+        $query = $this->ministerindicator->getGoalTemp($userid,'dep_goal');
+        if($query){
+			$data['goaltemp_array'] =  $query;
+		}else{
+			$data['goaltemp_array'] = array();
+		}
+        
+        $data['id'] = $id;
         $data['showresult'] = null;
         
         $data['title'] = "MFA - Add Indicator ";
@@ -236,9 +259,10 @@ class Manageindicator extends CI_Controller {
 	function addDivision()
 	{
 		$this->load->helper(array('form'));
-		
-        $data['divid'] = $this->session->userdata('divid');
-        $data['depid'] = $this->session->userdata('divdepid');
+
+        $data['divid'] = $this->session->userdata('sessdiv');
+        
+        $data['depid'] = $this->session->userdata('sessdep');
         
         // dep of user
         $query = $this->department->getOneGom($this->session->userdata('sessdep'));
@@ -328,9 +352,23 @@ class Manageindicator extends CI_Controller {
     {
         $id = $this->uri->segment(3);
         
+        $data['indicatorNO'] = $this->session->userdata('number');
+        $data['indicatorName'] = $this->session->userdata('name');
+        $data['weightmin'] = $this->session->userdata('weightmin');
+        
         $data['dep_array'] = $this->ministerindicator->getOneIndicatorDep($id);
         $data['goal_array'] = $this->ministerindicator->getOneIndicatorGoalDep($id,$this->session->userdata('sessyear'));
         
+        $userid = $this->session->userdata('sessid');
+        $query = $this->ministerindicator->getGoalTemp($userid,'division_goal');
+        if($query){
+			$data['goaltemp_array'] =  $query;
+		}else{
+			$data['goaltemp_array'] = array();
+		}
+        
+        $data['id'] = $id;
+        $data['divid'] = $this->uri->segment(4);
         $data['showresult'] = null;
         
         
@@ -341,9 +379,21 @@ class Manageindicator extends CI_Controller {
     function addNewIndicatorDivFromGoalDep() 
     {
         $id = $this->uri->segment(3);
+        $data['divid'] = $this->uri->segment(4);
+        $data['indicatorNO'] = $this->session->userdata('number');
+        $data['indicatorName'] = $this->session->userdata('name');
+        $data['weightmin'] = $this->session->userdata('weightmin');
         
         $data['dep_array'] = $this->ministerindicator->getNameFromMinister("dep_goal","id",$id);
         $data['dep_goal_id'] = $id;
+        
+        $userid = $this->session->userdata('sessid');
+        $query = $this->ministerindicator->getGoalTemp($userid,'division_goal');
+        if($query){
+			$data['goaltemp_array'] =  $query;
+		}else{
+			$data['goaltemp_array'] = array();
+		}
         
         $data['showresult'] = null;
         
@@ -377,8 +427,21 @@ class Manageindicator extends CI_Controller {
 	function addNewIndicatorDivision()
 	{
 		$this->load->helper(array('form'));
+        
+        $data['indicatorNO'] = $this->session->userdata('number');
+        $data['indicatorName'] = $this->session->userdata('name');
+        $data['weightmin'] = $this->session->userdata('weightmin');
+        $data['divid'] = $this->uri->segment(3);
 
 		$data['showresult'] = null;
+        
+        $userid = $this->session->userdata('sessid');
+        $query = $this->ministerindicator->getGoalTemp($userid,'division_goal');
+        if($query){
+			$data['goaltemp_array'] =  $query;
+		}else{
+			$data['goaltemp_array'] = array();
+		}
 	
 		$data['title'] = "MFA - Add Indicator ";
 		$this->load->view('indicator/addnewindicatordivision_view',$data);
@@ -866,6 +929,16 @@ class Manageindicator extends CI_Controller {
 		if($query){
 			$data['minis_indicator_array'] =  $query;
 		}
+        $data['goal_min_array'] = array();
+        foreach ($query as $loop) {
+            if ($loop->isMinister > 0) {
+                $resultmin = $this->ministerindicator->getOneIndicatorGoalDepFromMinIndicator($loop->isMinister);
+                $data['goal_min_array'] = $resultmin;
+            }
+            if ($loop->isGoalmin > 0) $goalminid = $loop->isGoalmin;
+            
+        }
+            
 		$query = $this->ministerindicator->getOneIndicatorGoalDep($id);
 		if($query){
 			$data['goal_indicator_array'] =  $query;
@@ -884,17 +957,22 @@ class Manageindicator extends CI_Controller {
 		if($query){
 			$data['minis_indicator_array'] =  $query;
 		}
+        
+        $data['goal_dep_array'] = array();
+        foreach ($query as $loop) {
+            if ($loop->isDep > 0) {
+                $resultmin = $this->ministerindicator->getGoalDivFromDep($loop->isDep);
+                $data['goal_dep_array'] = $resultmin;
+            }
+            if ($loop->isGoalDep > 0) $goalminid = $loop->isGoalDep;
+            
+        }
+        
 		$query = $this->ministerindicator->getOneIndicatorGoalDivision($id);
 		if($query){
 			$data['goal_indicator_array'] =  $query;
 		}else{
 			$data['goal_indicator_array'] =  array();
-		}
-		$query = $this->ministerindicator->getOneIndicatorResponseDivision($id);
-		if($query){
-			$data['res_indicator_array'] =  $query;
-		}else{
-			$data['res_indicator_array'] =  array();
 		}
 
 		$data['title'] = "MFA - View Indicator ";
@@ -903,9 +981,7 @@ class Manageindicator extends CI_Controller {
 
 	function saveDepartment()
 	{
-
-        $depid= ($this->input->post('departmentid'));
-        
+        $depid= ($this->session->userdata('sessdep'));
         
         // array new indicator temp
         $newminid = ($this->input->post('newminid'));
@@ -986,12 +1062,11 @@ class Manageindicator extends CI_Controller {
 		$weightmin= ($this->input->post('weightmin'));
 		
         // dep goal response name array
-		$userid= ($this->input->post('userid'));
+		//$userid= ($this->input->post('userid'));
             
 		//array
         $goalid = $this->input->post('goalid');
-		//$goalNO = $this->input->post('goalNO');
-		//$goalName = $this->input->post('goalName');
+		
 
 		$criterion1 = $this->input->post('criterion1');
 		$criterion2 = $this->input->post('criterion2');
@@ -1027,6 +1102,8 @@ class Manageindicator extends CI_Controller {
 
 		  $indicatorid = $this->db->insert_id();
 		  $goal = array();
+
+          // edit goal temp
 		  for ($i=0; $i<count($goalid); $i++) {
 			    $goal['id'] = $goalid[$i];
                 $goal['indicatorID'] = $indicatorid;
@@ -1058,7 +1135,7 @@ class Manageindicator extends CI_Controller {
 	function saveDivision()
 	{
 		
-        $divid= ($this->input->post('divid'));
+        $divid= ($this->session->userdata('sessdiv'));
         
         
         // array new indicator temp
@@ -1143,8 +1220,15 @@ class Manageindicator extends CI_Controller {
 		$userid= ($this->input->post('userid'));
             
 		//array
-		$goalNO = $this->input->post('goalNO');
-		$goalName = $this->input->post('goalName');
+        
+        $goalid = $this->input->post('goalid');
+        
+        if ($nextpage==1) {
+            $goaldepid = $this->input->post('goaldepid');
+            $goalnumber = $this->input->post('goaldepnumber');
+            $goalname = $this->input->post('goaldepname');
+            $responseid = $this->input->post('responsetextid');
+        }
 
 		$criterion1 = $this->input->post('criterion1');
 		$criterion2 = $this->input->post('criterion2');
@@ -1179,25 +1263,34 @@ class Manageindicator extends CI_Controller {
 		if ($resultMin) {
 
 		  $indicatorid = $this->db->insert_id();
-		  $goal = array();
-		  for ($i=0; $i<count($goalNO); $i++) {
-			if ($goalName[$i]!=null) {
-				$goal['indicatorID']= $indicatorid;
-				$goal['number']= $goalNO[$i];
-				$goal['name']= $goalName[$i];
-                $goal['responseID'] = $userid[$i];
-				$result = $this->ministerindicator->addIndicatorGoalDivision($goal);
-						/*
-						if ($result) $this->session->set_flashdata('showresult', 'success');
-						else { 
-							$this->session->set_flashdata('showresult', 'fail');
-							$this->ministerindicator->delIndicator($indicatorid);
-							$this->ministerindicator->delGoalbyIndicator($indicatorid);
-						}*/
-					}
-				}
+		  $goaldep = array();
+          $goal = array();
+		  
+          // insert goal from dep
+          if ($nextpage==1) {  
+              for ($i=0; $i<count($goalnumber); $i++) {
+                  $goaldep['number'] = $goalnumber[$i];
+                  $goaldep['name'] = $goalname[$i];
+                  $goaldep['indicatorID'] = $indicatorid;
+                  $goaldep['responseID'] = $responseid[$i];
+                  $goaldep['editorID'] = $editid;
+                  $goaldep['isGoalDep'] = $goaldepid[$i];
+                  $result = $this->ministerindicator->addIndicatorGoalDivision($goaldep);  
+              }
+          }
+          
+            
+          // edit goal temp
+		  for ($i=0; $i<count($goalid); $i++) {
+			    $goal['id'] = $goalid[$i];
+                $goal['indicatorID'] = $indicatorid;
+				$result = $this->ministerindicator->editNumberGoal($goal,"division_goal");
+          }
 				
-                
+                $this->session->unset_userdata('number');
+                $this->session->unset_userdata('name');
+                $this->session->unset_userdata('weightmin');
+            
                 $data['showresult'] = "success";
 				// if success , go to indicator table
 
@@ -1291,7 +1384,7 @@ class Manageindicator extends CI_Controller {
 		redirect('manageindicator/showMinister', 'refresh');
 	}
     
-    function deleteGoalTemp($table=null,$goalid)
+    function deleteGoalTemp($table=null,$goalid,$indicatorid, $divid)
 	{
         switch($table) {
             case 1: $this->ministerindicator->delGoalTemp($goalid,"min");
@@ -1301,8 +1394,20 @@ class Manageindicator extends CI_Controller {
             case 2: $this->ministerindicator->delGoalTemp($goalid,"dep");
                     redirect('manageindicator/addNewIndicatorDep', 'location');
                     break;
-            case 3: $this->ministerindicator->delGoalTemp($goalid,"division");
-                    redirect('manageindicator/addIndicatorMinister', 'location');
+            case 3: $this->ministerindicator->delGoalTemp($goalid,"dep");
+                    redirect('manageindicator/addNewIndicatorDepFromInMin/'.$indicatorid, 'location');
+                    break;
+            case 4: $this->ministerindicator->delGoalTemp($goalid,"dep");
+                    redirect('manageindicator/addNewIndicatorDepFromGoalMin/'.$indicatorid, 'location');
+                    break;
+            case 5: $this->ministerindicator->delGoalTemp($goalid,"division");
+                    redirect('manageindicator/addNewIndicatorDivision', 'location');
+                    break;
+            case 6: $this->ministerindicator->delGoalTemp($goalid,"division");
+                    redirect('manageindicator/addNewIndicatorDivFromInDep/'.$indicatorid."/".$divid, 'location');
+                    break;
+            case 7: $this->ministerindicator->delGoalTemp($goalid,"division");
+                    redirect('manageindicator/addNewIndicatorDivFromGoalDep/'.$indicatorid."/".$divid, 'location');
                     break;
             default: break;
         }
@@ -1373,7 +1478,7 @@ class Manageindicator extends CI_Controller {
 		if($query){
 			$data['minis_indicator_array'] =  $query;
 		}
-		$query = $this->ministerindicator->getOneIndicatorGoal($id);
+		$query = $this->ministerindicator->getOneIndicatorGoalDepFromMinIndicator($id);
 		if($query){
 			$data['goal_indicator_array'] =  $query;
 		}else{
@@ -1405,12 +1510,13 @@ class Manageindicator extends CI_Controller {
 		}else{
 			$data['goal_indicator_array'] =  array();
 		}
+        /*
 		$query = $this->ministerindicator->getOneIndicatorResponseDep($id);
 		if($query){
 			$data['res_indicator_array'] =  $query;
 		}else{
 			$data['res_indicator_array'] =  array();
-		}
+		}*/
 		$data['depID'] = $id;
 		$data['title'] = "MFA - View Indicator";
 		$this->load->view('indicator/viewindicatordepartment_view',$data);
@@ -1445,7 +1551,7 @@ class Manageindicator extends CI_Controller {
 	{
 		//$this->load->model('user');
 		$term = $this->input->get('term', TRUE);
-		$pwemployee = $this->user->searchName($term);
+		$pwemployee = $this->user->searchResponseName($term,$this->uri->segment(3));
 		echo json_encode($pwemployee);
 	}
     
@@ -1488,6 +1594,24 @@ class Manageindicator extends CI_Controller {
         
         $this->ministerindicator->addIndicatorGoalDep($goal);
         redirect('manageindicator/addNewIndicatorDep', 'location');
+    }
+    
+    function addDivGoalTemp() 
+    {
+        $number = $this->input->post('goalnumber');
+        $name = $this->input->post('goalname');
+        $responseid = $this->input->post('responseid');
+        
+        $this->session->set_userdata('number', $this->input->post('number'));
+        $this->session->set_userdata('name', $this->input->post('name'));
+        $this->session->set_userdata('weightmin', $this->input->post('weight'));
+        
+        $userid = $this->session->userdata('sessid');
+        
+        $goal = array('number' => $number, 'name' => $name, 'indicatorID' => 0, 'responseID' =>$responseid, 'editorID' => $userid);
+        
+        $this->ministerindicator->addIndicatorGoalDivision($goal);
+        redirect('manageindicator/addNewIndicatorDivision', 'location');
     }
     
     function view_minplan()
