@@ -71,7 +71,21 @@ td.highlight {
                                         <td><?php echo $loop['dep_name']; ?></td>
                                         <td><?php echo $loop['div_name']; ?></td>
                                         <td><?php echo $loop['email']; ?></td>
-										<td>ผู้รับผิดชอบประเด็นความสำเร็จ</td>
+										<td>
+											<?php
+												if($loop['admin_dep'] == 1){
+													echo "ผู้ดูแลกรม";
+												}else if($loop['approve_dep'] == 1){
+													echo "อธิบดีกรม";
+												}elseif($loop['approve_div'] == 1){
+													echo "ผู้อำนวยการกอง";
+												}elseif($loop['set_div'] == 1){
+													echo "ผู้กำหนดตัวชี้วัดกอง";
+												}elseif($loop['report_div'] == 1){
+													echo "ผู้รับผิดชอบประเด็นความสำเร็จ";
+												}
+											?>
+										</td>
 										<td>
 											<a href='<?php echo "user_del_info/".$loop['USERID']."/2"; ?>' class="btnDelete btn btn-danger btn-xs" onClick='return confirm(" คุณต้องการลบหรือไม่ ")' title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></a>
 										</td>

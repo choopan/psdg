@@ -88,7 +88,7 @@ td.highlight {
 									<div class="row">
 										<div class="form-group">
 										<div class="col-lg-3">
-											<input id="addNew" type="submit" class="btn btn-success" value="เพิ่ม"> <a href="<?php echo site_url("indicator_admin/user_indicator_view");?>" class="btn btn-primary">กลับ</a>
+											<input id="addNew" type="submit" class="btn btn-success" value="เพิ่ม"> <a href="<?php echo site_url("indicator_admin/user_indicator_view3");?>" class="btn btn-primary">กลับ</a>
 										</div>
 										</div>
 									</div>

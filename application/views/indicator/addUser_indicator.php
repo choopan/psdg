@@ -35,7 +35,7 @@ td.highlight {
 							</div>
 						<?php }?>	
 								<div id="show"></div>
-								<form onSubmit="return check_pass()" action="<?php echo site_url("indicator_admin/indicatorUser_save3"); ?>" method="post" name="addUser">
+								<form onSubmit="return check_pass()" action="<?php echo site_url("indicator_admin/indicatorUser_save"); ?>" method="post" name="addUser">
 
 									<div class="row">
 										<div class="col-lg-4">

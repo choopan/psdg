@@ -91,21 +91,6 @@ Class User extends CI_Model
 	return $query->result();
  }
     
- function searchResponseName($term, $divid)
- {
-	$this->db->_protect_identifiers=false;
-	$this->db->select("user_indicator.userid, CONCAT(pwfname,' ', pwlname) as pwname, pwposition.PWNAME as poname, PWTELOFFICE as pwtelephone, pwemployee.PWPOSITION as positionid, department.name as depname");
-	$this->db->from('user_indicator');	
-    $this->db->join('pwemployee', 'user_indicator.userid = pwemployee.userid','left');
-	$this->db->join('pwposition', 'pwposition.pwposition = pwemployee.pwposition','left');	
-	$this->db->join('department', 'pwemployee.department = department.id','left');
-    $this->db->where('report_div', 1);
-    $this->db->where('user_indicator.division', $divid);
-	$this->db->like('pwfname', $term,'after');
-	$query = $this->db->get();
-	return $query->result();
- }
-    
  function searchReportName($term)
  {
 	$this->db->_protect_identifiers=false;
@@ -125,7 +110,7 @@ Class User extends CI_Model
   $this->db->_protect_identifiers=false;
 	$this->db->select("PWUSERNAME, CONCAT(pwfname,' ', pwlname) as fullname, PWFNAME, PWLNAME, PWEFNAME, PWELNAME, PWEMAIL, PWTELOFFICE, pwposition.PWNAME as poname, pwposition.PWENAME as poename, pwemployee.PWPOSITION as ponumber");
 	$this->db->from('pwemployee');	
-	$this->db->join('pwposition', 'pwposition.pwposition = pwemployee.pwposition','left');	
+	$this->db->join('pwposition', 'pwposition.pwposition = pwemployee.pwposition');	
 	$this->db->where('USERID', $id);
 	$query = $this->db->get();		
 	return $query->result();
@@ -364,6 +349,9 @@ function user_indicator_view3()
 					   ->join('pwemployee','user_indicator.userid = pwemployee.USERID','left')
 					   ->join('department','pwemployee.department = department.id','left')
 					   ->join('division','pwemployee.division = division.id','left')
+					   ->or_where('user_indicator.approve_dep',1)
+					   ->or_where('user_indicator.approve_div',1)
+					   ->or_where('user_indicator.set_div',1)
 					   ->where('pwemployee.enabled',1)
 					   ->get()
 					   ->result_array();
