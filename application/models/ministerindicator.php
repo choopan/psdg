@@ -298,6 +298,22 @@ Class Ministerindicator extends CI_Model
 	         ->from('dep_goal')
              ->join('dep_plan','dep_plan.dep_goal_id=dep_goal.id','left')
              ->join('dep_target','dep_target.dep_plan_id=dep_plan.id','left')
+	         ->where('dep_goal.indicatorID', $id)
+			 ->where('dep_goal.isGoalMin',0);
+	$query = $this->db->get();		
+	return $query->result();
+ }
+ 
+ function getOneIndicatorGoalDepIsGoalMin($id=NULL)
+ {
+	$this->db->select("dep_goal.number as gnumber,dep_goal.name as gname,min_plan.number as pnumber,min_plan.name as pname, min_target.number as tnumber, min_target.name as tname, dep_goal.id as goalid")
+	         ->order_by("dep_goal.number", "asc")
+             ->order_by("min_plan.number", "asc")
+             ->order_by("min_target.number", "asc")
+	         ->from('dep_goal')
+			 ->from('min_goal','dep_goal.isGoalmin=min_goal.id','left')
+             ->join('min_plan','min_plan.min_goal_id=min_goal.id','left')
+             ->join('min_target','min_target.min_plan_id=min_plan.id','left')
 	         ->where('dep_goal.indicatorID', $id);
 	$query = $this->db->get();		
 	return $query->result();

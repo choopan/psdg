@@ -94,6 +94,29 @@
                                         <td><?php echo $loop1->tnumber.". ".$loop1->tname; ?></td>
                                     </tr>
 									<?php  } } ?>
+								<?php 
+                                    // goal dep from goal min
+									$lastgoal=0;
+                                    $lastplan=0;
+									foreach($goal_min_array as $loop1){ ?>
+										<tr>
+                                        <td><?php if ($lastgoal!=$loop1->gnumber) { 
+                                                    if ($loop1->gnumber!= "") echo $loop1->gnumber.". "; 
+                                                    echo $loop1->gname;
+                                                    $lastgoal = $loop1->gnumber;
+                                                  }
+                                                
+                                            ?>
+                                        </td>
+                                        <td><?php if ($lastplan!=$loop1->pnumber) { 
+                                                echo $loop1->pnumber.". ".$loop1->pname; 
+                                                $lastplan = $loop1->pnumber;
+                                            }
+                                            ?>
+                                        </td>
+                                        <td><?php echo $loop1->tnumber.". ".$loop1->tname; ?></td>
+                                    </tr>
+								<?php	} 	?>
                                 </tbody>
 							</table>
 						</div>

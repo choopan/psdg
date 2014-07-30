@@ -1101,8 +1101,21 @@ class Manageindicator extends CI_Controller {
 		if ($resultMin) {
 
 		  $indicatorid = $this->db->insert_id();
+		  $goal_min = array();
+		  
+		  if ($indicator_min_id > 0) {
+				$query = $this->ministerindicator->getIndicatorMinGoal($indicator_min_id,$year)->result();
+				foreach($query as $loop) {
+					$goal_min['indicatorID'] = $indicatorid;
+					$goal_min['number'] = $loop->number;
+					$goal_min['name'] = $loop->name;
+					$goal_min['editorID'] = $editid;
+					$goal_min['isGoalMin'] = $loop->goalid;
+					$result = $this->ministerindicator->addIndicatorGoalDep($goal_min);
+				}
+		  }
+		  
 		  $goal = array();
-
           // edit goal temp
 		  for ($i=0; $i<count($goalid); $i++) {
 			    $goal['id'] = $goalid[$i];
@@ -1510,6 +1523,14 @@ class Manageindicator extends CI_Controller {
 		}else{
 			$data['goal_indicator_array'] =  array();
 		}
+		
+		$query = $this->ministerindicator->getOneIndicatorGoalDepIsGoalMin($id);
+		if($query){
+			$data['goal_min_array'] =  $query;
+		}else{
+			$data['goal_min_array'] =  array();
+		}
+		
         /*
 		$query = $this->ministerindicator->getOneIndicatorResponseDep($id);
 		if($query){
