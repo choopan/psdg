@@ -1557,7 +1557,7 @@ class Manageindicator extends CI_Controller {
         foreach ($query as $loop) {
             $depid = $loop->isDep;
             if ($depid > 0) {
-                $resultdep = $this->ministerindicator->
+                //$resultdep = $this->ministerindicator->
             }
         }
 		$query = $this->ministerindicator->getOneIndicatorGoalDivision($id);
