@@ -91,6 +91,18 @@ Class User extends CI_Model
 	return $query->result();
  }
     
+ function searchResponseName($term, $divid)
+ {
+	//$this->db->_protect_identifiers=false;
+	$this->db->select("id, name");
+	$this->db->from('user_indicator');	
+    $this->db->where('report_div',1);
+    $this->db->where('division',$divid);
+    $this->db->like('name', $term,'after');
+	$query = $this->db->get();
+	return $query->result();
+ }
+    
  function searchReportName($term)
  {
 	$this->db->_protect_identifiers=false;

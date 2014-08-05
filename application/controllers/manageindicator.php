@@ -1517,18 +1517,20 @@ class Manageindicator extends CI_Controller {
 		if($query){
 			$data['dep_indicator_array'] =  $query;
 		}
-		$query = $this->ministerindicator->getOneIndicatorGoalDep($id);
-		if($query){
-			$data['goal_indicator_array'] =  $query;
-		}else{
-			$data['goal_indicator_array'] =  array();
-		}
 		
 		$query = $this->ministerindicator->getOneIndicatorGoalDepIsGoalMin($id);
 		if($query){
 			$data['goal_min_array'] =  $query;
 		}else{
 			$data['goal_min_array'] =  array();
+		}
+        
+        $query = $this->ministerindicator->getOneIndicatorGoalDep($id);
+		if($query){
+            if ($data['goal_min_array']) $data['goal_indicator_array'] =  array();
+			else $data['goal_indicator_array'] =  $query;
+		}else{
+			$data['goal_indicator_array'] =  array();
 		}
 		
         /*
@@ -1551,6 +1553,13 @@ class Manageindicator extends CI_Controller {
 		if($query){
 			$data['dep_indicator_array'] =  $query;
 		}
+        
+        foreach ($query as $loop) {
+            $depid = $loop->isDep;
+            if ($depid > 0) {
+                $resultdep = $this->ministerindicator->
+            }
+        }
 		$query = $this->ministerindicator->getOneIndicatorGoalDivision($id);
         if($query){
 			$data['goal_indicator_array'] =  $query;
@@ -1573,6 +1582,14 @@ class Manageindicator extends CI_Controller {
 		//$this->load->model('user');
 		$term = $this->input->get('term', TRUE);
 		$pwemployee = $this->user->searchResponseName($term,$this->uri->segment(3));
+		echo json_encode($pwemployee);
+	}
+    
+    function autocompleteControl()
+	{
+		//$this->load->model('user');
+		$term = $this->input->get('term', TRUE);
+		$pwemployee = $this->user->searchName($term);
 		echo json_encode($pwemployee);
 	}
     

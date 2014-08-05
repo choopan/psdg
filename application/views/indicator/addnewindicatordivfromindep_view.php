@@ -306,8 +306,8 @@ function auto_tag(tag,num)
 	
 				    response($.map(data,function(pwemployee){
                         return {
-							id: pwemployee.userid,
-							value: pwemployee.pwname
+							id: pwemployee.id,
+							value: pwemployee.name
                         };
                     }));
                 }

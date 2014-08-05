@@ -92,7 +92,7 @@
                                         </td>
                                         <td><?php echo $loop1->tnumber.". ".$loop1->tname; ?></td>
                                         <td><?php if ($lastgoal!=$loop1->gnumber) { 
-                                                echo $loop1->pwfname." ".$loop1->pwlname;
+                                                echo $loop1->fullname;
                                                 $lastgoal = $loop1->gnumber;
                                             } ?>
                                         </td>

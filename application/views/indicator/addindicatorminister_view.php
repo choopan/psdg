@@ -477,7 +477,7 @@ $(document).ready(function() {
 		$(tag+num).autocomplete({
 		source: function(request, response){
 			$.ajax({
-                url: "<?php echo site_url('manageindicator/autocompleteResponse'); ?>",
+                url: "<?php echo site_url('manageindicator/autocompleteControl'); ?>",
                 dataType: "json",
                 data: {term: request.term},
 				error: function(data){

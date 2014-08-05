@@ -26,10 +26,10 @@ Class Ministerindicator extends CI_Model
 	$this->db->select("number, min_indicator.name, GROUP_CONCAT( DISTINCT(department.name) SEPARATOR ' <br> ' ) AS TDepName, criteria1, criteria2, criteria3, criteria4, criteria5, goal, weight, min_indicator.id as mid");
 	$this->db->order_by("number*1", "asc");
 	$this->db->from('min_indicator');		
-	$this->db->join('minIndicatorResponse','minIndicatorResponse.minIndicatorID=min_indicator.id', 'left');	
-	$this->db->join('pwemployee','pwemployee.userid=minIndicatorResponse.userID', 'left');	
+	$this->db->join('min_indicator_response','min_indicator_response.minIndicatorID=min_indicator.id', 'left');	
+	$this->db->join('pwemployee','pwemployee.userid=min_indicator_response.userID', 'left');	
 	$this->db->join('department','department.id=pwemployee.department', 'left');	
-	//$this->db->group_by('minIndicatorResponse.resDepartmentID');
+	//$this->db->group_by('min_indicator_response.resDepartmentID');
 	$this->db->group_by('min_indicator.name');
 	$this->db->where('year', $year);
 	$query = $this->db->get();	
@@ -42,8 +42,8 @@ Class Ministerindicator extends CI_Model
 	$this->db->select("min_indicator.id as id, number, name");
 	$this->db->order_by("number*1", "asc");
 	$this->db->from('min_indicator');
-	//$this->db->join('minIndicatorResponse','minIndicatorResponse.minIndicatorID=min_indicator.id');	
-	//$this->db->join('pwdepartment','pwdepartment.DepID=minIndicatorResponse.resDepartmentID');	
+	//$this->db->join('min_indicator_response','min_indicator_response.minIndicatorID=min_indicator.id');	
+	//$this->db->join('pwdepartment','pwdepartment.DepID=min_indicator_response.resDepartmentID');	
 	$this->db->where('year', $year);
 	$query = $this->db->get();	
 	return $query;
@@ -254,10 +254,10 @@ Class Ministerindicator extends CI_Model
  function getOneIndicatorResponse($id=NULL)
  {
 	$this->db->_protect_identifiers=false;
-	$this->db->select("minIndicatorResponse.userID, CONCAT(pwfname,' ', pwlname) as resName, pwposition.pwname as poname, pwemployee.pwteloffice as resTelephone, department.name as ThDepName, isControl");
-	$this->db->order_by("minIndicatorResponse.id", "asc");
-	$this->db->from('minIndicatorResponse');
-	$this->db->join('pwemployee','pwemployee.userid=minIndicatorResponse.userID');	
+	$this->db->select("min_indicator_response.userID, user_indicator.name as resName, pwposition.pwname as poname, pwemployee.pwteloffice as resTelephone, department.name as ThDepName, isControl");
+	$this->db->order_by("min_indicator_response.id", "asc");
+	$this->db->from('min_indicator_response');
+	$this->db->join('user_indicator','user_indicator.id=min_indicator_response.userID');	
 	$this->db->join('department','department.id=pwemployee.department');	
 	$this->db->join('pwposition','pwposition.pwposition=pwemployee.pwposition');	
 	$this->db->where('minIndicatorID', $id);
@@ -279,12 +279,13 @@ Class Ministerindicator extends CI_Model
  
  function getOneIndicatorResponseDivision($id=NULL)
  {
-	$this->db->select("userID, resName, pwposition.pwname as poname, resTelephone, ThDepName");
-	$this->db->order_by("id", "asc");
-	$this->db->from('divisionIndicatorResponse');
-	$this->db->join('pwdepartment','pwdepartment.DepID=divisionIndicatorResponse.resDepartmentID');	
-	$this->db->join('pwposition','pwposition.pwposition=divisionIndicatorResponse.resPosition');	
-	$this->db->where('divisionIndicatorID', $id);
+	$this->db->select("division_goal.responseID, user_indicator.name as resName, department.name as depname, division.name as divname");
+	//$this->db->order_by("id", "asc");
+	$this->db->from('division_goal');
+    $this->db->join('user_indicator', 'user_indicator.id = division_goal.responseID', 'left');
+	$this->db->join('department','department.id=user_indicator.department', 'left');	
+	$this->db->join('division','division.id=user_indicator.division');	
+	$this->db->where('user_indicator.division', $id);
 	$query = $this->db->get();		
 	return $query->result();
  }
@@ -298,8 +299,8 @@ Class Ministerindicator extends CI_Model
 	         ->from('dep_goal')
              ->join('dep_plan','dep_plan.dep_goal_id=dep_goal.id','left')
              ->join('dep_target','dep_target.dep_plan_id=dep_plan.id','left')
-	         ->where('dep_goal.indicatorID', $id)
-			 ->where('dep_goal.isGoalMin',0);
+	         ->where('dep_goal.indicatorID', $id);
+			 //->where('dep_goal.isGoalMin',0);
 	$query = $this->db->get();		
 	return $query->result();
  }
@@ -311,8 +312,8 @@ Class Ministerindicator extends CI_Model
              ->order_by("min_plan.number", "asc")
              ->order_by("min_target.number", "asc")
 	         ->from('dep_goal')
-			 ->from('min_goal','dep_goal.isGoalmin=min_goal.id','left')
-             ->join('min_plan','min_plan.min_goal_id=min_goal.id','left')
+			 ->join('min_goal','dep_goal.isGoalMin=min_goal.id','left')
+             ->join('min_plan','min_plan.min_goal_id=dep_goal.isGoalMin','left')
              ->join('min_target','min_target.min_plan_id=min_plan.id','left')
 	         ->where('dep_goal.indicatorID', $id);
 	$query = $this->db->get();		
@@ -340,7 +341,7 @@ Class Ministerindicator extends CI_Model
              ->order_by("dep_plan.number", "asc")
              ->order_by("dep_target.number", "asc")
 	         ->from('division_goal')
-             ->join('pwemployee', 'pwemployee.userid=division_goal.responseID', 'left')
+             ->join('user_indicator', 'user_indicator.id=division_goal.responseID', 'left')
              ->join('dep_goal', 'dep_goal.id = division_goal.isGoalDep','left')
              ->join('dep_plan','dep_plan.dep_goal_id=dep_goal.id','left')
              ->join('dep_target','dep_target.dep_plan_id=dep_plan.id','left')
@@ -351,12 +352,12 @@ Class Ministerindicator extends CI_Model
  
  function getOneIndicatorGoalDivision($id=NULL)
  {
-	$this->db->select("division_goal.number as gnumber,division_goal.name as gname,division_plan.number as pnumber,division_plan.name as pname, division_target.number as tnumber, division_target.name as tname, pwfname, pwlname")
+	$this->db->select("division_goal.number as gnumber,division_goal.name as gname,division_plan.number as pnumber,division_plan.name as pname, division_target.number as tnumber, division_target.name as tname, user_indicator.name as fullname")
 	         ->order_by("division_goal.number", "asc")
              ->order_by("division_plan.number", "asc")
              ->order_by("division_target.number", "asc")
 	         ->from('division_goal')
-             ->join('pwemployee', 'pwemployee.userid=division_goal.responseID', 'left')
+             ->join('user_indicator', 'user_indicator.id=division_goal.responseID', 'left')
              ->join('division_plan','division_plan.division_goal_id=division_goal.id','left')
              ->join('division_target','division_target.division_plan_id=division_plan.id','left')
              ->where('isGoalDep',0)
@@ -373,7 +374,7 @@ Class Ministerindicator extends CI_Model
 
  function addIndicatorResponse($in=NULL)
  {		
-	$this->db->insert('minIndicatorResponse', $in);
+	$this->db->insert('min_indicator_response', $in);
 	return $this->db->insert_id();			
  }
 
@@ -468,7 +469,7 @@ Class Ministerindicator extends CI_Model
  function delResponsebyIndicator($in=NULL)
  {		
 	$this->db->where('minIndicatorID', $in);
-	$this->db->delete('minIndicatorResponse'); 
+	$this->db->delete('min_indicator_response'); 
  }
 
  function delGoalbyIndicator($id=NULL)
