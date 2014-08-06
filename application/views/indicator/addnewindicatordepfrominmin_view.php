@@ -72,46 +72,6 @@ td.highlight {
             <div class="panel-heading">ประเด็นความสำเร็จ</div>
         </div>
     </div>
-    <div class="col-md-2">
-        <div class="newgoaltemp">
-            <div class="row">
-                <div class="form-group">
-                <a data-toggle="modal" data-target="#addGoalForm" class="btn btn-success" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="เพิ่มประเด็นความสำเร็จ" data-backdrop="static" data-keyboard="false">
-				<span class="glyphicon glyphicon-plus"></span> เพิ่ม<br>ประเด็นความสำเร็จ</a>
-                
-        <!-- add new goal temp modal -->
-			<div class="modal fade" id="addGoalForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-lg">
-        			<div class="modal-content">
-        				<div class="modal-header">
-                			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  			<h4 class="modal-title">	                 	
-                 				<strong>เพิ่มประเด็นความสำเร็จ</strong> 
-                 			</h4>
-            			</div>            <!-- /modal-header -->
-            			<div class="modal-body">
-					  		<div class="form-group">
-								<label for="">ลำดับที่ : </label>
-								<input type="text" class="form-control" name="goalnumber" id="goalnumber" value="" style="width: 80px">
-					  		</div>
-					  		<div class="form-group">
-								<label for=""> คำอธิบายประเด็นความสำเร็จ :</label>
-								<input type="text" class="form-control" name="goalname" id="goalname" value="">
-					  		</div>
-                                
-				        </div>            <!-- /modal-body -->
-        			
-            				<div class="modal-footer">
-            					<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addNewGoalTemp();"><span class="glyphicon glyphicon-floppy-save"></span> บันทึกประเด็นความสำเร็จ</button>			
-                				<button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> ปิด</button>
-            				</div>  
-    					</div>
-					</div>
-				</div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <!-- show all goal temp indicatorID=0 -->

@@ -60,12 +60,44 @@
                                     </tr>
                                 </thead>
 								<tbody>
-								<?php 
+                                <?php 
                                     $lastgoal=0;
                                     $lastplan=0;
-                                
-                                if(is_array($goal_dep_array) && count($goal_dep_array) ) {
+                                // min indicator
+                                if(is_array($goal_min_array) && count($goal_min_array) ) {
+									foreach($goal_min_array as $loop3){
+								?>
+									<tr>
+                                        <td><?php if ($lastgoal!=$loop3->gnumber) { 
+                                                    if ($loop3->gnumber!= "") echo $loop3->gnumber.". "; 
+                                                    echo $loop3->gname;
+                                                    //$lastgoal = $loop1->gnumber;
+                                                  }
+                                                
+                                            ?>
+                                        </td>
+                                        <td><?php if ($lastplan!=$loop3->pnumber) { 
+                                                echo $loop3->pnumber.". ".$loop3->pname; 
+                                                $lastplan = $loop3->pnumber;
+                                            }
+                                            ?>
+                                        </td>
+                                        <td><?php echo $loop3->tnumber.". ".$loop3->tname; ?></td>
+                                        <td><?php if ($lastgoal!=$loop3->gnumber) { 
+                                                echo $loop3->pwfname." ".$loop3->pwlname;
+                                                $lastgoal = $loop3->gnumber;
+                                            } ?>
+                                        </td>
+                                    </tr>
+									<?php  } } 
+                            
+                                    $lastgoal=0;
+                                    $lastplan=0;
+                                // dep indicator
+                            if (count($goal_min_array)<1) {  
+                                if(is_array($goal_dep_array) && (count($goal_dep_array)>0) ) {
 									foreach($goal_dep_array as $loop1){
+                                        
 								?>
 									<tr>
                                         <td><?php if ($lastgoal!=$loop1->gnumber) { 
@@ -89,10 +121,12 @@
                                             } ?>
                                         </td>
                                     </tr>
-									<?php  } } 
+									<?php  } } }
                                     
                                     $lastgoal=0;
                                     $lastplan=0;
+                            
+                                // div indicator
                                 if(is_array($goal_indicator_array) && count($goal_indicator_array) ) {
 									foreach($goal_indicator_array as $loop2){
 								?>
@@ -114,7 +148,7 @@
                                         </td>
                                         <td><?php echo $loop2->tnumber.". ".$loop2->tname; ?></td>
                                         <td><?php if ($lastgoal!=$loop2->gnumber) { 
-                                                echo $loop2->pwfname." ".$loop2->pwlname;
+                                                echo $loop2->firstname." ".$loop2->lastname;
                                                 $lastgoal = $loop2->gnumber;
                                             } ?>
                                         </td>

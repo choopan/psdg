@@ -71,51 +71,6 @@ td.highlight {
             <div class="panel-heading">ประเด็นความสำเร็จ</div>
         </div>
     </div>
-    <div class="col-md-2">
-        <div class="newgoaltemp">
-            <div class="row">
-                <div class="form-group">
-                <a data-toggle="modal" data-target="#addGoalForm" class="btn btn-success" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="เพิ่มประเด็นความสำเร็จ" data-backdrop="static" data-keyboard="false">
-				<span class="glyphicon glyphicon-plus"></span> เพิ่ม<br>ประเด็นความสำเร็จ</a>
-                
-        <!-- add new goal temp modal -->
-			<div class="modal fade" id="addGoalForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-lg">
-        			<div class="modal-content">
-        				<div class="modal-header">
-                			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  			<h4 class="modal-title">	                 	
-                 				<strong>เพิ่มประเด็นความสำเร็จ</strong> 
-                 			</h4>
-            			</div>            <!-- /modal-header -->
-            			<div class="modal-body">
-					  		<div class="form-group">
-								<label for="">ลำดับที่ : </label>
-								<input type="text" class="form-control" name="goalnumber" id="goalnumber" value="" style="width: 80px">
-					  		</div>
-					  		<div class="form-group">
-								<label for=""> คำอธิบายประเด็นความสำเร็จ :</label>
-								<input type="text" class="form-control" name="goalname" id="goalname" value="">
-					  		</div>
-                            <div class="form-group">
-								<label for=""> ผู้รับผิดชอบ :</label>
-                                <input type="hidden" name="responseid" id="responseid" value="">
-								<input type="text" class="form-control" name="responsename" id="responseName" value="">
-					  		</div>
-                                
-				        </div>            <!-- /modal-body -->
-        			
-            				<div class="modal-footer">
-            					<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addNewGoalTemp();"><span class="glyphicon glyphicon-floppy-save"></span> บันทึกประเด็นความสำเร็จ</button>			
-                				<button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> ปิด</button>
-            				</div>  
-    					</div>
-					</div>
-				</div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <!-- show all goal temp indicatorID=0 -->
@@ -144,21 +99,17 @@ td.highlight {
                 <input type="hidden" name="goaldepname[]" value="<?php echo $loop2->gname; ?>">
                 <td><?php echo $loop2->gnumber; ?></td>
                 <td><a id="fancyboxall" href="<?php echo site_url("manageindicator/view_minplan/".$loop2->goalid."/3");  ?>"><?php echo $loop2->gname; ?></a></td>
-                <td><input type="hidden" name="responsetextid[]" id="responsetextid<?php echo $num; ?>" value="">
-                    <input type="text" class="form-control" name="responsetext[]" id="responsetext<?php echo $num; ?>" value="">
+                <td>
+                    <select class="form-control" name=responsetextid[] id="responsetextid">
+                        <option value="0">-- เลือก --</option>
+                        <?php foreach($response_array as $loop3) { ?>
+                        <option value="<?php echo $loop3->id; ?>"><?php echo $loop3->firstname." ".$loop3->lastname; ?></option>
+                        <?php } ?>
+                    </select>
                 </td>
                 <td> </td>
             </tr>
             <?php $lastnumber = $loop2->gnumber; $num++; } } ?>
-            <?php foreach($goaltemp_array as $loop2) { ?>
-            <tr>
-                <input type="hidden" name="goalid[]" value="<?php echo $loop2->goalid; ?>">
-                <td><?php echo $loop2->number; ?></td>
-                <td><a id="fancyboxall" href="<?php echo site_url("manageindicator/view_minplan/".$loop2->goalid."/5");  ?>"><?php echo $loop2->name; ?></a></td>
-                <td><?php echo $loop2->pwfname." ".$loop2->pwlname; ?></td>
-                <td><a id="fancyboxall" href="<?php echo site_url("manageindicator/view_minplan/".$loop2->goalid."/4");  ?>"><button type="button" class="btn btn-primary btn-xs">เพิ่มแผนงาน/โครงการและเป้าหมาย</button></a> <button type="button" class="btnDelete btn btn-danger btn-xs" onclick="delgoal_confirm(<?php echo $loop2->goalid; ?>)" data-title="Delete" data-toggle="modal" data-target="#delete" data-placement="top" rel="tooltip" title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></button></td>
-            </tr>
-            <?php } ?>
         </tbody>
     </table>
     </div>

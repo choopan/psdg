@@ -96,8 +96,12 @@ td.highlight {
 					  		</div>
                             <div class="form-group">
 								<label for=""> ผู้รับผิดชอบ :</label>
-                                <input type="hidden" name="responseid" id="responseid" value="">
-								<input type="text" class="form-control" name="responsename" id="responseName" value="">
+                                <select class="form-control" name=responseid id="responseid">
+                                    <option value="0">-- เลือก --</option>
+                                    <?php foreach($response_array as $loop) { ?>
+                                    <option value="<?php echo $loop->id; ?>"><?php echo $loop->firstname." ".$loop->lastname; ?></option>
+                                    <?php } ?>
+                                </select>
 					  		</div>
                                 
 				        </div>            <!-- /modal-body -->
@@ -134,7 +138,7 @@ td.highlight {
                 <input type="hidden" name="goalid[]" value="<?php echo $loop->goalid; ?>">
                 <td><?php echo $loop->number; ?></td>
                 <td><a id="fancyboxall" href="<?php echo site_url("manageindicator/view_minplan/".$loop->goalid."/5");  ?>"><?php echo $loop->name; ?></a></td>
-                <td><?php echo $loop->pwfname." ".$loop->pwlname; ?></td>
+                <td><?php echo $loop->firstname." ".$loop->lastname; ?></td>
                 <td><a id="fancyboxall" href="<?php echo site_url("manageindicator/view_minplan/".$loop->goalid."/4");  ?>"><button type="button" class="btn btn-primary btn-xs">เพิ่มแผนงาน/โครงการและเป้าหมาย</button></a> <button type="button" class="btnDelete btn btn-danger btn-xs" onclick="delgoal_confirm(<?php echo $loop->goalid; ?>)" data-title="Delete" data-toggle="modal" data-target="#delete" data-placement="top" rel="tooltip" title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></button></td>
             </tr>
             <?php } ?>

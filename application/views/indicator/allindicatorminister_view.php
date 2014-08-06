@@ -29,19 +29,19 @@
                         <div class="table-responsive">
                             <table class="table table-striped row-border table-hover" id="dataTables-example">
                                 <thead><tr>
-									<th rowspan="2">ตัวชี้วัด</th>
-									<th rowspan="2">ชื่อ</th>
-									<th colspan="5">เกณฑ์การให้คะแนน</th>
-									<th rowspan="2">น้ำหนัก</th>
-									<th rowspan="2">หน่วยงาน</th>
-									<th rowspan="2" width="125">จัดการ</th>
+									<th rowspan="2" style="width: 60px;">ตัวชี้วัด</th>
+									<th rowspan="2" style="text-align: center;">ชื่อ</th>
+									<th colspan="5" style="text-align: center; width: 300px">เกณฑ์การให้คะแนน</th>
+									<th rowspan="2" style="width: 60px;">น้ำหนัก</th>
+									<th rowspan="2" style="width: 150px;">หน่วยงาน</th>
+									<th rowspan="2" style="width: 125px;">จัดการ</th>
 								</tr>
 								<tr>
-									<th>1</th>
-									<th>2</th>
-									<th>3</th>
-									<th>4</th>
-									<th>5</th>
+									<th style="text-align: center;">1</th>
+									<th style="text-align: center;">2</th>
+									<th style="text-align: center;">3</th>
+									<th style="text-align: center;">4</th>
+									<th style="text-align: center;">5</th>
 								</tr>
 								</thead>
                                 <tbody>

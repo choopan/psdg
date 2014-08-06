@@ -63,13 +63,13 @@ Class Ministerindicator extends CI_Model
     
  function getGoalTemp($userid=null,$table=null)
  {
-    if ($table == "division_goal") $this->db->select("indicatorID as id, number, name, id as goalid, pwfname,pwlname");
+    if ($table == "division_goal") $this->db->select("indicatorID as id, number, name, division_goal.id as goalid, firstname, lastname");
 	else $this->db->select("indicatorID as id, number, name, id as goalid");
         
 	$this->db->order_by("number", "asc");
 	$this->db->from($table);	
      
-    if ($table == "division_goal") $this->db->join('pwemployee','pwemployee.userid = '.$table.'.responseid','left');
+    if ($table == "division_goal") $this->db->join('user_indicator','user_indicator.id = '.$table.'.responseid','left');
      
 	$this->db->where('indicatorID', 0);
     $this->db->where('editorID', $userid);
@@ -222,20 +222,20 @@ Class Ministerindicator extends CI_Model
  
  function getOneIndicatorDep($id=NULL)
  {
-	$this->db->select("id, depID, number, name, criteria1, criteria2, criteria3, criteria4, criteria5, goal, weight, technicalnote, pwfname, pwlname, isMinister, isGoalmin");
+	$this->db->select("dep_indicator.id, depID, number, name, criteria1, criteria2, criteria3, criteria4, criteria5, goal, weight, technicalnote, user_indicator.firstname as pwfname, user_indicator.lastname as pwlname, isMinister, isGoalmin");
 	$this->db->from('dep_indicator');
-    $this->db->join('pwemployee','pwemployee.userid = dep_indicator.editorID','left');
-	$this->db->where('id', $id);
+    $this->db->join('user_indicator','user_indicator.id = dep_indicator.editorID','left');
+	$this->db->where('dep_indicator.id', $id);
 	$query = $this->db->get();		
 	return $query->result();
  }
  
  function getOneIndicatorDivision($id=NULL)
  {
-	$this->db->select("id, divisionID, number, name, criteria1, criteria2, criteria3, criteria4, criteria5, goal, weight, technicalnote, pwfname, pwlname, isDep, isGoalDep");
+	$this->db->select("division_indicator.id, divisionID, number, name, criteria1, criteria2, criteria3, criteria4, criteria5, goal, weight, technicalnote, user_indicator.firstname as pwfname, user_indicator.lastname as pwlname, isDep, isGoalDep");
 	$this->db->from('division_indicator');
-    $this->db->join('pwemployee','pwemployee.userid = division_indicator.editorID','left');
-	$this->db->where('id', $id);
+    $this->db->join('user_indicator','user_indicator.id = division_indicator.editorID','left');
+	$this->db->where('division_indicator.id', $id);
 	$query = $this->db->get();		
 	return $query->result();
  }
@@ -254,12 +254,10 @@ Class Ministerindicator extends CI_Model
  function getOneIndicatorResponse($id=NULL)
  {
 	$this->db->_protect_identifiers=false;
-	$this->db->select("min_indicator_response.userID, user_indicator.name as resName, pwposition.pwname as poname, pwemployee.pwteloffice as resTelephone, department.name as ThDepName, isControl");
+	$this->db->select("min_indicator_response.userID, user_indicator.firstname as resName, pwposition.pwname as poname, pwemployee.pwteloffice as resTelephone, department.name as ThDepName, isControl");
 	$this->db->order_by("min_indicator_response.id", "asc");
 	$this->db->from('min_indicator_response');
-	$this->db->join('user_indicator','user_indicator.id=min_indicator_response.userID');	
-	$this->db->join('department','department.id=pwemployee.department');	
-	$this->db->join('pwposition','pwposition.pwposition=pwemployee.pwposition');	
+	$this->db->join('pwemployee','user_indicator.id=min_indicator_response.userID');	
 	$this->db->where('minIndicatorID', $id);
 	$query = $this->db->get();		
 	return $query->result();
@@ -336,7 +334,7 @@ Class Ministerindicator extends CI_Model
 
  function getGoalDivFromDep($id=null)
  {
-     $this->db->select("division_goal.number as gnumber,division_goal.name as gname,dep_plan.number as pnumber,dep_plan.name as pname, dep_target.number as tnumber, dep_target.name as tname, pwfname, pwlname")
+     $this->db->select("division_goal.number as gnumber,division_goal.name as gname,dep_plan.number as pnumber,dep_plan.name as pname, dep_target.number as tnumber, dep_target.name as tname, user_indicator.firstname as pwfname, user_indicator.lastname as pwlname, isGoalMin")
 	         ->order_by("division_goal.number", "asc")
              ->order_by("dep_plan.number", "asc")
              ->order_by("dep_target.number", "asc")
@@ -349,10 +347,35 @@ Class Ministerindicator extends CI_Model
 	$query = $this->db->get();		
 	return $query->result();
  }
+    
+ function getGoalDivFromMin($id=null,$divid=null)
+ {
+     $result = $this->db->select("indicatorID")
+                        ->from("min_goal")
+                        ->where("min_goal.id",$id)
+                        ->get()->result_array();
+     if ($result[0]['indicatorID']>0) {
+         $this->db->select("division_goal.number as gnumber,division_goal.name as gname,min_plan.number as pnumber,min_plan.name as pname, min_target.number as tnumber, min_target.name as tname, user_indicator.firstname as pwfname, user_indicator.lastname as pwlname")
+	         ->order_by("division_goal.number", "asc")
+             ->order_by("min_plan.number", "asc")
+             ->order_by("min_target.number", "asc")
+	         ->from('min_goal')
+             ->join('min_plan','min_plan.min_goal_id=min_goal.id','left')
+             ->join('min_target','min_target.min_plan_id=min_plan.id','left')
+             ->join('dep_goal','dep_goal.isGoalMin=min_goal.id','left')
+             ->join('division_goal','division_goal.isGoalDep=dep_goal.id','left')
+             ->join('user_indicator', 'user_indicator.id=division_goal.responseID', 'left')
+	         ->where('min_goal.indicatorID', $result[0]['indicatorID'])
+             ->where('division_goal.indicatorID',$divid);
+	     $query = $this->db->get();	
+         return $query->result();
+     }
+     
+ }
  
  function getOneIndicatorGoalDivision($id=NULL)
  {
-	$this->db->select("division_goal.number as gnumber,division_goal.name as gname,division_plan.number as pnumber,division_plan.name as pname, division_target.number as tnumber, division_target.name as tname, user_indicator.name as fullname")
+	$this->db->select("division_goal.number as gnumber,division_goal.name as gname,division_plan.number as pnumber,division_plan.name as pname, division_target.number as tnumber, division_target.name as tname, user_indicator.firstname, user_indicator.lastname")
 	         ->order_by("division_goal.number", "asc")
              ->order_by("division_plan.number", "asc")
              ->order_by("division_target.number", "asc")

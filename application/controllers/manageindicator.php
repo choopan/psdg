@@ -367,6 +367,14 @@ class Manageindicator extends CI_Controller {
 			$data['goaltemp_array'] = array();
 		}
         
+        // list response name from user_indicator
+        $query = $this->user->listResponseName($this->uri->segment(4));
+        if($query){
+			$data['response_array'] =  $query;
+		}else{
+			$data['response_array'] = array();
+		}
+        
         $data['id'] = $id;
         $data['divid'] = $this->uri->segment(4);
         $data['showresult'] = null;
@@ -393,6 +401,14 @@ class Manageindicator extends CI_Controller {
 			$data['goaltemp_array'] =  $query;
 		}else{
 			$data['goaltemp_array'] = array();
+		}
+        
+        // list response name from user_indicator
+        $query = $this->user->listResponseName($this->uri->segment(4));
+        if($query){
+			$data['response_array'] =  $query;
+		}else{
+			$data['response_array'] = array();
 		}
         
         $data['showresult'] = null;
@@ -441,6 +457,14 @@ class Manageindicator extends CI_Controller {
 			$data['goaltemp_array'] =  $query;
 		}else{
 			$data['goaltemp_array'] = array();
+		}
+        
+        // list response name from user_indicator
+        $query = $this->user->listResponseName($this->uri->segment(3));
+        if($query){
+			$data['response_array'] =  $query;
+		}else{
+			$data['response_array'] = array();
 		}
 	
 		$data['title'] = "MFA - Add Indicator ";
@@ -959,9 +983,18 @@ class Manageindicator extends CI_Controller {
 		}
         
         $data['goal_dep_array'] = array();
+        $data['goal_min_array'] = array();
         foreach ($query as $loop) {
             if ($loop->isDep > 0) {
                 $resultmin = $this->ministerindicator->getGoalDivFromDep($loop->isDep);
+                foreach ($resultmin as $loop2) {
+                    if ($loop2->isGoalMin >0) {
+                        // if isGoalMin >0 mean dep indicators are selected from minister indicator
+                        $resultmin2 = $this->ministerindicator->getGoalDivFromMin($loop2->isGoalMin,$id);
+                        $data['goal_min_array'] = $resultmin2;
+                        break;
+                    }
+                }
                 $data['goal_dep_array'] = $resultmin;
             }
             if ($loop->isGoalDep > 0) $goalminid = $loop->isGoalDep;

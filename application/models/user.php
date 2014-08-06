@@ -103,6 +103,16 @@ Class User extends CI_Model
 	return $query->result();
  }
     
+ function listResponseName($divid)
+ {
+     $result = $this->db->select("id, firstname, lastname")
+                        ->from("user_indicator")
+                        ->where("report_div",1)
+                        ->where("division",$divid)
+                        ->get()->result();
+     return $result;
+ }
+    
  function searchReportName($term)
  {
 	$this->db->_protect_identifiers=false;
